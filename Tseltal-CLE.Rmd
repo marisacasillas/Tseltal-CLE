@@ -1,0 +1,172 @@
+---
+title             : "Child language experience in a Tseltal Mayan village"
+shorttitle        : "Child language experience in a Tseltal Mayan village"
+
+author: 
+  - name          : "Marisa Casillas"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Wundtlaan 1, 6525XD Nijmegen, The Netherlands"
+    email         : "Marisa.Casillas@mpi.nl"
+  - name          : "Penelope Brown"
+    affiliation   : "1"
+  - name          : "Stephen C. Levinson"
+    affiliation   : "1"
+
+affiliation:
+  - id            : "1"
+    institution   : "Max Planck Institute for Psycholinguistics"
+#  - id            : "2"
+#    institution   : "Cambridge University"
+
+#author_note: |
+#  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+abstract: |
+  Enter abstract here. Each new line herein must be indented, like this line.
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["r-references.bib"]
+
+figsintext        : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+mask              : no
+
+class             : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r load_packages, include=FALSE, warning=FALSE}
+library(papaja)
+library(ggplot2)
+library(tidyverse)
+library(viridis)
+library(grid)
+library(gridExtra)
+```
+
+```{r analysis_presets, include=FALSE}
+data.path <- "20180618-txts/anon/" # text files exported from ELAN
+plot.path <- "plots/" # output plots
+seg.index.file <- "Segment-order-inventory.csv"
+```
+
+# Introduction
+
+# Methods
+We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+
+## Participants
+
+## Material
+
+## Procedure
+
+## Data analysis
+We used `r cite_r("r-references.bib")` for all our analyses.
+
+
+# Results
+
+```{r prepare_data, include=FALSE}
+# Read in annotation files
+files <- list.files(path=data.path,pattern="*.txt")
+all.data <- data.frame()
+for (i in 1:length(files)) {
+  print(files[i])
+  newfile <- read.table(paste0(data.path, files[i]), quote = "",
+                        sep="\t", header=FALSE)
+  newfile$aclew_id <- unlist(strsplit(files[i], '\\.'))[1]
+  all.data <- rbind(all.data, newfile)
+}
+all.data$row <- c(1:nrow(all.data))
+names(all.data)[1:6] <- c("tier", "speaker", "start", "stop", "dur", "val")
+all.data <- as.tibble(all.data)
+
+# Read in participant data
+ptcp.info <- as.tibble(read.csv("aclew-participants.csv",
+                                colClasses=c("aclew_id"="character"),
+                                stringsAsFactors = F))
+ptcp.info <-  ptcp.info %>%
+              select(lab_internal_subject_id, aclew_id,age_mo_round,
+                     age_mo_round, child_sex,
+                     mat_ed, fat_ed, number_older_sibs, household_size) %>%
+                     mutate(aclew_id = as.character(aclew_id))
+
+# Add participant and segment info
+codes <- all.data %>% filter(tier == "code")
+
+all.data <- all.data %>% filter(speaker != "") %>%
+            left_join(ptcp.info, by = "aclew_id") %>%
+            mutate(sample = "", segment = "")
+
+for (i in 1:nrow(codes)) {
+  rec <- codes$aclew_id[i]
+  seg <- as.character(codes$val[i])
+  seg.on <- codes$start[i]
+  seg.off <- codes$stop[i]
+  seg.idx <- which(all.data$aclew_id == rec &
+                     all.data$start < seg.off &
+                     all.data$stop > seg.on)
+  all.data$segment[seg.idx] <- seg
+}
+
+# Get min/hr speech measures
+xds.per.seg <- all.data %>%
+  filter(speaker != "CHI" & grepl("xds@", tier)) %>%
+  group_by(aclew_id, segment) %>%
+  summarise(xds_min = round(sum(dur)/60000,3))
+tds.per.seg <- all.data %>%
+  filter(speaker != "CHI" & grepl("xds@", tier) & val == "T") %>% 
+  group_by(aclew_id, segment) %>%
+  summarise(tds_min = round(sum(dur)/60000,3))
+cds.per.seg <- all.data %>%
+  filter(speaker != "CHI" & grepl("xds@", tier) & (val == "T" | val == "C")) %>% 
+  group_by(aclew_id, segment) %>%
+  summarise(cds_min = round(sum(dur)/60000,3))
+
+left_join_NA <- function(x, y, ...) {
+  left_join(x = x, y = y, by = ...) %>% 
+    mutate_each(funs(replace(., which(is.na(.)), 0)))
+}
+
+codes.mph <- codes %>%
+  rename(segment = val) %>%
+  left_join_NA(xds.per.seg) %>%
+  left_join_NA(tds.per.seg) %>%
+  left_join_NA(cds.per.seg) %>%
+  left_join(ptcp.info) %>%
+  mutate(xds_mph = xds_min/(dur/3600000),
+         tds_mph = tds_min/(dur/3600000),
+         cds_mph = cds_min/(dur/3600000),
+         prop_tds = tds_min/xds_min)
+
+codes.mph$sample <- "random"
+codes.mph$sample[which(
+  grepl('va|tt|extension', codes.mph$segment))] <- "high activity"
+```
+
+``` {r }
+```
+
+# Discussion
+
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
