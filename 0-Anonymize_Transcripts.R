@@ -1,8 +1,8 @@
 # Use this file to anonymize and check transcript data
 
-raw.data.path <- "20180618-txts/raw/" # text files exported from ELAN
-anon.data.path <- "20180618-txts/anon/" # text files to use as input to analysis
-/
+raw.data.path <- "transcripts/raw/" # text files exported from ELAN
+anon.data.path <- "transcripts/anon/" # text files to use as input to analysis
+
 files <- list.files(path=raw.data.path,pattern="*.txt")
 all.data <- data.frame()
 for (i in 1:length(files)) {
