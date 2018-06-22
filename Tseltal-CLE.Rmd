@@ -128,6 +128,9 @@ col.sample.bu3 <- list(
 
 
 # Results
+## Still to graph
+3: sliding window in random to match mean TDS rate/TT transition rates
+4: utt length, repetitiveness, F0 peaks and ranges
 
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # Read in annotation files
@@ -607,6 +610,139 @@ grid.arrange(xdsmph.segments.nonrand, tdsmph.segments.nonrand.zoomedin,
              tdsprp.segments.nonrand, tdsprp.segments.sa.nonrand, nrow=2, ncol=2)
 ```
 
+``` {r sample_differences_ads}
+# deltas m/h XDS, TDS, and CDS mph
+quantity.mph.per.sample <- quantity.rand %>%
+  mutate(sample = "random",
+         sample_type = "random") %>%
+  bind_rows(quantity.nonrand) %>%
+  group_by(aclew_child_id, sample) %>%
+  summarise(m_xds_mph = mean(xds_mph),
+         m_tds_mph = mean(tds_mph),
+         m_cds_mph = mean(cds_mph))
+deltas.random.v.tt <- quantity.mph.per.sample %>%
+  filter(sample != "high-activity") %>%
+  arrange(aclew_child_id, sample) %>%
+  mutate(d_xds_mph = 0,
+         d_tds_mph = 0,
+         d_cds_mph = 0)
+for (i in 2:nrow(deltas.random.v.tt)) {
+  deltas.random.v.tt$d_xds_mph[i] <-
+    deltas.random.v.tt$m_xds_mph[i] - deltas.random.v.tt$m_xds_mph[i-1] # set up for tt - random
+  deltas.random.v.tt$d_tds_mph[i] <-
+    deltas.random.v.tt$m_tds_mph[i] - deltas.random.v.tt$m_tds_mph[i-1]
+  deltas.random.v.tt$d_cds_mph[i] <-
+    deltas.random.v.tt$m_cds_mph[i] - deltas.random.v.tt$m_cds_mph[i-1]
+}
+deltas.random.v.tt <- deltas.random.v.tt %>%
+  filter(sample != "random") %>% # only keep meaningful vals
+  select(aclew_child_id, d_xds_mph, d_tds_mph, d_cds_mph) %>%
+  mutate(delta = "tt-random")
+deltas.random.v.va <- quantity.mph.per.sample %>%
+  filter(sample != "turn-taking") %>%
+  arrange(aclew_child_id, sample) %>%
+  mutate(d_xds_mph = 0,
+         d_tds_mph = 0,
+         d_cds_mph = 0)
+for (i in 2:nrow(deltas.random.v.va)) {
+  deltas.random.v.va$d_xds_mph[i] <-
+    deltas.random.v.va$m_xds_mph[i-1] - deltas.random.v.va$m_xds_mph[i] # set up for va - random
+  deltas.random.v.va$d_tds_mph[i] <-
+    deltas.random.v.va$m_tds_mph[i-1] - deltas.random.v.va$m_tds_mph[i]
+  deltas.random.v.va$d_cds_mph[i] <-
+    deltas.random.v.va$m_cds_mph[i-1] - deltas.random.v.va$m_cds_mph[i]
+}
+deltas.random.v.va <- deltas.random.v.va %>%
+  filter(sample == "random") %>% # only keep meaningful vals
+  select(aclew_child_id, d_xds_mph, d_tds_mph, d_cds_mph) %>%
+  mutate(delta = "ha-random")
+deltas.random.v.oth <- bind_rows(deltas.random.v.tt, deltas.random.v.va) %>%
+  full_join(ptcp.info, by = "aclew_child_id")
+
+# deltas utt/h XDS, TDS, and CDS
+tot.dur.samples.per.rec <- seg.info %>%
+  mutate(duration = ifelse(grepl('1min', Sample), 1, 5),
+         sample = ifelse(grepl('random', CodeName), "random",
+                         ifelse(grepl('va', CodeName), "high-activity",
+                                "turn-taking"))) %>%
+  select(aclew_id, CodeName, duration, sample) %>%
+  rename(aclew_child_id = aclew_id, segment = CodeName)
+n.utts.per.sample.all <- all.data %>%
+  filter(speaker != "CHI" & grepl("xds@", tier)) %>%
+  group_by(aclew_child_id, segment, val) %>%
+  summarise(n_utts = n()) %>%
+  full_join(tot.dur.samples.per.rec, by = c("aclew_child_id", "segment")) %>%
+  replace_na(list(val = "T", n_utts = 0))
+n.utts.per.sample.xds <- n.utts.per.sample.all %>%
+  group_by(aclew_child_id, segment, sample, duration) %>%
+  summarise(n_utts_seg = sum(n_utts)) %>%
+  mutate(xds_uph = (n_utts_seg/duration)*60) %>%
+  group_by(aclew_child_id, sample) %>%
+  summarise(m_xds_uph = mean(xds_uph))
+n.utts.per.sample.tds <- n.utts.per.sample.all %>%
+  filter(val == "T") %>%
+  group_by(aclew_child_id, segment, sample, duration) %>%
+  summarise(n_utts_seg = sum(n_utts)) %>%
+  mutate(tds_uph = (n_utts_seg/duration)*60) %>%
+  group_by(aclew_child_id, sample) %>%
+  summarise(m_tds_uph = mean(tds_uph))
+n.utts.per.sample.cds <- n.utts.per.sample.all %>%
+  filter(val == "T" | val == "C") %>%
+  group_by(aclew_child_id, segment, sample, duration) %>%
+  summarise(n_utts_seg = sum(n_utts)) %>%
+  mutate(cds_uph = (n_utts_seg/duration)*60) %>%
+  group_by(aclew_child_id, sample) %>%
+  summarise(m_cds_uph = mean(cds_uph))
+uph.per.sample <- n.utts.per.sample.xds %>%
+  full_join(n.utts.per.sample.tds, by = c("aclew_child_id", "sample")) %>%
+  full_join(n.utts.per.sample.cds, by = c("aclew_child_id", "sample"))
+deltas.random.v.tt.uph <- uph.per.sample %>%
+  filter(sample != "high-activity") %>%
+  mutate(d_xds_uph = 0,
+         d_tds_uph = 0,
+         d_cds_uph = 0) %>%
+  arrange(aclew_child_id, sample)
+for (i in 2:nrow(deltas.random.v.tt.uph)) {
+  deltas.random.v.tt.uph$d_xds_uph[i] <-
+    deltas.random.v.tt.uph$m_xds_uph[i] - deltas.random.v.tt.uph$m_xds_uph[i-1]
+  deltas.random.v.tt.uph$d_tds_uph[i] <-
+    deltas.random.v.tt.uph$m_tds_uph[i] - deltas.random.v.tt.uph$m_tds_uph[i-1]
+  deltas.random.v.tt.uph$d_cds_uph[i] <-
+    deltas.random.v.tt.uph$m_cds_uph[i] - deltas.random.v.tt.uph$m_cds_uph[i-1]
+}
+deltas.random.v.tt.uph <- deltas.random.v.tt.uph %>%
+  filter(sample != "random") %>%
+  select(aclew_child_id, d_xds_uph, d_tds_uph, d_cds_uph) %>%
+  mutate(delta = "tt-random")
+deltas.random.v.va.uph <- uph.per.sample %>%
+  filter(sample != "turn-taking") %>%
+  mutate(d_xds_uph = 0,
+         d_tds_uph = 0,
+         d_cds_uph = 0) %>%
+  arrange(aclew_child_id, sample)
+for (i in 2:nrow(deltas.random.v.va.uph)) {
+  deltas.random.v.va.uph$d_xds_uph[i] <-
+    deltas.random.v.va.uph$m_xds_uph[i-1] - deltas.random.v.va.uph$m_xds_uph[i]
+  deltas.random.v.va.uph$d_tds_uph[i] <-
+    deltas.random.v.va.uph$m_tds_uph[i-1] - deltas.random.v.va.uph$m_tds_uph[i]
+  deltas.random.v.va.uph$d_cds_uph[i] <-
+    deltas.random.v.va.uph$m_cds_uph[i-1] - deltas.random.v.va.uph$m_cds_uph[i]
+}
+deltas.random.v.va.uph <- deltas.random.v.va.uph %>%
+  filter(sample == "random") %>%
+  select(aclew_child_id, d_xds_uph, d_tds_uph, d_cds_uph) %>%
+  mutate(delta = "va-random")
+deltas.random.v.oth.utts <- bind_rows(deltas.random.v.tt.uph, deltas.random.v.va.uph) %>%
+  full_join(ptcp.info, by = "aclew_child_id")
+
+# TT transitions
+
+
+```
+
+``` {r sample_differences_cds}
+# m/h CHI vocs, # CHI vocs, & voc mat between random, tt, and va
+```
 # Discussion
 
 
