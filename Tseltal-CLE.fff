@@ -16,3 +16,12 @@
 \end{figure*}
 \efloatseparator
  
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{Tseltal-CLE_files/figure-latex/plot_chi_voctypes_overall-1.pdf}
+\caption{}
+\end{figure*}
+\efloatseparator
+ 
