@@ -141,6 +141,21 @@ Many other studies of child-caregiver turn taking use an arbitrary cut-off for d
 ## Still to graph
 3: sliding window in random to match mean TDS rate/TT transition rates
 4: utt length, repetitiveness, F0 peaks and ranges
+SHOULD I ADD DATAPOINTS ON THE UPH FIGS TO SHOW SHNEIDMAN'S DATA?
+Age 1:
+- US: CDS 616 (SD=231); ADS/OCDS 278 (SD=247)
+-- 79% XDS from MOT (~60% XDS MOT is CDS); 8% XDS from children (mostly ADS/OCDS) 
+- Mayan: CDS 86 (SD=59); ADS/OCDS 342 (SD=201)
+-- 31% XDS from MOT (~4% XDS MOT is CDS); 60% XDS from children (~50% XDS other kids was ADS/OCDS)
+Age 2:
+- US: CDS M=815, SD=376; ADS/OCDS M=411, SD=318
+-- M=65%, SD=28% from MOT (directed: M=800, SD=381; overheard: M=211, SD =55);
+-- M=7%, SD=10% from kids (directed: M=15, SD=22; overheard: M=86, SD=141)
+- Mayan: CDS M=274, SD=166; ADS/OCDS M=271, SD=136
+-- M=19%, SD=17% from MOT (directed:M=104, SD=100; overheard:M=82 SD=52);
+-- M=61%, SD=27% from kids (directed:M=104, SD=100; overheard:M=82 SD=52)
+<!-- is this right?? the values are the same for D vs. O with adult and kid speech: I think it's more like (directed:M=175, SD=100; overheard:M=190 SD=110) according to figure 2-->
+
 
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # Read in annotation files
