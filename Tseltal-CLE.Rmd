@@ -72,14 +72,34 @@ sem <- function (x) {
 ```
 
 # Introduction
-- Children require linguistic input to become full-fledged speakers of their language(s)
+Much of developmental language science revolves around one central question: what linguistic evidence (i.e., what types and how much) is needed to support first language acquisition? Early claims about children's language environments characterized linguistic `input' as syntactically complex and error-prone, with no negative evidence (REFS). However, decades of work has overturned this view entirely: the speech that children hear and use in their interactions with others is rich with multimodal information that children can leverage to infer linguistic knowledge. In fact, children's own speech productions appear to closely mirror the stochastic patterns in their linguistic input (REFS), convincingly accounting for the kinds of errors children do and don't make in spontaneous speech (REFS; see also REFS for similar work regarding phonological learning).
+
+In the last two decades, the role of children's linguistic environments on their language development has become a topic of intense focus in developmental psychology, with studies showing repeatedly that the amount of child-directed speech (CDS) children hear influences their language development, particularly their vocabulary (REFS). For example, [TO DO: Fill in later]. Some studies have also linked the quantity of directed speech children hear to their speed of lexical retrieval and their syntactic development (REFS; Weisleder; LuCiD; Huttenlocher). [TO DO: Fill in later after reading Huttenlocher]. Child-directed speech estimates have traditionally come from short at-home or in-lab video recordings of caregiver-child interaction. But recently many researchers have also used daylong audio recordings (e.g., with the LENA(C) system) to track the approximate amount of spoken language in children's at-home language environments; tracking information about how much of the talk is child-directed by annotating sub-samples of the recording (REFS; Weisleder) or looking at other cues to interactional behavior (REFS; Romeo). 
+
+The conclusion drawn in much of this work is that child-directed speech is the ideal register for learning words; especially for _referential_ word learning (i.e., concrete nouns and verbs; REFS). In line with this idea, experimental studies have conclusively shown that infant-directed speech is nearly universally preferred over adult-directed speech by young children (REFS ManyBabies, etc.). Perhaps more importantly, child-directed speech is often produced under conditions of joint activity, in which caregivers and children coordinate their behavior in order to accomplish interactional goals (e.g., daily routines of feeding, diaper changing, and play). Using head-mounted eyetrackers, Chen Yu and colleagues (REFS) have demonstrated that coordination during object-play exchanges [TO DO: Fill in later]. Crucially, then, estimates of child-directed speech quantity may functionally predict children's word learning because they index the frequency with which children engage in rich, multimodal interactions with their caregivers; interactions in which children can actively and contingently elicit just the right linguistic information at just the right time to be optimally interesting and useful for learning (REFS; Eve's paper on homophonic Vs in French).
+
+There are, however, a few very important caveats to this body of work relating CDS quantity and language development. First, while there is overwhelming evidence linking CDS quantity to vocabulary size, links to grammatical development are much more scant (REFS: Huttenlocher; others???).  Learning a language involves mastery of its systemic underpinnings, e.g., its phonology, morphology, and syntax. While there is clear reason for CDS to have referentially more clear speech (good for learning concrete vocabulary), there is less clear reason for it to do the same for grammatical information. [Start with Yurovsky paper + refrences therein] 
+
+<!--A lack of evidence linking input to grammatical outcomes may partly be more scant for practical reasons (e.g., there is no similarly convenient metric like the CDI; REFS).-->
+
+<!--means are meaningless if the thing that matters is some threshhold of interaction. well, not fully if we take evidence from cross-situational learning in wihch # of exposures matters, but even then we might expect bursty exposures to be more effective than non-bursty ones if memory is an issue... isn't there a Lew-Williams paper along these lines?-->
+
+
+
+- However, there are two major caveats to this work, all interrelated with each other:
+  - 1: While evidence linking input and vocab is super strong, evidence linking input to grammar is more scant; aspects of the system may be differentially sensitive to experience (Dan's paper)
+  - 2: Literacy-centric view of language development; what is the 'target'?
+  - 3: Focused on WEIRD kids
+
+
+<!--- Children require linguistic input to become full-fledged speakers of their language(s)
 - As developmentalists, our ultimate goal is to be able to model the diverse mechanisms that allow children to convert the linguistic information in their environment to internalized linguistic knowledge, e.g., (statistical learning, motor development, etc.; see slides)
 - We have (rightfully) spent an enormous amount of time analyzing what information exists in children's input—such information is an important jumping off point for inspiring and constraining theories about learning mechanisms
 - We have developed many techniques for tracking input, most recently daylong recordings
   - Extoll the virtues of daylong recordings
   - Indeed, studies along these lines, linking children's language experience to their language outcomes, finds a strong impact of experience, especiall with respect to CDS
     - List some findings on input effects
-    - Why is CDS special? Briefly list findings
+    - Why is CDS special? Briefly list findings-->
 - However, there are two major caveats to this work, all interrelated with each other:
   - 1: While evidence linking input and vocab is super strong, evidence linking input to grammar is more scant; aspects of the system may be differentially sensitive to experience (Dan's paper)
   - 2: Literacy-centric view of language development; what is the 'target'?
@@ -1390,6 +1410,13 @@ delta.tds.tth.c_o.plot <- ggplot(
 
 grid.arrange(delta.cvc.mph.plot,delta.voc.rtg.plot,
              delta.tds.tth.o_c.plot, delta.tds.tth.c_o.plot, nrow=2, ncol=2)
+
+```
+
+``` {r prevalence_tt_estimate}
+best.min.avgs <- tth.per.sample %>%
+  filter(sample != "random") %>%
+  select(-d_c_o.tth.cds, -d_c_o.tth.tds, -d_o_c.tth.cds, -d_o_c.tth.tds)
 
 ```
 
