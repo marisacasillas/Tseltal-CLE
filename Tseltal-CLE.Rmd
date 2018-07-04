@@ -76,20 +76,40 @@ Much of developmental language science revolves around one central question: wha
 
 In the last two decades, the role of children's linguistic environments on their language development has become a topic of intense focus in developmental psychology, with studies showing repeatedly that the amount of child-directed speech (CDS) children hear influences their language development, particularly their vocabulary (REFS). For example, [TO DO: Fill in later]. Some studies have also linked the quantity of directed speech children hear to their speed of lexical retrieval and their syntactic development (REFS; Weisleder; LuCiD; Huttenlocher). [TO DO: Fill in later after reading Huttenlocher]. Child-directed speech estimates have traditionally come from short at-home or in-lab video recordings of caregiver-child interaction. But recently many researchers have also used daylong audio recordings (e.g., with the LENA(C) system) to track the approximate amount of spoken language in children's at-home language environments; tracking information about how much of the talk is child-directed by annotating sub-samples of the recording (REFS; Weisleder) or looking at other cues to interactional behavior (REFS; Romeo). 
 
-The conclusion drawn in much of this work is that child-directed speech is the ideal register for learning words; especially for _referential_ word learning (i.e., concrete nouns and verbs; REFS). In line with this idea, experimental studies have conclusively shown that infant-directed speech is nearly universally preferred over adult-directed speech by young children (REFS ManyBabies, etc.). Perhaps more importantly, child-directed speech is often produced under conditions of joint activity, in which caregivers and children coordinate their behavior in order to accomplish interactional goals (e.g., daily routines of feeding, diaper changing, and play). Using head-mounted eyetrackers, Chen Yu and colleagues (REFS) have demonstrated that coordination during object-play exchanges [TO DO: Fill in later]. Crucially, then, estimates of child-directed speech quantity may functionally predict children's word learning because they index the frequency with which children engage in rich, multimodal interactions with their caregivers; interactions in which children can actively and contingently elicit just the right linguistic information at just the right time to be optimally interesting and useful for learning (REFS; Eve's paper on homophonic Vs in French).
+The conclusion drawn in much of this work is that child-directed speech is the ideal register for learning words; especially for _referential_ word learning (i.e., concrete nouns and verbs; REFS). In line with this idea, experimental studies have conclusively shown that infant-directed speech is nearly universally preferred over adult-directed speech by young children (REFS ManyBabies, etc.). Perhaps more importantly, child-directed speech is often produced under conditions of joint activity, in which caregivers and children coordinate their behavior in order to accomplish interactional goals (e.g., daily routines of feeding, diaper changing, and play). Using head-mounted eyetrackers, Chen Yu and colleagues (REFS) have demonstrated that coordination during object-play exchanges [TO DO: Fill in later]. Crucially, then, estimates of child-directed speech quantity may functionally predict children's word learning because they index the frequency with which children engage in rich, multimodal interactions with their caregivers; interactions in which children can actively and contingently elicit just the right linguistic information at just the right time to be optimally interesting and useful for learning (REFS; Eve's paper on homophonic Vs in French). There are, however, at least two major caveats to this body of work relating CDS quantity and language development.
 
-There are, however, a few very important caveats to this body of work relating CDS quantity and language development. First, while there is overwhelming evidence linking CDS quantity to vocabulary size, links to grammatical development are much more scant (REFS: Huttenlocher; others???).  Learning a language involves mastery of its systemic underpinnings, e.g., its phonology, morphology, and syntax. While there is clear reason for CDS to have referentially more clear speech (good for learning concrete vocabulary), there is less clear reason for it to do the same for grammatical information. [Start with Yurovsky paper + refrences therein] 
+First, while there is overwhelming evidence linking CDS quantity to vocabulary size, links to grammatical development are much more scant (REFS: Huttenlocher; others???).<!--Footnote: A lack of evidence linking input to grammatical outcomes may partly be due to practical limitations, e.g., there is no similarly convenient metric for syntactic development like the CDI (REFS??).-->  Learning a language involves mastery of its systemic underpinnings, e.g., its phonology, morphology, and syntax. While there is clear reason for CDS to have referentially more clear speech--which is good for learning concrete vocabulary---it's less obvious that the ability to learn syntactic structures is similarly facilitated [TO DO: Start with Yurovsky paper + refrences therein]. On the other hand, many usage-based approaches to language development and processing (e.g., REFS) suggest that much of our syntactic knowledge is wrapped up in lexically specified representations; what is good for the lexicon may also be good for syntax. Taken together with Huttenlocher's findings, the relationship between CDS and syntactic development may be less linear (i.e., more exposure != more skill) and more like [TO DO: fill in].
 
-<!--A lack of evidence linking input to grammatical outcomes may partly be more scant for practical reasons (e.g., there is no similarly convenient metric like the CDI; REFS).-->
+Second, findings regarding the importance of CDS quantity for language development have typically only focused on Western (primarily North American) populations (e.g., REFS), fundamentally limiting our ability to generalize the effects to children acquiring language worldwide (REFS: WEIRD). While there is certainly insight to be gained by looking at within-population variation, researchers are more likely to find the places where their assumptions break down when they study child language development in new populations. Ethnographic work with traditional non-Western communities has demonstrated that caregiver-child interaction styles vary immensely from place to place, with some reports of little or no child-directed speech (*Table 1*; Gaskins, 2006; Lieven, 1994??). Although some of these children hear very little CDS, there are no reports of significant delay in their linguistic development. On the contrary, children in these communities are reported to acquire language with `typical'-looking benchmarks: they tend to start pointing (REFS: Liszkowski) and talking (REFS: Rogoff et al., 2003?; Brown??) around the same time we would expect for Western middle-class infants. However, it is difficult to make direct comparisons between these ethnographic reports and reports from Western settings that use entirely different methods of sampling and analysis. To our knowledge, only a handful of researcherers have attempted to quantitatively describe the language environments of children growing up in traditional non-Western communities. We briefly highlight two recent efforts.
 
-<!--means are meaningless if the thing that matters is some threshhold of interaction. well, not fully if we take evidence from cross-situational learning in wihch # of exposures matters, but even then we might expect bursty exposures to be more effective than non-bursty ones if memory is an issue... isn't there a Lew-Williams paper along these lines?-->
+<!--TO DO: INSERT TABLE OF PREVIOUS ETHNOGRAPHIC WORK
+``typical'' looking language development despite very little child-directed speech (e.g., REFS; Schieffelin, 1990; Ochs, 1988; Demuth, 1992(?); Takada, 2005; Goody, 1982; Schieffelin & Ochs, 1986; Pye, 1986; Gaskins, 2006; Brown & Casillas, under review).--> <!--Pye 1986. Quiché mayan speech to children. Journal of Child Language, 13(1), 85-100-->
+
+Scaff, Cristia, and colleagues (REFS: 2017; in preparation) have used a number of different data collection methods to estimate how much speech children hear in an indigenous Tsimane community in Bolivia. Collectively, their results suggest that Tsimane children NN or fewer minutes [TO DO: << fill in numbers] of CDS per hour. For comparison, children from Western middle-class homes are reported to hear between NN and NN minutes of CDS per hour [TO DO: << fill in numbers] (REFS: Alex's paper + the refs therein, but also the newer Tamis-LeMonda paper; maybe give estimates w/ age ranges for each??), with children in working-class homes hearing between NN and NN minutes of CDS per hour [TO DO: << fill in numbers].
+
+Laura Shneidman and colleagues (REFS; 2010; 2012) analyzed speech from 1-hour at-home video recordings of Yucatec Mayan children and American children between 13 and 35 months. Shneidman and Goldin-Meadow's (REFS; 2012) analyses of the video recordings yielded four main findings: compared to the American children, (a) the Mayan children heard many fewer utterances per hour, (b) a much smaller proportion of the utterances they heard were _child-directed_, (c) the proportion of child-directed utterances increased dramatically with age, matching American children's by 35 months, and that (d) most of the added CDS came from other children (e.g., older siblings and cousins). They also demonstrated that the lexical diversity of CDS children heard at 24 months---particularly from adult speakers---predicted their vocabulary knowledge at 35 months.
+
+These groundbreaking studies on Tsimane and Yucatec Mayan children's early language environments lead us to a number of important interim conclusions. First, children in each of these communities appear able to acquire their languages with relatively little CDS. Second, the frequency with which they are addressed increases with age. Third, other children may be the primary source of CDS in similar communities. And finally, despite these differences, CDS from adults may still be the most robust predictor of vocabulary growth.
+
+## The current study
+- In this paper we examine the linguistic experiences of 10 Tseltal Mayan children. Why Mayan?
+  - Non-WEIRD
+  - Rich area of research: Little CDS from report—potentially a great case for looking at a functioning acquisition system with minimal environmental input
+  - Many linguistically and culturally similar communities for comparison (see Shneidman, Pye, etc.)
+  - See slides for more
+  - A major contribution of this work is to use daylong recordings, which allow us to estimate... (TLM paper on short vs. longer recs).
+    - At the same time, there is potentially great value in knowing about what happens during interactional bursts when they happen, so we track ... tt and va as well
+- Our aim is to develop a child language environment profile for Tseltal Mayan, one that gives an impression of the speech children hear around them and the type of speech that is addressed to them directly. <Describe corpus and lay out basic questions (see results below)>
 
 
+<!--Mayan work not yet mentioned:
+de Leon, 1998??
+Gaskins, 1990??
+Gaskins, 1999??
+Redfield & Villa Rojas, 1934??
+Rogoff et al., 1993??
+Lordes de Leon (2000): overhearing isn't just eavesdropping for Tsotsil kids because they're still socialized as participants-->
 
-- However, there are two major caveats to this work, all interrelated with each other:
-  - 1: While evidence linking input and vocab is super strong, evidence linking input to grammar is more scant; aspects of the system may be differentially sensitive to experience (Dan's paper)
-  - 2: Literacy-centric view of language development; what is the 'target'?
-  - 3: Focused on WEIRD kids
 
 
 <!--- Children require linguistic input to become full-fledged speakers of their language(s)
@@ -99,7 +119,7 @@ There are, however, a few very important caveats to this body of work relating C
   - Extoll the virtues of daylong recordings
   - Indeed, studies along these lines, linking children's language experience to their language outcomes, finds a strong impact of experience, especiall with respect to CDS
     - List some findings on input effects
-    - Why is CDS special? Briefly list findings-->
+    - Why is CDS special? Briefly list findings
 - However, there are two major caveats to this work, all interrelated with each other:
   - 1: While evidence linking input and vocab is super strong, evidence linking input to grammar is more scant; aspects of the system may be differentially sensitive to experience (Dan's paper)
   - 2: Literacy-centric view of language development; what is the 'target'?
@@ -116,7 +136,7 @@ There are, however, a few very important caveats to this body of work relating C
   - See slides for more
   - A major contribution of this work is to use daylong recordings, which allow us to estimate... (TLM paper on short vs. longer recs).
     - At the same time, there is potentially great value in knowing about what happens during interactional bursts when they happen, so we track ... tt and va as well
-- Our aim is to develop a child language environment profile for Tseltal Mayan, one that gives an impression of the speech children hear around them and the type of speech that is addressed to them directly. <Describe corpus and lay out basic questions (see results below)>
+- Our aim is to develop a child language environment profile for Tseltal Mayan, one that gives an impression of the speech children hear around them and the type of speech that is addressed to them directly. <Describe corpus and lay out basic questions (see results below)>-->
 - Results:
   - How much speech do children hear overall and what proportion of that is directed to them? How does that compare to other communities we've studied?
     - *measures*: XDS and TDS minutes per hour and proportion (from random selections only)
@@ -665,7 +685,6 @@ grid.arrange(xdsmph.segments.nonrand, tdsmph.segments.nonrand.zoomedin,
              tdsprp.segments.nonrand, tdsprp.segments.sa.nonrand, nrow=2, ncol=2)
 ```
 
-
 ``` {r chi_voctypes_overall}
 chi.vm.lx.utts <- all.data %>%
   filter((tier == "vcm@CHI" | tier == "lex@CHI" | tier == "mwu@CHI")) %>%
@@ -698,7 +717,6 @@ chi.vm.lx.voc.type.props <- chi.vm.lx.utts %>%
   full_join(ptcp.info, by = "aclew_child_id")
 ```
 
-
 ``` {r plot_chi_voctypes_overall}
 chi.vm.lx.voc.type.props <- chi.vm.lx.voc.type.props %>%
   mutate(voc.type = factor(as.factor(max_voc.rtg), labels = c("NCB", "CB", "SW", "MW")))
@@ -721,7 +739,6 @@ voc.mat.by.age <- ggplot(
     axis.line = element_line(color="black", size = 0.4))
 voc.mat.by.age
 ```
-
 
 ``` {r sample_differences}
 # deltas m/h XDS, TDS, and CDS mph
@@ -1421,6 +1438,12 @@ best.min.avgs <- tth.per.sample %>%
 ```
 
 # Discussion
+
+## LATERGRAM
+One serious issue is how we define adult-like linguistic competence, especially within models in which we consider that adults still continue learning and that individual differences are rampant between adults in both linguistic knowledge and skill at every level, from phonetics to syntax to pragmatics, and of course vocabulary too. When we talk about language acquisition, especially cross-culturally, we have to be careful about what we think the ``target'' is and what are considered to be the developmental benchmarks children achieve. The focus recently has been on vocabulary acquisition, for some of the reasons outline above. However, vocabulary is a particularly literacy-centric view of language development. If we were to go back in time and set the seed of developmental language science in another culture, we might be much more concerned about the acquisition of kinship systems and other complex relational language, or in the ability to design elaborately indirect speech acts. Acquiring a language involves the mastery of a shockingly diverse array of skills and knowledge: not just linguistic symbols and systems, but also the infrastructure underlying their use (e.g., interactional skills), the cognitive-general skills supporting those systems. There's no reason _a priori_ to believe that every aspect of language acquisition is equally influenced by environmental input. For example, children's pointing frequency is influenced by the amount of pointing in their environment, but the age of pointing onset---the age which they first begin to point---appears unaffected by the frequency of pointing in their environment (REFS: Matthews, Liszkowski).
+
+
+<!--means are meaningless if the thing that matters is some threshhold of interaction. well, not fully if we take evidence from cross-situational learning in wihch # of exposures matters, but even then we might expect bursty exposures to be more effective than non-bursty ones if memory is an issue... isn't there a Lew-Williams paper along these lines?-->
 
 
 \newpage
