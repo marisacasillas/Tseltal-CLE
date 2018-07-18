@@ -81,7 +81,7 @@ First, while there is overwhelming evidence linking CDS quantity to vocabulary s
 
 Second, **[TASK 04: Add paragraph on burstiness]**
 
-Third, prior work has typically focused on Western (primarily North American) populations, limiting our ability to generalize these effects to children acquiring language worldwide (REFS: WEIRD; Lieven, 1994). While we do gain valuable insight by looking at _within-population_ variation (e.g., REFS), we can more effectively find places where our assumptions break down by studying _new_ populations. Linguistic anthropologists working in non-Western communities have long reported that caregiver interaction styles vary immensely from place to place, with some caregivers using little or no CDS to young children (REFS Gaskins, 2006). Children in these communities reportedly acquire language with 'typical'-looking benchmarks. For example, they start pointing (REFS Liszkowski) and talking (REFS Rogoff et al., 2003?; Brown??) around the same time we would expect for Western middle-class infants. These findings have had little impact on mainstream theories of word learning and language acquisition, partly due to a lack of directly comparable measures (Brown, 2014). If, however, these children indeed acquire language without delay despite little or no CDS, we must reconsider what kind of linguistic evidence is necessary for children to learn language.
+Third, prior work has typically focused on Western (primarily North American) populations, limiting our ability to generalize these effects to children acquiring language worldwide (REFS: WEIRD; Lieven, 1994). While we do gain valuable insight by looking at _within-population_ variation (e.g., REFS), we can more effectively find places where our assumptions break down by studying _new_ populations. Linguistic anthropologists working in non-Western communities have long reported that caregiver interaction styles vary immensely from place to place, with some caregivers using little or no CDS to young children (REFS Gaskins, 2006). Children in these communities reportedly acquire language with 'typical'-looking benchmarks. For example, they start pointing (REFS Liszkowski et al., 2012; but see Salomo & Liszkowski, 2013) and talking (REFS Rogoff et al., 2003?; Brown??) around the same time we would expect for Western middle-class infants. These findings have had little impact on mainstream theories of word learning and language acquisition, partly due to a lack of directly comparable measures (Brown, 2014). If, however, these children indeed acquire language without delay despite little or no CDS, we must reconsider what kind of linguistic evidence is necessary for children to learn language.
 
 <!--**[TASK 05: Check out previous ethnographic work]** Possibly relevant: Schieffelin, 1990; Ochs, 1988; Demuth, 1992(?); Takada, 2005; Goody, 1982; Schieffelin & Ochs, 1986; Pye, 1986; Gaskins, 2006; Brown & Casillas, under review).--> <!--Pye 1986. Quiché mayan speech to children. Journal of Child Language, 13(1), 85-100-->
 
@@ -109,46 +109,33 @@ More than forty years of ethnographic work by the second author has told us that
 
 Young children are often cared for by other family members, especially older siblings. Even when not on their mother's back, infants are rarely put on the ground, so they can't usually pick up the objects around them until they are old enough to walk. Toys are scarce and books are vanishingly rare, so the objects children do get their hands on tend to be natural or household objects (e.g., rocks, sticks, spoons, baskets, etc.). By age five, most children are competent speakers who daily engage in chores and caregiving of their younger siblings. The Tseltal approach to caregiving is similar to that described for other Mayan communities (e.g., REFS Rogoff, Gaskins, de Leon, Shneidman).
 
-## Corpus and data selection {#methods-corpus}
-The current data come from the Casillas HomeBank Corpus (REFS HomeBank), which includes daylong recordings and other developmental language data from 55+ children under 4;0 in two indigenous, non-WEIRD communities: the Tseltal Mayan community described here and a Papua New Guinean community described elsewhere (REFS). The Tseltal data include recordings from 55 children born to 43 mothers. Our dataset, initiated in 2015, included  2.86 children per mother; median = 2; range = 1==9). 
+## Corpus {#methods-corpus}
+The current data come from the Casillas HomeBank Corpus (REFS HomeBank), which includes daylong recordings and other developmental language data from 55+ children under 4;0 in two indigenous, non-WEIRD communities: the Tseltal Mayan community described here and a Papua New Guinean community described elsewhere (REFS).
 
+*[TASK 06: Check these demographic data again]*
+The Tseltal data, which were primarily collected in 2015, include recordings from 55 children born to 43 mothers. The families in our dataset typically only had 2--3 children (median = 2; range = 1--9), due to the fact that the participating families represent a fairly young subsample of the community (mothers: mean = 26.9 years; median = 25.9; range = 16.6--43.8 and fathers: mean = 30.5; median = 27.6; range = 17.7–-52.9). On average, mothers were 20.1 years old when they had their first child (median = 19; range = 12--27), with a following inter-child interval of 3.04 years (median = 2.8; range = 1--8.5).\footnote{These estimates do not include miscarriages and/or children who passed away.}. As a result, 26% of the participating families had two children under 4;0.
 
+Extended households, defined in our dataset as the group sharing a kitchen or other primary living space, ranged between between 3 and 15 people (mean = NN; median = NN). Although 30.9% of the target children are first-born, they were rarely the only child in their extended household. Caregiver education is one (imperfect) measure of contact with Western culture. Most mothers had finished primary school, with many also having completed secondary school (range = no schooling--university). Most fathers had finished secondary school, with many having also completed preparatory school (range = no schooling--university). Owing in large part to the patrilineal allocation of land (i.e., father to son), 93% of the fathers grew up in the village where the recordings took place, while only 53% of the mothers did.  
 
-55 children 48 mo and younger from 43 mothers
-Average number of children per mother: 2.86 (range=1–9; median=2)
-26% of families with two children under 48 months
-Average age of 20.1 at first birth (range=12–27; median=19)
-Average time between births: 3.04 years (range=1–8.5; median=2.8)
+### Recordings {#methods-corpus-recs}
+Methods for estimating the quantity of speech that children hear have advanced significantly in the past two decades, with long-format (4+ hour) at-home audio recordings quickly becoming the new standard (e.g., with the LENA^®^ system; REFS). These recordings capture a wider range of the linguistic patterns children hear as they participate in different activities with different speakers over the course of their day. In longer, more naturalistic recordings, caregivers also tend to use less CDS (REFS Tamis-LeMonda<!--\footnote{That said, Tamis-LeMonda and colleagues found that rank CDS quantity use was highly correlated between short- and long-format recordings.}-->). The result is greater confidence that the estimated CDS characteristics are representative of what the child typically hears at home.
 
-26.9 
-range=16.6–43.8
-median=25.9
-Primary school
-range=None–University
-53%
+We used a novel combination of a lightweight stereo audio recorder (Olympus^®^ WS-832) and wearable photo camera (Narrative Clip 1^®^) fitted with a fish-eye lens, to track children's movements and interactions over the course of a 9--11-hour period in which the experimenter was not present.  Each recording was made during a single day at home in which the recorder and/or camera was attached to the child. Ambulatory children wore both devices on an elastic vest. Non-ambulatory children wore the recorder in a onesie while their primary caregiver wore the camera on an elastic vest *Figure 1* *[TASK 07: Make figure]*. The camera was set to take photos at 30-second intervals and was synchronized to the audio in post-processing to create video of the child's daylong recording.\footnote{Documentation for recording set-up and scripts for post-processing are available at *[TASK 08: Link to relevant docs]*}
 
-30.5
-range=17.7–52.9
-median=27.6
-Secondary school
-range=Primary–University
-93%
+## Data selection and annotation {#methods-samples}
+We annotated video clips from 10 of the 55 children's recordings. We chose these 10 recordings to maximize variance in three demographic variables: child age (0--3;0), child sex, and maternal education. The sample is summarized in *Table 1* *[TASK 09: Make table]*. We then selected one hour's worth of non-overlapping clips from each recording in the following order: nine randomly selected 5-minute clips, five 1-minute clips manually selected as the top 'turn-taking' minutes of the recording, five 1-minute clips manually selected as the top 'vocal activity' minutes of the recording, and one, manually selected 5-minute extension of the best 1-minute sample.
+<!--IMPORTANT: Say right here why we have all these sample types!!-->
 
-Extended households in our dataset (defined as those who share a kitchen or other primary living space) ranged between between 3 and 15 people *[TASK 06: Check this range]*. 
-<!--Methods for estimating the quantity of speech that children hear have advanced significantly in the past two decades, with long-format (4+ hour) at-home audio recordings quickly becoming the new standard (e.g., with the LENA^®^ system; REFS). These recordings capture the range of linguistic patterns children hear as they participate in different activities with different speakers over the course of their day. In longer, more naturalistic recordings, caregivers also tend to use less CDS (REFS Tamis-LeMonda\footnote{That said, Tamis-LeMonda and colleagues found that rank CDS quantity use was highly correlated between short- and long-format recordings.}). The result is greater confidence that the estimated CDS characteristics are representative of what the child typically hears at home.-->
+The manually selected clips were chosen by two trained annotators (the first author and a student assistant) who listened to each recording in its entirety at 1--2x speed and took notes on the onset times of candidate turn taking and vocal activity regions. Then the first author reviewed each candidate closely (1x speed, multiple repetitions) to choose the best five one-minute samples for each of the two types of activity. Good turn-taking activity was defined as at closely timed sequences of contingent vocalization between the target child and at least one other person. The 'best' turn-taking clips were chosen because they had the most and most clear turn-switching activity between the target child and the other speaker(s). Good vocal activity clips were defined as clips in which the target child produced the most and most diverse spontaneous (i.e., not imitative) vocalizations. The 'best' vocal activity clips were chosen for representing the most linguistically mature and/or diverse vocalizations made by the child over the day---the idea of this sample is to get an idea of the child's productive speech abilities. All else being equal, candidate clips were prioritized when they contained less background noise or speakers who were not otherwise frequently represented (e.g., CDS from older males). The best turn-taking clips and vocal activity clips often overlapped; clips were first assigned to turn-taking and vocal activity clips were chosen from the remainder of the candidates.
 
-
-<!--A major contribution of this work is the use of daylong recordings to describe children's language environments. Using a novel combination of a lightweight audio recorder and wearable photo camera, we were able to track children's movements and interactions over the course of a 9--11-hour period in which the experimenter was not present. With long-format recordings of this kind we can make precise descriptive estimates about the speech children hear: typical quantities, variation within a day, and more (REFS: see also Tamis-LeMonda et al....).-->
-
-
-## How to define temporal contingency for turn taking
-Many other studies of child-caregiver turn taking use an arbitrary cut-off for detecting contingency (5 seconds?? Look up references). We base ours on measures of turn taking in interactions with infants and young children. Hilbrink et al. (2015) looked at interaction in a longitudinal corpus from 3 to 18 months and found that infants' responses to mothers began between -700ms and 1200ms relative to the end of the mothers' turns. Complementarily, mothers' responses to infant vocalizations began between -350ms and 650ms relative to the end of the infants' turns. Casillas et al. (2016) investigated the timing of question-answer responses from caregiver to child and from child to caregiver with children between 20 and 35 months. In their study, children's responses typically started between -500ms and 650ms relative to the end of their caregivers' turns. Caregivers' responses typically started between -1000ms and 400ms relative to the end of their children's turns. Because both studies focused on fairly intensive bouts of interaction, and both within WEIRD parental contexts, we defined contingent responses in the current data with slightly generous allowances for overlap and gap: contingent responses must begin with no more than `r allowed.overlap`ms of overlap and `r allowed.gap`ms of gap relative to the offset of the first speaker's turn. We used this same criteria for finding child-to-other turn transitions and other-to-child turn transitions. Transitions were only counted if the other speaker's turn was coded as addressed to 'T' (the target child).
-
-<!--Potentially redefine allowed.overlap and allowed.gap based on ±2.5SD of timing distributions for Hilbrink and Casillas data-->
-
+Each video clip was transcribed and annotated in ELAN (REFS) using the ACLEW Annotation Scheme (REFS) by the first author and a native speaker of Tseltal who lives in the community and knows most of the recorded families personally. At the time of writing, NN% *[TASK XX: Fill in before submitting]* of the clips have been reviewed by a second, highly literate native Tseltal speaker with extensive training in ELAN. The annotations include the transcription of (nearly) all hearable utterances in Tseltal, a loose translation of each utterance into Spanish, vocal maturity measures of each target child utterance (non-linguistic vocalizations/non-canonical babbling/non-word canonical babbling/single words/multiple words), and addressee annotations for all non-target-child utterances (target-child-directed/other-child-directed/adult-directed/adult-and-child-directed/animal-directed/other-speaker-type-directed).
 
 ## Data analysis {#methods-analysisinfo}
-<!--We used `r cite_r("r-references.bib")` for all our analyses.-->
+We exported each ELAN file into a tab-separated values, which we could then read into ```R.version$version.string``` for analysis. All plots were made using the ggplot2 package, and all analyses run using the lme4 and betareg packages *[TASK 10: Fix references to packages and their citations]*.
+<!--## How to define temporal contingency for turn taking
+Many other studies of child-caregiver turn taking use an arbitrary cut-off for detecting contingency (5 seconds?? Look up references). We base ours on measures of turn taking in interactions with infants and young children. Hilbrink et al. (2015) looked at interaction in a longitudinal corpus from 3 to 18 months and found that infants' responses to mothers began between -700ms and 1200ms relative to the end of the mothers' turns. Complementarily, mothers' responses to infant vocalizations began between -350ms and 650ms relative to the end of the infants' turns. Casillas et al. (2016) investigated the timing of question-answer responses from caregiver to child and from child to caregiver with children between 20 and 35 months. In their study, children's responses typically started between -500ms and 650ms relative to the end of their caregivers' turns. Caregivers' responses typically started between -1000ms and 400ms relative to the end of their children's turns. Because both studies focused on fairly intensive bouts of interaction, and both within WEIRD parental contexts, we defined contingent responses in the current data with slightly generous allowances for overlap and gap: contingent responses must begin with no more than `r allowed.overlap`ms of overlap and `r allowed.gap`ms of gap relative to the offset of the first speaker's turn. We used this same criteria for finding child-to-other turn transitions and other-to-child turn transitions. Transitions were only counted if the other speaker's turn was coded as addressed to 'T' (the target child).-->
+
+<!--Potentially redefine allowed.overlap and allowed.gap based on ±2.5SD of timing distributions for Hilbrink and Casillas data-->
 
 
 # Results {#results}
@@ -177,7 +164,7 @@ Many other studies of child-caregiver turn taking use an arbitrary cut-off for d
     - no video data
     - only 10 kids-->
     
-## Still to graph
+<!--## Still to graph
 3: sliding window in random to match mean TDS rate/TT transition rates
 4: utt length, repetitiveness, F0 peaks and ranges
 
@@ -203,7 +190,7 @@ Age35mo?
 24 months Directed speech 315 (69); Overheard speech 360 (73)
 (I think these data weren't coded for adult vs. child speaker)
 
-<!-- is this right?? the values are the same for D vs. O with adult and kid speech: I think it's more like (directed:M=175, SD=100; overheard:M=190 SD=110) according to figure 2-->
+is this right?? the values are the same for D vs. O with adult and kid speech: I think it's more like (directed:M=175, SD=100; overheard:M=190 SD=110) according to figure 2-->
 
 
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
@@ -1460,6 +1447,8 @@ Redfield & Villa Rojas, 1934??
 Rogoff et al., 1993??
 Lordes de Leon (2000): overhearing isn't just eavesdropping for Tsotsil kids because they're still socialized as participants-->
 
+# Acknowledgements {#acknowledgements}
+<!--This work would not be possible without the efforts of Rebeca, Beti, Xun, their cousin, and Antun. We are enormously grateful to the participating families for sharing their lives with us. We also thank the community and community leaders in Tenejapa for supporting our work. Thanks too, to Maartje Weenink and Daphne Jansen, who have spent many hours identifying usable clips and annotation errors. This work was supported by a NWO Veni Innovational Scheme grant (#) to MC and by an ERC Advanced Grant (INTERACT#) project to SCL. This manuscript was written using the papaja library in RStudio version *[TASK XX: Cite correctly!!]*.--> 
 
 \newpage
 
