@@ -451,30 +451,36 @@ recording in the following order: nine randomly selected 5-minute clips,
 five 1-minute clips manually selected as the top \enquote{turn-taking}
 minutes of the recording, five 1-minute clips manually selected as the
 top \enquote{vocal activity} minutes of the recording, and one, manually
-selected 5-minute extension of the best 1-minute sample.
+selected 5-minute extension of the best 1-minute sample. We created
+these different subsamples of each day to measure properties of (a)
+children's \emph{average} language environments (random samples) and (b)
+their \emph{most input-dense} language environments (turn-taking
+samples). The third sample (high-activity) gave us insight into
+children's productive speech abilities.
 
-The manually selected clips were chosen by two trained annotators (the
-first author and a student assistant) who listened to each recording in
-its entirety at 1--2x speed and took notes on the onset times of
-candidate turn taking and vocal activity regions. Then the first author
-reviewed each candidate closely (1x speed, multiple repetitions) to
-choose the best five one-minute samples for each of the two types of
-activity. Good turn-taking activity was defined as at closely timed
-sequences of contingent vocalization between the target child and at
-least one other person. The \enquote{best} turn-taking clips were chosen
-because they had the most and most clear turn-switching activity between
-the target child and the other speaker(s). Good vocal activity clips
-were defined as clips in which the target child produced the most and
-most diverse spontaneous (i.e., not imitative) vocalizations. The
+The turn-taking and high-activity clips were chosen by two trained
+annotators (the first author and a student assistant) who listened to
+each recording in its entirety at 1--2x speed while actively taking
+notes about potentially useful clips. Afterwards, the first author
+reviewed the list of candidate clips, listened again to each one (at 1x
+speed, multiple repetitions), and chose the best five 1-minute samples
+for each of the two types of activity. Good turn-taking activity was
+defined as at closely timed sequences of contingent vocalization between
+the target child and at least one other person (i.e., frequent
+vocalization exchanges). The \enquote{best} turn-taking clips were
+chosen because they had the most and most clear turn-switching activity
+between the target child and the other speaker(s). Good vocal activity
+clips were defined as clips in which the target child produced the most
+and most diverse spontaneous (i.e., not imitative) vocalizations. The
 \enquote{best} vocal activity clips were chosen for representing the
 most linguistically mature and/or diverse vocalizations made by the
-child over the day---the idea of this sample is to get an idea of the
-child's productive speech abilities. All else being equal, candidate
-clips were prioritized when they contained less background noise or
-speakers who were not otherwise frequently represented (e.g., CDS from
-older males). The best turn-taking clips and vocal activity clips often
-overlapped; clips were first assigned to turn-taking and vocal activity
-clips were chosen from the remainder of the candidates.
+child over the day. All else being equal, candidate clips were
+prioritized when they contained less background noise or featured
+speakers and speech that were not otherwise frequently represented
+(e.g., CDS from older males). The best turn-taking clips and vocal
+activity clips often overlapped; turn-taking clips were selected from
+the list of candidates first, and then vocal-activity clips were chosen
+from the remainder.
 
 Each video clip was transcribed and annotated in ELAN (REFS) using the
 ACLEW Annotation Scheme (REFS) by the first author and a native speaker
@@ -488,15 +494,15 @@ Spanish, vocal maturity measures of each target child utterance
 (non-linguistic vocalizations/non-canonical babbling/non-word canonical
 babbling/single words/multiple words), and addressee annotations for all
 non-target-child utterances
-(target-child-directed/other-child-directed/adult-directed/adult-and-child-directed/animal-directed/other-speaker-type-directed).
+(target-child-directed/other-child-directed/adult-directed/adult-and-child-directed/animal-directed/other-speaker-type-directed).\footnote{Full documentation, including training materials, for the ACLEW Annotation Scheme can be found at *[TASK 10: Add OSF link]*.}
 
 \subsection{Data analysis}\label{methods-analysisinfo}
 
-We exported each ELAN file into a tab-separated values, which we could
-then read into \texttt{R.version\$version.string} for analysis. All
-plots were made using the ggplot2 package, and all analyses run using
-the lme4 and betareg packages \emph{{[}TASK 10: Fix references to
-packages and their citations{]}}.
+We reformatted each ELAN file into tab-separated values so that the
+annotations could be read into R version 3.5.0 (2018-04-23) for
+analysis. All plots were made using the ggplot2 package, and all
+analyses run using the lme4 and betareg packages \emph{{[}TASK 11: Fix
+references to packages and their citations{]}}.
 
 \section{Results}\label{results}
 
