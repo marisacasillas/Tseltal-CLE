@@ -221,9 +221,39 @@ of the most robust predictors of their early syntactic development
 syntax. For now, however, the link between CDS and other aspects of
 grammatical development still needs to be more thoroughly tested.
 
-Second, \textbf{{[}TASK 04: Add paragraph on burstiness{]}}
+\textbf{{[}TASK 04: Refine paragraph on burstiness{]}} Second, most work
+on CDS quantity uses summary measures which average over the ebb and
+flow of interaction during sustained co-presence (e.g., proportion CDS).
+In adult conversation, linguistic behaviors are highly structured: while
+some occur at fairly regular intervals (\enquote{periodic}, e.g.,
+discourse connectives), others occur in shorter, more intense bouts
+separated by long periods of absence (\enquote{bursty}, e.g.,
+descriptions; REFS Abney 2018 bursts and lulls, see also fusaroli et al.
+2014 dialog as interpersonal synergy). Recent work suggests that bursty
+distributions are typical of child language environments as well,
+particularly with respect to the distribution of content words. Blasi
+and colleagues (REFS in prep) find that nouns and verbs are used
+burstily in child-proximal speech across all six of the languages in
+their typologically diverse sample. They also find that infrequent words
+are somewhat more bursty overall, leading them to propose that
+burstiness may play a key and universal role in helping learners to
+acquire linguistic units that are otherwise rare.
+\footnote{In contrast, Drew and Bergelson (REFS in preparation) find that the highest-frequency nouns used in CDS and children's own speech were relatively more bursty than other nouns in comparable American English data. Note, however, that these two studies use different measures of burstiness.}
+Their findings resonate with those of Schwab and Lew-Williams (2016),
+who find that two-year-olds learn novel words better from a massed
+presentation of object labels compared to a distributed presentation
+(but see contrasting findings from multi-day experiments, e.g., REFS
+Ambridge et al., 2006; Childers and Tomasello, 2002). Regularities in
+child language environments are likely to exist at multiple,
+interlocking timescales (Abney REFS). These temporal characteristics
+have enormous implications for how attention and memory shape children's
+language development. By that token, the current link between CDS
+quantity and linguistic development would be greatly enriched if we
+accounted for more nuanced distributional properties of CDS (see REFS
+Mendoza and Fausey (in preparation) for related work on child-proximal
+music).
 
-Third, prior work has typically focused on Western (primarily North
+Finally, prior work has typically focused on Western (primarily North
 American) populations, limiting our ability to generalize these effects
 to children acquiring language worldwide (REFS: WEIRD; Lieven, 1994).
 While we do gain valuable insight by looking at \emph{within-population}
@@ -451,12 +481,14 @@ recording in the following order: nine randomly selected 5-minute clips,
 five 1-minute clips manually selected as the top \enquote{turn-taking}
 minutes of the recording, five 1-minute clips manually selected as the
 top \enquote{vocal activity} minutes of the recording, and one, manually
-selected 5-minute extension of the best 1-minute sample. We created
-these different subsamples of each day to measure properties of (a)
-children's \emph{average} language environments (random samples) and (b)
-their \emph{most input-dense} language environments (turn-taking
-samples). The third sample (high-activity) gave us insight into
-children's productive speech abilities.
+selected 5-minute extension of the best 1-minute sample \emph{FIGURE ??}
+\emph{{[}TASK 10: Add figure of recording times with samples highlighted
+for the 10 recs{]}}. We created these different subsamples of each day
+to measure properties of (a) children's \emph{average} language
+environments (random samples) and (b) their \emph{most input-dense}
+language environments (turn-taking samples). The third sample
+(high-activity) gave us insight into children's productive speech
+abilities.
 
 The turn-taking and high-activity clips were chosen by two trained
 annotators (the first author and a student assistant) who listened to
@@ -494,15 +526,25 @@ Spanish, vocal maturity measures of each target child utterance
 (non-linguistic vocalizations/non-canonical babbling/non-word canonical
 babbling/single words/multiple words), and addressee annotations for all
 non-target-child utterances
-(target-child-directed/other-child-directed/adult-directed/adult-and-child-directed/animal-directed/other-speaker-type-directed).\footnote{Full documentation, including training materials, for the ACLEW Annotation Scheme can be found at *[TASK 10: Add OSF link]*.}
+(target-child-directed/other-child-directed/adult-directed/adult-and-child-directed/animal-directed/other-speaker-type-directed).\footnote{Full documentation, including training materials, for the ACLEW Annotation Scheme can be found at *[TASK 11: Add OSF link]*.}
 
 \subsection{Data analysis}\label{methods-analysisinfo}
 
-We reformatted each ELAN file into tab-separated values so that the
-annotations could be read into R version 3.5.0 (2018-04-23) for
-analysis. All plots were made using the ggplot2 package, and all
-analyses run using the lme4 and betareg packages \emph{{[}TASK 11: Fix
-references to packages and their citations{]}}.
+We reformatted each ELAN file into tab-separated values in order to read
+the annotations into R version 3.5.0 (2018-04-23) for analysis. We made
+plots with the ggplot2 package and ran all analyses with the lme4 and
+betareg packages \emph{{[}TASK 12: Fix references to packages and their
+citations{]}}. We then calculated a number of summary variables to
+characterize children's language environments and linguistic development
+including: the quantity of all overheard speech and all speech directed
+to the target child (\enquote{TCDS}) in both minutes per hour and
+utterances per hour, the proportion of speech in CDS and coming from
+adult vs.~child speakers, the number of target child-to-other and
+other-to-target child turn transitions per hour, the minutes of
+vocalization produced by target children per hour, and the average
+maturity of children's vocalizations. Using language environment
+measures from the turn-taking sample, we then also estimated the number
+of intensive interaction minutes each child experienced over the day.
 
 \section{Results}\label{results}
 
