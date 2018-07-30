@@ -1,4 +1,4 @@
-\documentclass[man]{apa6}
+\documentclass[floatsintext,man]{apa6}
 
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -39,12 +39,6 @@
   {\begin{landscape}\begin{center}\begin{ThreePartTable}}
   {\end{ThreePartTable}\end{center}\end{landscape}}
 
-  \usepackage{ifthen} % Only add declarations when endfloat package is loaded
-  \ifthenelse{\equal{\string man}{\string man}}{%
-   \DeclareDelayedFloatFlavor{ThreePartTable}{table} % Make endfloat play with longtable
-   % \DeclareDelayedFloatFlavor{ltable}{table} % Make endfloat play with lscape
-   \DeclareDelayedFloatFlavor{lltable}{table} % Make endfloat play with lscape & longtable
-  }{}%
 
 
 
@@ -177,16 +171,16 @@ topic, many researchers have fixed their sights on child-directed speech
 (CDS), showing that it is linguistically distinctive
 (REFS)\textbf{{[}TASK 00: Add missing references{]}}, interactionally
 rich (REFS), preferred by infants (REFS), and---perhaps most
-importantly---facilitates word learning (REFS). One might then conclude
-that CDS is an essential component for acquiring a first language. Yet
+importantly---facilitates word learning (REFS). By all appearances, CDS
+is an essential component for acquiring a first language. Yet
 ethnographic reports from a number of traditional, non-Western
 communities suggest that children easily acquire their community's
 language(s) with little or no CDS (REFS). If so, CDS may not be
 essential for learning language; just useful for facilitating certain
 aspects of language development. In this paper we investigate the
 language environment and early development of 10 Tseltal Mayan children
-growing up in a community that reportedly uses very little CDS with
-infants and young children (REFS Brown).
+growing up in a community where past research has suggested that
+caregivers use little CDS with infants and young children (REFS Brown).
 
 \subsection{Child-directed speech}\label{intro-cds}
 
@@ -208,50 +202,43 @@ language development.
 
 First, while there is overwhelming evidence linking CDS quantity to
 vocabulary size, links to grammatical development are more scant (REFS:
-Huttenlocher; Frank et al.). Children must master the systemic
-underpinnings of their language(s), e.g., the phonology, morphology, and
-syntax. While the advantage of CDS for referential word learning is
-clear, it is less obvious how CDS facilitates syntactic learning.
-\textbf{{[}TASK 03: Add argument from Yurovsky paper + refrences
-therein{]}} On the other hand, there is a wealth of evidence that both
-children and adults' syntactic knowledge is highly lexically specified
-(REFS), and that, crosslinguistically, children's vocabulary size is one
-of the most robust predictors of their early syntactic development
-(REFS). In short, what is good for the lexicon may also be good for
-syntax. For now, however, the link between CDS and other aspects of
-grammatical development still needs to be more thoroughly tested.
+Huttenlocher; Frank et al.). While the advantage of CDS for referential
+word learning is clear, it is less obvious how CDS facilitates syntactic
+learning. \textbf{{[}TASK 03: Add argument from Yurovsky paper +
+refrences therein{]}} On the other hand, there is a wealth of evidence
+that both children and adults' syntactic knowledge is highly lexically
+specified (REFS), and that, crosslinguistically, children's vocabulary
+size is one of the most robust predictors of their early syntactic
+development (REFS). In short, what is good for the lexicon may also be
+good for syntax. For now, however, the link between CDS and other
+aspects of grammatical development still needs to be more thoroughly
+tested.
 
-\textbf{{[}TASK 04: Refine paragraph on burstiness{]}} Second, most work
-on CDS quantity uses summary measures which average over the ebb and
-flow of interaction during sustained co-presence (e.g., proportion CDS).
-In adult conversation, linguistic behaviors are highly structured: while
-some occur at fairly regular intervals (\enquote{periodic}, e.g.,
-discourse connectives), others occur in shorter, more intense bouts
-separated by long periods of absence (\enquote{bursty}, e.g.,
-descriptions; REFS Abney 2018 bursts and lulls, see also fusaroli et al.
-2014 dialog as interpersonal synergy). Recent work suggests that bursty
-distributions are typical of child language environments as well,
-particularly with respect to the distribution of content words. Blasi
-and colleagues (REFS in prep) find that nouns and verbs are used
+A second caveat is that most work on CDS quantity uses summary measures
+that average over the ebb and flow of interaction (e.g., proportion
+CDS). In both child and adult interactions, verbal behaviors are highly
+structured: while some occur at fairly regular intervals
+(\enquote{periodic}), others occur in shorter, more intense bouts
+separated by long periods of inactivity (\enquote{bursty} REFS Abney
+2018 bursts and lulls, see also fusaroli et al. 2014 synergy). For
+example, Abney and colleagues (2016 REFS) found that, across multiple
+time scales of daylong recordings, both infants' and adults' vocal
+behavior was clustered. Focusing on lexical development, Blasi and
+colleagues (REFS in prep) also found that nouns and verbs were used
 burstily in child-proximal speech across all six of the languages in
-their typologically diverse sample. They also find that infrequent words
-are somewhat more bursty overall, leading them to propose that
-burstiness may play a key and universal role in helping learners to
-acquire linguistic units that are otherwise rare.
-\footnote{In contrast, Drew and Bergelson (REFS in preparation) find that the highest-frequency nouns used in CDS and children's own speech were relatively more bursty than other nouns in comparable American English data. Note, however, that these two studies use different measures of burstiness.}
-Their findings resonate with those of Schwab and Lew-Williams (2016),
-who find that two-year-olds learn novel words better from a massed
-presentation of object labels compared to a distributed presentation
-(but see contrasting findings from multi-day experiments, e.g., REFS
-Ambridge et al., 2006; Childers and Tomasello, 2002). Regularities in
-child language environments are likely to exist at multiple,
-interlocking timescales (Abney REFS). These temporal characteristics
-have enormous implications for how attention and memory shape children's
-language development. By that token, the current link between CDS
-quantity and linguistic development would be greatly enriched if we
-accounted for more nuanced distributional properties of CDS (see REFS
-Mendoza and Fausey (in preparation) for related work on child-proximal
-music).
+their typologically diverse sample. Infrequent words were somewhat more
+bursty overall, leading them to propose that burstiness may play a key
+and universal role in acquiring otherwise-rare linguistic units (see
+also REFS in prep from
+ICIS).\footnote{But see Drew and Bergelson (REFS in preparation), who find that the highest-frequency nouns used in CDS and children's own speech were relatively more bursty than other nouns.}
+Experiment-based work also shows that two-year-olds learn novel words
+better from a massed presentation of object labels versus a distributed
+presentation (Schwab and Lew-Williams (2016) REFS; but see REFS Ambridge
+et al., 2006; Childers and Tomasello, 2002). Structured temporal
+characteristics in children's language experience imply new roles for
+attention and memory in language development. By that token, we should
+begin to investigate the link between CDS and linguistic development
+with more nuanced measures of how CDS is distributed.
 
 Finally, prior work has typically focused on Western (primarily North
 American) populations, limiting our ability to generalize these effects
@@ -280,35 +267,31 @@ communities}\label{intro-nonweird}
 To our knowledge, only a handful of researchers have used methods from
 developmental psycholinguistics to describe the language environments
 and linguistic development of children growing up in traditional,
-non-Western communities. We focus here on \emph{quantitative} language
-development measures because the key claims about CDS and linguistic
-development are themselves quantitative in nature. We briefly highlight
-two recent efforts along these lines, but see Cristia et al. (2017) for
-a recent review.
+non-Western communities. We briefly highlight two recent efforts along
+these lines, but see Mastin and Vogt (REFS 2016) and Cristia et al.
+(2017) for more examples.
 
 Scaff, Cristia, and colleagues (REFS 2017; in preparation) have used a
 number of methods to estimate how much speech children hear in a Tsimane
 forager-horticulturalist population in the Bolivian lowlands. Their
 daylong recordings show that Tsimane children between 0;6 and 6;0 hear
-\textasciitilde{}5 minutes of CDS per hour, with no increase for older
-children (but see Cristia et al., 2017). For comparison, children from
-North American homes between ages 0;3 and 3;0 are estimated to hear
-\textasciitilde{}11 minutes of CDS per hour in daylong recordings (REFS:
-Bergelson, Casillas, et al., see also REFS the newer Tamis-LeMonda
-paper; maybe give estimates w/ age ranges for each??). In addition to
-CDS, Tsimane children also hear \textasciitilde{}10 minutes of
-other-directed speech per hour (e.g., talk between adults)---more than
-the \textasciitilde{}7 minutes of adult-directed speech per hour North
-American children are estimated to hear (REFS Bergelson, Casillas, et
-al.). This difference may be attributable to the fact that the Tsimane
-live in extended family clusters of 3--4 households, and so speakers are
-typically in close proximity to 5--8 other people (REFS Cristia et al.,
-2017).
+\textasciitilde{}5 minutes of CDS per hour, regardless of their age (but
+see Cristia et al., 2017). For comparison, children from North American
+homes between ages 0;3 and 3;0 are estimated to hear \textasciitilde{}11
+minutes of CDS per hour in daylong recordings (REFS: Bergelson,
+Casillas, et al., see also REFS the newer Tamis-LeMonda paper; maybe
+give estimates w/ age ranges for each??). Tsimane children also hear
+\textasciitilde{}10 minutes of other-directed speech per hour (e.g.,
+talk between adults) compared to the \textasciitilde{}7 minutes per hour
+heard by North American children (REFS Bergelson, Casillas, et al.).
+This difference may be attributable to the fact that the Tsimane live in
+extended family clusters of 3--4 households, so speakers are typically
+in close proximity to 5--8 other people (REFS Cristia et al., 2017).
 
 Laura Shneidman and colleagues (REFS; 2010; 2012) analyzed speech from
 1-hour at-home video recordings of children between ages 1;0 and 3;0 in
-two communities: Yucatec Mayan (Southern Mexico) and North American (in
-a major US city). Their analyses yielded four main findings: compared to
+two communities: Yucatec Mayan (Southern Mexico) and North American (a
+major U.S. city). Their analyses yielded four main findings: compared to
 the American children, (a) the Yucatec children heard many fewer
 utterances per hour, (b) a much smaller proportion of the utterances
 they heard were \emph{child-directed}, (c) the proportion of utterances
@@ -321,10 +304,10 @@ months.
 
 These groundbreaking studies establish a number of important findings:
 First, children in each of these communities appear able to acquire
-their languages with relatively little CDS. Second, CDS may become more
-frequent as children get older, though this may be largely due to speech
-from other children. Finally, despite these differences, CDS from adults
-may still be the most robust predictor of vocabulary growth.
+their languages with relatively little CDS. Second, CDS might become
+more frequent as children get older, though this could largely be due to
+speech from other children. Finally, despite these differences, CDS from
+adults may still be the most robust predictor of vocabulary growth.
 
 \subsection{The current study}\label{intro-currentstudy}
 
@@ -334,28 +317,26 @@ do not frequently speak directly to their children until the children
 themselves begin speaking (REFS: Brown??). Nonetheless, Tseltal children
 develop language with no apparent delays. Tseltal Mayan language and
 culture has much in common with the Yucatec Mayan communities Shneidman
-has worked with (REFS: 2010 + add other stuff that's not nec lg), which
-allows us to compare differences in child language environments between
-the two sites more directly than before.\textbackslash{}footnote\{For a
-review of comparative work in developmental linguistic anthropology,
-particularly on Mayan cultures, see Pye (2017).) We provide more details
-on this community and dataset in the \protect\hyperlink{methods}{Methods
-section}.
+reports on (REFS: 2010 + add other stuff that's not nec lg), allowing us
+to compare differences in child language environments between the two
+sites more directly than before.\textbackslash{}footnote\{For a review
+of comparative work on language socialization in Mayan cultures, see Pye
+(2017).) We provide more details on this community and dataset in the
+\protect\hyperlink{methods}{Methods section}.
 
-Similar to previous work by Shneidman, Scaff, Cristia, and colleages, we
-estimated how much speech children overheard, how much was directed to
-them, and how those quantities changed with age. To this foundation we
-added new sampling techniques for investigating variability in
-children's speech environments within daylong recordings. We also
-analyzed children's early vocal productions, examining both the overall
-developmental trajectory of their vocal maturity and how their
-vocalizations are influenced by CDS.
+Similar to previous work, we estimated how much speech children
+overheard, how much was directed to them, and how those quantities
+changed with age. To this foundation we added new sampling techniques
+for investigating variability in children's speech environments within
+daylong recordings. We also analyzed children's early vocal productions,
+examining both the overall developmental trajectory of their vocal
+maturity and how their vocalizations are influenced by CDS.
 
 Based on prior work, we predicted that Tseltal Mayan children hear
 little CDS, that the amount of CDS they hear increases with age, that
 most CDS comes from other children, and that, despite this, Tseltal
-Mayan children would hit early speech production benchmarks on par with
-Western children. We additionally predicted that children's language
+Mayan children reach speech production benchmarks on par with Western
+children. We additionally predicted that children's language
 environments would be bursty---that brief, high-intensity interactions
 would be sparsely distributed throughout the day, accounting for the
 majority of children's daily CDS---and that children's responsiveness
@@ -381,15 +362,15 @@ labor. A few community members---both men and women---earn incomes as
 teachers and shopkeepers but are still expected to regularly contribute
 to their family's household work.
 
-More than forty years of ethnographic work by the second author has told
-us that Tseltal children's language environments are non-child-centered
-and non-object-centered (REFS). During their waking hours, Tseltal
-infants are typically tied to their mother's back while she goes about
-her work for the day. Infants receive very little direct speech until
-they themselves begin to initiate interactions, usually as they approach
-their first birthdays. Even then, interactional exchanges are often
-brief or non-verbal (e.g., object exchange routines) and take place
-within a multi-participant context (Brown 2011; 2014). Rarely is
+More than forty years of ethnographic work by the second author has
+reported that Tseltal children's language environments are
+non-child-centered and non-object-centered (REFS). During their waking
+hours, Tseltal infants are typically tied to their mother's back while
+she goes about her work for the day. Infants receive very little direct
+speech until they themselves begin to initiate interactions, usually as
+they approach their first birthdays. Even then, interactional exchanges
+are often brief or non-verbal (e.g., object exchange routines) and take
+place within a multi-participant context (Brown 2011; 2014). Rarely is
 attention given to words and their meanings, even when objects are
 central to the activity. Instead, interactions tend to focus on
 appropriate actions and responses, and young children are socialized to
@@ -402,8 +383,8 @@ put on the ground, so they can't usually pick up the objects around them
 until they are old enough to walk. Toys are scarce and books are
 vanishingly rare, so the objects children do get their hands on tend to
 be natural or household objects (e.g., rocks, sticks, spoons, baskets,
-etc.). By age five, most children are competent speakers who daily
-engage in chores and caregiving of their younger siblings. The Tseltal
+etc.). By age five, most children are competent speakers who engage
+daily in chores and caregiving of their younger siblings. The Tseltal
 approach to caregiving is similar to that described for other Mayan
 communities (e.g., REFS Rogoff, Gaskins, de Leon, Shneidman).
 
@@ -411,20 +392,20 @@ communities (e.g., REFS Rogoff, Gaskins, de Leon, Shneidman).
 
 The current data come from the Casillas HomeBank Corpus (REFS HomeBank),
 which includes daylong recordings and other developmental language data
-from 55+ children under 4;0 in two indigenous, non-WEIRD communities:
-the Tseltal Mayan community described here and a Papua New Guinean
-community described elsewhere (REFS).
+from more than 100 children under 4;0 across two indigenous, non-WEIRD
+communities: the Tseltal Mayan community described here and a Papua New
+Guinean community described elsewhere (REFS).
 
 \emph{{[}TASK 06: Check these demographic data again{]}} The Tseltal
-data, which were primarily collected in 2015, include recordings from 55
-children born to 43 mothers. The families in our dataset typically only
-had 2--3 children (median = 2; range = 1--9), due to the fact that the
-participating families represent a fairly young subsample of the
-community (mothers: mean = 26.9 years; median = 25.9; range = 16.6--43.8
-and fathers: mean = 30.5; median = 27.6; range = 17.7---52.9). On
-average, mothers were 20.1 years old when they had their first child
-(median = 19; range = 12--27), with a following inter-child interval of
-3.04 years (median = 2.8; range =
+data, primarily collected in 2015, include recordings from 55 children
+born to 43 mothers. The families in our dataset typically only had 2--3
+children (median = 2; range = 1--9), due to the fact that the
+participating families come from a young subsample of the community
+(mothers: mean = 26.9 years; median = 25.9; range = 16.6--43.8 and
+fathers: mean = 30.5; median = 27.6; range = 17.7---52.9). On average,
+mothers were 20.1 years old when they had their first child (median =
+19; range = 12--27), with a following inter-child interval of 3.04 years
+(median = 2.8; range =
 1--8.5).\footnote{These estimates do not include miscarriages and/or children who passed away.}.
 As a result, 26\% of the participating families had two children under
 4;0.
@@ -438,23 +419,22 @@ with Western culture. Most mothers had finished primary school, with
 many also having completed secondary school (range = no
 schooling--university). Most fathers had finished secondary school, with
 many having also completed preparatory school (range = no
-schooling--university). Owing in large part to the patrilineal
-allocation of land (i.e., father to son), 93\% of the fathers grew up in
-the village where the recordings took place, while only 53\% of the
-mothers did.
+schooling--university). Owing in large part to patrilineal (i.e., father
+to son) land inheritance, 93\% of the fathers grew up in the village
+where the recordings took place, while only 53\% of the mothers did.
 
 \subsubsection{Recordings}\label{methods-corpus-recs}
 
 Methods for estimating the quantity of speech that children hear have
-advanced significantly in the past two decades, with long-format (4+
-hour) at-home audio recordings quickly becoming the new standard (e.g.,
-with the LENA\textsuperscript{®} system; REFS). These recordings capture
-a wider range of the linguistic patterns children hear as they
-participate in different activities with different speakers over the
-course of their day. In longer, more naturalistic recordings, caregivers
-also tend to use less CDS (REFS Tamis-LeMonda). The result is greater
-confidence that the estimated CDS characteristics are representative of
-what the child typically hears at home.
+advanced significantly in the past two decades, with long-format at-home
+audio recordings quickly becoming the new standard (e.g., with the
+LENA\textsuperscript{®} system; REFS). These recordings capture a wider
+range of the linguistic patterns children hear as they participate in
+different activities with different speakers over the course of their
+day. In longer, more naturalistic recordings, caregivers also tend to
+use less CDS (REFS Tamis-LeMonda). The result is greater confidence that
+the estimated CDS characteristics are representative of what the child
+typically hears at home.
 
 We used a novel combination of a lightweight stereo audio recorder
 (Olympus\textsuperscript{®} WS-832) and wearable photo camera (Narrative
@@ -518,56 +498,86 @@ Each video clip was transcribed and annotated in ELAN (REFS) using the
 ACLEW Annotation Scheme (REFS) by the first author and a native speaker
 of Tseltal who lives in the community and knows most of the recorded
 families personally. At the time of writing, NN\% \emph{{[}TASK XX: Fill
-in before submitting{]}} of the clips have been reviewed by a second,
-highly literate native Tseltal speaker with extensive training in ELAN.
-The annotations include the transcription of (nearly) all hearable
-utterances in Tseltal, a loose translation of each utterance into
-Spanish, vocal maturity measures of each target child utterance
-(non-linguistic vocalizations/non-canonical babbling/non-word canonical
-babbling/single words/multiple words), and addressee annotations for all
-non-target-child utterances
+in before submitting{]}} of the clips have been reviewed by a second
+native Tseltal speaker. The annotations include the transcription of
+(nearly) all hearable utterances in Tseltal, a loose translation of each
+utterance into Spanish, vocal maturity measures of each target child
+utterance (non-linguistic vocalizations/non-canonical babbling/non-word
+canonical babbling/single words/multiple words), and addressee
+annotations for all non-target-child utterances
 (target-child-directed/other-child-directed/adult-directed/adult-and-child-directed/animal-directed/other-speaker-type-directed).\footnote{Full documentation, including training materials, for the ACLEW Annotation Scheme can be found at *[TASK 11: Add OSF link]*.}
+
+\subsubsection{Why vocal maturity?}\label{why-vocal-maturity}
+
+\emph{{[}TASK 12: Missing paragraph!!{]}}
 
 \subsection{Data analysis}\label{methods-analysisinfo}
 
-We reformatted each ELAN file into tab-separated values in order to read
-the annotations into R version 3.5.0 (2018-04-23) for analysis. We made
-plots with the ggplot2 package and ran all analyses with the lme4 and
-betareg packages \emph{{[}TASK 12: Fix references to packages and their
-citations{]}}. We then calculated a number of summary variables to
-characterize children's language environments and linguistic development
-including: the quantity of all overheard speech and all speech directed
-to the target child (\enquote{TCDS}) in both minutes per hour and
-utterances per hour, the proportion of speech in CDS and coming from
-adult vs.~child speakers, the number of target child-to-other and
-other-to-target child turn transitions per hour, the minutes of
-vocalization produced by target children per hour, and the average
-maturity of children's vocalizations. Using language environment
-measures from the turn-taking sample, we then also estimated the number
-of intensive interaction minutes each child experienced over the day.
+We exported each ELAN file as tab-separated values and then the
+annotations into R version 3.5.0 (2018-04-23) for analysis (plots:
+ggplot2; analyses: lme4 and betareg \emph{{[}TASK 13: Fix references to
+packages and their citations{]}}). We then calculated a number of
+summary variables to characterize children's language environments and
+linguistic development including: the rate of all overheard speech
+(\enquote{XDS}) and all speech directed to the target child
+(\enquote{TCDS}) in both minutes per hour and utterances per hour, the
+proportion of speech in TCDS and coming from adult vs.~child speakers,
+the rate of target-child-to-other and other-to-target-child turn
+transitions, the rate of vocalization produced by the target child, and
+the average maturity of children's vocalizations. Using language
+environment measures from the turn-taking sample, we then also estimated
+the number of intensive interaction minutes each child experienced over
+the day.
 
 \section{Results}\label{results}
 
-\begin{figure}
-\centering
-\includegraphics{Tseltal-CLE_files/figure-latex/plot_XDS_TDS_quantity_random-1.pdf}
-\caption{}
-\end{figure}
+How much speech do Tseltal children hear overall and what proportion of
+that speech is directed to them? How does that compare to other
+communities that have been studied? For maximum comparability with prior
+work from other communities we limit any direct comparisons to the
+randomly sampled Tseltal clips. On average, the children in our corpus
+heard 24.68 minutes of speech per hour (median = 20.12; range =
+8.23--48.60), of which an average of 3.63 minutes were directed toward
+the target child (median = 4.08; range = 0.83--6.55). Consequently, the
+mean proportion of speech directed to children was 0.29 (median = 0.28;
+range = 0.05--0.77). By-child estimates of all overheard speech
+(\enquote{XDS}), target-child-directed speech (\enquote{TCDS}),
+proportion TCDS, and speech from adult vs.~child caregivers are shown in
+\protect\hyperlink{fig1}{figure 1}. To these figures we have added
+estimates from prior work with other
+communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert those estimates to minutes per hour using the mean utterance duration in our dataset for all non-target child speakers}.
 
-\begin{figure}
-\centering
-\includegraphics{Tseltal-CLE_files/figure-latex/plot_XDS_TDS_quantity_nonrandom-1.pdf}
-\caption{}
-\end{figure}
+\textbackslash{}begin\{figure\}{[}!h{]}
+\includegraphics[width=\textwidth]{Tseltal-CLE_files/figure-latex/fig1-1}
+\textbackslash{}caption\{By-child estimates for minutes per hour of all
+overheard speech (upper left), target-child-directed speech (upper
+right), proportion target-child-directed speech (lower left), and
+proportion of TCDS coming from adults vs.~children (lower right; adults
+= purple). Boxplots indicate variance in each measure across the nine
+5-minute random clips. Bands on the linear trends show 95\%
+CIs.\}\label{fig:fig1} \textbackslash{}end\{figure\}
+
+How much speech do Tseltal children hear overall and what proportion of
+that speech is directed to them? How does that compare to other
+communities that have been studied? For maximum comparability with prior
+work from other communities we limit any direct comparisons to the
+randomly sampled Tseltal clips. On average, the children in our corpus
+heard 24.68 minutes of speech per hour (median = 20.12; range =
+8.23--48.60), of which an average of 3.63 minutes were directed toward
+the target child (median = 4.08; range = 0.83--6.55). Consequently, the
+mean proportion of speech directed to children was 0.29 (median = 0.28;
+range = 0.05--0.77). By-child estimates of all overheard speech
+(\enquote{XDS}), target-child-directed speech (\enquote{TCDS}),
+proportion TCDS, and speech from adult vs.~child caregivers are shown in
+\protect\hyperlink{fig1}{figure 1}. To these figures we have added
+estimates from prior work with other
+communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert those estimates to minutes per hour using the mean utterance duration in our dataset for all non-target child speakers}.
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/plot_chi_voctypes_overall-1.pdf}
 \caption{}
 \end{figure}
-
-\includegraphics{Tseltal-CLE_files/figure-latex/plot_sample_differences-1.pdf}
-\includegraphics{Tseltal-CLE_files/figure-latex/plot_sample_differences-2.pdf}
 
 \section{Discussion}\label{disc}
 

@@ -1,4 +1,5 @@
 # Use this file to anonymize and check transcript data
+library(tidyverse)
 
 raw.data.path <- "transcripts/raw/" # text files exported from ELAN
 anon.data.path <- "transcripts/anon/" # text files to use as input to analysis
