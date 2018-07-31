@@ -49,6 +49,7 @@ library(viridis)
 library(grid)
 library(gridExtra)
 library(ggpirate)
+library(lme4)
 source("0-Helper.R")
 ```
 
@@ -230,6 +231,16 @@ xds.per.seg.rand <- all.data %>%
   replace_na(list(segment_dur = 5, xds_min = 0)) %>%
   mutate(xds_mph = (xds_min/segment_dur)*60) %>%
   arrange(aclew_child_id, segment)
+# ODS
+ods.per.seg.rand <- all.data %>%
+  filter(sample == "random" & speaker != "CHI" &
+           grepl("xds@", tier) & val != "T") %>%
+  group_by(aclew_child_id, segment, segment_dur) %>%
+  summarise(ods_min = round(sum(dur)/60000,3)) %>%
+  full_join(all.rand.segments, by = c("aclew_child_id", "segment")) %>%
+  replace_na(list(segment_dur = 5, ods_min = 0)) %>%
+  mutate(ods_mph = (ods_min/segment_dur)*60) %>%
+  arrange(aclew_child_id, segment)
 # TDS
 tds.per.seg.rand <- all.data %>%
   filter(sample == "random" & speaker != "CHI" &
@@ -250,14 +261,23 @@ cds.per.seg.rand <- all.data %>%
   replace_na(list(segment_dur = 5, cds_min = 0)) %>%
   mutate(cds_mph = (cds_min/segment_dur)*60) %>%
   arrange(aclew_child_id, segment)
+# Number of speakers per clip
+spkrs.per.seg.rand <- all.data %>%
+  filter(sample == "random" & speaker != "CHI" &
+           !(grepl("@", tier))) %>%
+  group_by(aclew_child_id, segment) %>%
+  summarise(n_spkrs_clip = length(unique(speaker)))
 # All together
 quantity.rand <- xds.per.seg.rand %>%
+  full_join(ods.per.seg.rand, by = c("aclew_child_id", "segment", "segment_dur")) %>%
   full_join(tds.per.seg.rand, by = c("aclew_child_id", "segment", "segment_dur")) %>%
   full_join(cds.per.seg.rand, by = c("aclew_child_id", "segment", "segment_dur")) %>%
+  full_join(spkrs.per.seg.rand, by = c("aclew_child_id", "segment")) %>%
   full_join(ptcp.info, by = "aclew_child_id") %>%
   replace_na(list(xds_min = 0, xds_mph = 0,
                   tds_min = 0, tds_mph = 0,
-                  cds_min = 0, cds_mph = 0)) %>%
+                  cds_min = 0, cds_mph = 0,
+                  n_spkrs_clip = 0)) %>%
   mutate(prop_tds = tds_min/xds_min)
   # Don't replace NAs with 0s in this case; proportion is not meaningful w/o any speech
 quantity.rand.bychild <- quantity.rand %>%
@@ -265,11 +285,15 @@ quantity.rand.bychild <- quantity.rand %>%
   summarise(
     xds_min = mean(xds_min),
     xds_mph = mean(xds_mph),
+    ods_min = mean(ods_min),
+    ods_mph = mean(ods_mph),
     tds_min = mean(tds_min),
     tds_mph = mean(tds_mph),
     cds_min = mean(cds_min),
     cds_mph = mean(cds_mph),
-    prop_tds = mean(prop_tds, na.rm = TRUE))
+    prop_tds = mean(prop_tds, na.rm = TRUE),
+    m_n_spkrs = mean(n_spkrs_clip)) %>%
+  full_join(ptcp.info, by = "aclew_child_id")
 
 # Get xds and tds min/hr by speaker type
 all.data$SpkrAge <- "Not known"
@@ -292,6 +316,16 @@ xds.per.seg.rand.sa <- all.data %>%
   replace_na(list(segment_dur = 5, xds_min.sa = 0)) %>%
   mutate(xds_mph.sa = (xds_min.sa/segment_dur)*60) %>%
   arrange(aclew_child_id, segment, SpkrAge)
+# ODS
+ods.per.seg.rand.sa <- all.data %>%
+  filter(sample == "random" & speaker != "CHI" & SpkrAge != "Not known" &
+           grepl("xds@", tier) & val != "T") %>%
+  group_by(aclew_child_id, SpkrAge, segment, segment_dur) %>%
+  summarise(ods_min.sa = round(sum(dur)/60000,3)) %>%
+  full_join(all.rand.segments.sa, by = c("aclew_child_id", "segment", "SpkrAge")) %>%
+  replace_na(list(segment_dur = 5, ods_min.sa = 0)) %>%
+  mutate(ods_mph.sa = (ods_min.sa/segment_dur)*60) %>%
+  arrange(aclew_child_id, segment, SpkrAge)
 # TDS
 tds.per.seg.rand.sa <- all.data %>%
   filter(sample == "random" & speaker != "CHI" & SpkrAge != "Not known" &
@@ -312,18 +346,29 @@ cds.per.seg.rand.sa <- all.data %>%
   replace_na(list(segment_dur = 5, cds_min.sa = 0)) %>%
   mutate(cds_mph.sa = (cds_min.sa/segment_dur)*60) %>%
   arrange(aclew_child_id, segment, SpkrAge)
+# Number of speakers per clip
+spkrs.per.seg.rand.sa <- all.data %>%
+  filter(sample == "random" & speaker != "CHI" & SpkrAge != "Not known" &
+           !(grepl("@", tier))) %>%
+  group_by(aclew_child_id, SpkrAge, segment) %>%
+  summarise(n_spkrs_clip = length(unique(speaker)))
 # All together
 quantity.rand.sa <- xds.per.seg.rand.sa %>%
+  full_join(ods.per.seg.rand.sa, by = c("aclew_child_id", "SpkrAge",
+                                        "segment", "segment_dur")) %>%
   full_join(tds.per.seg.rand.sa, by = c("aclew_child_id", "SpkrAge",
                                         "segment", "segment_dur")) %>%
   full_join(cds.per.seg.rand.sa, by = c("aclew_child_id", "SpkrAge",
                                         "segment", "segment_dur")) %>%
   full_join(select(quantity.rand, c("aclew_child_id", "segment", "tds_min")),
             by = c("aclew_child_id", "segment")) %>%
+  full_join(spkrs.per.seg.rand.sa, by = c("aclew_child_id", "SpkrAge", "segment")) %>%
   full_join(ptcp.info, by = "aclew_child_id") %>%
   replace_na(list(xds_min.sa = 0, xds_mph.sa = 0,
+                  ods_min.sa = 0, ods_mph.sa = 0,
                   tds_min.sa = 0, tds_mph.sa = 0,
-                  cds_min.sa = 0, cds_mph.sa = 0)) %>%
+                  cds_min.sa = 0, cds_mph.sa = 0,
+                  n_spkrs_clip = 0)) %>%
   mutate(prop_tds.sa = tds_min.sa/xds_min.sa,
          prop_sa.tds = tds_min.sa/tds_min)
   # Don't replace NAs with 0s in this case; proportion is not meaningful w/o any speech
@@ -363,7 +408,7 @@ comparison.data.shapes <- unique(comparison.data$shape)
 # XDS min/hr
 xdsmph.segments.rand <- ggplot(quantity.rand,
                           aes(x = age_mo_round, y = xds_mph)) +
-  geom_boxplot(aes(group = age_mo_round)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
   geom_smooth(method = "lm", color = "black") +
   ylab("XDS (min/hr)") + xlab("")	+
   scale_y_continuous(limits=c(0,85),
@@ -372,7 +417,25 @@ xdsmph.segments.rand <- ggplot(quantity.rand,
                      breaks=seq(0,38,6)) +
   coord_cartesian(ylim=c(0,85),xlim=c(0,38)) +
   geom_point(data = comparison.data,
-             aes(x = AgeMonths, y = xds_mph, group = Site, shape = Site), alpha = 0.5) +
+             aes(x = AgeMonths, y = xds_mph, group = Site, shape = Site), alpha = 0.4) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# ODS min/hr
+odsmph.segments.rand <- ggplot(quantity.rand,
+                          aes(x = age_mo_round, y = ods_mph)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("ODS (min/hr)") + xlab("")	+
+  scale_y_continuous(limits=c(0,80),
+                     breaks=seq(0,80,20)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,80),xlim=c(0,38)) +
+  geom_point(data = comparison.data,
+             aes(x = AgeMonths, y = ods_mph, group = Site, shape = Site), alpha = 0.4) +
   scale_shape_manual(values=comparison.data.shapes) +
   theme_apa() +
   theme(legend.position="none",
@@ -381,16 +444,16 @@ xdsmph.segments.rand <- ggplot(quantity.rand,
 # TDS min/hr
 tdsmph.segments.rand <- ggplot(quantity.rand,
       aes(x = age_mo_round, y = tds_mph)) +
-  geom_boxplot(aes(group = age_mo_round)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
   geom_smooth(method = "lm", color = "black") +
   ylab("TCDS (min/hr)") + xlab("")	+
-  scale_y_continuous(limits=c(0,85),
-                     breaks=seq(0,85,20)) +
+  scale_y_continuous(limits=c(0,80),
+                     breaks=seq(0,80,20)) +
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,85),xlim=c(0,38)) +
+  coord_cartesian(ylim=c(0,80),xlim=c(0,38)) +
   geom_point(data = comparison.data,
-             aes(x = AgeMonths, y = tds_mph, group = Site, shape = Site), alpha = 0.5) +
+             aes(x = AgeMonths, y = tds_mph, group = Site, shape = Site), alpha = 0.4) +
   scale_shape_manual(values=comparison.data.shapes) +
   theme_apa() +
   theme(legend.position="none",
@@ -398,16 +461,16 @@ tdsmph.segments.rand <- ggplot(quantity.rand,
 
 tdsmph.segments.rand.zoomedin <- ggplot(quantity.rand,
                                    aes(x = age_mo_round, y = tds_mph)) +
-  geom_boxplot(aes(group = age_mo_round)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
   geom_smooth(method = "lm", color = "black") +
   ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
-  scale_y_continuous(limits=c(0,30),
-                     breaks=seq(0,30,10)) +
+  scale_y_continuous(limits=c(0,20),
+                     breaks=seq(0,20,5)) +
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,30),xlim=c(0,38)) +
+  coord_cartesian(ylim=c(0,20),xlim=c(0,38)) +
   geom_point(data = comparison.data,
-             aes(x = AgeMonths, y = tds_mph, group = Site, shape = Site), alpha = 0.5) +
+             aes(x = AgeMonths, y = tds_mph, group = Site, shape = Site), alpha = 0.4) +
   scale_shape_manual(values=comparison.data.shapes) +
   theme_apa() +
   theme(legend.position="none",
@@ -416,16 +479,16 @@ tdsmph.segments.rand.zoomedin <- ggplot(quantity.rand,
 # TDS prop
 tdsprp.segments.rand <- ggplot(quantity.rand,
                           aes(x = age_mo_round, y = prop_tds)) +
-  geom_boxplot(aes(group = age_mo_round)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
   geom_smooth(method = "lm", color = "black") +
-  ylab("TCDS/XDS") + xlab("Child age (mo)")	+
+  ylab("TCDS/All spch") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(-.2,1.2),
                      breaks=seq(0,1,0.2)) +
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
   coord_cartesian(ylim=c(0,1),xlim=c(0,38)) +
   geom_point(data = comparison.data,
-             aes(x = AgeMonths, y = prp_tds, group = Site, shape = Site), alpha = 0.5) +
+             aes(x = AgeMonths, y = prp_tds, group = Site, shape = Site), alpha = 0.4) +
   scale_shape_manual(values=comparison.data.shapes) +
   theme_apa() +
   theme(legend.position="none",
@@ -437,7 +500,7 @@ tdsprp.segments.sa.rand <- ggplot(quantity.rand.sa,
                                  group = SpkrAge, fill = SpkrAge, color = SpkrAge)) +
   geom_boxplot(aes(group = interaction(age_mo_round, SpkrAge),
                    fill = SpkrAge, color = SpkrAge),
-               position = position_dodge(1), alpha = 0.3) +
+               position = position_dodge(1), outlier.shape = NA, alpha = 0.3) +
   geom_smooth(method = "lm") +
   ylab("Prop of TCDS") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(-.2,1.2),
@@ -457,17 +520,25 @@ tdsprp.segments.sa.rand <- ggplot(quantity.rand.sa,
 
 How much speech do Tseltal children hear overall and what proportion of that speech is directed to them? How does that compare to other communities that have been studied? For maximum comparability with prior work from other communities we limit any direct comparisons to the randomly sampled Tseltal clips. On average, the children in our corpus heard `r round(mean(quantity.rand.bychild$xds_mph),2)` minutes of speech per hour (median = `r round(median(quantity.rand.bychild$xds_mph),2)`; range = `r round(min(quantity.rand.bychild$xds_mph),2)`--`r round(max(quantity.rand.bychild$xds_mph),2)`), of which an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes were directed toward the target child (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`). Consequently, the mean proportion of speech directed to children was `r round(mean(quantity.rand.bychild$prop_tds),2)` (median = `r round(median(quantity.rand.bychild$prop_tds),2)`; range = `r round(min(quantity.rand.bychild$prop_tds),2)`--`r round(max(quantity.rand.bychild$prop_tds),2)`). By-child estimates of all overheard speech ('XDS'), target-child-directed speech ('TCDS'), proportion TCDS, and speech from adult vs. child caregivers are shown in [figure 1](#fig1). To these figures we have added estimates from prior work with other communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert those estimates to minutes per hour using the mean utterance duration in our dataset for all non-target child speakers}.
 
-```{r fig1, echo=FALSE, fig.cap="By-child estimates for minutes per hour of all overheard speech (upper left), target-child-directed speech (upper right), proportion target-child-directed speech (lower left), and proportion of TCDS coming from adults vs. children (lower right; adults = purple). Boxplots indicate variance in each measure across the nine 5-minute random clips. Bands on the linear trends show 95% CIs.", message=FALSE, warning=FALSE, out.width = "\\textwidth", fig.pos = "!h"}
-grid.arrange(xdsmph.segments.rand, tdsmph.segments.rand.zoomedin,
+```{r fig1, echo=FALSE, fig.cap="By-child estimates for minutes per hour of all overheard speech (upper left), target-child-directed speech (upper right), proportion target-child-directed speech (lower left), and proportion of TCDS coming from adults vs. children (lower right; adults = purple). Black dots and boxplots indicate variance in each measure across the nine 5-minute random Tseltal clips. Bands on the linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=4}
+grid.arrange(odsmph.segments.rand, tdsmph.segments.rand.zoomedin,
              tdsprp.segments.rand, tdsprp.segments.sa.rand, nrow=2, ncol=2)
 ```
 
-How much speech do Tseltal children hear overall and what proportion of that speech is directed to them? How does that compare to other communities that have been studied? For maximum comparability with prior work from other communities we limit any direct comparisons to the randomly sampled Tseltal clips. On average, the children in our corpus heard `r round(mean(quantity.rand.bychild$xds_mph),2)` minutes of speech per hour (median = `r round(median(quantity.rand.bychild$xds_mph),2)`; range = `r round(min(quantity.rand.bychild$xds_mph),2)`--`r round(max(quantity.rand.bychild$xds_mph),2)`), of which an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes were directed toward the target child (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`). Consequently, the mean proportion of speech directed to children was `r round(mean(quantity.rand.bychild$prop_tds),2)` (median = `r round(median(quantity.rand.bychild$prop_tds),2)`; range = `r round(min(quantity.rand.bychild$prop_tds),2)`--`r round(max(quantity.rand.bychild$prop_tds),2)`). By-child estimates of all overheard speech ('XDS'), target-child-directed speech ('TCDS'), proportion TCDS, and speech from adult vs. child caregivers are shown in [figure 1](#fig1). To these figures we have added estimates from prior work with other communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert those estimates to minutes per hour using the mean utterance duration in our dataset for all non-target child speakers}.
+How much speech do Tseltal children hear overall and what proportion of that speech is directed to them? How does the quantity of speech they hear compare to other communities that have been studied? For maximum comparability with prior work we limit direct comparisons to the randomly sampled Tseltal clips. During randomly sampled clips, Tseltal children heard an average of `r round(mean(quantity.rand.bychild$xds_mph),2)` minutes of speech per hour (median = `r round(median(quantity.rand.bychild$xds_mph),2)`; range = `r round(min(quantity.rand.bychild$xds_mph),2)`--`r round(max(quantity.rand.bychild$xds_mph),2)`), of which an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes were directed toward the target child (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`). Consequently, the mean proportion of speech directed to children was `r round(mean(quantity.rand.bychild$prop_tds),2)` (median = `r round(median(quantity.rand.bychild$prop_tds),2)`; range = `r round(min(quantity.rand.bychild$prop_tds),2)`--`r round(max(quantity.rand.bychild$prop_tds),2)`). By-child estimates of all overheard speech ('XDS'), target-child-directed speech ('TCDS'), proportion TCDS, and speech from adult vs. child caregivers are shown in [figure 1](#fig1). To these figures we have added estimates from prior work with other communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (`r avg.utt.len.tseltal$median.utt.len`ms)}.
+
+```{r baseline_models, message=FALSE, warning=FALSE, paged.print=FALSE}
+```
+
+
+
 
 <!--## How to define temporal contingency for turn taking
 Many other studies of child-caregiver turn taking use an arbitrary cut-off for detecting contingency (5 seconds?? Look up references). We base ours on measures of turn taking in interactions with infants and young children. Hilbrink et al. (2015) looked at interaction in a longitudinal corpus from 3 to 18 months and found that infants' responses to mothers began between -700ms and 1200ms relative to the end of the mothers' turns. Complementarily, mothers' responses to infant vocalizations began between -350ms and 650ms relative to the end of the infants' turns. Casillas et al. (2016) investigated the timing of question-answer responses from caregiver to child and from child to caregiver with children between 20 and 35 months. In their study, children's responses typically started between -500ms and 650ms relative to the end of their caregivers' turns. Caregivers' responses typically started between -1000ms and 400ms relative to the end of their children's turns. Because both studies focused on fairly intensive bouts of interaction, and both within WEIRD parental contexts, we defined contingent responses in the current data with slightly generous allowances for overlap and gap: contingent responses must begin with no more than `r allowed.overlap`ms of overlap and `r allowed.gap`ms of gap relative to the offset of the first speaker's turn. We used this same criteria for finding child-to-other turn transitions and other-to-child turn transitions. Transitions were only counted if the other speaker's turn was coded as addressed to 'T' (the target child).-->
 
 <!--Potentially redefine allowed.overlap and allowed.gap based on ±2.5SD of timing distributions for Hilbrink and Casillas data-->
+
+
 
 <!--
   - How do ADS and TDS differ?
