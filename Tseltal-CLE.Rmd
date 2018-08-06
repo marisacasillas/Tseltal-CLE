@@ -156,8 +156,21 @@ all.data$row <- c(1:nrow(all.data))
 
 # Read in supplementary data
 ptcp.info <- read_csv(ptcp.info.file, col_types = cols()) %>%
-  select(-row)
+  dplyr::select(-row)
 seg.info <- read_csv(seg.index.file)
+
+# Create normalized versions of predictor vars
+ptcp.info <- ptcp.info %>%
+  mutate(
+    tchiyr.m = mean(age_mo_round),
+    motyr.m = mean(mother_age),
+    nsb.m = mean(number_older_sibs),
+    hsz.m = mean(household_size),
+    tchiyr.sd = sd(age_mo_round),
+    motyr.sd = sd(mother_age),
+    nsb.sd = sd(number_older_sibs),
+    hsz.sd = sd(household_size)
+    )
 
 # Add participant and segment info
 codes <- all.data %>% filter(tier == "code")
@@ -206,7 +219,7 @@ all.data$segment_dur[va.samples] <- 1
 
 avg.utt.len.tseltal <- all.data %>%
   filter(speaker != "CHI") %>%
-  select(dur) %>%
+  dplyr::select(dur) %>%
   summarise(mean.utt.len = mean(dur),
             median.utt.len = median(dur))
 ```
@@ -360,7 +373,7 @@ quantity.rand.sa <- xds.per.seg.rand.sa %>%
                                         "segment", "segment_dur")) %>%
   full_join(cds.per.seg.rand.sa, by = c("aclew_child_id", "SpkrAge",
                                         "segment", "segment_dur")) %>%
-  full_join(select(quantity.rand, c("aclew_child_id", "segment", "tds_min")),
+  full_join(dplyr::select(quantity.rand, c("aclew_child_id", "segment", "tds_min")),
             by = c("aclew_child_id", "segment")) %>%
   full_join(spkrs.per.seg.rand.sa, by = c("aclew_child_id", "SpkrAge", "segment")) %>%
   full_join(ptcp.info, by = "aclew_child_id") %>%
@@ -528,9 +541,55 @@ grid.arrange(odsmph.segments.rand, tdsmph.segments.rand.zoomedin,
 How much speech do Tseltal children hear overall and what proportion of that speech is directed to them? How does the quantity of speech they hear compare to other communities that have been studied? For maximum comparability with prior work we limit direct comparisons to the randomly sampled Tseltal clips. During randomly sampled clips, Tseltal children heard an average of `r round(mean(quantity.rand.bychild$xds_mph),2)` minutes of speech per hour (median = `r round(median(quantity.rand.bychild$xds_mph),2)`; range = `r round(min(quantity.rand.bychild$xds_mph),2)`--`r round(max(quantity.rand.bychild$xds_mph),2)`), of which an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes were directed toward the target child (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`). Consequently, the mean proportion of speech directed to children was `r round(mean(quantity.rand.bychild$prop_tds),2)` (median = `r round(median(quantity.rand.bychild$prop_tds),2)`; range = `r round(min(quantity.rand.bychild$prop_tds),2)`--`r round(max(quantity.rand.bychild$prop_tds),2)`). By-child estimates of all overheard speech ('XDS'), target-child-directed speech ('TCDS'), proportion TCDS, and speech from adult vs. child caregivers are shown in [figure 1](#fig1). To these figures we have added estimates from prior work with other communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (`r avg.utt.len.tseltal$median.utt.len`ms)}.
 
 ```{r baseline_models, message=FALSE, warning=FALSE, paged.print=FALSE}
+# prepare predictors for modeling
+quantity.rand$child_sex <- as.factor(quantity.rand$child_sex)
+quantity.rand$mat_ed <- as.factor(quantity.rand$mat_ed)
+nspkrs.m <- mean(quantity.rand$n_spkrs_clip)
+nspkrs.sd <- sd(quantity.rand$n_spkrs_clip)
+quantity.rand <- quantity.rand %>%
+  mutate(
+    xds_mph.nz = ifelse(xds_mph > 0, 1, 0),
+    ods_mph.nz = ifelse(ods_mph > 0, 1, 0),
+    tds_mph.nz = ifelse(tds_mph > 0, 1, 0),
+    cds_mph.nz = ifelse(cds_mph > 0, 1, 0),
+    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
+    chisx.std = recode_factor(child_sex,
+                              "M" = "M", "F" = "F"),
+    mated.std = recode_factor(mat_ed,
+                              "none" = "none", "primary" = "primary",
+                              "secondary" = "secondary", "preparatory" = "preparatory"),
+    motyr.std = ((mother_age - motyr.m)/motyr.sd),
+    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
+    hsz.std = ((household_size - hsz.m)/hsz.sd),
+    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd))
+
+# Hurdle model
+ods.rand.hurdle.zr <- glmer(ods_mph.nz ~
+                              # theoretical predictors
+                              tchiyr.std + mated.std +
+                              # nuisance predictors
+                              nsk.std +
+                              # the rest...
+                              (1|aclew_child_id),
+                            data = quantity.rand,
+                            family = binomial(link = logit))
+
+ods.rand.hurdle.nz <- glmer(ods_mph ~ 1 + (1|aclew_child_id),
+                            data = subset(quantity.rand, ods_mph.nz == 1),
+                            family = Gamma(link = log))
+
+
+adu.max <- glmer(Switch ~ Condition * Type + Duration + 
+    (Type+Condition|Subject) + (1|Gap), data=switch.real.A,
+    family=binomial, control = glmerControl(optimizer="bobyqa"))
+
+# Gaussian model
+
+# Gaussian model with transformed DV
+
+
+
 ```
-
-
 
 
 <!--## How to define temporal contingency for turn taking
