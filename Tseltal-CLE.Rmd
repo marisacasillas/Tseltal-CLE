@@ -50,6 +50,7 @@ library(grid)
 library(gridExtra)
 library(ggpirate)
 library(lme4)
+library(glmmTMB)
 source("0-Helper.R")
 ```
 
@@ -558,38 +559,134 @@ quantity.rand <- quantity.rand %>%
     mated.std = recode_factor(mat_ed,
                               "none" = "none", "primary" = "primary",
                               "secondary" = "secondary", "preparatory" = "preparatory"),
+    mated.tri.std = recode_factor(mat_ed,
+                              "none" = "0-5", "primary" = "0-5",
+                              "secondary" = "6-8", "preparatory" = "12+"),
+    mated.tri.std2 = recode_factor(mat_ed,
+                              "preparatory" = "12+",
+                              "none" = "0-5", "primary" = "0-5",
+                              "secondary" = "6-8"),
     motyr.std = ((mother_age - motyr.m)/motyr.sd),
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd))
 
-# Hurdle model
-ods.rand.hurdle.zr <- glmer(ods_mph.nz ~
-                              # theoretical predictors
-                              tchiyr.std + mated.std +
-                              # nuisance predictors
-                              nsk.std +
-                              # the rest...
-                              (1|aclew_child_id),
-                            data = quantity.rand,
-                            family = binomial(link = logit))
+# Predictors
+#tchiyr.std, chisx.std, mated.std, nsb.std, hsz.std, nsk.std
 
-ods.rand.hurdle.nz <- glmer(ods_mph ~ 1 + (1|aclew_child_id),
+## ODS models ####
+# Hurdle # ----
+# Binomial
+ods.rand.hurdle.zr <- glmer(ods_mph.nz ~ nsk.std +
+                              (1|aclew_child_id),
+                             data = quantity.rand,
+                             family = binomial(link = logit))
+# NB: Problem in nsk.std here in that there's very little variance for
+# ods_mph.nz == 0; can't estimate with this model
+#summary(ods.rand.hurdle.zr)
+
+# Gamma
+ods.rand.hurdle.nz <- glmer(ods_mph ~ tchiyr.std * mated.tri.std +
+                                nsk.std + hsz.std + chisx.std +
+                              (1|aclew_child_id),
                             data = subset(quantity.rand, ods_mph.nz == 1),
                             family = Gamma(link = log))
+#summary(ods.rand.hurdle.nz)
 
+# ZINB # ----
+ods.rand.zinb1 <- glmmTMB(round(ods_mph,0) ~ # ODS rand winner
+                           tchiyr.std * mated.tri.std +
+                           hsz.std + chisx.std + nsk.std +
+                           offset(segment_dur) +
+                           (1|aclew_child_id),
+                         data=quantity.rand,
+                         ziformula=~nsk.std, # no cvgnce w/ hsz.std added to ZI
+                         family="nbinom1")
+#summary(ods.rand.zinb1)
 
-adu.max <- glmer(Switch ~ Condition * Type + Duration + 
-    (Type+Condition|Subject) + (1|Gap), data=switch.real.A,
-    family=binomial, control = glmerControl(optimizer="bobyqa"))
+# check other levels of mated
+ods.rand.zinb1b <- glmmTMB(round(ods_mph,0) ~ # ODS rand winner
+                           tchiyr.std * mated.tri.std2 +
+                           hsz.std + chisx.std + nsk.std +
+                           offset(segment_dur) +
+                           (1|aclew_child_id),
+                         data=quantity.rand,
+                         ziformula=~nsk.std, # no cvgnce w/ hsz.std added to ZI
+                         family="nbinom1")
+#summary(ods.rand.zinb1)
 
-# Gaussian model
+# sig effect of # speakers (more spkrs ~ more ods)***
+# sig effect of maternal edu (12+ > 6-8)** and (12+ > none)*; more school ~ more ods
 
-# Gaussian model with transformed DV
+## TDS models ####
+# Hurdle # ----
+# Binomial
+tds.rand.hurdle.zr <- glmer(tds_mph.nz ~ nsk.std +
+                              (1|aclew_child_id),
+                             data = quantity.rand,
+                             family = binomial(link = logit))
+#summary(tds.rand.hurdle.zr)
 
+# NB: convergence warning but max|grad| is very close to the tolerance,
+# so we'll consider it okay wrt convergence
+#relgrad <- with(tds.rand.hurdle.zr@optinfo$derivs, solve(Hessian, gradient))
+#max(abs(relgrad))
 
+# Gamma
+tds.rand.hurdle.nz <- glmer(tds_mph ~ tchiyr.std * mated.tri.std +
+                                nsk.std + hsz.std + chisx.std +
+                              (1|aclew_child_id),
+                            data = subset(quantity.rand, tds_mph.nz == 1),
+                            family = Gamma(link = log))
+#summary(tds.rand.hurdle.nz)
+
+# ZINB # ----
+tds.rand.zinb1 <- glmmTMB(round(tds_mph,0) ~
+                           tchiyr.std * mated.tri.std +
+                           hsz.std + chisx.std + nsk.std +
+                           offset(segment_dur) +
+                           (1|aclew_child_id),
+                         data=quantity.rand,
+                         ziformula=~nsk.std, # no cvgnce w/ hsz.std added to ZI
+                         family="nbinom1")
+
+#summary(tds.rand.zinb1)
+# sig effect of child sex (F ~ more tds)*
+# marg effect of household size (more ppl ~ less tds)
+
+## propTDS models ####
+# Beta # ----
+quantity.rand.prpdata <- subset(quantity.rand, !(is.na(prop_tds)))
+# Requires that 0 < y < 1: so we transform (y * (n−1) + 0.5) / n where n = sample size
+quantity.rand.prpdata$prp_tds_sqz <- (quantity.rand.prpdata$prop_tds * (nrow(quantity.rand.prpdata)-1) + 0.5)/nrow(quantity.rand.prpdata)
+
+prptds.rand.beta1 <- glmmTMB(prp_tds_sqz ~
+                               tchiyr.std * mated.tri.std +
+                               hsz.std + chisx.std + nsk.std +
+                               (1|aclew_child_id),
+                             data=quantity.rand.prpdata,
+                             family=list(family="beta",link="logit"))
+#summary(prptds.rand.beta1)
+
+prptds.rand.beta1b <- glmmTMB(prp_tds_sqz ~
+                               tchiyr.std * mated.tri.std2 +
+                               hsz.std + chisx.std + nsk.std +
+                               (1|aclew_child_id),
+                             data=quantity.rand.prpdata,
+                             family=list(family="beta",link="logit"))
+#summary(prptds.rand.beta1b)
+
+# sig effect of # of speakers (more spkrs ~ less prptds)***
+# marg effect of child sex (F ~ more prptds)
+# marg effect of maternal edu (12+ < none); more school ~ less prptds
 
 ```
+
+
+** TO DO NEXT: **
+- model w/ adult vs. child speech
+- figure with #spkrs
+- then... replicate this with the turn-taking sample
 
 
 <!--## How to define temporal contingency for turn taking
@@ -600,8 +697,6 @@ Many other studies of child-caregiver turn taking use an arbitrary cut-off for d
 
 
 <!--
-  - How do ADS and TDS differ?
-    - *measures*: utt length, repetitiveness, F0 peaks and ranges, questions, imperatives (?)
   - How much speech do children hear during bouts/bursts of interaction? How often do these bursts occur?
     - *measures*: deltas for m/h TDS, #utts TDS, # TT transitions between random, tt, and va: are they actually different?
     - *measures*: XDS and TDS minutes per hour and proportion (from tt and va selections: do they show similar age effects?)
