@@ -1,3 +1,23 @@
+sem <- function (x) {
+    sd(x) / sqrt(length(x))
+}
+
+qqplot.data <- function (vec) # argument: vector of numbers
+{
+  # following four lines from base R's qqline()
+  y <- quantile(vec[!is.na(vec)], c(0.25, 0.75))
+  x <- qnorm(c(0.25, 0.75))
+  slope <- diff(y)/diff(x)
+  int <- y[1L] - slope * x[1L]
+
+  d <- data.frame(resids = vec)
+
+  residplot <- ggplot(d, aes(sample = resids)) +
+    stat_qq() + geom_abline(slope = slope, intercept = int)
+
+  return(residplot)
+}
+
 left_join_NA <- function(x, y, ...) {
   left_join(x = x, y = y, by = ...) %>% 
     mutate_each(funs(replace(., which(is.na(.)), 0)))

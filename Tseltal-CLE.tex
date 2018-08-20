@@ -531,21 +531,23 @@ the day.
 
 \section{Results}\label{results}
 
+\subsection{Speech quantity}\label{speech-quantity}
+
 How much speech do Tseltal children hear overall and what proportion of
-that speech is directed to them? How does that compare to other
-communities that have been studied? For maximum comparability with prior
-work from other communities we limit any direct comparisons to the
-randomly sampled Tseltal clips. On average, the children in our corpus
-heard 24.68 minutes of speech per hour (median = 20.12; range =
+that speech is directed to them? For maximum comparability with prior
+work we first limit direct comparisons to the randomly sampled Tseltal
+clips. During randomly sampled clips, Tseltal children heard an average
+of 24.68 minutes of speech per hour (median = 20.12; range =
 8.23--48.60), of which an average of 3.63 minutes were directed toward
 the target child (median = 4.08; range = 0.83--6.55). Consequently, the
 mean proportion of speech directed to children was 0.29 (median = 0.28;
-range = 0.05--0.77). By-child estimates of all overheard speech
-(\enquote{XDS}), target-child-directed speech (\enquote{TCDS}),
-proportion TCDS, and speech from adult vs.~child caregivers are shown in
+range = 0.05--0.77). By-child estimates of the overheard speech
+(other-directed speech; \enquote{ODS}) rate, target-child-directed
+speech (\enquote{TCDS}) rate, proportion TCDS (TCDS/(TCDS+ODS)), and
+TCDS rate from adult vs.~child caregivers are shown in
 \protect\hyperlink{fig1}{figure 1}. To these figures we have added
 estimates from prior work with other
-communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert those estimates to minutes per hour using the mean utterance duration in our dataset for all non-target child speakers}.
+communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (1029ms)}.
 
 \begin{figure}
 \centering
@@ -559,21 +561,139 @@ across the nine 5-minute random Tseltal clips. Bands on the linear
 trends show 95\% CIs.}
 \end{figure}
 
-How much speech do Tseltal children hear overall and what proportion of
-that speech is directed to them? How does the quantity of speech they
-hear compare to other communities that have been studied? For maximum
-comparability with prior work we limit direct comparisons to the
-randomly sampled Tseltal clips. During randomly sampled clips, Tseltal
-children heard an average of 24.68 minutes of speech per hour (median =
-20.12; range = 8.23--48.60), of which an average of 3.63 minutes were
-directed toward the target child (median = 4.08; range = 0.83--6.55).
-Consequently, the mean proportion of speech directed to children was
-0.29 (median = 0.28; range = 0.05--0.77). By-child estimates of all
-overheard speech (\enquote{XDS}), target-child-directed speech
-(\enquote{TCDS}), proportion TCDS, and speech from adult vs.~child
-caregivers are shown in \protect\hyperlink{fig1}{figure 1}. To these
-figures we have added estimates from prior work with other
-communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (1029ms)}.
+We modeled these measures for the nine clips from each child using
+mixed-effects regression using the glmmTMB package in R (REF). Notably,
+gaussian linear regression is not appropriate for any of our measures .
+The rate-based dependent variables (ODS min/hr and TCDS min/hr) are
+continuous with a zero-inflated positive distribution, the proportion
+TCDS variable (TCDS/(TCDS+ODS)) is doubly-bounded, and the number of
+speakers is count data (i.e., non-continuous).
+
+To address this issue for the rate variables (ODS and TDS min/hr), we
+rounded each rate estimate down to nearest minute per hour to treat it
+as count data and then employed zero-inflated negative binomial
+regression (ZINB). ZINB regressions model the dependent variable in two
+ways: (1) a binomial (\enquote{zero-inflation}) model that evaluates the
+likelihood that a datapoint is zero or non-zero and (2) a negative
+binomial (\enquote{conditional}) model of all the non-zero datapoints
+(REF). For proportion TCDS we used beta regression, which is suited to
+making predictions on doubly-bounded data (for more details see Smithson
+REFS).
+
+Our primary predictors were as follows: child age, household size, and
+number of non-target-child speakers present in that clip (all centered
+and standardized), plus maternal education (pre-secondary
+vs.~secondary-plus)\footnote{Spanish-only education begins in secondary school.},
+and squared time of day at the start of the clip (in decimal hours;
+centered on noon and standardized). We used squared time of day to model
+the cycle of activity at home: mealtimes in the mornings and evenings
+should be more similar to each other than the afternoon because of
+dispersal for chores. To this we also added two-way interactions between
+child age and maternal education, number of speakers, household size,
+and time of day. Finally, we included a random effect of child, with
+random slopes of time of day, unless doing so resulted in model
+non-convergence. Finally, for the zero-inflation models of
+zero-vs-nonzero ODS and TDS rate, we included household size, number of
+speakers present, and time of day, with interactions between time of day
+and household size and time of day and number of speakers present. The
+zero-inflation models used the same random effects structure as their
+complementary conditional models. We often had to reduce the fixed
+effects structure in the zero-inflation model to achieve convergence, as
+detailed below.
+
+The quantity of other-directed speech (ODS) was primarily affected by
+the number of speakers present (MODEL-REF): more speakers was associated
+with more overheard speech. ODS was also significantly affected by time
+of day, being more frequent in the mornings and evenings than around
+midday (MODEL-REF). ODS was also more frequent in large households for
+older children compared to younger children (MODEL-REF). There was no
+significant effect of child age overall, and no effect involving
+maternal education. The zero-inflation model of ODS included fixed
+effects of household size, time of day, and their interaction, but none
+of these predictors were significant.
+
+The quantity of target-directed speech (TCDS) was primarily affected by
+factors relating to the child's age. Older children heard more TCDS
+(MODEL-REF) than younger children in general, particularly when many
+other speakers were present (MODEL-REF). This also meant that, compared
+to younger children, older children showed a much stronger effect of
+time of day: younger children tended to hear a stable quantity of TCDS
+throughout the day while older children heard much more TCDS in the
+mornings and evenings compared to midday (MODEL-REF). The zero-inflation
+model of TCDS also showed significant effects of house size, time of
+day, and the interaction of time of day and number of speakers; TCDS is
+more likely to be present in smaller households (MODEL-REF) and in the
+mornings and evenings (MODEL-REF), particularly when there are more
+speakers present (MODEL-REF).
+
+As reviewed above, previous work on Mayan communities, including the
+Tseltal community suggests that Mayan children hear much TCDS from other
+children, and that the proportion of TCDS from other children increases
+with age (REFS). In order to analyze the effect speaker age (child or
+adult TCDS) together with the other predictors modeled above, we split
+the data into TCDS from adults and children. All other predictors
+remained the same, only the number of speakers present represented the
+number of speakers of the relevant type for that datapoint (i.e.,, TCDS
+rate from adults in clip 1 given the number of adult speakers present in
+clip 1).
+
+The quantity of TCDS was strongly affected by speaker age: in contrast
+to prior work, these data show that most TCDS comes from adults
+(MODEL-REF). In addition, this model replicates the interaction between
+child age and time of day: older children hear most of their TCDS in the
+mornings and evenings while younger children hear stable TCDS over the
+day (MODEL-REF). We also find that speaker age effects depend on how
+many speakers there are of each type: while TCDS form children is more
+likely when more children are present, adults do not show a similar
+effect (MODEL-REF). The zero-inflation model of TCDS from adults and
+children included fixed effects of household size, time of day, and
+their interaction, but none of these predictors were significant.
+
+The overall proportion of speech directed to the child (proportion TCDS)
+decreased when more speakers were present (MODEL-REF). Despite this,
+older children still showed a stronger time of day effect than younger
+children, with proportionally more TCDS in the mornings and evenings
+(MODEL-REF). There were no significant overall effects of age, nor were
+there any effects of maternal education or household size on the
+proportion of TCDS used.
+
+\subsubsection{Speech quantity during peak
+moments}\label{speech-quantity-during-peak-moments}
+
+Children's linguistic experiences are bursty (REFS) and, as we have
+seen, speech is distributed asymetrically throughout the day in Tseltal
+children's environments. If, for example, children do most of their
+language learning for the day during these short bouts of interaction,
+it may be more useful to characterize their learning environment with
+respect to the interactional periods---what kinds of speech do they hear
+during interaction?---rather than averaging over the entire day. We
+therefore repeat the same set of analyses with the turn-taking subset of
+the child's data: ODS rate, TCDS rate, TCDS rate by speaker age, and
+proportion TCDS.
+
+During high turn-taking clips, Tseltal children heard an average of
+25.21 minutes of speech per hour (median = 23.99; range = 12.94--38.29),
+of which an average of 13.28 minutes were directed toward the target
+child (median = 13.65; range = 7.32--20.19). Consequently, the mean
+proportion of speech directed to children was 0.62 (median = 0.62; range
+= 0.37--0.93).
+
+\begin{figure}
+\centering
+\includegraphics{Tseltal-CLE_files/figure-latex/fig2-1.pdf}
+\caption{\label{fig:fig2}By-child estimates for minutes per hour of all
+overheard speech (upper left), target-child-directed speech (upper
+right), proportion target-child-directed speech (lower left), and
+proportion of TCDS coming from adults vs.~children (lower right; adults
+= purple). Black dots and boxplots indicate variance in each measure
+across the high turn-taking Tseltal clips. Bands on the solid linear
+trends show 95\% CIs. Dashed linear trends indicate averages from the
+randomly sampled clips for comparison.}
+\end{figure}
+
+** TO DO NEXT: ** - Add turn taking figs, descriptors, and models
+(somewhere?) for both rand and tt - then\ldots{} replicate this with the
+turn-taking sample
 
 \begin{figure}
 \centering
