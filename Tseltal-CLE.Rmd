@@ -688,7 +688,7 @@ tds.rand.sa.zinb <- glmmTMB(round(tds_mph.sa,0) ~
                               hsz.std + nsk.std +
                               I(stthr.std^2) +
                               tchiyr.std:mated.bin +
-                              tchiyr.std:nsk.std + # no convgnce w/ this extra term
+                              tchiyr.std:nsk.std +
 #                              tchiyr.std:hsz.std + # no convgnce w/ this extra term
                               tchiyr.std:I(stthr.std^2) +
                               SpkrAge:tchiyr.std +
@@ -1194,9 +1194,13 @@ quantity.nonrand.tt.sa <- quantity.nonrand.tt.sa %>%
 ```
 
 ```{r baseline_tt_models, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Note: I'm not going to use an offset of segment_dur because:
+# (1) it behaves a little weirdly (and non-conservatively!) and sometimes causes non-cvgnce
+# (2) the DVs are relative (i.e., minutes per hour) so some sample diff is already mitigated
+
 ## ODS random sample ####
 # zero-inflated negative binomial #----
-ods.nonrand.tt.zinb <- glmmTMB(round(ods_mph,0) ~
+ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
                            tchiyr.std + mated.bin +
                            hsz.std + nsk.std +
                            I(stthr.std^2) +
@@ -1204,19 +1208,19 @@ ods.nonrand.tt.zinb <- glmmTMB(round(ods_mph,0) ~
                            tchiyr.std:nsk.std +
                            tchiyr.std:hsz.std +
                            tchiyr.std:I(stthr.std^2) +
-#                           offset(segment_dur) + # weird outcomes
                            (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
                          data=quantity.nonrand.tt,
-                         ziformula=~hsz.std:I(stthr.std^2)+hsz.std, # max: no cvgnce w/ nsk.std
+                         ziformula=~hsz.std*I(stthr.std^2), # max: no cvgnce w/ nsk.std added
                          family="nbinom1")
-#summary(ods.nonrand.tt.zinb)
+#summary(ods.tt.zinb)
 #nsk.std                    0.75978    0.12625   6.018 1.77e-09 ***
-#I(stthr.std^2)            -4.51876    2.32867  -1.940   0.0523 .
+#I(stthr.std^2)            -4.51876    2.32867  -1.940   0.0523 .  
+# No significant ZI effects
 
 
 ## TDS random sample ####
 # zero-inflated negative binomial #----
-tds.nonrand.tt.zinb <- glmmTMB(round(tds_mph,0) ~
+tds.tt.zinb <- glmmTMB(round(tds_mph,0) ~
                            tchiyr.std + mated.bin +
                            hsz.std + nsk.std +
                            I(stthr.std^2) +
@@ -1224,40 +1228,40 @@ tds.nonrand.tt.zinb <- glmmTMB(round(tds_mph,0) ~
                            tchiyr.std:nsk.std +
                            tchiyr.std:hsz.std +
                            tchiyr.std:I(stthr.std^2) +
-#                           offset(segment_dur) + # weird outcomes
                            (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
                          data=quantity.nonrand.tt,
                          ziformula=~I(stthr.std^2)*hsz.std + I(stthr.std^2)*nsk.std,
                          family="nbinom1")
-#summary(tds.nonrand.tt.zinb)
+#summary(tds.tt.zinb)
 #nsk.std                   -0.173899   0.097452  -1.784  0.07435 .  
 #tchiyr.std:hsz.std        -0.312828   0.171197  -1.827  0.06765 .  
-#tchiyr.std:I(stthr.std^2) -3.767934   1.252014  -3.009  0.00262 **
+#tchiyr.std:I(stthr.std^2) -3.767934   1.252014  -3.009  0.00262 ** 
+# No significant ZI effects
 
 
 ## TDS by speaker age random sample ####
 # zero-inflated negative binomial #----
-tds.nonrand.tt.sa.zinb <- glmmTMB(round(tds_mph.sa,0) ~
+tds.tt.sa.zinb <- glmmTMB(round(tds_mph.sa,0) ~
                               tchiyr.std + mated.bin + SpkrAge + 
                               hsz.std + nsk.std +
                               I(stthr.std^2) +
                               tchiyr.std:mated.bin +
-                              tchiyr.std:nsk.std + # no convgnce w/ this extra term
+                              tchiyr.std:nsk.std +
 #                              tchiyr.std:hsz.std + # no convgnce w/ this extra term
                               tchiyr.std:I(stthr.std^2) +
                               SpkrAge:tchiyr.std +
                               SpkrAge:nsk.std +
-#                              offset(segment_dur) + # weird outcomes
                               (1+I(stthr.std^2)|aclew_child_id),
                             data=quantity.nonrand.tt.sa,
                             ziformula=~I(stthr.std^2)*hsz.std, # no cvgnce w/ nsk.std
                             family="nbinom1")
-#summary(tds.nonrand.tt.sa.zinb)
+#summary(tds.tt.sa.zinb)
 #SpkrAgeChild              -2.251455   0.312293  -7.209 5.62e-13 ***
 #nsk.std                   -0.296705   0.134996  -2.198  0.02796 *  
 #tchiyr.std:I(stthr.std^2) -4.197429   1.967005  -2.134  0.03285 *  
 #tchiyr.std:SpkrAgeChild    0.895499   0.273544   3.274  0.00106 ** 
 #SpkrAgeChild:nsk.std       1.508982   0.267585   5.639 1.71e-08 ***
+# No significant ZI effects
 
 
 ## propTDS random sample ####
@@ -1268,7 +1272,7 @@ quantity.nonrand.tt.prpdata$prp_tds_sqz <- (quantity.nonrand.tt.prpdata$prop_tds
                                         (nrow(quantity.nonrand.tt.prpdata)-1) +
                                         0.5)/nrow(quantity.nonrand.tt.prpdata)
 
-prptds.nonrand.tt.beta <- glmmTMB(prp_tds_sqz ~
+prptds.tt.beta <- glmmTMB(prp_tds_sqz ~
                               tchiyr.std + mated.bin +
                               hsz.std + nsk.std +
                               I(stthr.std^2) +
@@ -1276,34 +1280,42 @@ prptds.nonrand.tt.beta <- glmmTMB(prp_tds_sqz ~
                               tchiyr.std:nsk.std +
                               tchiyr.std:hsz.std +
                               tchiyr.std:I(stthr.std^2) +
-                              offset(segment_dur) +
                               (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
                             data=quantity.nonrand.tt.prpdata,
                             family=list(family="beta",link="logit"))
-#summary(prptds.nonrand.tt.beta)
-#nsk.std                   -1.65586    0.26421  -6.267 3.67e-10 ***
-
-
-## Number speakers random sample ####
-# poisson regression #----
-nspkrs.nonrand.tt.pois <- glmmTMB(n_spkrs_clip ~
-                              tchiyr.std + mated.bin +
-                              hsz.std +
-                              I(stthr.std^2) +
-                              tchiyr.std:mated.bin +
-                              tchiyr.std:hsz.std +
-                              tchiyr.std:I(stthr.std^2) +
-                              offset(segment_dur) +
-                              (1+I(stthr.std^2)|aclew_child_id),
-                            data=quantity.nonrand.tt,
-                            family=list(family="poisson",link="log"))
-#summary(nspkrs.nonrand.tt.pois)
-#hsz.std                     1.4302     0.7693   1.859  0.06302 . 
+#summary(prptds.tt.beta)
+#nsk.std                   -1.41053    0.19543  -7.218 5.29e-13 ***
+#tchiyr.std:nsk.std         0.33378    0.18997   1.757   0.0789 .  
 ```
 
 
 
 
+## ODS tt sample ####
+#ziformula=~hsz.std*I(stthr.std^2)
+#nsk.std                    0.75978    0.12625   6.018 1.77e-09 ***
+#I(stthr.std^2)            -4.51876    2.32867  -1.940   0.0523 .  
+# No significant ZI effects
+
+## TDS random sample ####
+#ziformula=~I(stthr.std^2)*hsz.std + I(stthr.std^2)*nsk.std
+#nsk.std                   -0.173899   0.097452  -1.784  0.07435 .  
+#tchiyr.std:hsz.std        -0.312828   0.171197  -1.827  0.06765 .  
+#tchiyr.std:I(stthr.std^2) -3.767934   1.252014  -3.009  0.00262 ** 
+# No significant ZI effects
+
+## TDS by speaker age random sample ####
+#ziformula=~I(stthr.std^2)*hsz.std
+#SpkrAgeChild              -2.251455   0.312293  -7.209 5.62e-13 ***
+#nsk.std                   -0.296705   0.134996  -2.198  0.02796 *  
+#tchiyr.std:I(stthr.std^2) -4.197429   1.967005  -2.134  0.03285 *  
+#tchiyr.std:SpkrAgeChild    0.895499   0.273544   3.274  0.00106 ** 
+#SpkrAgeChild:nsk.std       1.508982   0.267585   5.639 1.71e-08 ***
+# No significant ZI effects
+
+## propTDS random sample ####
+#nsk.std                   -1.41053    0.19543  -7.218 5.29e-13 ***
+#tchiyr.std:nsk.std         0.33378    0.18997   1.757   0.0789 .
 
 
 
@@ -1311,118 +1323,12 @@ nspkrs.nonrand.tt.pois <- glmmTMB(n_spkrs_clip ~
 
 
 
-```{r plot_XDS_TDS_quantity_nonrandom, message=FALSE, warning=FALSE, paged.print=FALSE}
-# Graph the basic speech quantity info
-# XDS min/hr
-xdsmph.segments.nonrand <- ggplot(quantity.nonrand,
-                          aes(x = age_mo_round, y = xds_mph,
-                              group = sample, fill = sample, color = sample)) +
-  geom_boxplot(aes(group = interaction(age_mo_round, sample),
-               fill = sample, color = sample),
-               position = position_dodge(1), alpha = 0.3) +
-  geom_smooth(aes(lty = sample), method = "lm") +
-  scale_fill_manual(values=c("gray60", "gray20")) +
-  scale_color_manual(values=c("gray60", "gray20")) +
-  scale_linetype_manual(values=c("solid", "dashed")) +
-  ylab("XDS (min/hr)") + xlab("Child age (mo)")	+
-  scale_y_continuous(limits=c(0,85),
-                     breaks=seq(0,85,20)) +
-  scale_x_continuous(limits=c(0,38),
-                     breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,85),xlim=c(0,38)) +
-  theme_apa() + theme(legend.position="none",
-                      axis.line = element_line(color="black", size = 0.4))
-# xdsmph.segments.nonrand
-# TDS min/hr
-tdsmph.segments.nonrand <- ggplot(quantity.nonrand,
-                          aes(x = age_mo_round, y = tds_mph,
-                              group = sample, fill = sample, color = sample)) +
-  geom_boxplot(aes(group = interaction(age_mo_round, sample),
-               fill = sample, color = sample),
-               position = position_dodge(1), alpha = 0.3) +
-  geom_smooth(aes(lty = sample), method = "lm") +
-  scale_fill_manual(values=c("gray60", "gray20")) +
-  scale_color_manual(values=c("gray60", "gray20")) +
-  scale_linetype_manual(values=c("solid", "dashed")) +
-  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
-  scale_y_continuous(limits=c(0,85),
-                     breaks=seq(0,85,20)) +
-  scale_x_continuous(limits=c(0,38),
-                     breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,85),xlim=c(0,38)) +
-  theme_apa() + theme(legend.position="none",
-                      axis.line = element_line(color="black", size = 0.4))
-#tdsmph.segments.nonrand
-tdsmph.segments.nonrand.zoomedin <- ggplot(quantity.nonrand,
-                          aes(x = age_mo_round, y = tds_mph,
-                              group = sample, fill = sample, color = sample)) +
-  geom_boxplot(aes(group = interaction(age_mo_round, sample),
-               fill = sample, color = sample),
-               position = position_dodge(1), alpha = 0.3) +
-  geom_smooth(aes(lty = sample), method = "lm") +
-  scale_fill_manual(values=c("gray60", "gray20")) +
-  scale_color_manual(values=c("gray60", "gray20")) +
-  scale_linetype_manual(values=c("solid", "dashed")) +
-  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
-  scale_y_continuous(limits=c(0,40),
-                     breaks=seq(0,40,10)) +
-  scale_x_continuous(limits=c(0,38),
-                     breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,40),xlim=c(0,38)) +
-  theme_apa() + theme(legend.position="none",
-                      axis.line = element_line(color="black", size = 0.4))
-#tdsmph.segments.nonrand.zoomedin
-# TDS prop
-tdsprp.segments.nonrand <- ggplot(quantity.nonrand,
-                          aes(x = age_mo_round, y = prop_tds,
-                              group = sample, fill = sample, color = sample)) +
-  geom_boxplot(aes(group = interaction(age_mo_round, sample),
-               fill = sample, color = sample),
-               position = position_dodge(1), alpha = 0.3) +
-  geom_smooth(aes(lty = sample), method = "lm") +
-  scale_fill_manual(values=c("gray60", "gray20")) +
-  scale_color_manual(values=c("gray60", "gray20")) +
-  scale_linetype_manual(values=c("solid", "dashed")) +
-  ylab("TCDS/XDS") + xlab("Child age (mo)")	+
-  scale_y_continuous(limits=c(-.2,1.2),
-                     breaks=seq(0,1,0.2)) +
-  scale_x_continuous(limits=c(0,38),
-                     breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,1),xlim=c(0,38)) +
-  theme_apa() + theme(legend.position="none",
-                      axis.line = element_line(color="black", size = 0.4))
-#tdsprp.segments.nonrand
-# prop TDS from adults vs. children
-tdsprp.segments.sa.nonrand <- ggplot(quantity.nonrand.sa,
-                             aes(x = age_mo_round, y = prop_sa.tds,
-                                 group = SpkrAge, fill = SpkrAge)) +
-  geom_boxplot(aes(group = interaction(age_mo_round, SpkrAge, sample),
-                  color = interaction(SpkrAge, sample),
-                  fill = interaction(SpkrAge, sample)),
-               position = position_dodge(3), alpha = 0.3, lwd = 0.2) +
-  geom_smooth(aes(group = interaction(SpkrAge, sample),
-                  color = interaction(SpkrAge, sample),
-                  fill = interaction(SpkrAge, sample),
-                  lty = interaction(SpkrAge, sample)),
-              method = "lm", alpha = 0.2) +
-  scale_fill_manual(values=c(viridis(3)[1], viridis(3)[2],
-                             viridis(3)[1], viridis(3)[2])) +
-  scale_color_manual(values=c(viridis(3)[1], viridis(3)[2],
-                             viridis(3)[1], viridis(3)[2])) +
-  scale_linetype_manual(values=c("solid", "solid", "dashed", "dashed")) +
-  ylab("Prop of TCDS") + xlab("Child age (mo)")	+
-  scale_y_continuous(limits=c(-.2,1.2),
-                     breaks=seq(0,1,0.2)) +
-  scale_x_continuous(limits=c(0,38),
-                     breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,1), xlim=c(0,38)) +
-  theme_apa() + theme(legend.position="none",
-                      axis.line = element_line(color="black", size = 0.4))
-#tdsprp.segments.sa.nonrand
-# Combine the plots into one
-#grid.arrange(xdsmph.segments.nonrand, tdsmph.segments.nonrand.zoomedin,
-#             tdsprp.segments.nonrand, tdsprp.segments.sa.nonrand, nrow=2, ncol=2)
-```
+
+
+
+
+
+
 
 
 ** TO DO NEXT: **

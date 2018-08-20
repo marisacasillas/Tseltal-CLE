@@ -240,7 +240,6 @@ prptds.rand.glmr.resid.dist.plot <- ggplot(prptds.rand.glmr.resid.resids, aes(x=
 
 
 ####                    N-SKRS                    ####
-## Number speakers random sample ####
 # poisson regression #----
 nspkrs.rand.pois <- glmmTMB(n_spkrs_clip ~
                               tchiyr.std + mated.bin +
@@ -249,12 +248,12 @@ nspkrs.rand.pois <- glmmTMB(n_spkrs_clip ~
                               tchiyr.std:mated.bin +
                               tchiyr.std:hsz.std +
                               tchiyr.std:I(stthr.std^2) +
-                              (1+I(stthr.std^2)|aclew_child_id),
+                              (1|aclew_child_id),
                             data=quantity.rand,
-                            family=list(family="poisson",link="log"))
+                            family="poisson")
 #summary(nspkrs.rand.pois)
-#mated.bin6+             0.84981    0.26486   3.209  0.00133 **
-#tchiyr.std:mated.bin6+ -0.59871    0.30223  -1.981  0.04759 * 
+#mated.bin6+                0.41524    0.22444   1.850   0.0643 .  
+#I(stthr.std^2)             1.74301    0.77140   2.260   0.0238 *  
 
 # gaussian glm of log transformed DV (w/ zeroes) #----
 nspkrs.rand.glmr <- glmmTMB(log(n_spkrs_clip+1) ~
@@ -527,6 +526,21 @@ prptds.nonrand.tt.glmr.resid.dist.plot <- ggplot(prptds.nonrand.tt.glmr.resid.re
 
 
 ####                    N-SKRS                    ####
+# poisson regression #----
+nspkrs.nonrand.tt.pois <- glmmTMB(n_spkrs_clip ~
+                              tchiyr.std + mated.bin +
+                              hsz.std +
+                              I(stthr.std^2) +
+                              tchiyr.std:mated.bin +
+                              tchiyr.std:hsz.std +
+                              tchiyr.std:I(stthr.std^2) +
+                              (1|aclew_child_id),
+                            data=quantity.nonrand.tt,
+                            family="poisson")
+#summary(nspkrs.nonrand.tt.pois)
+#mated.bin6+                0.48389    0.17399   2.781 0.005417 ** 
+#tchiyr.std:I(stthr.std^2) -2.49781    1.44738  -1.726 0.084394 . 
+
 # gaussian glm of log transformed DV (w/ zeroes) #----
 nspkrs.nonrand.tt.glmr <- glmmTMB(log(n_spkrs_clip+1) ~
                               tchiyr.std + mated.bi.std +
