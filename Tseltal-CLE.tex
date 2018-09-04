@@ -494,9 +494,10 @@ activity clips often overlapped; turn-taking clips were selected from
 the list of candidates first, and then vocal-activity clips were chosen
 from the remainder.
 
-Each video clip was transcribed and annotated in ELAN (REFS) using the
-ACLEW Annotation Scheme (REFS) by the first author and a native speaker
-of Tseltal who lives in the community and knows most of the recorded
+\includegraphics{Tseltal-CLE_files/figure-latex/fig0-1.pdf} Each video
+clip was transcribed and annotated in ELAN (REFS) using the ACLEW
+Annotation Scheme (REFS) by the first author and a native speaker of
+Tseltal who lives in the community and knows most of the recorded
 families personally. At the time of writing, NN\% \emph{{[}TASK XX: Fill
 in before submitting{]}} of the clips have been reviewed by a second
 native Tseltal speaker. The annotations include the transcription of
@@ -552,13 +553,12 @@ communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was o
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig1-1.pdf}
-\caption{\label{fig:fig1}By-child estimates for minutes per hour of all
-overheard speech (upper left), target-child-directed speech (upper
-right), proportion target-child-directed speech (lower left), and
-proportion of TCDS coming from adults vs.~children (lower right; adults
-= purple). Black dots and boxplots indicate variance in each measure
-across the nine 5-minute random Tseltal clips. Bands on the linear
-trends show 95\% CIs.}
+\caption{\label{fig:fig1}By-child estimates of minutes per hour of overheard
+speech (upper left), target-child-directed speech (upper right),
+proportion of speech that is directed to the target child (lower left),
+and number of speakers present (lower right). Data are shown for the
+random (purple; solid) and turn taking (green; dashed) samples. Bands on
+the solid linear trends show 95\% CIs.}
 \end{figure}
 
 We modeled these measures for the nine clips from each child using
@@ -678,22 +678,101 @@ child (median = 13.65; range = 7.32--20.19). Consequently, the mean
 proportion of speech directed to children was 0.62 (median = 0.62; range
 = 0.37--0.93).
 
+Using the same approach as before, we modeled the four speech quantity
+measures for the 5--6 turn-taking
+clips\footnote{The turn-taking clips included in this analysis are: the five 1-minute turn-taking clips and also the 5-minute 'extension' clip for that recording if it was an extension of a turn-taking clip}
+from each recording.
+
+As in the random sample, when more speakers were present, ODS was
+significantly more frequent (MODEL-REF). While time of day significantly
+affected ODS rate in the random sample, its effect on the turn-taking
+bouts was only marginal, and trended in the opposite direction, i.e.,
+more overheard speech during afternoon turn-taking bouts (MODEL-REF).
+Furthermore, there was no evidence of interactions between time of day
+and household size, as there was in the random sample. The
+zero-inflation model included fixed effects of household size, time of
+day, and their interaction, but none of these predictors were
+significant.
+
+The only significant factor affecting TCDS quantity in the turn-taking
+sample was a two-way interaction between child age and time of day
+(MODEL-REF). In contrast to the random sample this interaction showed
+that younger children hear more TCDS during morning and evening
+turn-taking bouts, but TCDS is more uniform across the day in older
+children's turn-taking bouts. Unlike the random sample, this turn-taking
+sample showed no main effect of child age: older and younger children
+heard comparable amounts of TCDS overall. There was also no significant
+interaction between age and number of speakers present, like there was
+in the random sample. The zero-inflation model included fixed effects of
+household size, time of day, and number of speakers, plus two-way
+interactions of time of day and household size, and time of day and
+number of speakers present. While, in the random sample, clips with
+no-vs-some TCDS were significantly predicted by house size, time of day,
+and the interaction of time of day and number of speakers, none of these
+factors significantly predicted the presence of TCDS in the turn-taking
+clips.
+
+The model of TCDS quantity by speaker age for the turn-taking sample
+showed some similar results to the random sample. First, the quantity of
+TCDS in the turn-taking sample was strongly affected by speaker age
+(MODEL-REF) due to the fact that most TCDS still came from adults.
+Second, the presence of more children increased the quantity of TCDS
+from children more than the presence of more adults increased the
+quantity of TCDS from adults (MODEL-REF). However, TCDS quantity by
+speaker in the turn taking data also showed an inverse effect of time of
+day and child age, compared to that found in the randomly sampled data:
+TCDS was maximized during turn-taking bouts that took place in the
+mornings and evenings for younger children, but more uniform throughout
+the day for older children (MODEL-REF).
+
+In addition, the turn-taking bouts also showed a significant effect of
+number of speakers: more speakers was associated with less TCDS
+(MODEL-REF). There was also an interaction between child age and speaker
+age: older children heard an increasing amount of TCDS from other
+children during turn-taking bouts (MODEL-REF). The zero-inflation model
+of TCDS from adults and children included fixed effects of household
+size, time of day, and their interaction, but none of these predictors
+were significant.
+
+As in the random sample, the overall proportion of speech directed to
+the child (proportion TCDS) decreased when more speakers were present
+(MODEL-REF). Unlike the random sample, however, there was no interaction
+between child age and time of day. There were no other significant
+predictors of proportion of speech in TCDS.
+
+\subsection{Interactional exchanges}\label{interactional-exchanges}
+
+We can also measure children's linguistic environments as a summary of
+the interactional exchanges they partake in (see also Romeo REFS). When
+children are jointly engaged with an interlocutor, they can practice
+making contingent vocalizations, and both the child and the interlocutor
+can more easily coordinate their behaviors and social and communicative
+intentions. We characterize children's interactional exchanges with four
+measures: the rate of child-to-other turn transitions, other-to-child
+turn transitions, the average duration of interactional sequences, and
+the ratio of interlocutor vs.~child vocalization time. We first describe
+these measures with respect to the random sample then, for comparison,
+examine the turn-taking sample.
+
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig2-1.pdf}
-\caption{\label{fig:fig2}By-child estimates for minutes per hour of all
-overheard speech (upper left), target-child-directed speech (upper
-right), proportion target-child-directed speech (lower left), and
-proportion of TCDS coming from adults vs.~children (lower right; adults
-= purple). Black dots and boxplots indicate variance in each measure
-across the high turn-taking Tseltal clips. Bands on the solid linear
-trends show 95\% CIs. Dashed linear trends indicate averages from the
-randomly sampled clips for comparison.}
+\caption{\label{fig:fig2}By-child estimates of minutes per hour of
+child-to-other (upper left) and other-to-child (upper right) turn
+transitions per minute, turn-taking sequenec duration (lower left), and
+normalized difference in vocalization time (1 = child vocalizes more
+than their interlocutor; 0 = vice versa). Data are shown for the random
+(purple; solid) and turn taking (green; dashed) samples. Bands on the
+solid linear trends show 95\% CIs}
 \end{figure}
 
-** TO DO NEXT: ** - Add turn taking figs, descriptors, and models
-(somewhere?) for both rand and tt - then\ldots{} replicate this with the
-turn-taking sample
+Details about models here
+
+\subsubsection{Interactional exchanges during peak
+moments}\label{interactional-exchanges-during-peak-moments}
+
+\subsection{Frequency of high turn-taking
+activity}\label{frequency-of-high-turn-taking-activity}
 
 \begin{figure}
 \centering

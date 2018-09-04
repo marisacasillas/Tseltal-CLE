@@ -1,3 +1,247 @@
 <!--For example, the LENA^®^ system gives its users up to 16 hours of continuous audio recording at a time, along with software to help determine where in the recording researchers will find speech. By annotating sub-samples of these recordings (REFS: Weisleder) or by looking at other cues to interactional behavior (REFS: Romeo), researchers can then get insight into how often children are engaged in child-directed interactions at home. These estimates can then be compared with their language outcomes to check for correlations between what children hear and how they develop linguistically.-->
 
 <!--In daily life, children often hear CDS during joint activities; events in which caregivers' and children's behavior is coordinated to accomplish some interactional goal (e.g., during mealtimes, grooming, and play).-->
+
+
+
+# Graph the basic speech quantity info
+# XDS min/hr
+xdsmph.segments.rand <- ggplot(quantity.rand,
+                          aes(x = age_mo_round, y = xds_mph)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("XDS (min/hr)") + xlab("")	+
+  scale_y_continuous(limits=c(0,85),
+                     breaks=seq(0,85,20)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,85),xlim=c(0,38)) +
+  geom_point(data = comparison.data,
+             aes(x = AgeMonths, y = xds_mph, group = Site, shape = Site), alpha = 0.4) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# ODS min/hr
+odsmph.segments.rand <- ggplot(quantity.rand,
+                          aes(x = age_mo_round, y = ods_mph)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("ODS (min/hr)") + xlab("")	+
+  scale_y_continuous(limits=c(0,80),
+                     breaks=seq(0,80,20)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,80),xlim=c(0,38)) +
+  geom_point(data = comparison.data,
+             aes(x = AgeMonths, y = ods_mph, group = Site, shape = Site), alpha = 0.4) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# TDS min/hr
+tdsmph.segments.rand <- ggplot(quantity.rand,
+      aes(x = age_mo_round, y = tds_mph)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("TCDS (min/hr)") + xlab("")	+
+  scale_y_continuous(limits=c(0,80),
+                     breaks=seq(0,80,20)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,80),xlim=c(0,38)) +
+  geom_point(data = comparison.data,
+             aes(x = AgeMonths, y = tds_mph, group = Site, shape = Site), alpha = 0.4) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+tdsmph.segments.rand.zoomedin <- ggplot(quantity.rand,
+                                   aes(x = age_mo_round, y = tds_mph)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
+  scale_y_continuous(limits=c(0,20),
+                     breaks=seq(0,20,5)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,20),xlim=c(0,38)) +
+  geom_point(data = comparison.data,
+             aes(x = AgeMonths, y = tds_mph, group = Site, shape = Site), alpha = 0.4) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# TDS prop
+tdsprp.segments.rand <- ggplot(quantity.rand,
+                          aes(x = age_mo_round, y = prop_tds)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("TCDS/All spch") + xlab("Child age (mo)")	+
+  scale_y_continuous(limits=c(-.2,1.2),
+                     breaks=seq(0,1,0.2)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,1),xlim=c(0,38)) +
+  geom_point(data = comparison.data,
+             aes(x = AgeMonths, y = prp_tds, group = Site, shape = Site), alpha = 0.4) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# prop TDS from adults vs. children
+tdsprp.segments.sa.rand <- ggplot(quantity.rand.sa,
+                             aes(x = age_mo_round, y = prop_sa.tds,
+                                 group = SpkrAge, fill = SpkrAge, color = SpkrAge)) +
+  geom_boxplot(aes(group = interaction(age_mo_round, SpkrAge),
+                   fill = SpkrAge, color = SpkrAge),
+               position = position_dodge(1), outlier.shape = NA, alpha = 0.3) +
+  geom_smooth(method = "lm") +
+  ylab("Prop of TCDS") + xlab("Child age (mo)")	+
+  scale_y_continuous(limits=c(-.2,1.2),
+                     breaks=seq(0,1,0.2)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,1), xlim=c(0,38)) +
+  geom_point(data = comparison.data.sa,
+             aes(x = AgeMonths, y = prp_spkr, group = SpkrAge,
+                 fill = SpkrAge, shape = Site), alpha = 0.5) +
+  scale_shape_manual(values=comparison.data.shapes) +
+  col.sample.bu3 +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# number of speakers per clip
+nspkrs.segments.rand <- ggplot(quantity.rand,
+                          aes(x = age_mo_round, y = n_spkrs_clip)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("# Speakers") + xlab("Child age (mo)")	+
+  scale_y_continuous(limits=c(0,10),
+                     breaks=seq(0,10,2)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,10),xlim=c(0,38)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+        
+```{r fig1, echo=FALSE, fig.cap="By-child estimates for minutes per hour of all overheard speech (upper left), target-child-directed speech (upper right), proportion target-child-directed speech (lower left), and proportion of TCDS coming from adults vs. children (lower right; adults = purple). Black dots and boxplots indicate variance in each measure across the nine 5-minute random Tseltal clips. Bands on the linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=4}
+grid.arrange(odsmph.segments.rand, tdsmph.segments.rand.zoomedin,
+             tdsprp.segments.rand, tdsprp.segments.sa.rand, nrow=2, ncol=2)
+```
+
+
+```{r make_tt_interaction_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Graph the basic turn taking rate info
+# CHI-OTH transitions per minute
+chi.oth.tts.tt <- ggplot(turn.transitions.tt,
+                          aes(x = age_mo_round, y = n.c_o.tpm)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("CHI-OTH tts/min") + xlab("")	+
+  scale_y_continuous(limits=c(0,30),
+                     breaks=seq(0,30,10)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,30),xlim=c(0,38)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# OTH-CHI transitions per minute
+oth.chi.tts.tt <- ggplot(turn.transitions.tt,
+                          aes(x = age_mo_round, y = n.o_c.tpm)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("OTH-CHI tts/min") + xlab("")	+
+  scale_y_continuous(limits=c(0,30),
+                     breaks=seq(0,30,10)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,30),xlim=c(0,38)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# Graph the basic sequence duration info
+seq.dur.tt <- ggplot(turn.sequences.tt,
+                          aes(x = age_mo_round, y = seq.dur)) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("Sequence duration (min)") + xlab("")	+
+  scale_y_continuous(limits=c(0,1),
+                     breaks=seq(0,1,0.1)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,0.5),xlim=c(0,38)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+# Graph the basic CHI-OTH voc time delta info
+cvc.ovc.delta.tt <- ggplot(cvc.ovc.per.seg.tt,
+                          aes(x = age_mo_round, y = cvc.ovc.delta.norm)) +
+  geom_hline(yintercept = 0, lwd = 0.5) +
+  geom_boxplot(aes(group = age_mo_round), outlier.shape = NA) +
+  geom_smooth(method = "lm", color = "black") +
+  ylab("Normalized voc. diff.") + xlab("")	+
+  scale_y_continuous(limits=c(-1,1),
+                     breaks=seq(-1,1,0.5)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(-1,1),xlim=c(0,38)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+```
+
+```{r fig4, echo=FALSE, fig.cap="By-child estimates for child-to-other (upper left) and other-to-child (upper right) turn transitions per minute, turn-taking sequenec duration (lower left), and normalized difference in vocalization time (1 = child vocalizes more than their interlocutor; 0 = vice versa). Boxplots indicate variance in each measure across the 5--6 high turn-taking Tseltal clips. Bands on the solid linear trends show 95% CIs", message=FALSE, warning=FALSE, fig.height=4}
+grid.arrange(chi.oth.tts.tt, oth.chi.tts.tt,
+             seq.dur.tt, cvc.ovc.delta.tt, nrow=2, ncol=2)
+```
+
+
+
+# seg.info$start.hhmmss <- paste0(substr(seg.info$start.hhmmss,1,2), ":",
+#                                 substr(seg.info$start.hhmmss,3,4), ":",
+#                                 substr(seg.info$start.hhmmss,5,6))
+# Adjust naming errors in segment clips (clip name TODs are too late!):
+# 0643 by 21m37s
+# 2109 by 10m11s
+# 2625 by 30m28s
+# 3026 by 26m54s
+# 6216 by 20m30s
+# 7176 by 10m55s
+# 7220 by 13m02s
+# 7326 by 55m25s
+# 8179 by 18m12s
+# 8787 by 22m28s
+
+newoffsets <- tibble(
+  aclew_id = c("0643", "2109", "2625", "3026", "6216",
+               "7176", "7220", "7326", "8179", "8787"),
+  newoffset = c("1H 21M 37S", "10M 11S", "30M 28S", "26M 54S", "20M 30S",
+                "10M 55S", "13M 2S", "55M 25S", "18M 12S", "22M 28S")
+  ) %>%
+  left_join(seg.info, by = "aclew_id") %>% 
+  mutate(
+    offset_d = lubridate::duration(newoffset),
+    start = as.character(strptime(start.hhmmss, format = "%H%M%S", tz = "UTC") - offset_d),
+    newoffset = sprintf("%02d%02d%02d",
+               lubridate::hour(start), lubridate::minute(start), lubridate::second(start))
+  ) %>% 
+  dplyr::select(c("aclew_id", "Media", newoffset))
+
+new.seg.info <- left_join(seg.info, newoffsets, by = c("aclew_id", "Media")) %>% 
+  mutate(Media.new = str_replace(Media, "[[:digit:]]{6}", newoffset))
+
+write_csv(new.seg.info, "seginfo.csv")
+
+seg.info <- left_join(seg.info, tod.adjustment, by = "aclew_id")
