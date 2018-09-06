@@ -2208,7 +2208,57 @@ Lastly, the normalized ratio of time spent vocalizing (CHI:OTH) in the turn-taki
 
 ## Frequency of high turn-taking activity
 
+```{r detect_tt_in_random, message=FALSE, warning=FALSE, paged.print=FALSE}
+tt.threshold.bychild <- turn.transitions %>%
+  filter(grepl("tt", segment)) %>%
+  mutate(tm1.bin = ifelse(tm1.val == "T", 1, 0),
+         tp1.bin = ifelse(tp1.val == "T", 1, 0)) %>%
+  replace_na(list(tm1.bin = 0, tp1.bin = 0)) %>%
+  mutate(tot.tts = tm1.bin + tp1.bin) %>%
+  group_by(aclew_child_id, segment) %>%
+  summarise(n_all.tts = sum(tot.tts)) %>%
+  mutate(seg.dur = ifelse(grepl("ext", segment), 5, 1),
+         n_all.tpm = n_all.tts/seg.dur) %>%
+  group_by(aclew_child_id) %>%
+  summarise(
+    min.all.tpm = min(n_all.tpm),
+    max.all.tpm = max(n_all.tpm),
+    mean.all.tpm = mean(n_all.tpm),
+    median.all.tpm = median(n_all.tpm))
 
+lowest.bychild.tt.tpm <- min(tt.threshold.bychild$mean.all.tpm)
+
+tm1s.rand <- turn.transitions %>%
+  filter(!is.na(tm1.val) & grepl("random", segment)) %>%
+  dplyr::select(c("aclew_child_id", "segment", "tm1.stop")) %>%
+  rename(transition.start = tm1.stop) %>%
+  mutate(transition.type = "tm1")
+
+tp1s.rand <- turn.transitions %>%
+  filter(!is.na(tp1.val) & grepl("random", segment)) %>%
+  dplyr::select(c("aclew_child_id", "segment", "tp1.start")) %>%
+  rename(transition.start = tp1.start) %>%
+  mutate(transition.type = "tp1")
+
+tts.rand <- bind_rows(tm1s.rand, tp1s.rand) %>%
+  arrange(aclew_child_id, segment, transition.start)
+
+# make sliding window of turn taking rate
+seg.info.start.stop <- seg.info %>%
+  filter(Include == 1) %>%
+  mutate(start.ms = clipoffset.sec*1000,
+         seg.dur = ifelse(grepl("random", CodeName), 5, ifelse(grepl("ext", CodeName), 6, 1)),
+         stop.ms = start.ms + (seg.dur*1000)) %>%
+  dplyr::select(aclew_id, CodeName, start.ms, stop.ms)
+for (row in seg.info.start.stop) {
+  child <- seg.info.start.stop$aclew_id[row]
+  segment <- seg.info.start.stop$CodeName[row]
+  tt.subsample <- filter(tts.rand, aclew_child_id == child &
+                           transition.start >= seg.info.start.stop$start.ms[row] &
+                           transition.start >= seg.info.start.stop$stop.ms[row])
+}
+
+```
 
 
 
