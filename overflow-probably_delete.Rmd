@@ -939,3 +939,130 @@ delta.tds.tth.c_o.plot <- ggplot(
 
 ```
 
+```{r corpus_comparison_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prep comparison data for matching figures
+comparison.data <- read_csv(comparison.file)
+tds.mph.tofill <- which(is.na(comparison.data$tds_mph) & !(is.na(comparison.data$tds_uph)))
+comparison.data$tds_mph[tds.mph.tofill] <- ((comparison.data$tds_uph[tds.mph.tofill] *
+                                               avg.utt.len.tseltal$median.utt.len)/60000)
+ods.mph.tofill <- which(is.na(comparison.data$ods_mph) & !(is.na(comparison.data$ods_uph)))
+comparison.data$ods_mph[ods.mph.tofill] <- ((comparison.data$ods_uph[ods.mph.tofill] *
+                                               avg.utt.len.tseltal$median.utt.len)/60000)
+xds.mph.tofill <- which(is.na(comparison.data$xds_mph) &
+                          !(is.na(comparison.data$ods_mph)) & !(is.na(comparison.data$tds_mph)))
+comparison.data$xds_mph[xds.mph.tofill] <- comparison.data$ods_mph[xds.mph.tofill] +
+  comparison.data$tds_mph[xds.mph.tofill]
+
+comparison.data.sa <- bind_rows(comparison.data, comparison.data)
+comparison.data.sa$SpkrAge <- c(rep("Child", nrow(comparison.data)),
+                                rep("Adult", nrow(comparison.data)))
+comparison.data.sa$prp_spkr <- NA
+for (i in 1:nrow(comparison.data.sa)) {
+  if (!(is.na(comparison.data.sa$prp_tds_adu[i]))) {
+      comparison.data.sa$prp_spkr[i] <- ifelse(comparison.data.sa$SpkrAge[i] == "Child",
+                                               comparison.data.sa$prp_tds_chi[i]/100,
+                                               comparison.data.sa$prp_tds_adu[i]/100)
+
+  }
+}
+comparison.data$Site <- factor(comparison.data$Site, levels = unique(comparison.data$Site))
+comparison.data.sa$Site <- factor(comparison.data.sa$Site, levels = unique(comparison.data$Site))
+comparison.data.shapes <- unique(comparison.data$shape)
+```
+
+
+```{r extra_models, message=FALSE, warning=FALSE, paged.print=FALSE}
+## TDS by speaker age random sample ####
+# zero-inflated negative binomial #----
+tds.rand.sa.zinb <- glmmTMB(round(tds_mph.sa,0) ~
+                              tchiyr.std + mated.bin + SpkrAge + 
+                              hsz.std + nsk.std +
+                              I(stthr.std^2) +
+                              tchiyr.std:mated.bin +
+#                              tchiyr.std:nsk.std +
+#                              tchiyr.std:hsz.std + # no convgnce w/ this extra term
+                              tchiyr.std:I(stthr.std^2) +
+                              SpkrAge:tchiyr.std +
+                              SpkrAge:nsk.std +
+                              (1+I(stthr.std^2)|aclew_child_id),
+                            data=quantity.rand.sa,
+                            ziformula=~I(stthr.std^2)*hsz.std, # no cvgnce w/ nsk.std
+                            family="nbinom1")
+#summary(tds.rand.sa.zinb)
+#mated.bin6+               -0.83494    0.40446  -2.064 0.038986 *  
+#SpkrAgeChild              -1.97850    0.38264  -5.171 2.33e-07 ***
+#tchiyr.std:I(stthr.std^2) -4.37920    2.46473  -1.777 0.075610 .  
+#SpkrAgeChild:nsk.std       1.28636    0.38438   3.347 0.000818 ***
+# ZI
+#I(stthr.std^2)         -84.7812    34.1124  -2.485   0.0129 *
+
+
+## propTDS random sample ####
+# beta regression #----
+quantity.rand.prpdata <- subset(quantity.rand, !(is.na(prop_tds)))
+# requires that 0 < y < 1: so we transform (y * (n−1) + 0.5) / n where n = sample size
+quantity.rand.prpdata$prp_tds_sqz <- (quantity.rand.prpdata$prop_tds * (nrow(quantity.rand.prpdata)-1) + 0.5)/nrow(quantity.rand.prpdata)
+
+prptds.rand.beta <- glmmTMB(prp_tds_sqz ~
+                              tchiyr.std + mated.bin +
+                              hsz.std + nsk.std +
+                              I(stthr.std^2) +
+                              tchiyr.std:mated.bin +
+                              tchiyr.std:nsk.std +
+                              tchiyr.std:hsz.std +
+                              tchiyr.std:I(stthr.std^2) +
+                              (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                            data=quantity.rand.prpdata,
+                            family=list(family="beta",link="logit"))
+#summary(prptds.rand.beta)
+#nsk.std                    -0.9706     0.2258  -4.299 1.72e-05 ***
+#tchiyr.std:I(stthr.std^2)  -4.3325     2.2614  -1.916   0.0554 .  
+
+## TDS by speaker age random sample ####
+# zero-inflated negative binomial #----
+tds.tt.sa.zinb <- glmmTMB(round(tds_mph.sa,0) ~
+                              tchiyr.std + mated.bin + SpkrAge + 
+                              hsz.std + nsk.std +
+                              I(stthr.std^2) +
+                              tchiyr.std:mated.bin +
+                              tchiyr.std:nsk.std +
+#                              tchiyr.std:hsz.std + # no convgnce w/ this extra term
+                              tchiyr.std:I(stthr.std^2) +
+                              SpkrAge:tchiyr.std +
+                              SpkrAge:nsk.std +
+                              (1+I(stthr.std^2)|aclew_child_id),
+                            data=quantity.nonrand.tt.sa,
+                            ziformula=~I(stthr.std^2)*hsz.std, # no cvgnce w/ nsk.std
+                            family="nbinom1")
+#summary(tds.tt.sa.zinb)
+#SpkrAgeChild              -2.24990    0.31190  -7.214 5.45e-13 ***
+#nsk.std                   -0.30060    0.13683  -2.197   0.0280 *  
+#tchiyr.std:I(stthr.std^2) -4.92679    2.31284  -2.130   0.0332 *  
+#tchiyr.std:SpkrAgeChild    0.87792    0.27473   3.196   0.0014 ** 
+#SpkrAgeChild:nsk.std       1.50811    0.27583   5.467 4.57e-08 ***
+# No significant ZI effects
+
+
+## propTDS random sample ####
+# beta regression #----
+quantity.nonrand.tt.prpdata <- subset(quantity.nonrand.tt, !(is.na(prop_tds)))
+# requires that 0 < y < 1: so we transform (y * (n−1) + 0.5) / n where n = sample size
+quantity.nonrand.tt.prpdata$prp_tds_sqz <- (quantity.nonrand.tt.prpdata$prop_tds *
+                                        (nrow(quantity.nonrand.tt.prpdata)-1) +
+                                        0.5)/nrow(quantity.nonrand.tt.prpdata)
+
+prptds.tt.beta <- glmmTMB(prp_tds_sqz ~
+                              tchiyr.std + mated.bin +
+                              hsz.std + nsk.std +
+                              I(stthr.std^2) +
+                              tchiyr.std:mated.bin +
+                              tchiyr.std:nsk.std +
+                              tchiyr.std:hsz.std +
+                              tchiyr.std:I(stthr.std^2) +
+                              (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                            data=quantity.nonrand.tt.prpdata,
+                            family=list(family="beta",link="logit"))
+#summary(prptds.tt.beta)
+#nsk.std                   -1.41541    0.19595  -7.223 5.07e-13 ***
+#tchiyr.std:nsk.std         0.33195    0.19003   1.747   0.0807 . 
+```
