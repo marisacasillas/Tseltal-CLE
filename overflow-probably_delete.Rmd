@@ -1066,3 +1066,214 @@ prptds.tt.beta <- glmmTMB(prp_tds_sqz ~
 #nsk.std                   -1.41541    0.19595  -7.223 5.07e-13 ***
 #tchiyr.std:nsk.std         0.33195    0.19003   1.747   0.0807 . 
 ```
+
+
+``` {r visualize_rand_ods_effects}
+# Nspeakers:
+#nsk.std                    1.05779    0.10152  10.420   <2e-16 ***
+#ggplot() + geom_point(data = quantity.rand, aes(x = nsk.std, y = round(ods_mph,0))) + geom_smooth(data = quantity.rand, aes(x = nsk.std, y = round(ods_mph,0)), method = "lm")
+
+# Time of day:
+#I(stthr.std^2)             2.99350    1.21337   2.467   0.0136 *  
+#ggplot() + geom_smooth(data = quantity.rand, aes(x = start.hr, y = round(ods_mph,0)), method = "lm", formula = y ~ poly(x, 2)) + geom_point(data = quantity.rand, aes(x = start.hr, y = round(ods_mph,0)))
+
+# House size * chi age:
+#tchiyr.std:hsz.std         0.31670    0.16002   1.979   0.0478 *  
+#ggplot() + geom_raster(data = quantity.rand, aes(y = tchiyr.std, x = hsz.std, fill = round(ods_mph,0)))
+```
+
+
+``` {r leftover_from_testing_prpchitcds}
+# the data are basically bimodal, so a beta regression won't work
+
+# requires that 0 < y < 1: so we transform (y * (n−1) + 0.5) / n where n = sample size
+propchitcds.rand$propchitcds_sqz <- (propchitcds.rand$prop_sa.tds * (nrow(propchitcds.rand)-1) + 0.5)/
+  nrow(propchitcds.rand)
+propchitcds.tt$propchitcds_sqz <- (propchitcds.tt$prop_sa.tds * (nrow(propchitcds.tt)-1) + 0.5)/
+  nrow(propchitcds.tt)
+
+## prop chi TCDS random sample ####
+prpchitcds.rand.beta <- glmmTMB(propchitcds_sqz ~
+                           tchiyr.std +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=propchitcds.rand,
+                         family=beta_family(link = "logit"))
+#qqnorm(residuals(prpchitcds.rand.beta))
+#qqline(residuals(prpchitcds.rand.beta)) # D: !!
+
+## prop chi TCDS tt sample ####
+prpchitcds.tt.beta <- glmmTMB(propchitcds_sqz ~
+                                tchiyr.std +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=propchitcds.tt,
+                         family=beta_family(link = "logit"))
+
+#qqnorm(residuals(prpchitcds.tt.beta))
+#qqline(residuals(prpchitcds.tt.beta)) # D: !!
+
+```
+
+
+xds.speakertype <- tibble(
+  spkrtype = c("CHI", "A", "C", "U", "E"),
+  xdsvals = c("T", "[AB]", "[CB]", "[U]", "[O]")
+)
+
+
+# Interactional sequences:
+# continuous sequences only including target-child vocalization and
+# target-child-directed talk
+turn.sequences <- tibble()
+for (i in 1:nrow(all.segments)) {
+  # retrieve all the target child vocs and xds == T vocalizations
+  subdata.tcds <- all.data %>%
+    filter(aclew_child_id == all.segments$aclew_child_id[i] &
+             segment == all.segments$segment[i] &
+             grepl('xds@', tier) &
+             val == "T")
+  subdata.chi <- all.data %>%
+    filter(aclew_child_id == all.segments$aclew_child_id[i] &
+             segment == all.segments$segment[i] &
+             tier == "CHI")
+  subdata <- bind_rows(subdata.tcds, subdata.chi) %>%
+    arrange(start)
+  # work through each target child voc in the clip
+  if (nrow(subdata) > 0) {
+    if (nrow(subdata.chi) > 0) {
+      chi.vocs <- mutate(subdata.chi,
+          seq.num = rep(NA,nrow(subdata.chi)),
+          seq.start = rep(NA,nrow(subdata.chi)),
+          seq.start.spkr = rep(NA,nrow(subdata.chi)),
+          seq.stop = rep(NA,nrow(subdata.chi)),
+          seq.stop.spkr = rep(NA,nrow(subdata.chi)))
+      seq.num <- 1
+      for (j in 1:nrow(chi.vocs)) {
+        curr.start <- chi.vocs$start[j]
+        curr.stop <- chi.vocs$stop[j]
+        curr.spk <- "CHI"
+        # First check if this chi voc is already in a sequence. If so, skip it
+        if (seq.num > 1) {
+          prev.seq <- which(chi.vocs$seq.num == seq.num - 1)[1]
+          prev.seq.start <- chi.vocs$seq.start[prev.seq]
+          prev.seq.stop <- chi.vocs$seq.stop[prev.seq]
+          if (curr.start >= prev.seq.start & curr.stop <= prev.seq.stop) {
+            chi.vocs$seq.start[j] <- chi.vocs$seq.start[prev.seq]
+            chi.vocs$seq.start.spkr[j] <- chi.vocs$seq.start.spkr[prev.seq]
+            chi.vocs$seq.stop[j] <- chi.vocs$seq.stop[prev.seq]
+            chi.vocs$seq.stop.spkr[j] <- chi.vocs$seq.stop.spkr[prev.seq]
+            chi.vocs$seq.num[j] <- chi.vocs$seq.num[prev.seq]
+            next
+          }
+        }
+        # We start a loop to look for related utterances to the LEFT
+        stop.looking.left <- FALSE
+        # Look first for prior turns from that STOP
+        #    - earliest: within the maximum gap allowed before the curr utt begins
+        #    - latest: up to the limit on vocal overlap or the end of
+        #              the curr utt (whichever comes first)
+        while (stop.looking.left == FALSE) {
+          # look first for turn transitions
+          if (curr.spk == "CHI") {
+            candidate.vocs <- subdata.tcds %>%
+              filter(stop >= curr.start - allowed.gap &
+                     stop <= min(curr.stop, (curr.start + allowed.overlap))) %>%
+              arrange(start)
+          } else {
+            candidate.vocs <- subdata.chi %>%
+              filter(stop >= curr.start - allowed.gap &
+                       stop <= min(curr.stop, (curr.start + allowed.overlap))) %>%
+              arrange(start)
+          }
+          candidate.continuation.vocs <- tibble()
+          if (nrow(candidate.vocs) > 0) {
+            # continue with the earliest (first occurring) candidate
+            curr.start <- candidate.vocs$start[1]
+            curr.stop <- candidate.vocs$stop[1]
+            curr.spk <- candidate.vocs$speaker[1]
+          } else { # otherwise look for speaker continuations;
+            # speech from the current speaker occurring before the current turn,
+            # that ends within the max gap window preceding the current turn start
+            candidate.continuation.vocs <- subdata %>%
+              filter(speaker == curr.spk &
+                       stop <= curr.start &
+                       stop >= curr.start - allowed.gap)
+            if (nrow(candidate.continuation.vocs) > 0) {
+              # continue with the earliest (first occurring) candidate
+              curr.start <- candidate.continuation.vocs$start[1]
+              curr.stop <- candidate.continuation.vocs$stop[1]
+              curr.spk <- candidate.continuation.vocs$speaker[1]
+            } else {
+              stop.looking.left <- TRUE
+            }
+          }
+        }
+        seq.start <- curr.start
+        seq.start.spkr <- curr.spk
+
+        # We start a loop to look for related utterances to the RIGHT
+        curr.start <- chi.vocs$start[j]
+        curr.stop <- chi.vocs$stop[j]
+        curr.spk <- "CHI"
+        stop.looking.right <- FALSE
+        # Look first for turn transitions that START
+        #    - earliest: within the allowed vocal overlap over the current utt,
+        #              up to its start time (whichever comes later)
+        #    - latest: before the maximum allowed gap after the curr utt ends
+        while(stop.looking.right == FALSE) {
+          if (curr.spk == "CHI") {
+            candidate.vocs <- subdata.tcds %>%
+              filter(start >= max(curr.start, (curr.stop - allowed.overlap)) &
+                     start <= curr.stop + allowed.gap) %>%
+              arrange(-stop)
+          } else {
+            candidate.vocs <- subdata.chi %>%
+              filter(start >= max(curr.start, (curr.stop - allowed.overlap)) &
+                     start <= curr.stop + allowed.gap) %>%
+              arrange(-stop)
+          }
+          candidate.continuation.vocs <- tibble()
+          if (nrow(candidate.vocs) > 0) {
+            # continue with the latest (last occurring) candidate
+            curr.start <- candidate.vocs$start[1]
+            curr.stop <- candidate.vocs$stop[1]
+            curr.spk <- candidate.vocs$speaker[1]
+          } else { # otherwise look for speaker continuations;
+            # speech from the current speaker occurring after the current turn,
+            # that starts within the max gap window following the current turn end
+            candidate.continuation.vocs <- subdata %>%
+              filter(speaker == curr.spk &
+                       start >= curr.stop &
+                       start <= curr.stop + allowed.gap)
+            if (nrow(candidate.continuation.vocs) > 0) {
+              # continue with the latest (last occurring) candidate
+              curr.start <- candidate.continuation.vocs$start[1]
+              curr.stop <- candidate.continuation.vocs$stop[1]
+              curr.spk <- candidate.continuation.vocs$speaker[1]
+            } else {
+              stop.looking.right <- TRUE
+            }
+          }
+        }
+        seq.stop <- curr.stop
+        seq.stop.spkr <- curr.spk
+
+        # Check if the "sequence" is actually just one CHI utterance
+        if (seq.start == chi.vocs$start[j] & seq.stop == chi.vocs$stop[j]) {
+          chi.vocs$seq.stop[j] <-  0
+          chi.vocs$seq.stop.spkr[j] <- "NONE"
+          chi.vocs$seq.start[j] <- 0
+          chi.vocs$seq.start.spkr[j] <- "NONE"
+        } else {
+          chi.vocs$seq.stop[j] <- seq.stop
+          chi.vocs$seq.stop.spkr[j] <- seq.stop.spkr
+          chi.vocs$seq.start[j] <- seq.start
+          chi.vocs$seq.start.spkr[j] <- seq.start.spkr
+          # Write the sequence number
+          chi.vocs$seq.num[j] <- seq.num
+          seq.num <- seq.num + 1
+        }
+      }
+      turn.sequences <- bind_rows(turn.sequences, chi.vocs)
+    }
+  }
+}

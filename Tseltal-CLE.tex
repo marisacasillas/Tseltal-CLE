@@ -519,73 +519,60 @@ annotations into R version 3.5.0 (2018-04-23) for analysis (plots:
 ggplot2; analyses: lme4 and betareg \emph{{[}TASK 13: Fix references to
 packages and their citations{]}}). We then calculated a number of
 summary variables to characterize children's language environments and
-linguistic development including: the rate of all overheard speech
-(\enquote{XDS}) and all speech directed to the target child
-(\enquote{TCDS}) in both minutes per hour and utterances per hour, the
-proportion of speech in TCDS and coming from adult vs.~child speakers,
-the rate of target-child-to-other and other-to-target-child turn
-transitions, the rate of vocalization produced by the target child, and
-the average maturity of children's vocalizations. Using language
-environment measures from the turn-taking sample, we then also estimated
-the number of intensive interaction minutes each child experienced over
-the day.
+linguistic development including three measures of speech quantity,
+three measures of verbal interactivity, and one measure of linguistic
+development. Using language environment measures from the turn-taking
+sample, we then also estimated the number of intensive interaction
+minutes each child experienced over the day and look at the potential
+relationship between how much speech children hear and their linguistic
+development.
 
 \section{Results}\label{results}
 
-\subsection{Speech quantity}\label{speech-quantity}
+\emph{{[}TASK 14: change fits in the figures to reflect model
+estimates{]}}
 
-How much speech do Tseltal children hear overall and what proportion of
-that speech is directed to them? For maximum comparability with prior
-work we first limit direct comparisons to the randomly sampled Tseltal
-clips. During randomly sampled clips, Tseltal children heard an average
-of 24.68 minutes of speech per hour (median = 20.12; range =
-8.23--48.60), of which an average of 3.63 minutes were directed toward
-the target child (median = 4.08; range = 0.83--6.55). Consequently, the
-mean proportion of speech directed to children was 0.29 (median = 0.28;
-range = 0.05--0.77). By-child estimates of the overheard speech
-(other-directed speech; \enquote{ODS}) rate, target-child-directed
-speech (\enquote{TCDS}) rate, proportion TCDS (TCDS/(TCDS+ODS)), and
-TCDS rate from adult vs.~child caregivers are shown in
-\protect\hyperlink{fig1}{figure 1}. To these figures we have added
-estimates from prior work with other
-communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (1029ms)}.
+\subsection{Data analysis}\label{data-analysis}
 
-\begin{figure}
-\centering
-\includegraphics{Tseltal-CLE_files/figure-latex/fig1-1.pdf}
-\caption{\label{fig:fig1}By-child estimates of minutes per hour of overheard
-speech (upper left), target-child-directed speech (upper right),
-proportion of speech that is directed to the target child (lower left),
-and number of speakers present (lower right). Data are shown for the
-random (purple; solid) and turn taking (green; dashed) samples. Bands on
-the solid linear trends show 95\% CIs.}
-\end{figure}
+We investigated the quantity of speech children heard with two measures:
+the rate of speech directed to the target child (\enquote{TCDS} minutes
+per hour) and the rate of hearable speech directed to others
+(\enquote{ODS} minutes per hour) (see \protect\hyperlink{fig1}{figure
+1}). We then briefly check two measures of the speaker environment:
+number of speakers, number of child speakers, and proportion of target
+speech from child speakers. We next analyze four measures of
+interactional quality: . Finally, we assess the children's vocal
+maturity.
 
-We modeled these measures for the nine clips from each child using
-mixed-effects regression using the glmmTMB package in R (REF). Notably,
-gaussian linear regression is not appropriate for any of our measures .
-The rate-based dependent variables (ODS min/hr and TCDS min/hr) are
-continuous with a zero-inflated positive distribution, the proportion
-TCDS variable (TCDS/(TCDS+ODS)) is doubly-bounded, and the number of
-speakers is count data (i.e., non-negative and non-continuous).
+\emph{{[}UPDATE ME TO REFLECT THE FINAL SET OF MODELS!{]}} Notably these
+rate measures (TCDS and ODS min/hr) are zero-inflated, non-negative
+measures (i.e., between zero and
+infinity\footnote{Minutes per hour are not capped at 60 because speech from all speakers is counted. For example, if two speakers are talking continuously throughout the sample, the estimate would be 120 min/hr.}
+with many cases of zero). This distributional property of TCDS and ODS
+min/hr renders them unsuitable for analysis with gaussian linear models
+because the variables are bounded at zero and, consequently, variance is
+systematically asymmetrical (i.e., a long right tail). We instead use
+zero-inflated negative binomial (ZINB) regressions for all rate
+variables in this manuscript. ZINB regressions model the dependent
+variable by splitting the data into two analyses: (1) a binomial
+(\enquote{zero-inflation}) model that evaluates the likelihood that the
+variable is present (e.g., \enquote{TCDS} or \enquote{no-TCDS} for a
+clip) and (2) a negative binomial (\enquote{conditional}) model of all
+the non-zero datapoints (e.g., \enquote{3} vs. \enquote{5} TCDS min/hr).
+For proportion TCDS we used beta regression, which is suited to making
+predictions on doubly-bounded data. We implemented all of these models
+using the glmmTMB package in R (REFS; for more on bounded regression
+models see Smithson REFS). In models analyzing the random clips, we
+include all nine 5-minute clips, and in models analyzing the turn-taking
+clips, we include all 5--6 clips selected for their interactive
+properties.\footnote{The turn-taking clips included in this analysis are: the five 1-minute turn-taking clips and also the 5-minute 'extension' clip for that recording if it was an extension of a turn-taking clip}
 
-To address this issue for the rate variables (ODS and TDS min/hr),
-employed zero-inflated negative binomial regression, which works on
-integer values, by rounded each rate estimate down to nearest minute per
-hour (ZINB). ZINB regressions model the dependent variable in two ways:
-(1) a binomial (\enquote{zero-inflation}) model that evaluates the
-likelihood that a datapoint is zero or non-zero and (2) a negative
-binomial (\enquote{conditional}) model of all the non-zero datapoints
-(REF). For proportion TCDS we used beta regression, which is suited to
-making predictions on doubly-bounded data. For number of speakers we
-used poisson regression, which is suited to non-negative (often skewed)
-integer-based continuous distributions (for more details see Smithson
-REFS).
-
-Our primary predictors were as follows: child age, household size, and
-number of non-target-child speakers present in that clip (all centered
-and standardized), plus maternal education (pre-secondary
-vs.~secondary-plus)\footnote{Spanish-only education begins in secondary school.},
+\emph{{[}UPDATE ME TO REFLECT THE FINAL SET OF MODELS!{]}} Our primary
+predictors were as follows: child age (months), household size (number
+of prople), and number of non-target-child speakers present in that
+clip, all centered and standardized, plus maternal education
+(pre-secondary
+vs.~secondary-plus)\footnote{Secondary school and beyond is Spanish-only.},
 and squared time of day at the start of the clip (in decimal hours;
 centered on noon and standardized). We used squared time of day to model
 the cycle of activity at home: mealtimes in the mornings and evenings
@@ -594,165 +581,167 @@ dispersal for chores. To this we also added two-way interactions between
 child age and maternal education, number of speakers, household size,
 and time of day. Finally, we included a random effect of child, with
 random slopes of time of day, unless doing so resulted in model
-non-convergence. Finally, for the zero-inflation models of
-zero-vs-nonzero ODS and TDS rate, we included household size, number of
-speakers present, and time of day, with interactions between time of day
-and household size and time of day and number of speakers present. The
-zero-inflation models used the same random effects structure as their
-complementary conditional models. We often had to reduce the fixed
-effects structure in the zero-inflation model to achieve convergence, as
-detailed below.
+non-convergence. Finally, for the zero-inflation models of TCDS and ODS
+min/hr, we included number of speakers present, time of day, and their
+interaction to differentiate zero and non-zero cases across clips. We
+often had to reduce the fixed effects structure in the zero-inflation
+model to achieve convergence, as detailed below.
 
-The quantity of other-directed speech (ODS) was primarily affected by
-the number of speakers present (MODEL-REF): more speakers was associated
-with more overheard speech. ODS was also significantly affected by time
-of day, being more frequent in the mornings and evenings than around
-midday (MODEL-REF). ODS was also more frequent in large households for
-older children compared to younger children (MODEL-REF). There was no
-significant effect of child age overall, and no effect involving
-maternal education. The zero-inflation model of ODS included fixed
-effects of household size, time of day, and their interaction, but none
-of these predictors were significant.
+\subsection{Speech quantity}\label{speech-quantity}
 
-The quantity of target-directed speech (TCDS) was primarily affected by
-factors relating to the child's age. To begin with, older children heard
-more TCDS than younger children in general (MODEL-REF). While the
-presence of more speakers was associated with less TCDS overall
-(MODEL-REF), older children were less affected than younger children by
-the increased number of speakers (MODEL-REF). Older children were also
-more likely than younger children to hear the most TCDS around midday,
-compared to the mornings and evenings (MODEL-REF). While there was no
-overall effect of maternal education, children with mothers who did not
-complete secondary school heard a greater increase in TCDS with age
-compared to children whose mothers had gone to school for longer
-(MODEL-REF). The zero-inflation model of TCDS also showed a significant
-effect of time of day and a significant interaction between time of day
-and household size; TCDS was overall more likely to be present in the
-mornings and evenings (MODEL-REF), though this effect was smaller in
-large households (MODEL-REF).
+\begin{figure}
+\centering
+\includegraphics{Tseltal-CLE_files/figure-latex/fig1-1.pdf}
+\caption{\label{fig:fig1}By-child estimates of minutes per hour of overheard
+speech (left), target-child-directed speech (right). Data are shown for
+the random (purple; solid) and turn taking (green; dashed) samples.
+Bands on the solid linear trends show 95\% CIs.}
+\end{figure}
+
+\subsubsection{Target-child directed speech
+(TCDS)}\label{target-child-directed-speech-tcds}
+
+The Tseltal children in our study were directly spoken to for an average
+of 3.63 minutes per hour in the random sample (median = 4.08; range =
+0.83--6.55) and 13.28 minutes per hour in the turn-taking sample (median
+= 13.65; range = 7.32--20.19).
+
+The rate of TCDS was primarily affected by factors relating to the time
+of day. The conditional model of randomly sampled clips showed that,
+overall, children were more likely to hear TCDS in the mornings and
+evenings than around midday (MODEL-REF). However, in both the randomly
+sampled clips and the turn-taking clips, the conditional models showed
+that this pattern weakened for older children, some of whom even heard
+peak TCDS input around midday (\protect\hyperlink{fig2}{figure 2};
+random: MODEL-REF; turn taking: MODEL-REF). There were no significant
+effects of child age, household size, number of speakers present, or
+maternal education in either model, and no significant effects in the
+zero-inflation
+models\footnote{The zero-inflation model for TCDS min/hr would not converge with time of day or number of speakers present.}.
+
+\begin{figure}
+\centering
+\includegraphics{Tseltal-CLE_files/figure-latex/fig2-1.pdf}
+\caption{\label{fig:fig2}TCDS rate heard at different times of day by
+children 12 months and younger (left) and 13 months and older (right) in
+the randomly selected (purple) and turn-taking (green) clips.}
+\end{figure}
+
+\subsubsection{Other directed speech
+(ODS)}\label{other-directed-speech-ods}
+
+The children in our corpus frequently heard speech directed to others:
+an average of 21.05 minutes per hour in the random sample (median =
+17.80; range = 3.57--42.80) and 11.93 minutes per hour in the
+turn-taking sample (median = 10.18; range = 1.37--24.42). That is, on
+average during their daylong recording, children heard 5--6 times as
+much speech directed to others than was directed to them. Even in the
+period of maximal interaction, children heard nearly equal amounts of
+speech directed to them and speech directed to others.
+
+The conditional models of ODS revealed a that the presence of more
+speakers was strongly associated with more ODS, in both the random
+(MODEL-REF) and turn-taking (MODEL-REF) clips. Additionally, more ODS
+occurred in the mornings and evenings (MODEL-REF), and was also more
+frequent in large households for older children compared to younger
+children (MODEL-REF). There were no other significant effects on ODS
+rate in the conditional models, and no significant effects in the
+zero-inflation
+models\footnote{Neither zero-inflation model for ODS min/hr would converge with number of speakers present, and so only include time of day.}.
+
+\subsection{Speaker environment}\label{speaker-environment}
 
 As reviewed above, previous work on Mayan communities, including the
 Tseltal community suggests that Mayan children hear much of their TCDS
 from other children, and that the proportion of TCDS from other children
-increases with age (REFS). In order to analyze the effect speaker age
-(child or adult TCDS) together with the other predictors modeled above,
-we split the data into TCDS from adults and children. All other
-predictors remained the same, only the number of speakers present
-represented the number of speakers of the relevant type for that
-datapoint (i.e., TCDS rate from adults in clip 1 given the number of
-adult speakers present in clip 1).
+increases with age (REFS). North American infants (6--7 months) tend to
+live in nuclear family homes but, during 16-hour daylong recordings,
+often hear speech from four individuals during a short period (REFS;
+cite\{bergelsonetal2018daybyday\}), and their developing ability to walk
+away and self-entertain has been proposed as a hypothesis for decreasing
+overheard speech with age (REFS; cite\{bergelsoncasillas2018\}). We
+investigated whether these same patterns held up for the children in the
+current corpus.
 
-TCDS rates were strongly affected by the age of the speaker: in contrast
-to prior work, these data show that most TCDS comes from adults
-(MODEL-REF). This speaker age effect depends on how many speakers there
-are of each type: while TCDS form children is more likely when more
-children are present, adults do not show a similar effect (MODEL-REF).
-Finally, children with mothers who had continued to secondary school and
-beyond heard less TCDS overall (MODEL-REF). The zero-inflation model of
-TCDS from adults and children included fixed effects of household size,
-time of day, and their interaction, but only one effect was significant:
-as before, TCDS was more likely overall in the mornings and evenings,
-compared to midday (MODEL-REF).
+\subsubsection{Number of speakers}\label{number-of-speakers}
 
-Lastly, the overall proportion of speech directed to the child
-(proportion TCDS) decreased when more speakers were present (MODEL-REF).
-There were no significant overall effects of age, time of day, maternal
-education, or household size on the proportion of TCDS used.
+There were an average 3.44 speakers present other than the target child
+in the randomly selected clips (median = 3; range = 0--10), and 2.56
+non-target-child speakers present in the turn taking clips (median = 2;
+range = 1--6). Children accounted for a little less than half of the
+speakers present; the average number of child speakers in the randomly
+selected clips was 1.44 (median = 2; range = 0--5) and in the turn
+taking clips was 0.86 (median = 1; range = 0--4).
 
-\subsubsection{Speech quantity during peak
-moments}\label{speech-quantity-during-peak-moments}
+We modeled the number of speakers present in the randomly selected and
+turn-taking clips using poisson linear regressions due to the fact that
+the dependent variable is integer count data (REFS). Each model included
+random slopes of chils and the age-related predictors of
+interest---child age (standardized) and two-way interactions between
+child age and household size (standardized) and child age and time of
+day (centered on noon, squared, and then standardized). The fixed
+effects also included household size and and time of day again as
+nuisance variables.
 
-Children's linguistic experiences are bursty (REFS) and, as we have
-seen, speech is distributed asymetrically throughout the day in Tseltal
-children's environments. If, for example, children do most of their
-language learning for the day during these short bouts of interaction,
-it may be more useful to characterize their learning environment with
-respect to the interactional periods---what kinds of speech do they hear
-during interaction?---rather than averaging over the entire day. We
-therefore repeat the same set of analyses with the turn-taking subset of
-the child's data: ODS rate, TCDS rate, TCDS rate by speaker age, and
-proportion TCDS.
+There was no evidence of age-related change in the number of speakers
+present. The total number of speakers was only significantly affeced by
+the time of day in the random clips (MODEL-REF), and was not
+significanly influenced by any of the predictors in the turn-taking
+clips. We a second set of models, this time only analyzing the number of
+child speakers present and found parallel results to the first set of
+models (randomly selected clips: MODEL-REF; turn-taking clips: no
+significant effects).
 
-During high turn-taking clips, Tseltal children heard an average of
-25.21 minutes of speech per hour (median = 23.99; range = 12.94--38.29),
-of which an average of 13.28 minutes were directed toward the target
-child (median = 13.65; range = 7.32--20.19). Consequently, the mean
-proportion of speech directed to children was 0.62 (median = 0.62; range
-= 0.37--0.93).
+\subsubsection{Proportion TCDS from other
+children}\label{proportion-tcds-from-other-children}
 
-Using the same approach as before, we modeled the four speech quantity
-measures for the 5--6 turn-taking
-clips\footnote{The turn-taking clips included in this analysis are: the five 1-minute turn-taking clips and also the 5-minute 'extension' clip for that recording if it was an extension of a turn-taking clip}
-from each recording.
-
-As in the random sample, when more speakers were present, ODS was
-significantly more frequent (MODEL-REF). There was no significant
-effects of time of day or household size on the rate of ODS in the
-turn-taking sample. The zero-inflation model included fixed effects of
-household size, time of day, and their interaction, but none of these
-predictors were significant.
-
-The only significant factor affecting TCDS quantity in the turn-taking
-sample was a two-way interaction between child age and time of day
-(MODEL-REF). As before, younger children were more likely to hear TCDS
-in the mornings and evenings, whereas older children were more likely to
-hear more TCDS midday (MODEL-REF). Unlike the random sample, this
-turn-taking sample showed no main effect of child age: older and younger
-children heard comparable amounts of TCDS overall. There were also no
-significant interactions involving the number of speakers present or
-maternal education, like there were in the random sample. The
-zero-inflation model included fixed effects of household size, time of
-day, and number of speakers but, unlike the model of TCDS in random
-clips, none of these predictors significantly influenced the presence of
-TCDS in the turn-taking clips.
-
-The model of TCDS quantity by speaker age for the turn-taking sample
-showed some similar results to the random sample. First, the quantity of
-TCDS in the turn-taking sample was strongly affected by speaker age
-(MODEL-REF): most TCDS still came from adults. Second, the presence of
-more children increased the quantity of TCDS from children more than the
-presence of more adults increased the quantity of TCDS from adults
-(MODEL-REF). TCDS quantity by speaker in the turn taking data
-additionally showed the time of day effect reported above: TCDS was
-maximized during turn-taking bouts that took place in the mornings and
-evenings for younger children, but less so for older children
-(MODEL-REF). There was also a significant effect of number of speakers:
-more speakers was associated with less TCDS (MODEL-REF). Lastly, there
-was an interaction between child age and speaker age: while adults were
-more likely to use TCDS overall, the increase in TCDS associated with
-older children was stronger for TCDS from other children compared to
-TCDS from adults (MODEL-REF), similar to the age effect found by
-Shneidman and Goldin-Meadow (REFS). The zero-inflation model of TCDS
-from adults and children included fixed effects of household size, time
-of day, and their interaction, but none of these predictors were
-significant.
-
-As in the random sample, the overall proportion of speech directed to
-the child (proportion TCDS) decreased when more speakers were present
-(MODEL-REF). There were no other significant predictors of proportion of
-speech in TCDS.
+Most TCDS heard by the children in our corpus came from adults: on
+average, only 19\% of TCDS came from child speakers. We used a binomial
+model to evaluate whether the likelihood of hearing TCDS from a child in
+a clip increased with age
+(REF).\footnote{We were unable to run a beta regression on the proportion of TCDS with age given that most of the clip values were at or near 0 or 1; thereby motivating the binomial analysis reported here.}
+We found no evidence that TCDS from other children increased with age in
+the randomly sampled or turn-taking clips (MODEL-REF). We also performed
+a Spearman's correlation between the child's age and the mean number of
+child talkers, but neither showed a significant relationship
+(MODEL-REFS).
 
 \subsection{Interactional exchanges}\label{interactional-exchanges}
 
-In the preceding section we measured children's linguistic environments
-by the sheer quantity of speech they enounter: both overheard and
-directed to them. We can also measure children's linguistic environments
-as a summary of the interactional exchanges they partake in (see also
-Romeo REFS). When children are jointly engaged with an interlocutor,
-they can practice making contingent vocalizations, and both the child
-and the interlocutor can more easily coordinate their behaviors and
-social and communicative intentions. In what follows, we characterize
-children's interactional exchanges with four measures: the rate of
-child-to-other turn transitions (i.e., contingent responses to the
-child's vocalizations), the rate of other-to-child turn transitions
-(i.e., contingent responses by the child), the duration of interactional
-turn-taking sequences involving the target child, and the ratio of
-interlocutor vs.~child vocalization time. We first describe these
-measures with respect to the random sample then, for comparison, we
-examine the turn-taking sample.
+We can also measure children's linguistic environments as a summary of
+the interactional exchanges they partake in (see also Romeo REFS). When
+children are jointly engaged with an interlocutor, they can practice
+making contingent vocalizations, and both the child and the interlocutor
+can more easily coordinate their behaviors and social and communicative
+intentions. In what follows, we characterize children's interactional
+exchanges with four measures: the rate of child-to-other turn
+transitions (i.e., contingent responses to the child's vocalizations),
+the rate of other-to-child turn transitions (i.e., contingent responses
+by the child), the duration of interactional turn-taking sequences
+involving the target child, and the ratio of interlocutor vs.~child
+vocalization time. We first describe these measures with respect to the
+random sample then, for comparison, we examine the turn-taking sample.
 
-\subsubsection{Temporal contingency and interactional
-sequences}\label{temporal-contingency-and-interactional-sequences}
+\begin{figure}
+\centering
+\includegraphics{Tseltal-CLE_files/figure-latex/fig3-1.pdf}
+\caption{\label{fig:fig3}By-child estimates of contingent responses per
+minute to the target child's vocalizations (upper left), contingent
+responses per minute by the target child to others'
+target-child-directed speech (upper right), the average duration of
+contingent interactional sequences (lower left), and the ratio of
+vocalization time between target children and target-child-directed
+speech (lower right). Each datapoint represents the value for a single
+clip within the random (purple; solid) or turn taking (green; dashed)
+samples. Bands on the solid linear trends show 95\% CIs.}
+\end{figure}
+
+\subsubsection{Contingent response rate}\label{contingent-response-rate}
+
+\subsubsection{Interactional sequences
+duration}\label{interactional-sequences-duration}
+
+\subsubsection{Vocalization ratio}\label{vocalization-ratio}
 
 We detect contingent turn exchanges between the target child and other
 speakers based on turn timing (). If there is a target-child-directed
@@ -793,154 +782,12 @@ That said, our timing restrictions are much tighter than those used to
 define interactional contingency in many other studies (e.g., REFS, see
 also REFS for a review on adult-adult turn timing).
 
-During the randomly selected clips, Tseltal children responded
-contingently to others' target-child vocalizations at an average rate of
-1.17 responses per minute (median = 0.20; range = 0--8.80). Meanwhile,
-other speakers responded contingently to the target children's
-vozalizations at an average rate of 1.38 responses per minute (median =
-0.40; range = 0--8.60). We detected 602 interactional sequences in the
-90 clips, with an average sequence duration of 5.76 seconds (median =
-4.30; range = 0.46--48.35). The average number of child vocalizations
-was 1.54 (range = 1--10; median = 1). Finally, we computed the
-normalized ratio of child vocalization time to target-child-directed
-vocalization time, finding that, overall, children vocalized for more
-time than their interlocutors, ranging from -0.17 to 0.78 (mean = 0.22,
-median = 0.24) by child.
+\subsection{Vocal maturity}\label{vocal-maturity}
 
-\begin{figure}
-\centering
-\includegraphics{Tseltal-CLE_files/figure-latex/fig2-1.pdf}
-\caption{\label{fig:fig2}By-child estimates of minutes per hour of
-child-to-other (upper left) and other-to-child (upper right) turn
-transitions per minute, turn-taking sequenec duration (lower left), and
-normalized difference in vocalization time (1 = child vocalizes more
-than their interlocutor; 0 = vice versa). Data are shown for the random
-(purple; solid) and turn taking (green; dashed) samples. Bands on the
-solid linear trends show 95\% CIs}
-\end{figure}
+\subsubsection{Developmental trajectory}\label{developmental-trajectory}
 
-As in the preceding set of analyses, gaussian linear regression was not
-appropriate for any of the four interaction measures. We again used
-zero-inflated negative binomial regression for the rate-based dependent
-variables (OTH-CHI and CHI-OTH turn transitions per minute), poisson
-regression for sequence duration (a non-negative integer-based
-continuous variable), and beta regression for normalized vocalization
-difference (a doubly-bounded variable).
-
-Our primary predictors were the same as before: child age, household
-size, and number of non-target-child speakers present in that clip (all
-centered and standardized), maternal education (pre-secondary
-vs.~secondary-plus), and squared time of day at the start of the clip
-(in decimal hours; centered on noon and standardized), plus two-way
-interactions between child age and maternal education, number of
-speakers, household size, and time of day, and a random effect of child,
-with random slopes of time of day, unless doing so resulted in model
-non-convergence. Because sequences are nested within clips, we also
-included a random effect of sequence in the model of sequence duration.
-Finally, for the zero-inflation models, we included household size,
-number of speakers present, and time of day, with interactions between
-time of day and household size and time of day and number of speakers
-present, as allowed by model convergence, as before.
-
-The rate at which children hear contingent response from others (CHI-OTH
-turn transitions per minute) was primarily influenced by factors
-relating to the child's age. Overall, older children heard more
-contingent responses then younger children (MODEL-REF), particularly
-when there were more speakers present (MODEL-REF). As with the speech
-quantity measures, younger children heard more contingent responses in
-the mornings and evenings while older children were more likely to hear
-more contingent responses midday (MODEL-REF). The zero-inflation model
-of contingent responses from others included household size, number of
-speakers present, and squared time of day, with two-way interactions of
-squared time of day with both household size and number of speakers
-present. Of these, the only significant factor predicting the presence
-of contingent responses was time of day: contingent responses from
-others were more likely overall in the mornings and evenings, compared
-to the afternoons (MODEL-REF).
-
-The rate at which children respond contingently to others (OTH-CHI turn
-transitions per minute) was similarly influenced by child age and time
-of day. Overall, older children gave more contingent responses then
-younger children (MODEL-REF). Again, older children were also more
-likely to give contingent responses around midday, compared to younger
-children, who were more likely to respond in the mornings and evenings
-(MODEL-REF). The zero-inflation model of contingent responses from
-others included household size, number of speakers present, and squared
-time of day, with two-way interactions of squared time of day with both
-household size and number of speakers present. None of these predictors
-significantly impacted the likelihood of a child giving a contingent
-response.
-
-The only factor to significantly impact the duration of interactional
-sequences was whether the child's mother completed secondary or further
-education (MODEL-REF). Similarly, the normalized ratio of time spent
-vocalizing (CHI:OTH) was higher for children of mothers who had
-completed secondary or further education (MODEL-REF) and was lower when
-more speakers were present (MODEL-REF).
-
-\subsubsection{Interactional exchanges during peak
-moments}\label{interactional-exchanges-during-peak-moments}
-
-During the turn taking clips, Tseltal children responded contingently to
-others' target-child vocalizations at an average rate of 7.56 responses
-per minute (median = 6.20; range = 0--26). Meanwhile, other speakers
-responded contingently to the target children's vozalizations at an
-average rate of 7.73 responses per minute (median = 7.80; range =
-0--25). We detected 511 interactional sequences in the 59 clips, with an
-average sequence duration of 6.61 seconds (median = 4.58; range =
-0.55--45.47). The average number of child vocalizations was 1.97 (range
-= 1--16; median = 1). Finally, we computed the normalized ratio of child
-vocalization time to target-child-directed vocalization time, finding
-that, overall, children vocalized for more time than their
-interlocutors, ranging from -0.16 to 0.37 (mean = 0.08, median = 0.13)
-by child.
-
-The rate at which children hear contingent response from others in the
-high turn-taking samples was influenced by maternal education, the
-number of speakers present, and the time of day. Children of mothers who
-completed secondary or further education heard a higher rate of
-contingent responses (MODEL-REF). Contingent responses from others were
-also less frequent when more speakers were present (MODEL-REF). Finally,
-as before, contingent responses from other were more likely in the
-mornings and afternoons for younger children, as compared to older
-children (MODEL-REF). The zero-inflation model included household size,
-squared time of day, and their interaction, none of which significantly
-predicted the presence of contingent responses from others.
-
-The rate at which children respond contingently to others was influenced
-by maternal education and the number of speakers present. Contingent
-responses from the target child were more likely from children whose
-mothers had completed secondary or further education (MODEL-REF) and
-less likely when more speakers were present (MODEL-REF). The
-zero-inflation model included household size, squared time of day, and
-their interaction. None of these predictors significantly impacted the
-likelihood of the child giving a contingent response.
-
-The duration of interactional sequences in the turn-taking sample was
-influenced by a multiple factors, most of which relate to the child's
-age. Sequences were slightly shorter for older children (MODEL-REF) and
-for children in large households (MODEL-REF), with a significant
-interaction between the two such that large households showed a larger
-decrease in sequence duration (MODEL-REF). That said, children of
-mothers who continued with secondary and further education participated
-in longer interactional sequences with age, compared to the other
-children (MODEL-REF). Finally, younger children were more likely than
-older children to experience longer interactional sequences in the
-mornings and evenings, compared to midday (MODEL-REF).
-
-Lastly, the normalized ratio of time spent vocalizing (CHI:OTH) in the
-turn-taking sample was not significantly impacted by any of the
-predictors in the model, including child age, time of day, number of
-speakers present, household size, and maternal education.
-
-\subsection{Frequency of high turn-taking
-activity}\label{frequency-of-high-turn-taking-activity}
-
-\begin{figure}
-\centering
-\includegraphics{Tseltal-CLE_files/figure-latex/plot_chi_voctypes_overall-1.pdf}
-\caption{}
-\end{figure}
+\subsubsection{Relation to language
+experience}\label{relation-to-language-experience}
 
 \section{Discussion}\label{disc}
 

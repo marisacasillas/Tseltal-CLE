@@ -282,6 +282,17 @@ We exported each ELAN file as tab-separated values and then the annotations into
 
 
 # Results {#results}
+*[TASK 14: change fits in the figures to reflect model estimates]*
+
+## Data analysis
+We investigated the quantity of speech children heard with two measures: the rate of speech directed to the target child ('TCDS' minutes per hour) and the rate of hearable speech directed to others ('ODS' minutes per hour) (see [figure 1](#fig1)). We then briefly check two measures of the speaker environment: number of speakers, number of child speakers, and proportion of target speech from child speakers. We next analyze four measures of interactional quality: <!--FILL ME IN!-->. Finally, we assess the children's vocal maturity.
+
+<!--Children's linguistic experiences are bursty (REFS) and, as we have seen, speech is distributed asymetrically throughout the day in Tseltal children's environments. If, for example, children do most of their language learning for the day during these short bouts of interaction, it may be more useful to characterize their learning environment with respect to the interactional periods---what kinds of speech do they hear during interaction?---rather than averaging over the entire day. We therefore repeat the same set of analyses with the turn-taking subset of the child's data: ODS rate, TCDS rate, TCDS rate by speaker age, and proportion TCDS.-->
+
+*[UPDATE ME TO REFLECT THE FINAL SET OF MODELS!]* Notably these rate measures (TCDS and ODS min/hr) are zero-inflated, non-negative measures (i.e., between zero and infinity\footnote{Minutes per hour are not capped at 60 because speech from all speakers is counted. For example, if two speakers are talking continuously throughout the sample, the estimate would be 120 min/hr.} with many cases of zero). This distributional property of TCDS and ODS min/hr renders them unsuitable for analysis with gaussian linear models because the variables are bounded at zero and, consequently, variance is systematically asymmetrical (i.e., a long right tail). We instead use zero-inflated negative binomial (ZINB) regressions for all rate variables in this manuscript. ZINB regressions model the dependent variable by splitting the data into two analyses: (1) a binomial ('zero-inflation') model that evaluates the likelihood that the variable is present (e.g., 'TCDS' or 'no-TCDS' for a clip) and (2) a negative binomial ('conditional') model of all the non-zero datapoints (e.g., '3' vs. '5' TCDS min/hr). For proportion TCDS we used beta regression, which is suited to making predictions on doubly-bounded data. We implemented all of these models using the glmmTMB package in R (REFS; for more on bounded regression models see Smithson REFS). In models analyzing the random clips, we include all nine 5-minute clips, and in models analyzing the turn-taking clips, we include all 5--6 clips selected for their interactive properties.\footnote{The turn-taking clips included in this analysis are: the five 1-minute turn-taking clips and also the 5-minute 'extension' clip for that recording if it was an extension of a turn-taking clip}
+
+*[UPDATE ME TO REFLECT THE FINAL SET OF MODELS!]* Our primary predictors were as follows: child age (months), household size (number of prople), and number of non-target-child speakers present in that clip, all centered and standardized, plus maternal education (pre-secondary vs. secondary-plus)\footnote{Secondary school and beyond is Spanish-only.}, and squared time of day at the start of the clip (in decimal hours; centered on noon and standardized). We used squared time of day to model the cycle of activity at home: mealtimes in the mornings and evenings should be more similar to each other than the afternoon because of dispersal for chores. To this we also added two-way interactions between child age and maternal education, number of speakers, household size, and time of day. Finally, we included a random effect of child, with random slopes of time of day, unless doing so resulted in model non-convergence. Finally, for the zero-inflation models of TCDS and ODS min/hr, we included number of speakers present, time of day, and their interaction to differentiate zero and non-zero cases across clips. We often had to reduce the fixed effects structure in the zero-inflation model to achieve convergence, as detailed below.
+
 ## Speech quantity
 ```{r random_quantity_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # Get min/hr speech measures
@@ -664,7 +675,7 @@ xdsmph.segment.rand_and_tt <- ggplot(quantity.rand_and_tt,
                    color = Sample), fill = "white", outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = Sample, color = Sample), method = "lm") +
-    ylab("XDS (min/hr)") + xlab("")	+
+  ylab("XDS (min/hr)") + xlab("")	+
   scale_y_continuous(limits=c(0,85),
                      breaks=seq(0,85,20)) +
   scale_x_continuous(limits=c(0,38),
@@ -683,7 +694,7 @@ odsmph.segments.rand_and_tt <- ggplot(quantity.rand_and_tt,
                    color = Sample), fill = "white", outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = Sample, color = Sample), method = "lm") +
-  ylab("ODS (min/hr)") + xlab("")	+
+  ylab("ODS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(-10,80),
                      breaks=seq(0,80,20)) +
   scale_x_continuous(limits=c(0,38),
@@ -702,7 +713,7 @@ tdsmph.segments.rand_and_tt <- ggplot(quantity.rand_and_tt,
                    color = Sample), fill = "white", outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = Sample, color = Sample), method = "lm") +
-  ylab("TCDS (min/hr)") + xlab("")	+
+  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,80),
                      breaks=seq(0,80,20)) +
   scale_x_continuous(limits=c(0,38),
@@ -720,7 +731,7 @@ tdsmph.segments.rand_and_tt.zoomedin <- ggplot(quantity.rand_and_tt,
                    color = Sample), fill = "white", outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = Sample, color = Sample), method = "lm") +
-  ylab("TCDS (min/hr)") + xlab("")	+
+  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,40),
                      breaks=seq(0,40,10)) +
   scale_x_continuous(limits=c(0,38),
@@ -790,16 +801,8 @@ nspkrs.segments.rand_and_tt <- ggplot(quantity.rand_and_tt,
         axis.line = element_line(color="black", size = 0.4))
 ```
 
-We investigated the \texit{amount} of speech children heard in three ways: the rate of speech directed to the target child ('TCDS' minutes per hour), the rate of hearable speech directed to others ('ODS' minutes per hour), and the proportion of TCDS coming from other children (see [figure 1](#fig1)). <!--To these figures we have added estimates from prior work with other communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (`r avg.utt.len.tseltal$median.utt.len`ms)}.-->
-
-None of these three measures conform to the assumptions made for gaussian linear regression: TCDS and ODS min/hr are zero-inflated, non-negative measures (i.e., between zero and infinity\footnote{Minutes per hour are not capped at 60 because speech from all speakers is counted. For example, if two speakers are talking continuously throughout the sample, the estimate would be 120 min/hr.} with many cases of zero), and proportion TCDS from child speakers is a doubly-bounded non-negative measure (i.e., between zero and one); in both of these cases the variable is bounded on at least one end and, consequently, variance is systematically asymmetrical (i.e., a long right tail). We instead modeled our two rate variables (TCDS and ODS min/hr) using zero-inflated negative binomial (ZINB) regression, which models the dependent variable by splitting the data into two analyses: (1) a binomial ('zero-inflation') model that evaluates the likelihood that the variable is present (e.g., 'TCDS' or 'no-TCDS' for a clip) and (2) a negative binomial ('conditional') model of all the non-zero datapoints (e.g., '3' vs. '5' TCDS min/hr). For proportion TCDS we used beta regression, which is suited to making predictions on doubly-bounded data. We implemented all of these models using the glmmTMB package in R (REFS; for more on bounded regression models see Smithson REFS).
-
-Our primary predictors were as follows: child age (months), household size (number of prople), and number of non-target-child speakers present in that clip, all centered and standardized, plus maternal education (pre-secondary vs. secondary-plus)\footnote{Secondary school and beyond is Spanish-only.}, and squared time of day at the start of the clip (in decimal hours; centered on noon and standardized). We used squared time of day to model the cycle of activity at home: mealtimes in the mornings and evenings should be more similar to each other than the afternoon because of dispersal for chores. To this we also added two-way interactions between child age and maternal education, number of speakers, household size, and time of day. Finally, we included a random effect of child, with random slopes of time of day, unless doing so resulted in model non-convergence. Finally, for the zero-inflation models of TCDS and ODS min/hr, we included number of speakers present, time of day, and their interaction to differentiate zero and non-zero cases across clips. We often had to reduce the fixed effects structure in the zero-inflation model to achieve convergence, as detailed below.
-
-
-```{r fig1, echo=FALSE, fig.cap="By-child estimates of minutes per hour of overheard speech (upper left), target-child-directed speech (upper right), proportion of speech that is directed to the target child (lower left), and number of speakers present (lower right). Data are shown for the random (purple; solid) and turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=4}
-grid.arrange(tdsmph.segments.rand_and_tt.zoomedin, odsmph.segments.rand_and_tt,
-             tdsprp.segments.rand_and_tt.sa, nspkrs.segments.rand_and_tt, nrow=2, ncol=2)
+```{r fig1, echo=FALSE, fig.cap="By-child estimates of minutes per hour of overheard speech (left), target-child-directed speech (right). Data are shown for the random (purple; solid) and turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=2.5}
+grid.arrange(tdsmph.segments.rand_and_tt.zoomedin, odsmph.segments.rand_and_tt, nrow=1, ncol=2)
 ```
 
 ```{r prepare_for_quantity_models, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -962,9 +965,9 @@ tds.tt.zinb <- glmmTMB(round(tds_mph,0) ~
 ```
 
 ### Target-child directed speech (TCDS)
-The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`) and `r round(mean(quantity.tt.bychild$tds_mph),2)` minutes per hour in the turn-taking sample (median = `r round(median(quantity.tt.bychild$tds_mph),2)`; range = `r round(min(quantity.tt.bychild$tds_mph),2)`--`r round(max(quantity.tt.bychild$tds_mph),2)`).
+The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`) and `r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)` minutes per hour in the turn-taking sample (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`). <!--To these figures we have added estimates from prior work with other communities.\footnote{The Yucatec Mayan data from Shneidman and colleagues was originally reported in utterances per hour. We convert their estimates to minutes per hour using the median utterance duration in our dataset for all non-target child speakers (`r avg.utt.len.tseltal$median.utt.len`ms)}.-->
 
-The rate of TCDS was primarily affected by factors relating to the time of day. The conditional model of randomly sampled clips showed that, overall, children were more likely to hear TCDS in the mornings and evenings than around midday (MODEL-REF). However, in both the randomly sampled clips and the turn-taking clips, the conditional models showed that this pattern weakened for older children, some of whom even heard peak TCDS input around midday (random: MODEL-REF; turn taking: MODEL-REF). There were no significant effects of child age, household size, number of speakers present, or maternal education in either model, and no significant effects in the zero-inflation models\footnote{The zero-inflation model for TCDS min/hr would not converge with time of day or number of speakers present.}.
+The rate of TCDS was primarily affected by factors relating to the time of day. The conditional model of randomly sampled clips showed that, overall, children were more likely to hear TCDS in the mornings and evenings than around midday (MODEL-REF). However, in both the randomly sampled clips and the turn-taking clips, the conditional models showed that this pattern weakened for older children, some of whom even heard peak TCDS input around midday ([figure 2](#fig2); random: MODEL-REF; turn taking: MODEL-REF). There were no significant effects of child age, household size, number of speakers present, or maternal education in either model, and no significant effects in the zero-inflation models\footnote{The zero-inflation model for TCDS min/hr would not converge with time of day or number of speakers present.}.
 
 ``` {r visualize_tcds_effects}
 quantity.nonrand.tt$Sample <- "turn taking"
@@ -978,58 +981,32 @@ tod.tcds <- ggplot(data = quantity.rand_and_tt.all) +
               aes(y = round(tds_mph,0), x = start.hr, color = Sample,
                   group = interaction(as.factor(ifelse(age_mo_round < 13, -1, 1)), Sample)),
               method = "lm", formula = y ~ poly(x, 2)) +
-  facet_grid(~ as.factor(ifelse(age_mo_round < 13, -1, 1)))
+  facet_grid(~ as.factor(ifelse(age_mo_round < 13, "<13mo", "13+mo"))) +
+  ylab("TCDS (min/hr)") + xlab("Time of day (hour)")	+
+  scale_y_continuous(limits=c(-10,40),
+                     breaks=c(0,10,20, 30, 40)) +
+  scale_x_continuous(limits=c(8,18),
+                     breaks=seq(8,18,2)) +
+  coord_cartesian(ylim=c(0,40),xlim=c(8,18)) +
+  scale_color_manual(values = viridis(3)) +
+  scale_fill_manual(values = viridis(3)) +
+  theme_apa() +
+  theme(legend.position="right",
+        axis.line = element_line(color="black", size = 0.4))
+
 ```
 
-<!--How much speech do Tseltal children hear overall and what proportion of that speech is directed to them? For maximum comparability with prior work we first limit direct comparisons to the randomly sampled Tseltal clips. During randomly sampled clips, Tseltal children heard an average of `r round(mean(quantity.rand.bychild$xds_mph),2)` minutes of speech per hour (median = `r round(median(quantity.rand.bychild$xds_mph),2)`; range = `r round(min(quantity.rand.bychild$xds_mph),2)`--`r round(max(quantity.rand.bychild$xds_mph),2)`), of which ... Consequently, the mean proportion of speech directed to children was `r round(mean(quantity.rand.bychild$prop_tds),2)` (median = `r round(median(quantity.rand.bychild$prop_tds),2)`; range = `r round(min(quantity.rand.bychild$prop_tds),2)`--`r round(max(quantity.rand.bychild$prop_tds),2)`). By-child estimates of the overheard speech (other-directed speech; 'ODS') rate, target-child-directed speech ('TCDS') rate, proportion TCDS (TCDS/(TCDS+ODS)), and TCDS rate from adult vs. child caregivers are shown in [figure 1](#fig1). -->
-
-
-The quantity of other-directed speech (ODS) was primarily affected by the number of speakers present (MODEL-REF): more speakers was associated with more overheard speech. ODS was also significantly affected by time of day, being more frequent in the mornings and evenings than around midday (MODEL-REF). ODS was also more frequent in large households for older children compared to younger children (MODEL-REF). There was no significant effect of child age overall, and no effect involving maternal education. The zero-inflation model of ODS included fixed effects of household size, time of day, and their interaction, but none of these predictors were significant.
-
-``` {r visualize_rand_ods_effects}
-# Nspeakers:
-#nsk.std                    1.05779    0.10152  10.420   <2e-16 ***
-#ggplot() + geom_point(data = quantity.rand, aes(x = nsk.std, y = round(ods_mph,0))) + geom_smooth(data = quantity.rand, aes(x = nsk.std, y = round(ods_mph,0)), method = "lm")
-
-# Time of day:
-#I(stthr.std^2)             2.99350    1.21337   2.467   0.0136 *  
-#ggplot() + geom_smooth(data = quantity.rand, aes(x = start.hr, y = round(ods_mph,0)), method = "lm", formula = y ~ poly(x, 2)) + geom_point(data = quantity.rand, aes(x = start.hr, y = round(ods_mph,0)))
-
-# House size * chi age:
-#tchiyr.std:hsz.std         0.31670    0.16002   1.979   0.0478 *  
-#ggplot() + geom_raster(data = quantity.rand, aes(y = tchiyr.std, x = hsz.std, fill = round(ods_mph,0)))
+```{r fig2, echo=FALSE, fig.cap="TCDS rate heard at different times of day by children 12 months and younger (left) and 13 months and older (right) in the randomly selected (purple) and turn-taking (green) clips.", message=FALSE, warning=FALSE, fig.height=2.5}
+tod.tcds
 ```
-
 
 ```{r ods_models, message=FALSE, warning=FALSE, paged.print=FALSE}
-# Note: I'm not going to use an offset of segment_dur because:
-# (1) it behaves a little weirdly (and non-conservatively!) and sometimes causes non-cvgnce
-# (2) the DVs are relative (i.e., minutes per hour) so some sample diff is already mitigated
-
-## ODS tt sample ####
-# zero-inflated negative binomial #----
-ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
-                         data=quantity.nonrand.tt,
-                         ziformula=~hsz.std*I(stthr.std^2), # max: no cvgnce w/ nsk.std added
-                         family="nbinom1")
-#summary(ods.tt.zinb)
-#nsk.std                    0.75038    0.12625   5.944 2.79e-09 ***
-#I(stthr.std^2)            -5.08226    2.88970  -1.759   0.0786 .  
-# No significant ZI effects
-
 ## ODS random sample ####
-# zero-inflated negative binomial #----
 ods.rand.zinb <- glmmTMB(round(ods_mph,0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
+                           tchiyr.std +
+                           mated.bin +
+                           hsz.std +
+                           nsk.std +
                            I(stthr.std^2) +
                            tchiyr.std:mated.bin +
                            tchiyr.std:nsk.std +
@@ -1037,101 +1014,183 @@ ods.rand.zinb <- glmmTMB(round(ods_mph,0) ~
                            tchiyr.std:I(stthr.std^2) +
                            (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
                          data=quantity.rand,
-                         ziformula=~hsz.std*I(stthr.std^2), # max: no cvgnce w/ nsk.std added
+                         ziformula=~I(stthr.std^2),#nsk.std,
                          family="nbinom1")
+#qqnorm(residuals(ods.rand.zinb))
+#qqline(residuals(ods.rand.zinb)) # not great...
 #summary(ods.rand.zinb)
 #nsk.std                    1.05779    0.10152  10.420   <2e-16 ***
-#I(stthr.std^2)             2.99350    1.21337   2.467   0.0136 *  
+#I(stthr.std^2)             2.99351    1.21337   2.467   0.0136 *  
 #tchiyr.std:hsz.std         0.31670    0.16002   1.979   0.0478 *  
+# No significant ZI effects
+
+## ODS tt sample ####
+ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
+                         tchiyr.std +
+                         mated.bin +
+                         hsz.std +
+                         nsk.std +
+                         I(stthr.std^2) +
+                         tchiyr.std:mated.bin +
+                         tchiyr.std:nsk.std +
+                         tchiyr.std:hsz.std +
+                         tchiyr.std:I(stthr.std^2) +
+                         (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                       data=quantity.nonrand.tt,
+                       ziformula=~I(stthr.std^2),#*nsk.std,
+                       family="nbinom1")
+#qqnorm(residuals(ods.tt.zinb))
+#qqline(residuals(ods.tt.zinb)) # ergh
+#summary(ods.tt.zinb)
+#nsk.std                    0.75038    0.12625   5.944 2.79e-09 ***
+#I(stthr.std^2)            -5.08225    2.88970  -1.759   0.0786 .  
 # No significant ZI effects
 ```
 
-As reviewed above, previous work on Mayan communities, including the Tseltal community suggests that Mayan children hear much of their TCDS from other children, and that the proportion of TCDS from other children increases with age (REFS). In order to analyze the effect speaker age (child or adult TCDS) together with the other predictors modeled above, we split the data into TCDS from adults and children. All other predictors remained the same, only the number of speakers present represented the number of speakers of the relevant type for that datapoint (i.e., TCDS rate from adults in clip 1 given the number of adult speakers present in clip 1).
+### Other directed speech (ODS)
+The children in our corpus frequently heard speech directed to others: an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`) and `r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)` minutes per hour in the turn-taking sample (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`). That is, on average during their daylong recording, children heard 5--6 times as much speech directed to others than was directed to them. Even in the period of maximal interaction, children heard nearly equal amounts of speech directed to them and speech directed to others.
 
-TCDS rates were strongly affected by the age of the speaker: in contrast to prior work, these data show that most TCDS comes from adults (MODEL-REF). This speaker age effect depends on how many speakers there are of each type: while TCDS form children is more likely when more children are present, adults do not show a similar effect (MODEL-REF). Finally, children with mothers who had continued to secondary school and beyond heard less TCDS overall (MODEL-REF). The zero-inflation model of TCDS from adults and children included fixed effects of household size, time of day, and their interaction, but only one effect was significant: as before, TCDS was more likely overall in the mornings and evenings, compared to midday (MODEL-REF).
+The conditional models of ODS revealed a that the presence of more speakers was strongly associated with more ODS, in both the random (MODEL-REF) and turn-taking (MODEL-REF) clips. Additionally, more ODS occurred in the mornings and evenings (MODEL-REF), and was also more frequent in large households for older children compared to younger children (MODEL-REF). There were no other significant effects on ODS rate in the conditional models, and no significant effects in the zero-inflation models\footnote{Neither zero-inflation model for ODS min/hr would converge with number of speakers present, and so only include time of day.}.
 
-``` {r visualize_rand_tds.sa_effects}
-# Speaker age:
-#SpkrAgeChild              -1.97850    0.38264  -5.171 2.33e-07 ***
-#ggplot() + geom_violin(data = quantity.rand.sa, aes(x = SpkrAge, y = round(tds_mph.sa,0))) + geom_jitter(data = quantity.rand.sa, aes(x = SpkrAge, y = round(tds_mph.sa,0)))
+## Speaker environment
+As reviewed above, previous work on Mayan communities, including the Tseltal community suggests that Mayan children hear much of their TCDS from other children, and that the proportion of TCDS from other children increases with age (REFS). North American infants (6--7 months) tend to live in nuclear family homes but, during 16-hour daylong recordings, often hear speech from four individuals during a short period (REFS; cite{bergelsonetal2018daybyday}), and their developing ability to walk away and self-entertain has been proposed as a hypothesis for decreasing overheard speech with age (REFS; cite{bergelsoncasillas2018}). We investigated whether these same patterns held up for the children in the current corpus.
 
-# Speaker age * Nspeakers:
-#SpkrAgeChild:nsk.std       1.28636    0.38438   3.347 0.000818 ***
-#ggplot() + geom_point(data = quantity.rand.sa, aes(y = round(tds_mph.sa,0), x = nsk.std, color = SpkrAge)) + geom_smooth(data = quantity.rand.sa, aes(y = round(tds_mph.sa,0), x = nsk.std, color = SpkrAge), method = "lm")
+```{r prp_nspkrs_models, message=FALSE, warning=FALSE, paged.print=FALSE}
+nspkrs.rand.zinb <- glmmTMB(n_spkrs_clip ~
+                           tchiyr.std +
+                           hsz.std +
+                           I(stthr.std^2) +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:I(stthr.std^2) +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=quantity.rand,
+                         family="poisson")
+#qqnorm(residuals(nspkrs.rand.zinb))
+#qqline(residuals(nspkrs.rand.zinb))
+#summary(nspkrs.rand.zinb)
+#I(stthr.std^2)             2.37136    0.90791   2.612    0.009 ** 
 
-# Maternal education
-#mated.bin6+               -0.83494    0.40446  -2.064 0.038986 *  
-#ggplot() + geom_violin(data = quantity.rand.sa, aes(x = mated.bin, y = round(tds_mph.sa,0))) + geom_jitter(data = quantity.rand.sa, aes(x = mated.bin, y = round(tds_mph.sa,0)))
+nspkrs.tt.zinb <- glmmTMB(n_spkrs_clip ~
+                           tchiyr.std +
+                           hsz.std +
+                           I(stthr.std^2) +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:I(stthr.std^2) +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=quantity.nonrand.tt,
+                         family="poisson")
+#qqnorm(residuals(nspkrs.tt.zinb))
+#qqline(residuals(nspkrs.tt.zinb)) # meh
+#summary(nspkrs.tt.zinb)
+# no significant effects
 
-# ZI - time of day (note ZI estimates are prob of DV being 0 ~ flip for interpretation):
-#I(stthr.std^2)         -84.7812    34.1124  -2.485   0.0129 *
-#ggplot() + geom_smooth(data = quantity.rand.sa, aes(x = start.hr, y = tds_mph.sa), method = "lm", formula = y ~ poly(x, 2))
+quantity.rand.sa.chi <- subset(quantity.rand.sa, SpkrAge == "Child")
+nchispkrs.rand.zinb <- glmmTMB(n_spkrs_clip ~
+                           tchiyr.std +
+                           hsz.std +
+                           I(stthr.std^2) +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:I(stthr.std^2) +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=quantity.rand.sa.chi,
+                         family="poisson")
+#qqnorm(residuals(nchispkrs.rand.zinb))
+#qqline(residuals(nchispkrs.rand.zinb))
+#summary(nchispkrs.rand.zinb)
+#I(stthr.std^2)              2.8314     1.4115   2.006   0.0449 *
+
+quantity.nonrand.tt.sa.chi <- subset(quantity.nonrand.tt.sa, SpkrAge == "Child")
+nchispkrs.tt.zinb <- glmmTMB(n_spkrs_clip ~
+                           tchiyr.std +
+                           hsz.std +
+                           I(stthr.std^2) +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:I(stthr.std^2) +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=quantity.nonrand.tt.sa.chi,
+                         family="poisson")
+#qqnorm(residuals(nchispkrs.tt.zinb))
+#qqline(residuals(nchispkrs.tt.zinb)) #eep
+#summary(nchispkrs.tt.zinb)
+# no significant effects
 ```
 
-Lastly, the overall proportion of speech directed to the child (proportion TCDS) decreased when more speakers were present (MODEL-REF). There were no significant overall effects of age, time of day, maternal education, or household size on the proportion of TCDS used.
+### Number of speakers
+There were an average `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), and `r round(mean(subset(quantity.nonrand, sample == "turn-taking")$n_spkrs_clip), 2)` non-target-child speakers present in the turn taking clips (median = `r round(median(subset(quantity.nonrand, sample == "turn-taking")$n_spkrs_clip),2)`; range = `r round(min(subset(quantity.nonrand, sample == "turn-taking")$n_spkrs_clip),2)`--`r round(max(subset(quantity.nonrand, sample == "turn-taking")$n_spkrs_clip),2)`). Children accounted for a little less than half of the speakers present; the average number of child speakers in the randomly selected clips was `r round(mean(subset(quantity.rand.sa, SpkrAge == "Child")$n_spkrs_clip), 2)` (median = `r round(median(subset(quantity.rand.sa, SpkrAge == "Child")$n_spkrs_clip), 2)`; range = `r round(min(subset(quantity.rand.sa, SpkrAge == "Child")$n_spkrs_clip), 2)`--`r round(max(subset(quantity.rand.sa, SpkrAge == "Child")$n_spkrs_clip), 2)`) and in the turn taking clips was `r round(mean(subset(quantity.nonrand.tt.sa, SpkrAge == "Child")$n_spkrs_clip), 2)` (median = `r round(median(subset(quantity.nonrand.tt.sa, SpkrAge == "Child")$n_spkrs_clip), 2)`; range = `r round(min(subset(quantity.nonrand.tt.sa, SpkrAge == "Child")$n_spkrs_clip), 2)`--`r round(max(subset(quantity.nonrand.tt.sa, SpkrAge == "Child")$n_spkrs_clip), 2)`).
 
-``` {r visualize_rand_prptds_effects}
-# Nspeakers:
-#nsk.std                    -0.9706     0.2258  -4.299 1.72e-05 ***
-#ggplot() + geom_point(data = quantity.rand.prpdata, aes(x = nsk.std, y = prp_tds_sqz)) + geom_smooth(data = quantity.rand.prpdata, aes(x = nsk.std, y = prp_tds_sqz), method = "lm")
+We modeled the number of speakers present in the randomly selected and turn-taking clips using poisson linear regressions due to the fact that the dependent variable is integer count data (REFS). Each model included random slopes of chils and the age-related predictors of interest---child age (standardized) and two-way interactions between child age and household size (standardized) and child age and time of day (centered on noon, squared, and then standardized). The fixed effects also included household size and and time of day again as nuisance variables.
+
+There was no evidence of age-related change in the number of speakers present. The total number of speakers was only significantly affeced by the time of day in the random clips (MODEL-REF), and was not significanly influenced by any of the predictors in the turn-taking clips. We a second set of models, this time only analyzing the number of child speakers present and found parallel results to the first set of models (randomly selected clips: MODEL-REF; turn-taking clips: no significant effects).
+
+```{r prp_chi_tcds_models, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+prpchitcds.avgs.rand <- subset(quantity.rand.sa, SpkrAge == "Child") %>%
+  filter(!is.na(prop_sa.tds)) %>%
+  group_by(aclew_child_id) %>%
+  summarise(mean.chiprptcds = mean(prop_sa.tds),
+            median.chiprptcds = median(prop_sa.tds),
+            n.chitcdsclips = n())
+
+prpchitcds.avgs.tt <- subset(quantity.nonrand.tt.sa, SpkrAge == "Child") %>%
+  filter(!is.na(prop_sa.tds)) %>%
+  group_by(aclew_child_id) %>%
+  summarise(mean.chiprptcds = mean(prop_sa.tds),
+            median.chiprptcds = median(prop_sa.tds),
+            n.chitcdsclips = n())
+
+# These values are basically bimodal, so we can only really analyze them in a
+# mixed model by converting them to 0 and 1 and then using a bimonal distribution
+#ggplot(propchitcds.rand, aes(propchitcds_sqz)) + geom_histogram()
+
+propchitcds.rand <- subset(quantity.rand.sa[which(!is.na(quantity.rand.sa$prop_sa.tds)),],
+                           SpkrAge == "Child")
+propchitcds.tt <- subset(quantity.nonrand.tt.sa[which(!is.na(quantity.nonrand.tt.sa$prop_sa.tds)),],
+                           SpkrAge == "Child")
+
+propchitcds.rand$chitcdsbin <- ifelse(propchitcds.rand$prop_sa.tds > 0, 1, 0)
+propchitcds.tt$chitcdsbin <- ifelse(propchitcds.tt$prop_sa.tds > 0, 1, 0)
+
+## prop chi TCDS random sample ####
+prpchitcds.rand.bin <- glmmTMB(chitcdsbin ~
+                                tchiyr.std +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=propchitcds.rand,
+                         family="binomial")
+#qqnorm(residuals(prpchitcds.rand.bin))
+#qqline(residuals(prpchitcds.rand.bin))
+#summary(prpchitcds.rand.bin)
+#tchiyr.std   -0.3267     0.4051  -0.806    0.420
+
+## prop chi TCDS tt sample ####
+prpchitcds.tt.bin <- glmmTMB(chitcdsbin ~
+                                tchiyr.std +
+                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
+                         data=propchitcds.tt,
+                         family="binomial")
+#qqnorm(residuals(prpchitcds.tt.bin))
+#qqline(residuals(prpchitcds.tt.bin))
+#summary(prpchitcds.tt.bin)
+#tchiyr.std   -0.0386     0.5231  -0.074   0.9412  
+
+# We can also aggregate to one point per child and then test a correlation with age
+propchitcds.rand.corr_age <- propchitcds.rand %>%
+  group_by(aclew_child_id, tchiyr.std, age_mo_round) %>%
+  summarise(avg_prpchitcds = mean(prop_sa.tds))
+cor.test(~ tchiyr.std + avg_prpchitcds,
+         data = propchitcds.rand.corr_age, method = "spearman")
+
+propchitcds.tt.corr_age <- propchitcds.tt %>%
+  group_by(aclew_child_id, tchiyr.std, age_mo_round) %>%
+  summarise(avg_prpchitcds = mean(prop_sa.tds))
+cor.test(~ tchiyr.std + avg_prpchitcds,
+         data = propchitcds.tt.corr_age, method = "spearman")
 ```
 
-### Speech quantity during peak moments
-Children's linguistic experiences are bursty (REFS) and, as we have seen, speech is distributed asymetrically throughout the day in Tseltal children's environments. If, for example, children do most of their language learning for the day during these short bouts of interaction, it may be more useful to characterize their learning environment with respect to the interactional periods---what kinds of speech do they hear during interaction?---rather than averaging over the entire day. We therefore repeat the same set of analyses with the turn-taking subset of the child's data: ODS rate, TCDS rate, TCDS rate by speaker age, and proportion TCDS.
-
-During high turn-taking clips, Tseltal children heard an average of `r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$xds_mph),2)` minutes of speech per hour (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$xds_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$xds_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$xds_mph),2)`), of which an average of `r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)` minutes were directed toward the target child (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`). Consequently, the mean proportion of speech directed to children was `r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$prop_tds),2)` (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$prop_tds),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$prop_tds),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$prop_tds),2)`). <!--By-child estimates of ODS rate, TCDS rate, TCDS rate from adult vs. child speakers, and proportion TCDS are shown in [figure 2](#fig2).-->
-
-
-Using the same approach as before, we modeled the four speech quantity measures for the 5--6 turn-taking clips\footnote{The turn-taking clips included in this analysis are: the five 1-minute turn-taking clips and also the 5-minute 'extension' clip for that recording if it was an extension of a turn-taking clip} from each recording.
-
-As in the random sample, when more speakers were present, ODS was significantly more frequent (MODEL-REF). There was no significant effects of time of day or household size on the rate of ODS in the turn-taking sample. The zero-inflation model included fixed effects of household size, time of day, and their interaction, but none of these predictors were significant.
-
-``` {r visualize_tt_ods_effects}
-# Nspeakers:
-#nsk.std                    0.75038    0.12625   5.944 2.79e-09 ***
-#ggplot() + geom_point(data = quantity.nonrand.tt, aes(x = nsk.std, y = round(ods_mph,0))) + geom_smooth(data = quantity.nonrand.tt, aes(x = nsk.std, y = round(ods_mph,0)), method = "lm")
-```
-
-The only significant factor affecting TCDS quantity in the turn-taking sample was a two-way interaction between child age and time of day (MODEL-REF). As before, younger children were more likely to hear TCDS in the mornings and evenings, whereas older children were more likely to hear more TCDS midday (MODEL-REF). Unlike the random sample, this turn-taking sample showed no main effect of child age: older and younger children heard comparable amounts of TCDS overall. There were also no significant interactions involving the number of speakers present or maternal education, like there were in the random sample. The zero-inflation model included fixed effects of household size, time of day, and number of speakers but, unlike the model of TCDS in random clips, none of these predictors significantly influenced the presence of TCDS in the turn-taking clips.
-
-``` {r visualize_tt_tds_effects}
-
-```
-
-The model of TCDS quantity by speaker age for the turn-taking sample showed some similar results to the random sample. First, the quantity of TCDS in the turn-taking sample was strongly affected by speaker age (MODEL-REF): most TCDS still came from adults. Second, the presence of more children increased the quantity of TCDS from children more than the presence of more adults increased the quantity of TCDS from adults (MODEL-REF). TCDS quantity by speaker in the turn taking data additionally showed the time of day effect reported above: TCDS was maximized during turn-taking bouts that took place in the mornings and evenings for younger children, but less so for older children (MODEL-REF). There was also a significant effect of number of speakers: more speakers was associated with less TCDS (MODEL-REF). Lastly, there was an interaction between child age and speaker age: while adults were more likely to use TCDS overall, the increase in TCDS associated with older children was stronger for TCDS from other children compared to TCDS from adults (MODEL-REF), similar to the age effect found by Shneidman and Goldin-Meadow (REFS). The zero-inflation model of TCDS from adults and children included fixed effects of household size, time of day, and their interaction, but none of these predictors were significant.
-
-``` {r visualize_tt_tds.sa_effects}
-# Speaker age:
-#SpkrAgeChild              -2.24990    0.31190  -7.214 5.45e-13 ***
-#ggplot() + geom_violin(data = quantity.nonrand.tt.sa, aes(x = SpkrAge, y = round(tds_mph.sa,0))) + geom_jitter(data = quantity.nonrand.tt.sa, aes(x = SpkrAge, y = round(tds_mph.sa,0)))
-
-# Speaker age * Nspeakers:
-#SpkrAgeChild:nsk.std       1.50811    0.27583   5.467 4.57e-08 ***
-#ggplot() + geom_point(data = quantity.nonrand.tt.sa, aes(y = round(tds_mph.sa,0), x = nsk.std, color = SpkrAge)) + geom_smooth(data = quantity.nonrand.tt.sa, aes(y = round(tds_mph.sa,0), x = nsk.std, color = SpkrAge), method = "lm")
-
-# Time of day * chi age:
-#tchiyr.std:I(stthr.std^2) -4.92679    2.31284  -2.130   0.0332 *  
-#ggplot(data = quantity.nonrand.tt.sa) + geom_point(data = quantity.nonrand.tt.sa, aes(y = round(tds_mph.sa,0), x = start.hr, group = as.factor(ifelse(age_mo_round < 13, -1, 1)))) + geom_smooth(data = quantity.nonrand.tt.sa, aes(y = round(tds_mph.sa,0), x = start.hr, group = as.factor(ifelse(age_mo_round < 13, -1, 1))), method = "lm", formula = y ~ poly(x, 2)) + facet_grid(~ as.factor(ifelse(age_mo_round < 13, -1, 1)))
-
-# Nspeakers (graphed trend here goes opposite to model):
-#nsk.std                   -0.30060    0.13683  -2.197   0.0280 *  
-#ggplot() + geom_smooth(data = quantity.nonrand.tt.sa, aes(x = nsk.std, y = round(tds_mph.sa,0)), method = "lm") + geom_point(data = quantity.nonrand.tt.sa, aes(x = nsk.std, y = round(tds_mph.sa,0)))
-
-# Speaker age * chi age:
-#tchiyr.std:SpkrAgeChild    0.87792    0.27473   3.196   0.0014 ** 
-#ggplot() + geom_point(data = quantity.nonrand.tt.sa, aes(y = round(tds_mph.sa,0), x = tchiyr.std, color = SpkrAge)) + geom_smooth(data = quantity.nonrand.tt.sa, aes(y = round(tds_mph.sa,0), x = tchiyr.std, color = SpkrAge), method = "lm")
-```
-
-As in the random sample, the overall proportion of speech directed to the child (proportion TCDS) decreased when more speakers were present (MODEL-REF). There were no other significant predictors of proportion of speech in TCDS.
-
-``` {r visualize_tt_prptds_effects}
-# Nspeakers:
-#nsk.std                   -1.41541    0.19595  -7.223 5.07e-13 ***
-#ggplot() + geom_point(data = quantity.nonrand.tt.prpdata, aes(x = nsk.std, y = prp_tds_sqz)) + geom_smooth(data = quantity.nonrand.tt.prpdata, aes(x = nsk.std, y = prp_tds_sqz), method = "lm")
-```
-
+### Proportion TCDS from other children
+Most TCDS heard by the children in our corpus came from adults: on average, only `r round(mean(prpchitcds.avgs.rand$mean.chiprptcds),2) * 100`% of TCDS came from child speakers. We used a binomial model to evaluate whether the likelihood of hearing TCDS from a child in a clip increased with age (REF).\footnote{We were unable to run a beta regression on the proportion of TCDS with age given that most of the clip values were at or near 0 or 1; thereby motivating the binomial analysis reported here.} We found no evidence that TCDS from other children increased with age in the randomly sampled or turn-taking clips (MODEL-REF). We also performed a Spearman's correlation between the child's age and the mean number of child talkers, but neither showed a significant relationship (MODEL-REFS).
 
 ## Interactional exchanges
+We can also measure children's linguistic environments as a summary of the interactional exchanges they partake in (see also Romeo REFS). When children are jointly engaged with an interlocutor, they can practice making contingent vocalizations, and both the child and the interlocutor can more easily coordinate their behaviors and social and communicative intentions. In what follows, we characterize children's interactional exchanges with four measures: the rate of child-to-other turn transitions (i.e., contingent responses to the child's vocalizations), the rate of other-to-child turn transitions (i.e., contingent responses by the child), the duration of interactional turn-taking sequences involving the target child, and the ratio of interlocutor vs. child vocalization time. We first describe these measures with respect to the random sample then, for comparison, we examine the turn-taking sample.
+
 ```{r allsamples_interaction_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # All segment info
 all.segments <- all.rand.segments %>%
@@ -1220,6 +1279,7 @@ for (i in 1:nrow(all.segments)) {
   }
   turn.transitions <- bind_rows(turn.transitions, chi.turn.info)
 }
+
 turn.transitions.overview.o_c <- turn.transitions %>%
   filter(!(is.na(tm1.val))) %>%
   group_by(aclew_child_id, segment) %>%
@@ -1229,6 +1289,7 @@ turn.transitions.overview.o_c <- turn.transitions %>%
   arrange(aclew_child_id, segment) %>%
   mutate(duration = ifelse(grepl('extension', sample_type), 5,
                            ifelse(grepl('random', sample_type), 5, 1)))
+
 turn.transitions.overview.c_o <- turn.transitions %>%
   filter(!(is.na(tp1.val))) %>%
   group_by(aclew_child_id, segment) %>%
@@ -1238,6 +1299,7 @@ turn.transitions.overview.c_o <- turn.transitions %>%
   arrange(aclew_child_id, segment) %>%
   mutate(duration = ifelse(grepl('extension', sample_type), 5,
                            ifelse(grepl('random', sample_type), 5, 1)))
+
 # Combine the turn-taking info into one table
 turn.transitions.overview <- turn.transitions.overview.o_c %>%
   full_join(dplyr::select(turn.transitions.overview.c_o,
@@ -1273,29 +1335,40 @@ turn.taking.by.child.bysample <- turn.transitions.overview %>%
          min.n.c_o.tpm = min(n.c_o.tpm),
          max.n.c_o.tpm = max(n.c_o.tpm))
 
-
 # Interactional sequences:
+# continuous sequences only including target-child vocalization and
+# target-child-directed talk
 turn.sequences <- tibble()
 for (i in 1:nrow(all.segments)) {
-  subdata <- all.data %>%
+  # retrieve all the target child vocs and xds == T vocalizations
+  subdata.tcds <- all.data %>%
     filter(aclew_child_id == all.segments$aclew_child_id[i] &
-             segment == all.segments$segment[i])
+             segment == all.segments$segment[i] &
+             grepl('xds@', tier) &
+             val == "T") %>%
+    mutate(uttid = paste0(speaker, start))
+  subdata.chi <- all.data %>%
+    filter(aclew_child_id == all.segments$aclew_child_id[i] &
+             segment == all.segments$segment[i] &
+             tier == "CHI") %>%
+    mutate(uttid = paste0(speaker, start))
+  subdata <- bind_rows(subdata.tcds, subdata.chi) %>%
+    arrange(start)
+  # work through each target child voc in the clip
   if (nrow(subdata) > 0) {
-    c_utt <- subdata %>%
-      filter(tier == "CHI")
-    if (nrow(c_utt) > 0) {
-      chi.vocs <- mutate(c_utt,
-          seq.num = rep(NA,nrow(c_utt)),
-          seq.start = rep(NA,nrow(c_utt)),
-          seq.start.spkr = rep(NA,nrow(c_utt)),
-          seq.stop = rep(NA,nrow(c_utt)),
-          seq.stop.spkr = rep(NA,nrow(c_utt)))
+    if (nrow(subdata.chi) > 0) {
+      chi.vocs <- mutate(subdata.chi,
+          seq.num = rep(NA,nrow(subdata.chi)),
+          seq.start = rep(NA,nrow(subdata.chi)),
+          seq.start.spkr = rep(NA,nrow(subdata.chi)),
+          seq.stop = rep(NA,nrow(subdata.chi)),
+          seq.stop.spkr = rep(NA,nrow(subdata.chi)))
       seq.num <- 1
       for (j in 1:nrow(chi.vocs)) {
         curr.start <- chi.vocs$start[j]
         curr.stop <- chi.vocs$stop[j]
-        curr.xds <- ""
         curr.spk <- "CHI"
+        curr.utt <- chi.vocs$uttid[j]
         # First check if this chi voc is already in a sequence. If so, skip it
         if (seq.num > 1) {
           prev.seq <- which(chi.vocs$seq.num == seq.num - 1)[1]
@@ -1312,51 +1385,25 @@ for (i in 1:nrow(all.segments)) {
         }
         # We start a loop to look for related utterances to the LEFT
         stop.looking.left <- FALSE
+        # Look first for prior turns from that STOP
+        #    - earliest: within the maximum gap allowed before the curr utt begins
+        #    - latest: up to the limit on vocal overlap or the end of
+        #              the curr utt (whichever comes first)
         while (stop.looking.left == FALSE) {
-          # Look first for turn transitions that start
-          #    - earliest: within the maximum gap allowed before the curr utt begins
-          #    - latest: when the curr utt ends, with a limit on vocal overlap
-          tm1.start <- c_utt$start[j] - allowed.gap
-          tm1.stop <- min((c_utt$start[j] + allowed.overlap), c_utt$stop[j])
-          xds.pattern <- ifelse(grepl("CHI", curr.spk), "T", "[.]")
-          # look first for turn transitions
           candidate.vocs <- subdata %>%
-            filter(grepl("xds", tier) &
-                     speaker != curr.spk &
-                     grepl(xds.pattern, val) &
-                     stop >= tm1.start & stop <= tm1.stop) %>%
+            filter(uttid != curr.utt &
+                     start <= curr.start &
+                     stop >= curr.start - allowed.gap &
+                     stop <= min(curr.stop, (curr.start + allowed.overlap))) %>%
             arrange(start)
-          candidate.continuation.vocs <- tibble()
           if (nrow(candidate.vocs) > 0) {
+            # continue with the earliest (first occurring) candidate
             curr.start <- candidate.vocs$start[1]
             curr.stop <- candidate.vocs$stop[1]
             curr.spk <- candidate.vocs$speaker[1]
-            curr.xds <- ifelse(curr.spk != "CHI", "T", "[.]")
+            curr.utt <- candidate.vocs$uttid[1]
           } else {
-            if (curr.spk != "CHI") {
-              candidate.continuation.vocs <- subdata %>%
-                filter(grepl("xds", tier) &
-                         speaker == curr.spk &
-                         val == curr.xds & # continuing to the same speaker
-                         stop >= curr.start - allowed.gap &
-                         stop < curr.start) %>%
-                arrange(start)
-            } else {
-              candidate.continuation.vocs <- subdata %>%
-                filter(grepl("xds", tier) &
-                         speaker == curr.spk &
-                         stop >= curr.start - allowed.gap &
-                         stop < curr.start) %>%
-                arrange(start)
-            }
-            if (nrow(candidate.continuation.vocs) > 0) {
-              curr.start <- candidate.continuation.vocs$start[1]
-              curr.stop <- candidate.continuation.vocs$stop[1]
-              curr.spk <- candidate.continuation.vocs$speaker[1]
-              curr.xds <- ifelse(curr.spk != "CHI", "T", "[.]")
-            } else {
-              stop.looking.left <- TRUE
-            }
+            stop.looking.left <- TRUE
           }
         }
         seq.start <- curr.start
@@ -1365,63 +1412,39 @@ for (i in 1:nrow(all.segments)) {
         # We start a loop to look for related utterances to the RIGHT
         curr.start <- chi.vocs$start[j]
         curr.stop <- chi.vocs$stop[j]
-        curr.xds <- ""
         curr.spk <- "CHI"
         stop.looking.right <- FALSE
+        # Look first for turn transitions that START
+        #    - earliest: within the allowed vocal overlap over the current utt,
+        #              up to its start time (whichever comes later)
+        #    - latest: before the maximum allowed gap after the curr utt ends
         while(stop.looking.right == FALSE) {
-          # Look first for turn transitions that start
-          #    - earliest: when the curr utt begins, with a limit on vocal overlap
-          #    - latest: before the maximum allowed gap after the curr utt ends
-          tp1.start <- max((c_utt$stop[j] - allowed.overlap), c_utt$start[j])
-          tp1.stop <- c_utt$stop[j] + allowed.gap
-          xds.pattern <- ifelse(grepl("CHI", curr.spk), "T", "[.]")
-          # look first for turn transitions
           candidate.vocs <- subdata %>%
-            filter(grepl("xds", tier) &
-                     speaker != curr.spk &
-                     grepl(xds.pattern, val) &
-                     start >= tp1.start & start <= tp1.stop) %>%
-            arrange(start)
-          candidate.continuation.vocs <- tibble()
+            filter(uttid != curr.utt &
+                     stop >= curr.stop &
+                     start >= max(curr.start, (curr.stop - allowed.overlap)) &
+                     start <= curr.stop + allowed.gap) %>%
+            arrange(-stop)
           if (nrow(candidate.vocs) > 0) {
-            lastrow <- nrow(candidate.vocs)
-            curr.start <- candidate.vocs$start[lastrow]
-            curr.stop <- candidate.vocs$stop[lastrow]
-            curr.spk <- candidate.vocs$speaker[lastrow]
-            curr.xds <- ifelse(curr.spk != "CHI", "T", "[.]")
+            # continue with the earliest (first occurring) candidate
+            curr.start <- candidate.vocs$start[1]
+            curr.stop <- candidate.vocs$stop[1]
+            curr.spk <- candidate.vocs$speaker[1]
+            curr.utt <- candidate.vocs$uttid[1]
           } else {
-            if (curr.spk != "CHI") {
-              candidate.continuation.vocs <- subdata %>%
-                filter(grepl("xds", tier) &
-                         speaker == curr.spk &
-                         val == curr.xds & # continuing to the same speaker
-                         start > curr.stop &
-                         start <= curr.stop + allowed.gap) %>%
-                arrange(start)
-            } else {
-              candidate.continuation.vocs <- subdata %>%
-                filter(grepl("xds", tier) &
-                         speaker == curr.spk &
-                         start > curr.stop &
-                         start <= curr.stop + allowed.gap) %>%
-                arrange(start)
-            }
-            if (nrow(candidate.continuation.vocs) > 0) {
-              lastrow <- nrow(candidate.continuation.vocs)
-              curr.start <- candidate.continuation.vocs$start[lastrow]
-              curr.stop <- candidate.continuation.vocs$stop[lastrow]
-              curr.spk <- candidate.continuation.vocs$speaker[lastrow]
-              curr.xds <- ifelse(curr.spk != "CHI", "T", "[.]")
-            } else {
-              stop.looking.right <- TRUE
-            }
+            stop.looking.right <- TRUE
           }
         }
         seq.stop <- curr.stop
         seq.stop.spkr <- curr.spk
 
-        # Check if the "sequence" is actually just one CHI utterance
+        # Check if the "sequence" is actually just 1+ CHI utterances
         if (seq.start == chi.vocs$start[j] & seq.stop == chi.vocs$stop[j]) {
+          chi.vocs$seq.stop[j] <-  0
+          chi.vocs$seq.stop.spkr[j] <- "NONE"
+          chi.vocs$seq.start[j] <- 0
+          chi.vocs$seq.start.spkr[j] <- "NONE"
+        } else if (length(unique(subset(subdata, start >= seq.start & stop <= seq.stop)$speaker)) == 1) {
           chi.vocs$seq.stop[j] <-  0
           chi.vocs$seq.stop.spkr[j] <- "NONE"
           chi.vocs$seq.start[j] <- 0
@@ -1527,11 +1550,11 @@ chi.oth.tts.rand_and_tt <- ggplot(turn.transitions.rand_and_tt,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = sample, color = sample), method = "lm") +
   ylab("CHI-OTH tts/min") + xlab("")	+
-  scale_y_continuous(limits=c(0,10),
-                     breaks=seq(0,10,2)) +
+  scale_y_continuous(limits=c(0,30),
+                     breaks=seq(0,30,5)) +
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,10),xlim=c(0,38)) +
+  coord_cartesian(ylim=c(0,30),xlim=c(0,38)) +
   scale_color_manual(values = viridis(3)) +
   scale_fill_manual(values = viridis(3)) +
   theme_apa() +
@@ -1546,11 +1569,11 @@ oth.chi.tts.rand_and_tt <- ggplot(turn.transitions.rand_and_tt,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = sample, color = sample), method = "lm") +
   ylab("OTH-CHI tts/min") + xlab("")	+
-  scale_y_continuous(limits=c(0,10),
-                     breaks=seq(0,10,2)) +
+  scale_y_continuous(limits=c(0,30),
+                     breaks=seq(0,30,5)) +
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,10),xlim=c(0,38)) +
+  coord_cartesian(ylim=c(0,30),xlim=c(0,38)) +
   scale_color_manual(values = viridis(3)) +
   scale_fill_manual(values = viridis(3)) +
   theme_apa() +
@@ -1558,18 +1581,22 @@ oth.chi.tts.rand_and_tt <- ggplot(turn.transitions.rand_and_tt,
         axis.line = element_line(color="black", size = 0.4))
 
 # Graph the basic sequence duration info
-seq.dur.rand_and_tt <- ggplot(turn.sequences.rand_and_tt,
-                          aes(x = age_mo_round, y = seq.dur*60, lty = sample)) +
+# plot per-clip averages so it's consistent with the rest
+turn.sequences.rand_and_tt.byclip <- turn.sequences.rand_and_tt %>%
+  group_by(aclew_child_id, age_mo_round, sample, segment) %>%
+  summarise(m.seqdur.sec = mean(seq.dur*60))
+seq.dur.rand_and_tt <- ggplot(turn.sequences.rand_and_tt.byclip,
+                          aes(x = age_mo_round, y = m.seqdur.sec, lty = sample)) +
   geom_boxplot(aes(group = interaction(age_mo_round, sample),
                    color = sample), fill = "white", outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = sample, color = sample), method = "lm") +
-  ylab("Sequence duration (sec)") + xlab("")	+
+  ylab("Sequence duration (sec)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,60),
-                     breaks=seq(0,60,5)) +
+                     breaks=seq(0,60,20)) +
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,30),xlim=c(0,38)) +
+  coord_cartesian(ylim=c(0,60),xlim=c(0,38)) +
   scale_color_manual(values = viridis(3)) +
   scale_fill_manual(values = viridis(3)) +
   theme_apa() +
@@ -1585,7 +1612,7 @@ cvc.ovc.delta.rand_and_tt <- ggplot(cvc.ovc.per.seg.rand_and_tt.nonas,
                    color = sample), fill = "white", outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(aes(fill = sample, color = sample), method = "lm") +
-  ylab("Normalized voc. difference") + xlab("")	+
+  ylab("Normalized voc. difference") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(-1,1),
                      breaks=seq(-1,1,0.5)) +
   scale_x_continuous(limits=c(0,38),
@@ -1598,583 +1625,21 @@ cvc.ovc.delta.rand_and_tt <- ggplot(cvc.ovc.per.seg.rand_and_tt.nonas,
         axis.line = element_line(color="black", size = 0.4))
 ```
 
-In the preceding section we measured children's linguistic environments by the sheer quantity of speech they enounter: both overheard and directed to them. We can also measure children's linguistic environments as a summary of the interactional exchanges they partake in (see also Romeo REFS). When children are jointly engaged with an interlocutor, they can practice making contingent vocalizations, and both the child and the interlocutor can more easily coordinate their behaviors and social and communicative intentions. In what follows, we characterize children's interactional exchanges with four measures: the rate of child-to-other turn transitions (i.e., contingent responses to the child's vocalizations), the rate of other-to-child turn transitions (i.e., contingent responses by the child), the duration of interactional turn-taking sequences involving the target child, and the ratio of interlocutor vs. child vocalization time. We first describe these measures with respect to the random sample then, for comparison, we examine the turn-taking sample.
-
-### Temporal contingency and interactional sequences
-We detect contingent turn exchanges between the target child and other speakers based on turn timing (<!--CREATE FIGURE-->). If there is a target-child-directed utterance that begins between the start of a target child vocalization and `r allowed.gap`msec after the end of the child's vocalization, we count it as a CHI-OTH turn transition Similarly, if there is a target child vocalization that begins between the start of a target-child-directed utterance and `r allowed.gap`msec after the end of the utterance, it is counted as a OTH-CHI turn transition. Each utterance is maximally allowed to act as one prompt for a child vocalization and one response to a child vocalization (e.g., in an CHI--OTH--CHI turn-taking sequence). We identify sequences of interaction using a similar mechanism: we look for chains of contingent responses before and after each child vocalization, allowing for speakers to continue with multiple vocalizations/utterances between speaker exchanges (<!--CREATE FIGURE-->). In this case, we also limit the overlap between utterances because we are focused here on interactional exchange that primarily features speech by one speaker at a time. Sequences are bounded by the earliest and latest vocalization for which there is no contingent prompt/response, respectively. Sequences must have at least one contingent non-target-child utterance. Finally, each child vocalization can only appear in one sequence, and many sequences have more than one child vocalization.
-
-We base these timing restrictions on vocal contingency on prior studyes of infant and young children's turn taking. Hilbrink et al. (2015; REFS) found that infants' (0;3--1;6) responses to mothers typically began between -700ms and 1200ms relative to the end of the mothers' turns and mothers' responses to their infants began between -350ms and 650ms relative to the end of the infants' turns. Casillas et al. (2016; REFS) found that children's responses to caregivers' questions typically started between -500ms and 650ms relative to their caregiver's turn end, and caregivers' responses to children's question between -1000ms and 400ms relative to the children's turn end. Because both studies focused on fairly intensive bouts of interaction, and both within WEIRD parental contexts, we defined contingent responses in the current data with more generous allowances for overlap and gap (gap = `r allowed.gap`; overlap = `r allowed.overlap`). That said, our timing restrictions are much tighter than those used to define interactional contingency in many other studies (e.g., REFS, see also REFS for a review on adult-adult turn timing).
-
-```{r prepare_random_interaction_for_models, message=FALSE, warning=FALSE, paged.print=FALSE}
-# prepare predictors for modeling
-turn.transitions.rand <- filter(turn.transitions.rand_and_tt, sample == "random")
-turn.transitions.rand$child_sex <- as.factor(turn.transitions.rand$child_sex)
-turn.transitions.rand$mat_ed <- as.factor(turn.transitions.rand$mat_ed)
-nspkrs.m <- mean(turn.transitions.rand$n_spkrs_clip)
-nspkrs.sd <- sd(turn.transitions.rand$n_spkrs_clip)
-turn.transitions.rand <- turn.transitions.rand %>%
-  mutate(
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
-
-turn.sequences.rand <- filter(turn.sequences.rand_and_tt, sample == "random")
-turn.sequences.rand$child_sex <- as.factor(turn.sequences.rand$child_sex)
-turn.sequences.rand$mat_ed <- as.factor(turn.sequences.rand$mat_ed)
-nspkrs.m <- mean(turn.sequences.rand$n_spkrs_clip)
-nspkrs.sd <- sd(turn.sequences.rand$n_spkrs_clip)
-turn.sequences.rand <- turn.sequences.rand %>%
-  mutate(
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
-
-cvc.ovc.per.seg.randnonas <- filter(cvc.ovc.per.seg.rand_and_tt.nonas, sample == "random")
-cvc.ovc.per.seg.randnonas$child_sex <- as.factor(cvc.ovc.per.seg.randnonas$child_sex)
-cvc.ovc.per.seg.randnonas$mat_ed <- as.factor(cvc.ovc.per.seg.randnonas$mat_ed)
-nspkrs.m <- mean(turn.sequences.rand$n_spkrs_clip)
-nspkrs.sd <- sd(turn.sequences.rand$n_spkrs_clip)
-cvc.ovc.per.seg.randnonas <- cvc.ovc.per.seg.randnonas %>%
-  mutate(
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
-
-cvc.ovc.per.seg.randnonas.bychild <- cvc.ovc.per.seg.randnonas %>%
-  group_by(aclew_child_id) %>%
-  summarise(mean.ratio = mean(cvc.ovc.delta.norm))
-# Predictors
-#tchiyr.std, chisx.std, mated.std, nsb.std, hsz.std, nsk.std, & SpkrAge (for quantity.rand.sa)
-```
-
-During the randomly selected clips, Tseltal children responded contingently to others' target-child vocalizations at an average rate of `r round(mean(turn.transitions.rand$n.o_c.tpm),2)` responses per minute (median = `r round(median(turn.transitions.rand$n.o_c.tpm),2)`; range = `r round(min(turn.transitions.rand$n.o_c.tpm),2)`--`r round(max(turn.transitions.rand$n.o_c.tpm),2)`). Meanwhile, other speakers responded contingently to the target children's vozalizations at an average rate of `r round(mean(turn.transitions.rand$n.c_o.tpm),2)` responses per minute (median = `r round(median(turn.transitions.rand$n.c_o.tpm),2)`; range = `r round(min(turn.transitions.rand$n.c_o.tpm),2)`--`r round(max(turn.transitions.rand$n.c_o.tpm),2)`). We detected `r nrow(turn.sequences.rand)` interactional sequences in the 90 clips, with an average sequence duration of `r round(mean(turn.sequences.rand$seq.dur)*60,2)` seconds (median = `r round(median(turn.sequences.rand$seq.dur)*60,2)`; range = `r round(min(turn.sequences.rand$seq.dur)*60,2)`--`r round(max(turn.sequences.rand$seq.dur)*60,2)`). The average number of child vocalizations was `r round(mean(turn.sequences.rand$n_cvcs_seq),2)` (range = `r round(min(turn.sequences.rand$n_cvcs_seq),2)`--`r round(max(turn.sequences.rand$n_cvcs_seq),2)`; median = `r round(median(turn.sequences.rand$n_cvcs_seq),2)`). Finally, we computed the normalized ratio of child vocalization time to target-child-directed vocalization time, finding that, overall, children vocalized for more time than their interlocutors, ranging from `r round(min(cvc.ovc.per.seg.randnonas.bychild$mean.ratio),2)` to `r round(max(cvc.ovc.per.seg.randnonas.bychild$mean.ratio),2)` (mean = `r round(mean(cvc.ovc.per.seg.randnonas.bychild$mean.ratio),2)`, median = `r round(median(cvc.ovc.per.seg.randnonas.bychild$mean.ratio),2)`) by child.
-
-```{r fig2, echo=FALSE, fig.cap="By-child estimates of minutes per hour of child-to-other (upper left) and other-to-child (upper right) turn transitions per minute, turn-taking sequenec duration (lower left), and normalized difference in vocalization time (1 = child vocalizes more than their interlocutor; 0 = vice versa). Data are shown for the random (purple; solid) and turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs", message=FALSE, warning=FALSE, fig.height=4}
+```{r fig3, echo=FALSE, fig.cap="By-child estimates of contingent responses per minute to the target child's vocalizations (upper left), contingent responses per minute by the target child to others' target-child-directed speech (upper right), the average duration of contingent interactional sequences (lower left), and the ratio of vocalization time between target children and target-child-directed speech (lower right). Each datapoint represents the value for a single clip within the random (purple; solid) or turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=4}
 grid.arrange(chi.oth.tts.rand_and_tt, oth.chi.tts.rand_and_tt,
              seq.dur.rand_and_tt, cvc.ovc.delta.rand_and_tt, nrow=2, ncol=2)
 ```
 
-As in the preceding set of analyses, gaussian linear regression was not appropriate for any of the four interaction measures. We again used zero-inflated negative binomial regression for the rate-based dependent variables (OTH-CHI and CHI-OTH turn transitions per minute), poisson regression for sequence duration (a non-negative integer-based continuous variable), and beta regression for normalized vocalization difference (a doubly-bounded variable).
-
-Our primary predictors were the same as before: child age, household size, and number of non-target-child speakers present in that clip (all centered and standardized), maternal education (pre-secondary vs. secondary-plus), and squared time of day at the start of the clip (in decimal hours; centered on noon and standardized), plus two-way interactions between child age and maternal education, number of speakers, household size, and time of day, and a random effect of child, with random slopes of time of day, unless doing so resulted in model non-convergence. Because sequences are nested within clips, we also included a random effect of sequence in the model of sequence duration. Finally, for the zero-inflation models, we included household size, number of speakers present, and time of day, with interactions between time of day and household size and time of day and number of speakers present, as allowed by model convergence, as before.
-
-```{r interaction_random_models, message=FALSE, warning=FALSE, paged.print=FALSE}
-# Note: I'm not going to use an offset of segment_dur because:
-# (1) it behaves a little weirdly (and non-conservatively!) and sometimes causes non-cvgnce
-# (2) the DVs are relative (i.e., minutes per hour) so some sample diff is already mitigated
-
-## CHI-OTH tts/min random sample ####
-# zero-inflated negative binomial #----
-c_o.tpm.rand.zinb <- glmmTMB(round(n.c_o.tpm,0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
-                         data=turn.transitions.rand,
-                         ziformula=~hsz.std*I(stthr.std^2) + nsk.std*I(stthr.std^2),
-                         family="nbinom1")
-#summary(c_o.tpm.rand.zinb)
-#tchiyr.std                 1.16799    0.44839   2.605  0.00919 **
-#nsk.std                   -0.30391    0.18322  -1.659  0.09718 . 
-#tchiyr.std:nsk.std         0.53383    0.22547   2.368  0.01790 * 
-#tchiyr.std:I(stthr.std^2) -6.75490    2.52714  -2.673  0.00752 **
-# ZI:
-#I(stthr.std^2)         -304.1025   153.1845  -1.985   0.0471 *
-#nsk.std                  -2.0868     1.1410  -1.829   0.0674 .
-#I(stthr.std^2):nsk.std -207.6951   118.2757  -1.756   0.0791 .
-
-
-## OTH-CHI tts/min random sample ####
-# zero-inflated negative binomial #----
-o_c.tpm.rand.zinb <- glmmTMB(round(n.o_c.tpm,0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
-                         data=turn.transitions.rand,
-                         ziformula=~hsz.std*I(stthr.std^2) + nsk.std*I(stthr.std^2),
-                         family="nbinom1")
-#summary(o_c.tpm.rand.zinb)
-#tchiyr.std                  1.1348     0.4796   2.366  0.01797 * 
-#tchiyr.std:nsk.std          0.4141     0.2401   1.725  0.08457 . 
-#tchiyr.std:I(stthr.std^2)  -7.5338     2.6263  -2.869  0.00412 **
-# ZI:
-#nsk.std                  -2.3122     1.3694  -1.688   0.0913 .
-
-
-## Sequence duration random sample ####
-# poisson #----
-turn.sequences.rand$uniq.segment <- paste0(turn.sequences.rand$aclew_child_id, "-",
-                                          turn.sequences.rand$segment)
-seqdur.sec.rand.zinb <- glmmTMB(round((seq.dur*60),0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|uniq.segment) +
-                           (1+I(stthr.std^2)|aclew_child_id),
-                         data=turn.sequences.rand,
-                         family="poisson")
-#summary(seqdur.sec.rand.zinb)
-#mated.bin6+                0.30808    0.15168   2.031   0.0422 *  
-
-
-## Normalized vocalization ratio random sample ####
-# beta regression #----
-# requires that 0 < y < 1: so we transform ((y * 0.49) + 0.5)
-cvc.ovc.per.seg.randnonas$vc.dlta.norm_sqz <- (cvc.ovc.per.seg.randnonas$cvc.ovc.delta.norm *
-                                                0.49) + 0.5
-
-cvc.ovc.per.seg.rand.beta <- glmmTMB(vc.dlta.norm_sqz ~
-                              tchiyr.std + mated.bin +
-                              hsz.std + nsk.std +
-                              I(stthr.std^2) +
-                              tchiyr.std:mated.bin +
-                              tchiyr.std:nsk.std +
-                              tchiyr.std:hsz.std +
-                              tchiyr.std:I(stthr.std^2) +
-                              (1+I(stthr.std^2)|aclew_child_id),
-                            data=cvc.ovc.per.seg.randnonas,
-                            family=list(family="beta",link="logit"))
-#summary(cvc.ovc.per.seg.rand.beta)
-#mated.bin6+                0.87816    0.32749   2.681  0.00733 **
-#nsk.std                   -0.34307    0.13569  -2.528  0.01146 * 
-```
-
-The rate at which children hear contingent response from others (CHI-OTH turn transitions per minute) was primarily influenced by factors relating to the child's age. Overall, older children heard more contingent responses then younger children (MODEL-REF), particularly when there were more speakers present (MODEL-REF). As with the speech quantity measures, younger children heard more contingent responses in the mornings and evenings while older children were more likely to hear more contingent responses midday (MODEL-REF). The zero-inflation model of contingent responses from others included household size, number of speakers present, and squared time of day, with two-way interactions of squared time of day with both household size and number of speakers present. Of these, the only significant factor predicting the presence of contingent responses was time of day: contingent responses from others were more likely overall in the mornings and evenings, compared to the afternoons (MODEL-REF).
-
-``` {r visualize_rand_c-o-tmp_effects}
-# Child age:
-#tchiyr.std                 1.16799    0.44839   2.605  0.00919 **
-#ggplot() + geom_point(data = turn.transitions.rand, aes(x = tchiyr.std, y = round(n.c_o.tpm,0))) + geom_smooth(data = turn.transitions.rand, aes(x = tchiyr.std, y = round(n.c_o.tpm,0)), method = "lm")
-
-# Nspeakers * chi age:
-#tchiyr.std:nsk.std         0.53383    0.22547   2.368  0.01790 * 
-#ggplot() + geom_raster(data = turn.transitions.rand, aes(y = tchiyr.std, x = nsk.std, fill = round(n.c_o.tpm,0)))
-
-# Time of day * chi age:
-#tchiyr.std:I(stthr.std^2) -6.75490    2.52714  -2.673  0.00752 **
-#ggplot() + geom_smooth(data = turn.transitions.rand, aes(x = start.hr, y = round(n.c_o.tpm,0), group = age_mo_round), method = "lm", formula = y ~ poly(x, 2)) + geom_point(data = turn.transitions.rand, aes(x = start.hr, y = round(n.c_o.tpm,0), group = age_mo_round)) + facet_grid(~ age_mo_round)
-
-# ZI - time of day (note ZI estimates are prob of DV being 0 ~ flip for interpretation):
-#I(stthr.std^2)         -304.1025   153.1845  -1.985   0.0471 *
-#ggplot() + geom_smooth(data = turn.transitions.rand, aes(x = start.hr, y = n.c_o.tpm), method = "lm", formula = y ~ poly(x, 2))
-```
-
-The rate at which children respond contingently to others (OTH-CHI turn transitions per minute) was similarly influenced by child age and time of day. Overall, older children gave more contingent responses then younger children (MODEL-REF). Again, older children were also more likely to give contingent responses around midday, compared to younger children, who were more likely to respond in the mornings and evenings (MODEL-REF). The zero-inflation model of contingent responses from others included household size, number of speakers present, and squared time of day, with two-way interactions of squared time of day with both household size and number of speakers present. None of these predictors significantly impacted the likelihood of a child giving a contingent response.
-
-``` {r visualize_rand_o-c-tmp_effects}
-# Child age:
-#tchiyr.std                  1.1348     0.4796   2.366  0.01797 * 
-#ggplot() + geom_point(data = turn.transitions.rand, aes(x = tchiyr.std, y = round(n.o_c.tpm,0))) + geom_smooth(data = turn.transitions.rand, aes(x = tchiyr.std, y = round(n.o_c.tpm,0)), method = "lm")
-
-# Time of day * chi age:
-#tchiyr.std:I(stthr.std^2)  -7.5338     2.6263  -2.869  0.00412 **
-#ggplot() + geom_smooth(data = turn.transitions.rand, aes(x = start.hr, y = round(n.o_c.tpm,0), group = age_mo_round), method = "lm", formula = y ~ poly(x, 2)) + geom_point(data = turn.transitions.rand, aes(x = start.hr, y = round(n.o_c.tpm,0), group = age_mo_round)) + facet_grid(~ age_mo_round)
-```
-
-The only factor to significantly impact the duration of interactional sequences was whether the child's mother completed secondary or further education (MODEL-REF). Similarly, the normalized ratio of time spent vocalizing (CHI:OTH) was higher for children of mothers who had completed secondary or further education (MODEL-REF) and was lower when more speakers were present (MODEL-REF).
-
-``` {r visualize_rand_seqdur_effects}
-# Maternal education:
-#mated.bin6+                0.30808    0.15168   2.031   0.0422 *  
-#ggplot() + geom_violin(data = turn.sequences.rand, aes(x = mated.bin, y = round((seq.dur*60),0))) + geom_jitter(data = turn.sequences.rand, aes(x = mated.bin, y = round((seq.dur*60),0)))
-```
-
-``` {r visualize_rand_vocratio_effects}
-# Maternal education:
-#mated.bin6+                0.87816    0.32749   2.681  0.00733 **
-#ggplot() + geom_violin(data = cvc.ovc.per.seg.randnonas, aes(x = mated.bin, y = vc.dlta.norm_sqz)) + geom_jitter(data = cvc.ovc.per.seg.randnonas, aes(x = mated.bin, y = vc.dlta.norm_sqz))
-
-# Nspeakers:
-#nsk.std                   -0.34307    0.13569  -2.528  0.01146 * 
-#ggplot() + geom_point(data = cvc.ovc.per.seg.randnonas, aes(x = nsk.std, y = vc.dlta.norm_sqz)) + geom_smooth(data = cvc.ovc.per.seg.randnonas, aes(x = nsk.std, y = vc.dlta.norm_sqz), method = "lm")
-```
-
-
-### Interactional exchanges during peak moments
-```{r prepare_tt_interaction_for_models, message=FALSE, warning=FALSE, paged.print=FALSE}
-# prepare predictors for modeling
-turn.transitions.tt <- filter(turn.transitions.rand_and_tt, sample == "turn-taking")
-turn.transitions.tt$child_sex <- as.factor(turn.transitions.tt$child_sex)
-turn.transitions.tt$mat_ed <- as.factor(turn.transitions.tt$mat_ed)
-nspkrs.m <- mean(turn.transitions.tt$n_spkrs_clip)
-nspkrs.sd <- sd(turn.transitions.tt$n_spkrs_clip)
-turn.transitions.tt <- turn.transitions.tt %>%
-  mutate(
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
-
-turn.sequences.tt <- filter(turn.sequences.rand_and_tt, sample == "turn-taking")
-turn.sequences.tt$child_sex <- as.factor(turn.sequences.tt$child_sex)
-turn.sequences.tt$mat_ed <- as.factor(turn.sequences.tt$mat_ed)
-nspkrs.m <- mean(turn.sequences.tt$n_spkrs_clip)
-nspkrs.sd <- sd(turn.sequences.tt$n_spkrs_clip)
-turn.sequences.tt <- turn.sequences.tt %>%
-  mutate(
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
-
-cvc.ovc.per.seg.ttnonas <- filter(cvc.ovc.per.seg.rand_and_tt.nonas, sample == "turn-taking")
-cvc.ovc.per.seg.ttnonas$child_sex <- as.factor(cvc.ovc.per.seg.ttnonas$child_sex)
-cvc.ovc.per.seg.ttnonas$mat_ed <- as.factor(cvc.ovc.per.seg.ttnonas$mat_ed)
-nspkrs.m <- mean(cvc.ovc.per.seg.ttnonas$n_spkrs_clip)
-nspkrs.sd <- sd(cvc.ovc.per.seg.ttnonas$n_spkrs_clip)
-cvc.ovc.per.seg.ttnonas <- cvc.ovc.per.seg.ttnonas %>%
-  mutate(
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
-
-cvc.ovc.per.seg.ttnonas.bychild <- cvc.ovc.per.seg.ttnonas %>%
-  group_by(aclew_child_id) %>%
-  summarise(mean.ratio = mean(cvc.ovc.delta.norm))
-
-# Predictors
-#tchiyr.std, chisx.std, mated.std, nsb.std, hsz.std, nsk.std, & SpkrAge (for quantity.rand.sa)
-```
-
-<!--RE-INTRO SUMMARY STATS HERE; recognize that these are interactional measures for the interactional sample-->
-
-During the turn taking clips, Tseltal children responded contingently to others' target-child vocalizations at an average rate of `r round(mean(turn.transitions.tt$n.o_c.tpm),2)` responses per minute (median = `r round(median(turn.transitions.tt$n.o_c.tpm),2)`; range = `r round(min(turn.transitions.tt$n.o_c.tpm),2)`--`r round(max(turn.transitions.tt$n.o_c.tpm),2)`). Meanwhile, other speakers responded contingently to the target children's vozalizations at an average rate of `r round(mean(turn.transitions.tt$n.c_o.tpm),2)` responses per minute (median = `r round(median(turn.transitions.tt$n.c_o.tpm),2)`; range = `r round(min(turn.transitions.tt$n.c_o.tpm),2)`--`r round(max(turn.transitions.tt$n.c_o.tpm),2)`). We detected `r nrow(turn.sequences.tt)` interactional sequences in the 59 clips, with an average sequence duration of `r round(mean(turn.sequences.tt$seq.dur)*60,2)` seconds (median = `r round(median(turn.sequences.tt$seq.dur)*60,2)`; range = `r round(min(turn.sequences.tt$seq.dur)*60,2)`--`r round(max(turn.sequences.tt$seq.dur)*60,2)`). The average number of child vocalizations was `r round(mean(turn.sequences.tt$n_cvcs_seq),2)` (range = `r round(min(turn.sequences.tt$n_cvcs_seq),2)`--`r round(max(turn.sequences.tt$n_cvcs_seq),2)`; median = `r round(median(turn.sequences.tt$n_cvcs_seq),2)`). Finally, we computed the normalized ratio of child vocalization time to target-child-directed vocalization time, finding that, overall, children vocalized for more time than their interlocutors, ranging from `r round(min(cvc.ovc.per.seg.ttnonas.bychild$mean.ratio),2)` to `r round(max(cvc.ovc.per.seg.ttnonas.bychild$mean.ratio),2)` (mean = `r round(mean(cvc.ovc.per.seg.ttnonas.bychild$mean.ratio),2)`, median = `r round(median(cvc.ovc.per.seg.ttnonas.bychild$mean.ratio),2)`) by child.
-
-```{r interaction_tt_models, message=FALSE, warning=FALSE, paged.print=FALSE}
-# Note: I'm not going to use an offset of segment_dur because:
-# (1) it behaves a little weirdly (and non-conservatively!) and sometimes causes non-cvgnce
-# (2) the DVs are relative (i.e., minutes per hour) so some sample diff is already mitigated
-
-## CHI-OTH tts/min turn-taking sample ####
-# zero-inflated negative binomial #----
-c_o.tpm.tt.zinb <- glmmTMB(round(n.c_o.tpm,0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
-                         data=turn.transitions.tt,
-                         ziformula=~hsz.std*I(stthr.std^2), # no cnvgnce w/ nsk.std
-                         family="nbinom1")
-#summary(c_o.tpm.tt.zinb)
-#mated.bin6+                0.724325   0.186911   3.875 0.000107 ***
-#nsk.std                   -0.327744   0.106364  -3.081 0.002061 ** 
-#tchiyr.std:I(stthr.std^2) -3.189846   1.570628  -2.031 0.042261 *  
-# No significant ZI effects
-
-
-## OTH-CHI tts/min turn-taking sample ####
-# zero-inflated negative binomial #----
-o_c.tpm.tt.zinb <- glmmTMB(round(n.o_c.tpm,0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|aclew_child_id), # max: no cnvgnce w/ stthr slopes
-                         data=turn.transitions.tt,
-                         ziformula=~hsz.std*I(stthr.std^2), # no cnvgnce w/ nsk.std
-                         family="nbinom1")
-#summary(o_c.tpm.tt.zinb)
-#mated.bin6+                0.76639    0.19109   4.011 6.05e-05 ***
-#nsk.std                   -0.34332    0.10941  -3.138   0.0017 ** 
-# No significant ZI effects
-
-
-## Sequence duration turn-taking sample ####
-# poisson #----
-turn.sequences.tt$uniq.segment <- paste0(turn.sequences.tt$aclew_child_id, "-",
-                                          turn.sequences.tt$segment)
-seqdur.sec.tt.zinb <- glmmTMB(round((seq.dur*60),0) ~
-                           tchiyr.std + mated.bin +
-                           hsz.std + nsk.std +
-                           I(stthr.std^2) +
-                           tchiyr.std:mated.bin +
-                           tchiyr.std:nsk.std +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:I(stthr.std^2) +
-                           (1|uniq.segment) +
-                           (1+I(stthr.std^2)|aclew_child_id),
-                         data=turn.sequences.tt,
-                         family="poisson")
-#summary(seqdur.sec.tt.zinb)
-#tchiyr.std                -0.35021    0.14365  -2.438  0.01478 *  
-#hsz.std                   -0.29601    0.11533  -2.567  0.01027 *  
-#tchiyr.std:mated.bin6+     0.39603    0.15145   2.615  0.00893 ** 
-#tchiyr.std:hsz.std        -0.44534    0.14380  -3.097  0.00196 ** 
-#tchiyr.std:I(stthr.std^2) -3.82356    1.37919  -2.772  0.00557 ** 
-
-
-## Normalized vocalization ratio turn-taking sample ####
-# beta regression #----
-# requires that 0 < y < 1: so we transform ((y * 0.49) + 0.5)
-cvc.ovc.per.seg.ttnonas$vc.dlta.norm_sqz <- (cvc.ovc.per.seg.ttnonas$cvc.ovc.delta.norm *
-                                                0.49) + 0.5
-
-cvc.ovc.per.seg.tt.beta <- glmmTMB(vc.dlta.norm_sqz ~
-                              tchiyr.std + mated.bin +
-                              hsz.std + nsk.std +
-                              I(stthr.std^2) +
-                              tchiyr.std:mated.bin +
-                              tchiyr.std:nsk.std +
-                              tchiyr.std:hsz.std +
-                              tchiyr.std:I(stthr.std^2) +
-                              (1+I(stthr.std^2)|aclew_child_id),
-                            data=cvc.ovc.per.seg.ttnonas,
-                            family=list(family="beta",link="logit"))
-#summary(cvc.ovc.per.seg.tt.beta)
-# No significant effects
-```
-
-The rate at which children hear contingent response from others in the high turn-taking samples was influenced by maternal education, the number of speakers present, and the time of day. Children of mothers who completed secondary or further education heard a higher rate of contingent responses (MODEL-REF). Contingent responses from others were also less frequent when more speakers were present (MODEL-REF). Finally, as before, contingent responses from other were more likely in the mornings and afternoons for younger children, as compared to older children (MODEL-REF). The zero-inflation model included household size, squared time of day, and their interaction, none of which significantly predicted the presence of contingent responses from others.
-
-``` {r visualize_tt_c-o-tmp_effects}
-# Maternal education:
-#mated.bin6+                0.724325   0.186911   3.875 0.000107 ***
-#ggplot() + geom_violin(data = turn.transitions.tt, aes(x = mated.bin, y = round(n.c_o.tpm,0))) + geom_jitter(data = turn.transitions.tt, aes(x = mated.bin, y = round(n.c_o.tpm,0)))
-
-# Nspeakers:
-#nsk.std                   -0.327744   0.106364  -3.081 0.002061 ** 
-#ggplot() + geom_point(data = turn.transitions.tt, aes(x = nsk.std, y = round(n.c_o.tpm,0))) + geom_smooth(data = turn.transitions.tt, aes(x = nsk.std, y = round(n.c_o.tpm,0)), method = "lm")
-
-# Time of day * chi age:
-#tchiyr.std:I(stthr.std^2) -3.189846   1.570628  -2.031 0.042261 *  
-#ggplot() + geom_smooth(data = turn.transitions.tt, aes(x = start.hr, y = round(n.c_o.tpm,0), group = age_mo_round), method = "lm", formula = y ~ poly(x, 2)) + geom_point(data = turn.transitions.tt, aes(x = start.hr, y = round(n.c_o.tpm,0), group = age_mo_round)) + facet_grid(~ age_mo_round)
-```
-
-The rate at which children respond contingently to others was influenced by maternal education and the number of speakers present. Contingent responses from the target child were more likely from children whose mothers had completed secondary or further education (MODEL-REF) and less likely when more speakers were present (MODEL-REF). The zero-inflation model included household size, squared time of day, and their interaction. None of these predictors significantly impacted the likelihood of the child giving a contingent response.
-
-``` {r visualize_tt_o-c-tmp_effects}
-# Maternal education:
-#mated.bin6+                0.76639    0.19109   4.011 6.05e-05 ***
-#ggplot() + geom_violin(data = turn.transitions.tt, aes(x = mated.bin, y = round(n.o_c.tpm,0))) + geom_jitter(data = turn.transitions.tt, aes(x = mated.bin, y = round(n.o_c.tpm,0)))
-
-# Nspeakers:
-#nsk.std                   -0.34332    0.10941  -3.138   0.0017 ** 
-#ggplot() + geom_point(data = turn.transitions.tt, aes(x = nsk.std, y = round(n.o_c.tpm,0))) + geom_smooth(data = turn.transitions.tt, aes(x = nsk.std, y = round(n.o_c.tpm,0)), method = "lm")
-```
-
-The duration of interactional sequences in the turn-taking sample was influenced by a multiple factors, most of which relate to the child's age. Sequences were slightly shorter for older children (MODEL-REF) and for children in large households (MODEL-REF), with a significant interaction between the two such that large households showed a larger decrease in sequence duration (MODEL-REF). That said, children of mothers who continued with secondary and further education participated in longer interactional sequences with age, compared to the other children (MODEL-REF). Finally, younger children were more likely than older children to experience longer interactional sequences in the mornings and evenings, compared to midday (MODEL-REF).
-
-``` {r visualize_tt_seqdur_effects}
-# Child age:
-#tchiyr.std                -0.35021    0.14365  -2.438  0.01478 *  
-#ggplot() + geom_point(data = turn.sequences.tt, aes(x = tchiyr.std, y = round((seq.dur*60),0))) + geom_smooth(data = turn.sequences.tt, aes(x = tchiyr.std, y = round((seq.dur*60),0)), method = "lm")
-
-# Household size:
-#hsz.std                   -0.29601    0.11533  -2.567  0.01027 *  
-#ggplot() + geom_point(data = turn.sequences.tt, aes(x = hsz.std, y = round((seq.dur*60),0))) + geom_smooth(data = turn.sequences.tt, aes(x = hsz.std, y = round((seq.dur*60),0)), method = "lm")
-
-# Household size * Child age:
-#tchiyr.std:hsz.std        -0.44534    0.14380  -3.097  0.00196 ** 
-#ggplot() + geom_raster(data = turn.sequences.tt, aes(y = tchiyr.std, x = hsz.std, fill = round((seq.dur*60),0)))
-
-# Maternal education * Child age:
-#tchiyr.std:mated.bin6+     0.39603    0.15145   2.615  0.00893 ** 
-#ggplot() + geom_point(data = turn.sequences.tt, aes(x = tchiyr.std, y = round((seq.dur*60),0), color = mated.bin)) + geom_smooth(data = turn.sequences.tt, aes(x = tchiyr.std, y = round((seq.dur*60),0), color = mated.bin), method = "lm")
-
-# Time of day * Child age:
-#tchiyr.std:I(stthr.std^2) -3.82356    1.37919  -2.772  0.00557 ** 
-#ggplot() + geom_smooth(data = turn.sequences.tt, aes(x = start.hr, y = round((seq.dur*60),0), group = age_mo_round), method = "lm", formula = y ~ poly(x, 2)) + geom_point(data = turn.sequences.tt, aes(x = start.hr, y = round((seq.dur*60),0), group = age_mo_round)) + facet_grid(~ age_mo_round)
-
-```
-
-Lastly, the normalized ratio of time spent vocalizing (CHI:OTH) in the turn-taking sample was not significantly impacted by any of the predictors in the model, including child age, time of day, number of speakers present, household size, and maternal education.
-
-## Frequency of high turn-taking activity
-
-```{r detect_tt_in_random, message=FALSE, warning=FALSE, paged.print=FALSE}
-tt.threshold.bychild <- turn.transitions %>%
-  filter(grepl("tt", segment)) %>%
-  mutate(tm1.bin = ifelse(tm1.val == "T", 1, 0),
-         tp1.bin = ifelse(tp1.val == "T", 1, 0)) %>%
-  replace_na(list(tm1.bin = 0, tp1.bin = 0)) %>%
-  mutate(tot.tts = tm1.bin + tp1.bin) %>%
-  group_by(aclew_child_id, segment) %>%
-  summarise(n_all.tts = sum(tot.tts)) %>%
-  mutate(seg.dur = ifelse(grepl("ext", segment), 5, 1),
-         n_all.tpm = n_all.tts/seg.dur) %>%
-  group_by(aclew_child_id) %>%
-  summarise(
-    min.all.tpm = min(n_all.tpm),
-    max.all.tpm = max(n_all.tpm),
-    mean.all.tpm = mean(n_all.tpm),
-    median.all.tpm = median(n_all.tpm))
-
-lowest.bychild.tt.tpm <- min(tt.threshold.bychild$mean.all.tpm)
-
-tm1s.rand <- turn.transitions %>%
-  filter(!is.na(tm1.val) & grepl("random", segment)) %>%
-  dplyr::select(c("aclew_child_id", "segment", "tm1.stop")) %>%
-  rename(transition.start = tm1.stop) %>%
-  mutate(transition.type = "tm1")
-
-tp1s.rand <- turn.transitions %>%
-  filter(!is.na(tp1.val) & grepl("random", segment)) %>%
-  dplyr::select(c("aclew_child_id", "segment", "tp1.start")) %>%
-  rename(transition.start = tp1.start) %>%
-  mutate(transition.type = "tp1")
-
-tts.rand <- bind_rows(tm1s.rand, tp1s.rand) %>%
-  arrange(aclew_child_id, segment, transition.start)
-
-# make sliding window of turn taking rate
-seg.info.start.stop <- seg.info %>%
-  filter(Include == 1) %>%
-  mutate(start.ms = clipoffset.sec*1000,
-         seg.dur = ifelse(grepl("random", CodeName), 5, ifelse(grepl("ext", CodeName), 6, 1)),
-         stop.ms = start.ms + (seg.dur*1000)) %>%
-  dplyr::select(aclew_id, CodeName, start.ms, stop.ms)
-for (row in seg.info.start.stop) {
-  child <- seg.info.start.stop$aclew_id[row]
-  segment <- seg.info.start.stop$CodeName[row]
-  tt.subsample <- filter(tts.rand, aclew_child_id == child &
-                           transition.start >= seg.info.start.stop$start.ms[row] &
-                           transition.start >= seg.info.start.stop$stop.ms[row])
-}
-
-```
-
-
-
-
-``` {r chi_voctypes_overall, message=FALSE, warning=FALSE, paged.print=FALSE}
-chi.vm.lx.utts <- all.data %>%
-  filter((tier == "vcm@CHI" | tier == "lex@CHI" | tier == "mwu@CHI")) %>%
-  mutate(voc.rating = ifelse(val == "M", 4,
-                             ifelse((val == "1" | val == "W"), 3,
-                                    ifelse((val == "0" | val == "C"), 2,
-                                           ifelse(val == "N", 1, 0))))) %>%
-  filter(voc.rating > 0) %>%
-  group_by(aclew_child_id, segment, sample, start) %>%
-  summarise(max_voc.rtg = max(voc.rating))
-
-all.voc.types.per.child <- tibble(
-  aclew_child_id = rep(ptcp.info$aclew_child_id, 4),
-  max_voc.rtg = c(rep(1, length(ptcp.info$aclew_child_id)), rep(2, length(ptcp.info$aclew_child_id)),
-                  rep(3, length(ptcp.info$aclew_child_id)), rep(4, length(ptcp.info$aclew_child_id)))
-)
-
-chi.nvocs <- chi.vm.lx.utts %>%
-  group_by(aclew_child_id) %>%
-  summarise(n_vocs = n())
-
-chi.vm.lx.voc.type.props <- chi.vm.lx.utts %>%
-  group_by(aclew_child_id, max_voc.rtg) %>%
-  summarise(n_voc.type = n()) %>%
-  full_join(all.voc.types.per.child, by = c("aclew_child_id", "max_voc.rtg")) %>%
-  replace_na(list(n_voc.type = 0)) %>%
-  full_join(chi.nvocs, by = "aclew_child_id") %>%
-  mutate(prop_voc.type = round(n_voc.type/n_vocs, 3)) %>%
-  arrange(aclew_child_id, max_voc.rtg) %>%
-  full_join(ptcp.info, by = "aclew_child_id")
-```
-
-``` {r plot_chi_voctypes_overall, message=FALSE, warning=FALSE, paged.print=FALSE}
-chi.vm.lx.voc.type.props <- chi.vm.lx.voc.type.props %>%
-  mutate(voc.type = factor(as.factor(max_voc.rtg), labels = c("NCB", "CB", "SW", "MW")))
-voc.mat.by.age <- ggplot(
-  data = chi.vm.lx.voc.type.props,
-  aes(x = age_mo_round, y = prop_voc.type, group = as.factor(voc.type))) +
-  geom_point(aes(color = as.factor(voc.type))) +
-  geom_smooth(aes(color = as.factor(voc.type), fill = as.factor(voc.type)), method = "loess") +
-  ylab("Prop of linguistic vocs") + xlab("Child age (mo)") +
-  labs(fill='Voc type') +
-  labs(color='Voc type') +
-  scale_y_continuous(limits=c(-0.5,1.5),
-                     breaks=seq(0,1,0.2)) +
-  scale_x_continuous(limits=c(0,38),
-                     breaks=seq(0,38,6)) +
-  coord_cartesian(ylim=c(0,1), xlim=c(0,38)) +
-  theme_apa() + theme(
-    legend.position = c(0.9, 0.85),
-    legend.background = element_rect(fill="transparent"),
-    axis.line = element_line(color="black", size = 0.4))
-voc.mat.by.age
-```
-
+### Contingent response rate
+### Interactional sequences duration
+### Vocalization ratio
+We detect contingent turn exchanges between the target child and other speakers based on turn timing (<!--CREATE FIGURE-->). If there is a target-child-directed utterance that begins between the start of a target child vocalization and `r allowed.gap`msec after the end of the child's vocalization, we count it as a CHI-OTH turn transition Similarly, if there is a target child vocalization that begins between the start of a target-child-directed utterance and `r allowed.gap`msec after the end of the utterance, it is counted as a OTH-CHI turn transition. Each utterance is maximally allowed to act as one prompt for a child vocalization and one response to a child vocalization (e.g., in an CHI--OTH--CHI turn-taking sequence). We identify sequences of interaction using a similar mechanism: we look for chains of contingent responses before and after each child vocalization, allowing for speakers to continue with multiple vocalizations/utterances between speaker exchanges (<!--CREATE FIGURE-->). In this case, we also limit the overlap between utterances because we are focused here on interactional exchange that primarily features speech by one speaker at a time. Sequences are bounded by the earliest and latest vocalization for which there is no contingent prompt/response, respectively. Sequences must have at least one contingent non-target-child utterance. Finally, each child vocalization can only appear in one sequence, and many sequences have more than one child vocalization.
+
+We base these timing restrictions on vocal contingency on prior studyes of infant and young children's turn taking. Hilbrink et al. (2015; REFS) found that infants' (0;3--1;6) responses to mothers typically began between -700ms and 1200ms relative to the end of the mothers' turns and mothers' responses to their infants began between -350ms and 650ms relative to the end of the infants' turns. Casillas et al. (2016; REFS) found that children's responses to caregivers' questions typically started between -500ms and 650ms relative to their caregiver's turn end, and caregivers' responses to children's question between -1000ms and 400ms relative to the children's turn end. Because both studies focused on fairly intensive bouts of interaction, and both within WEIRD parental contexts, we defined contingent responses in the current data with more generous allowances for overlap and gap (gap = `r allowed.gap`; overlap = `r allowed.overlap`). That said, our timing restrictions are much tighter than those used to define interactional contingency in many other studies (e.g., REFS, see also REFS for a review on adult-adult turn timing).
+
+## Vocal maturity
+### Developmental trajectory
+### Relation to language experience
 
 # Discussion {#disc}
 <!--
