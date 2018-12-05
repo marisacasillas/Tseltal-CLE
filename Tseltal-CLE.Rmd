@@ -866,9 +866,9 @@ grid.arrange(tdsmph.segments.rand_and_tt.zoomedin, odsmph.segments.rand_and_tt, 
 ```
 
 ## Target-child-directed speech (TCDS)
-The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 2](#fig2)). These estimates are close to those reported for Yucatec Mayan data [@shneidman2012language], which are plotted with our data, along with estimates from a few other populations in [Figure 3](#fig3) (we convert the original estimates to min/hr by using the median utterance duration in our dataset for all non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms)). We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
+The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 2](#fig2)). These estimates are close to those reported for Yucatec Mayan data [@shneidman2012language], which are plotted with our data, along with estimates from a few other populations in [Figure 3](#fig3) [US/Canada: @bergelsoncasillas2018what; US urban and Yukatek: @shneidman2010language; Mozambique urban and rural, and Dutch: @vogt2015communicative; Tsimane: @scaffIPlanguage; see @scaffIPlanguage for a more detailed comparison].^[We convert the original estimates from @shneidman2010language into min/hr by using the median utterance duration in our dataset for all non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms). Note that, though this conversion is far from perfect, Yukatek and Tseltal are related languages.]. We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
 
-```{r corpus_comparison_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r fig3, echo=FALSE, fig.cap="TCDS rate reported across different populations, including both urban (gray) and rural/indigenous (black) samples. Each point is the average TCDS rate reported for children at the indicated age, and size indicates number of children sampled (range: 1--26). See text for references to original studies.", message=FALSE, warning=FALSE, fig.height=2.5}
 # Prep comparison data for matching figures
 comparison.data <- read_csv(comparison.file)
 tds.mph.tofill <- which(is.na(comparison.data$tds_mph) & !(is.na(comparison.data$tds_uph)))
@@ -881,22 +881,52 @@ xds.mph.tofill <- which(is.na(comparison.data$xds_mph) &
                           !(is.na(comparison.data$ods_mph)) & !(is.na(comparison.data$tds_mph)))
 comparison.data$xds_mph[xds.mph.tofill] <- comparison.data$ods_mph[xds.mph.tofill] +
   comparison.data$tds_mph[xds.mph.tofill]
+# Add in current data
+by.chi.rand.avgs <- quantity.rand %>%
+  ungroup() %>%
+  select(age_mo_round, ods_mph, cds_mph, tds_mph, xds_mph, prop_tds) %>%
+  group_by(age_mo_round) %>%
+  summarise(ods_mph = mean(ods_mph),
+            cds_mph = mean(cds_mph),
+            tds_mph = mean(tds_mph),
+            xds_mph = mean(xds_mph),
+            prp_tds = mean(prop_tds, na.rm = TRUE)) %>%
+  rename(AgeMonths = age_mo_round) %>%
+  mutate(ods_uph = NA,
+         tds_uph = NA,
+         xds_uph = NA,
+         prp_tds_adu = NA,
+         prp_tds_chi = NA,
+         shape = 8,
+         N = 1,
+         Type = "Rural, non-WEIRD",
+         Site = "Tseltal",
+         Reference = "The current study",
+         Notes = "")
+comparison.data <- bind_rows(comparison.data, by.chi.rand.avgs)
 
-comparison.data.sa <- bind_rows(comparison.data, comparison.data)
-comparison.data.sa$SpkrAge <- c(rep("Child", nrow(comparison.data)),
-                                rep("Adult", nrow(comparison.data)))
-comparison.data.sa$prp_spkr <- NA
-for (i in 1:nrow(comparison.data.sa)) {
-  if (!(is.na(comparison.data.sa$prp_tds_adu[i]))) {
-      comparison.data.sa$prp_spkr[i] <- ifelse(comparison.data.sa$SpkrAge[i] == "Child",
-                                               comparison.data.sa$prp_tds_chi[i]/100,
-                                               comparison.data.sa$prp_tds_adu[i]/100)
-
-  }
-}
-comparison.data$Site <- factor(comparison.data$Site, levels = unique(comparison.data$Site))
-comparison.data.sa$Site <- factor(comparison.data.sa$Site, levels = unique(comparison.data$Site))
+comparison.data$Site <- factor(comparison.data$Site,
+                               levels = unique(comparison.data$Site))
 comparison.data.shapes <- unique(comparison.data$shape)
+
+# TDS min/hr comparison
+tdsmph.comparison <- ggplot(comparison.data,
+                          aes(x = AgeMonths, y = tds_mph, stroke = 1,
+                              color = Type, shape = Site, size = N)) +
+  geom_point() +
+  scale_shape_manual(values=comparison.data.shapes) +
+  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
+  scale_y_continuous(limits=c(0,20),
+                     breaks=seq(0,20,5)) +
+  scale_x_continuous(limits=c(0,38),
+                     breaks=seq(0,38,6)) +
+  coord_cartesian(ylim=c(0,20),xlim=c(0,38)) +
+  scale_color_manual(values = c("black", "gray60")) +
+  scale_fill_manual(values = c("black", "gray60")) +
+  theme_apa() +
+  guides(size = FALSE, color = FALSE) +
+  theme(axis.line = element_line(color="black", size = 0.4))
+tdsmph.comparison
 ```
 
 
