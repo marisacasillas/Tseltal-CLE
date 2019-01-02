@@ -78,19 +78,16 @@ allowed.gap <- 2000 #ms
 A great deal of work in developmental language science revolves around one central question: What linguistic evidence (i.e., what types and how much) is needed to support first language acquisition? In pursuing this topic, many researchers have fixed their sights on the quantity and characteristics of speech addressed to children; that is, speech designed for young recipients who may have limited attention and understanding. In several languages, child-directed speech (CDS^[Throughout this article, we use 'child-directed speech' and 'CDS' in the most literal sense: speech designed for and directed toward a child recipient.]) is linguistically accommodated [@soderstrom2007beyond; @cristia2013input], interactionally rich [@bruner1985childs; @masataka2003onset; @butterworth2003pointing; @estigarribia2007getting], and preferred by infants [@cooper1990preference; @segal2015infant; @manybabies2017; see, e.g., @hoff2006social and @golinkoff2015baby for reviews]. In those same linguistic communities, these properties of CDS have been found to facilitate early word learning [e.g., @hoff2003specificity; @hurtado2008does; @rowe2008child; @shneidman2012language; @shneidman2012counts; @cartmill2013quality; @weisleder2013talking; @hirshpasek2015contribution]. Yet ethnographic reports from a number of traditional, non-Western communities suggest that children easily acquire their community's language(s) even when they are infrequently directly addressed [@brown2011cultural]. If so, CDS may not be essential for learning language; just useful for facilitating certain aspects of language development. In this paper we investigate the language environment and early development of 10 Tseltal Mayan children growing up in a community where caregivers are reported to infrequently directly address speech to infants and young children [@brown1998conversational; @brown2011cultural; @brown2014interactional].
 
 ## Child-directed speech  {#intro-cds}
-Prior work on CDS in Western contexts has shown that the amount of CDS children hear influences their language development; more CDS is associated with larger and faster-growing receptive and productive vocabularies in young children [e.g., @hart1995meaningful; @hoff2003specificity; @hurtado2008does; @shneidman2012language; @shneidman2012counts; @weisleder2013talking; @ramirezesparza2014look; @ramirezesparza2017look; @lucidIP]. CDS has also been linked to young children's speed of lexical retrieval [@hurtado2008does; @weisleder2013talking; but see @lucidIP] and syntactic development [@huttenlocher2010sources]. The conclusion drawn from much of this work is that speech directed to children is well designed for learning words---especially concrete nouns and verbs---because it is optimized for a child's attention and understanding in the moment it is spoken.  Even outside of first-person interaction, infants and young children prefer listening to attention-grabbing CDS over adult-directed speech [see @manybabies2017 for a review]. There are, however, a few significant caveats to the body of work relating CDS quantity to language development.
+Prior work on CDS in Western contexts has shown that the amount of CDS children hear influences their language development; more CDS is associated with larger and faster-growing receptive and productive vocabularies in young children [e.g., @hart1995meaningful; @hoff2003specificity; @hurtado2008does; @shneidman2012language; @shneidman2012counts; @weisleder2013talking; @ramirezesparza2014look; @ramirezesparza2017look; @peterIPindividual]. CDS has also been linked to young children's speed of lexical retrieval [@hurtado2008does; @weisleder2013talking; but see @peterIPindividual] and syntactic development [@huttenlocher2010sources]. The conclusion drawn from much of this work is that speech directed to children is well designed for learning words---especially concrete nouns and verbs---because it is optimized for a child's attention and understanding in the moment it is spoken.  Even outside of first-person interaction, infants and young children prefer listening to attention-grabbing CDS over adult-directed speech [see @manybabies2017 for a review]. There are, however, a few significant caveats to the body of work relating CDS quantity to language development.
 
-First, while there is overwhelming evidence linking CDS quantity to vocabulary size, links to grammatical development are more scant [e.g., @huttenlocher2010sources; @frankIPvariability; @brinchmann2019direct]. While the advantage of CDS for referential word learning is clear, it is less obvious how CDS facilitates syntactic learning. For example, utterance length [a proxy for syntactic complexity @wasow1997remarks] doesn't appear to increase with child age [@newport1977mother], and parents are less likely to directly correct their children's syntactic errors than semantic ones [@brown1997introduction; but see @chouinard2003adult]---even sometimes themselves producing ungrammatical utterances to make individual words salient to their young interlocutors [@aslin1996models; see also @yurovsky2017communicative]. On the other hand, there is a wealth of evidence that syntactic knowledge is lexically specified [see, e.g., @lieven1997lexically; @goldberg2003constructions; @arnold2004avoiding], and that, crosslinguistically, children's vocabulary size is one of the most robust predictors of their early syntactic development [@bates1997inseparability; @marchman2004language; @frankIPvariability]. In short, what is good for the lexicon may also be good for syntax. For now, however, the link between CDS and other aspects of grammatical development still needs to be more thoroughly tested.
+First, while there is overwhelming evidence linking CDS quantity to vocabulary size, links to grammatical development are more scant [e.g., @huttenlocher2010sources; @frankIPvariability; @brinchmann2019direct]. While the advantage of CDS for referential word learning is clear, it is less obvious how CDS facilitates syntactic learning. For example, utterance length [a proxy for syntactic complexity @wasow1997remarks] doesn't appear to increase with child age [@newport1977mother], and parents are less likely to directly correct their children's syntactic errors than semantic ones [@brown1997introduction; but see @chouinard2003adult]---even sometimes themselves producing ungrammatical utterances to make individual words salient to their young interlocutors [@aslin1996models; see also @yurovsky2018communicative]. On the other hand, there is a wealth of evidence that syntactic knowledge is lexically specified [see, e.g., @lieven1997lexically; @goldberg2003constructions; @arnold2004avoiding], and that, crosslinguistically, children's vocabulary size is one of the most robust predictors of their early syntactic development [@bates1997inseparability; @marchman2004language; @frankIPvariability]. In short, what is good for the lexicon may also be good for syntax. For now, however, the link between CDS and other aspects of grammatical development still needs to be more thoroughly tested.
 
 A second caveat is that most work on CDS quantity uses summary measures that average over the ebb and flow of interaction (e.g., proportion CDS). In both child and adult interactions, verbal behaviors are highly structured: while some occur at fairly regular intervals ('periodic', e.g., discourse connectives such as 'alright', 'okay', and 'well'), others occur in shorter, more intense bouts separated by long periods of inactivity ('bursty', e.g., content words, descriptions; @abney2018bursts, see also @fusaroli2014synergy). For example, Abney and colleagues [-@abney2017time] found that, across multiple time scales of daylong recordings, both infants' and adults' vocal behavior was clustered. Focusing on lexical development, Blasi and colleagues [-@blasiIPhuman] also found that nouns and verbs were used burstily in child-proximal speech across all six of the languages in their typologically diverse sample. Infrequent words were somewhat more bursty overall, leading them to propose that burstiness may play a key and universal role in acquiring otherwise-rare linguistic units. Experiment-based work also shows that two-year-olds learn novel words better from a massed presentation of object labels versus a distributed presentation [@schwab2016repetition; but see @ambridge2006distributed and @childers2002two]. Structured temporal characteristics in children's language experience imply new roles for attention and memory in language development. By that token, we should begin to investigate the link between CDS and linguistic development with more nuanced measures of how CDS is distributed.
-
-<!--the current link between CDS quantity and linguistic development would be greatly enriched if we accounted for more nuanced distributional properties of CDS (Mendoza and Fausey (in preparation) for related work on child-proximal music).-->
-<!--Using data collected under more controlled conditions, Slone, Abney, and colleagues (in prep) found that infants were more likely to learn new object labels when their caregivers used those labels in a more bursty way during spontaneous interaction.-->
 
 Finally, prior work has typically focused on Western (primarily North American) populations, limiting our ability to generalize these effects to children acquiring language worldwide [@henrich2010beyond; @nielsen2017persistent; @lieven1994crosslinguistic; @brown2014language]. While we do gain valuable insight by looking at _within-population_ variation (e.g., different socioeconomic or sub-cultures), we can more effectively find places where our assumptions break down by studying _new_ populations. Linguistic anthropologists working in non-Western communities have long reported that caregiver interaction styles vary immensely from place to place, with some caregivers using little or no CDS to young children [@lieven1994crosslinguistic; @gaskins2006cultural; @brown2014language]. Children in these communities reportedly acquire language with 'typical'-looking benchmarks. For example, they start pointing and talking around the same time we would expect for Western middle-class infants [e.g., @brown2011cultural; @liszkowski2012prelinguistic; @brown2014language; @brown2014interactional; but see also @salomo2013sociocultural]. These findings have had little impact on mainstream theories of word learning and language acquisition, partly due to a lack of directly comparable measures [@brown2014language; @brown2014interactional]. If, however, these children indeed acquire language without delay despite little or no CDS, we must reconsider what kind of linguistic evidence is necessary for children to learn language.
 
 ## Language development in non-WEIRD communities {#intro-nonweird}
-A growing number of researchers are using methods from developmental psycholinguistics to describe the language environments and linguistic development of children growing up in traditional and/or non-Western communities [see also, e.g., @demuth2010three; @barrett2013early; @hernik2018infant; @ganek2018using; @garcia2018thematic; @fortierURadhoc]. <!--We focus here on _quantitative_ language development measures because the key claims about CDS and linguistic development are themselves quantitative in nature.--> We briefly highlight two recent efforts along these lines, but see Cristia and colleagues [-@cristia2017child] and Mastin and Vogt's work [-@vogt2015communicative; -@mastin2016infant] for similar examples.
+A growing number of researchers are using methods from developmental psycholinguistics to describe the language environments and linguistic development of children growing up in traditional and/or non-Western communities [see also, e.g., @demuth2010three; @barrett2013early; @hernik2018infant; @ganek2018using; @garcia2018thematic; @fortierURadhoc]. We briefly highlight two recent efforts along these lines, but see Cristia and colleagues [-@cristia2017child] and Mastin and Vogt's work [-@vogt2015communicative; -@mastin2016infant] for similar examples.
 
 Scaff, Cristia, and colleagues [-@cristia2017child; -@scaffIPlanguage] have used a number of methods to estimate how much speech children hear in a Tsimane forager-horticulturalist population in the Bolivian lowlands. From daylong audio recordings, they estimate that Tsimane children between 0;6 and 6;0 hear maximally ~5 minutes of directly addressed speech per hour, regardless of their age (but see Cristia et al., 2017). For comparison, children from North American homes between ages 0;3 and 3;0 are estimated to hear ~11 minutes of CDS per hour in daylong recordings [@bergelsoncasillas2018what]. Tsimane children also hear ~10 minutes of other-directed speech per hour (e.g., talk between adults) compared to the ~7 minutes per hour heard by young North American children [@bergelsoncasillas2018what]. This difference may be attributable to the fact that the Tsimane live in extended family clusters of 3--4 households, so speakers are typically in close proximity to 5--8 other people [@cristia2017child].
 
@@ -107,7 +104,7 @@ Based on prior work, we predicted that Tseltal Mayan children hear little CDS, t
 
 # Methods {#methods}
 ## Community {#methods-community}
-The children in our dataset come from a small-scale, subsistence farming community in the highlands of Chiapas in Southern Mexico. The vast majority of children grow up speaking Tseltal monolingually at home. The first few years of primary school are conducted mainly in Tseltal, but the remainder of primary school, secondary school, and any further education is conducted exclusively in Spanish. Nuclear families are often large (5+ children) and live in patrilineal clusters. Nearly all families grow staple crops such as corn and beans, but also bananas, chilies, squash, coffee, and more. <!--Families also cultivate and collect a range of other local plants, raise poultry for eggs and meat and, very occasionally, raise other animals (e.g., bulls) for slaughter. Additional produce, meat, and processed foods are available for purchase at small local shops and from vendors driving through town.--> Household and farming work is divided among men, women, and older children. Women do much of the daily cleaning and food preparation, but also frequently work in the garden, haul water and firewood, and do other physical labor. A few community members---both men and women---earn incomes as teachers and shopkeepers but are still expected to regularly contribute to their family's household work.
+The children in our dataset come from a small-scale, subsistence farming community in the highlands of Chiapas in Southern Mexico. The vast majority of children grow up speaking Tseltal monolingually at home. The first few years of primary school are conducted mainly in Tseltal, but the remainder of primary school, secondary school, and any further education is conducted exclusively in Spanish. Nuclear families are often large (5+ children) and live in patrilineal clusters. Nearly all families grow staple crops such as corn and beans, but also bananas, chilies, squash, coffee, and more. Household and farming work is divided among men, women, and older children. Women do much of the daily cleaning and food preparation, but also frequently work in the garden, haul water and firewood, and do other physical labor. A few community members---both men and women---earn incomes as teachers and shopkeepers but are still expected to regularly contribute to their family's household work.
 
 More than forty years of ethnographic work by the second author has reported that Tseltal children's language environments are non-child-centered and non-object-centered [@brown1998conversational; @brown2011cultural; @brown2014interactional]. During their waking hours, Tseltal infants are typically tied to their mother's back while she goes about her work for the day. Infants receive very little direct speech until they themselves begin to initiate interactions, usually as they approach their first birthdays. Even then, interactional exchanges are often brief or non-verbal (e.g., object exchange routines) and take place within a multi-participant context [@brown2014interactional]. Rarely is attention given to words and their meanings, even when objects are central to the activity. Instead, interactions tend to focus on appropriate actions and responses, and young children are socialized to attend to the interactions taking place around them [see also @rogoff2003firsthand; @deleon2011language].
 
@@ -126,11 +123,11 @@ Households size, defined in our dataset by the number of people sharing a kitche
 ### Recordings {#methods-corpus-recs}
 Methods for estimating the quantity of speech that children hear have advanced significantly in the past two decades, with long-format at-home audio recordings quickly becoming the new standard [e.g., with the LENA^®^ system; @greenwood2011assessing]. These recordings capture a wider range of the linguistic patterns children hear as they participate in different activities with different speakers over the course of their day. In long-format recordings, caregivers also tend to use less CDS [@tamislemonda2017power; see also @bergelson2018day]^[Typically, the CDS-features measured in these studies correlated between short- and long-format recordings, but with some caveats.]. The goal of these recordings is to more or less capture a representative sample of what the child hears and says at home.
 
-``` {r fig0, echo=FALSE, fig.cap="The recording vest fit over children's chests with an audio recording decice in the front horizontal pocket and a camera fitted with a fisheye lens attached to the a shoulder strap.", out.width = '50%'}
+``` {r fig1, echo=FALSE, fig.align = "center", fig.cap="The recording vest fit over children's chests with an audio recording device in the front horizontal pocket and a camera fitted with a fisheye lens attached to the a shoulder strap.", out.width = '50%'}
 knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-RecordingVest.jpg")
 ```
 
-We used a novel combination of a lightweight stereo audio recorder (Olympus^®^ WS-832) and wearable photo camera (Narrative Clip 1^®^) fitted with a fish-eye lens, to track children's movements and interactions over the course of a 9--11-hour period in which the experimenter was not present.  Each recording was made during a single day at home in which the recorder and/or camera was attached to the child. Ambulatory children wore both devices on an elastic vest. Non-ambulatory children wore the recorder in a onesie while their primary caregiver wore the camera on an elastic vest *Figure ???* *[TASK: Make figure]*. The camera was set to take photos at 30-second intervals and was synchronized to the audio in post-processing to create a video file featuring the snapshot-linked audio from the child's recording.^[Documentation for recording set-up and scripts for post-processing are available at *[TASK: Link to relevant docs]*.]
+We used a novel combination of a lightweight stereo audio recorder (Olympus^®^ WS-832) and wearable photo camera (Narrative Clip 1^®^) fitted with a fish-eye lens, to track children's movements and interactions over the course of a 9--11-hour period in which the experimenter was not present.  Each recording was made during a single day at home in which the recorder and/or camera was attached to the child. Ambulatory children wore both devices on an elastic vest. Non-ambulatory children wore the recorder in a onesie while their primary caregiver wore the camera on an elastic vest (see [Figure 1](#fig1)). The camera was set to take photos at 30-second intervals and was synchronized to the audio in post-processing to create a video file featuring the snapshot-linked audio from the child's recording.^[Documentation and scripts for post-processing are available at and https://github.com/marisacasillas/Weave.]
 
 <!--Block below: R code that reads in and labels the data so we can make the summary measures-->
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
@@ -153,18 +150,18 @@ seg.info <- read_csv(seg.index.file)
 # Extract and convert start time of each sample
 seg.info$start.hhmmss <- regmatches(seg.info$Media,
                                     regexpr("[[:digit:]]{6}", seg.info$Media))
-seg.info$start.sec <- as.numeric(substr(seg.info$start.hhmmss,1,2))*60000 +
-  as.numeric(substr(seg.info$start.hhmmss,3,4))*1000 +
+seg.info$start.sec <- as.numeric(substr(seg.info$start.hhmmss,1,2))*3600 +
+  as.numeric(substr(seg.info$start.hhmmss,3,4))*60 +
   as.numeric(substr(seg.info$start.hhmmss,5,6))
-seg.info$start.hr <- round(seg.info$start.sec/60000, 3)
+seg.info$start.hr <- round(seg.info$start.sec/3600, 3)
 
 seg.info$clipoffset.hhmmss <- regmatches(seg.info$Media,
                                     regexpr("(?<=[[:digit:]]{6}_)[[:digit:]]{6}",
                                             seg.info$Media, perl = TRUE))
-seg.info$clipoffset.sec <- as.numeric(substr(seg.info$clipoffset.hhmmss,1,2))*60000 +
-  as.numeric(substr(seg.info$clipoffset.hhmmss,3,4))*1000 +
+seg.info$clipoffset.sec <- as.numeric(substr(seg.info$clipoffset.hhmmss,1,2))*3600 +
+  as.numeric(substr(seg.info$clipoffset.hhmmss,3,4))*60 +
   as.numeric(substr(seg.info$clipoffset.hhmmss,5,6))
-seg.info$clipoffset.hr <- round(seg.info$clipoffset.sec/60000, 3)
+seg.info$clipoffset.hr <- round(seg.info$clipoffset.sec/3600, 3)
 
 # Add mean and sd values for participant-level predictors to ptcp.info
 ptcp.info <- ptcp.info %>%
@@ -238,12 +235,11 @@ avg.utt.len.tseltal <- all.data %>%
 ```
 
 ## Data selection and annotation {#methods-samples}
-We annotated video clips from 10 of the 55 children's recordings. We chose these 10 recordings to maximize variance in three demographic variables: child age (0--3;0), child sex, and maternal education. The sample is summarized in *Table 1* *[TASK: Make table]*. We then selected one hour's worth of non-overlapping clips from each recording in the following order: nine randomly selected 5-minute clips, five 1-minute clips manually selected as the top 'turn-taking' minutes of the recording, five 1-minute clips manually selected as the top 'vocal activity' minutes of the recording, and one, manually selected 5-minute extension of the best 1-minute sample (see [Figure 1](#fig1)). We created these different subsamples of each day to measure properties of (a) children's _average_ language environments (random samples) and (b) their _most input-dense_ language environments (turn-taking samples). The third sample (high-activity) gave us insight into children's productive speech abilities.
+We annotated video clips from 10 of the 55 children's recordings. We chose these 10 recordings to maximize variance in three demographic variables: child age (0--3;0), child sex, and maternal education. The sample is summarized in *Table 1* *[TASK: Make table]*. We then selected one hour's worth of non-overlapping clips from each recording in the following order: nine randomly selected 5-minute clips, five 1-minute clips manually selected as the top 'turn-taking' minutes of the recording, five 1-minute clips manually selected as the top 'vocal activity' minutes of the recording, and one, manually selected 5-minute extension of the best 1-minute sample (see [Figure 2](#fig2)). We created these different subsamples of each day to measure properties of (a) children's _average_ language environments (random samples) and (b) their _most input-dense_ language environments (turn-taking samples). The third sample (high-activity) gave us insight into children's productive speech abilities.
 
-The turn-taking and high-activity clips were chosen by two trained annotators (the first author and a student assistant) who listened to each recording in its entirety at 1--2x speed while actively taking notes about potentially useful clips. Afterwards, the first author reviewed the list of candidate clips, listened again to each one (at 1x speed, multiple repetitions), and chose the best five 1-minute samples for each of the two types of activity. Good turn-taking activity was defined as closely timed sequences of contingent vocalization between the target child and at least one other person (i.e., frequent vocalization exchanges). The 'best' turn-taking clips were chosen because they had the most and most clear turn-switching activity between the target child and the other speaker(s). Good vocal activity clips were defined as clips in which the target child produced the most and most diverse spontaneous (i.e., not imitative) vocalizations. The 'best' vocal activity clips were chosen for representing the most linguistically mature and/or diverse vocalizations made by the child over the day. All else being equal, candidate clips were prioritized when they contained less background noise or featured speakers and speech that were not otherwise frequently represented (e.g., CDS from older males). The best turn-taking clips and vocal activity clips often overlapped; turn-taking clips were selected from the list of candidates first, and then vocal-activity clips were chosen from the remainder.
-<!--*[TASK XX: Add (cleaned up) docs for coding to an OSF and link here]*-->
+The turn-taking and high-activity clips were chosen by two trained annotators (the first author and a student assistant) who listened to each recording in its entirety at 1--2x speed while actively taking notes about potentially useful clips. Afterwards, the first author reviewed the list of candidate clips, listened again to each one (at 1x speed, multiple repetitions), and chose the best five 1-minute samples for each of the two types of activity. Good turn-taking activity was defined as closely timed sequences of contingent vocalization between the target child and at least one other person (i.e., frequent vocalization exchanges). The 'best' turn-taking clips were chosen because they had the most and most clear turn-switching activity between the target child and the other speaker(s). Good vocal activity clips were defined as clips in which the target child produced the most and most diverse spontaneous (i.e., not imitative) vocalizations. The 'best' vocal activity clips were chosen for representing the most linguistically mature and/or diverse vocalizations made by the child over the day. All else being equal, candidate clips were prioritized when they contained less background noise or featured speakers and speech that were not otherwise frequently represented (e.g., CDS from older males). The best turn-taking clips and vocal activity clips often overlapped; turn-taking clips were selected from the list of candidates first, and then vocal-activity clips were chosen from the remainder. The instructions for selecting clips and resulting notes can be found at https://github.com/marisacasillas/Tseltal-CLE/blob/master/audio_scanning_instructions.md.
 
-```{r fig1, echo=FALSE, fig.cap="Recording duration (black line) and sampled clips (colored boxes) for each recording analyzed, sorted by child age.", message=FALSE, warning=FALSE, fig.height=2.5}
+```{r fig2, echo=FALSE, fig.cap="Recording duration (black line) and sampled clips (colored boxes) for each recording analyzed, sorted by child age.", message=FALSE, warning=FALSE, fig.height=2.5}
 ptcp.info <- mutate(ptcp.info,
                     rec.start.hr = lubridate::hour(start_of_recording) +
                       lubridate::minute(start_of_recording)/60 +
@@ -862,14 +858,14 @@ tdsprp.segments.rand_and_tt.sa <- ggplot(subset(quantity.sa.rand_and_tt, SpkrAge
         axis.line = element_line(color="black", size = 0.4))
 ```
 
-```{r fig2, echo=FALSE, fig.cap="By-child estimates of minutes per hour of other-directed speech (left) and target-child-directed speech (right). Data are shown for the random (purple; solid) and turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=2.5}
+```{r fig3, echo=FALSE, fig.cap="By-child estimates of minutes per hour of other-directed speech (left) and target-child-directed speech (right). Data are shown for the random (purple; solid) and turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=2.5}
 grid.arrange(tdsmph.segments.rand_and_tt.zoomedin, odsmph.segments.rand_and_tt, nrow=1, ncol=2)
 ```
 
 ## Target-child-directed speech (TCDS)
-The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 2](#fig2)). These estimates are close to those reported for Yucatec Mayan data [@shneidman2012language], which are plotted with our data, along with estimates from a few other populations in [Figure 3](#fig3) [US/Canada: @bergelsoncasillas2018what; US urban and Yukatek: @shneidman2010language; Mozambique urban and rural, and Dutch: @vogt2015communicative; Tsimane: @scaffIPlanguage; see @scaffIPlanguage for a more detailed comparison].^[We convert the original estimates from @shneidman2010language into min/hr by using the median utterance duration in our dataset for all non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms). Note that, though this conversion is far from perfect, Yukatek and Tseltal are related languages.]. We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
+The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan data [@shneidman2012language], which are plotted with our data, along with estimates from a few other populations in [Figure 4](#fig4) [US/Canada: @bergelsoncasillas2018what; US urban and Yukatek: @shneidman2010language; Mozambique urban and rural, and Dutch: @vogt2015communicative; Tsimane: @scaffIPlanguage; see @scaffIPlanguage for a more detailed comparison].^[We convert the original estimates from @shneidman2010language into min/hr by using the median utterance duration in our dataset for all non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms). Note that, though this conversion is far from perfect, Yukatek and Tseltal are related languages.]. We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
 
-```{r fig3, echo=FALSE, fig.cap="TCDS rate reported from daylong recordings made in different populations, including both urban (gray) and rural/indigenous (black) samples. Each point is the average TCDS rate reported for children at the indicated age, and size indicates number of children sampled (range: 1--26). See text for references to original studies.", message=FALSE, warning=FALSE, fig.height=2.5}
+```{r fig4, echo=FALSE, fig.cap="TCDS rate reported from daylong recordings made in different populations, including both urban (gray) and rural/indigenous (black) samples. Each point is the average TCDS rate reported for children at the indicated age, and size indicates number of children sampled (range: 1--26). See text for references to original studies.", message=FALSE, warning=FALSE, fig.height=2.5}
 # Prep comparison data for matching figures
 comparison.data <- read_csv(comparison.file)
 tds.mph.tofill <- which(is.na(comparison.data$tds_mph) & !(is.na(comparison.data$tds_uph)))
@@ -990,9 +986,9 @@ tds.tt.nb <- glmmTMB(round(tds_mph,0) ~
 #tchiyr.std:hsz.std        -0.37256    0.21505  -1.732   0.0832 .
 ```
 
-The rate of TCDS in the randomly sampled clips was primarily affected by factors relating to the time of day. The count model showed that, overall, children were more likely to hear TCDS in the mornings and evenings than around midday (B = `r round(tds.rand.zinb.COEF.time[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.time[[2]],2)`, z = `r round(tds.rand.zinb.COEF.time[[3]],2)`, p = `r round(tds.rand.zinb.COEF.time[[4]],2)`). However, this pattern weakened for older children, some of whom even heard peak TCDS input around midday, as illustrated in [Figure 4](#fig4) (B = `r round(tds.rand.zinb.COEF.agetime[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.agetime[[2]],2)`, z = `r round(tds.rand.zinb.COEF.agetime[[3]],2)`, p = `r round(tds.rand.zinb.COEF.agetime[[4]],2)`). There were no significant effects of child age, household size, or number of speakers present, no significant effects in the zero-inflation model.^[This TCDS zero-inflation did not include the number of speakers present or time of day.]
+The rate of TCDS in the randomly sampled clips was primarily affected by factors relating to the time of day. The count model showed that, overall, children were more likely to hear TCDS in the mornings and evenings than around midday (B = `r round(tds.rand.zinb.COEF.time[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.time[[2]],2)`, z = `r round(tds.rand.zinb.COEF.time[[3]],2)`, p = `r round(tds.rand.zinb.COEF.time[[4]],2)`). However, this pattern weakened for older children, some of whom even heard peak TCDS input around midday, as illustrated in [Figure 5](#fig5) (B = `r round(tds.rand.zinb.COEF.agetime[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.agetime[[2]],2)`, z = `r round(tds.rand.zinb.COEF.agetime[[3]],2)`, p = `r round(tds.rand.zinb.COEF.agetime[[4]],2)`). There were no significant effects of child age, household size, or number of speakers present, no significant effects in the zero-inflation model.^[This TCDS zero-inflation did not include the number of speakers present or time of day.]
 
-``` {r fig4, echo=FALSE, fig.cap="TCDS rate heard at different times of day by children 12 months and younger (left) and 13 months and older (right) in the randomly selected (purple) and turn-taking (green) clips.", message=FALSE, warning=FALSE, fig.height=2.5}
+``` {r fig5, echo=FALSE, fig.cap="TCDS rate heard at different times of day by children 12 months and younger (left) and 13 months and older (right) in the randomly selected (purple) and turn-taking (green) clips.", message=FALSE, warning=FALSE, fig.height=2.5}
 quantity.nonrand.tt$Sample <- "turn taking"
 quantity.rand$Sample <- "random"
 quantity.rand_and_tt.all <- bind_rows(quantity.nonrand.tt, quantity.rand)
@@ -1118,12 +1114,12 @@ The count model of ODS in the randomly selected clips revealed that the presence
 
 Other-directed speech may have been so common because there were an average `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), and (typically) more than half of the speakers were adults. However, these estimates may be comparable to North American infants (6--7 months) living in nuclear family homes [@bergelson2018day], so a high incidence of ODS may be common for infants in many sociocultural contexts.
 
-``` {r fig5, echo=FALSE, fig.cap="Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.", out.width = '100%'}
+``` {r fig6, echo=FALSE, fig.cap="Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.", out.width = '100%'}
 knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration.png")
 ```
 
 ## Target-child-to-other turn transitions (TC--O)
-We detect contingent turn exchanges between the target child and other speakers based on turn timing [Figure 5](#fig5). If a child’s vocalization is followed by a target-child-directed utterance within -`r allowed.overlap`--`r allowed.gap`msec of the end of the child’s vocalization [@hilbrink2015early; @casillas2016turn], it is counted as a contingent response (i.e., a TC--O transition). We use the same idea to find other-to-target-child transitions below (i.e., a target-child-directed utterance followed by a target child vocalization with the same overlap/gap restrictions). Each target child vocalization can only have one prompt and one response and each target-child-directed utterance can maximally count once as a prompt and once as a response (e.g., in a TC--O--TC sequence, the ‘O’ is both a response and a prompt).
+We detect contingent turn exchanges between the target child and other speakers based on turn timing [Figure 6](#fig6). If a child’s vocalization is followed by a target-child-directed utterance within -`r allowed.overlap`--`r allowed.gap`msec of the end of the child’s vocalization [@hilbrink2015early; @casillas2016turn], it is counted as a contingent response (i.e., a TC--O transition). We use the same idea to find other-to-target-child transitions below (i.e., a target-child-directed utterance followed by a target child vocalization with the same overlap/gap restrictions). Each target child vocalization can only have one prompt and one response and each target-child-directed utterance can maximally count once as a prompt and once as a response (e.g., in a TC--O--TC sequence, the ‘O’ is both a response and a prompt).
 
 Gap and overlap restrictions are based on prior studies of infant and young children's turn taking [@hilbrink2015early; @casillas2016turn], though the timing margins are increased slightly for the current dataset because the prior estimates come from relatively short, intense bouts of interaction in WEIRD parental contexts. Note, too, that much prior work has used maximum gaps of similar or greater length to detect verbal contingencies in  caregiver-child interaction; and any work based on LENA^TM conversational blocks is thereby based on a 5-second silence maximum [@vanegeren2001mother; @bornstein2015mother; @broesch2016similarities; @kuchirko2017becoming; @bergelsoncasillas2018what; @romeo2018beyond]; in comparison our timing restrictions are quite stringent.
 
@@ -1684,7 +1680,7 @@ seq.dur.rand_and_tt <- ggplot(turn.sequences.rand_and_tt.byclip,
         axis.line = element_line(color="black", size = 0.4))
 ```
 
-```{r fig6, echo=FALSE, fig.cap="By-child estimates of contingent responses per minute to the target child's vocalizations (left), contingent responses per minute by the target child to others' target-child-directed speech (middle), and the average duration of contingent interactional sequences (right). Each datapoint represents the value for a single clip within the random (purple; solid) or turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=2}
+```{r fig7, echo=FALSE, fig.cap="By-child estimates of contingent responses per minute to the target child's vocalizations (left), contingent responses per minute by the target child to others' target-child-directed speech (middle), and the average duration of contingent interactional sequences (right). Each datapoint represents the value for a single clip within the random (purple; solid) or turn taking (green; dashed) samples. Bands on the solid linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=2}
 grid.arrange(chi.oth.tts.rand_and_tt, oth.chi.tts.rand_and_tt,
              seq.dur.rand_and_tt, nrow=1, ncol=3)
 ```
@@ -1819,7 +1815,7 @@ o_c.tpm.tt.nb.COEF.nsk <-
 The rate at which children respond contingently to others (O--TC turn transitions per minute) was similarly influenced by child age and time of day: older children were less likely than young children to show peak response rates in the morning and evening (B = `r round(o_c.tpm.rand.zinb.COEF.agetime[[1]],2)`, SD = `r round(o_c.tpm.rand.zinb.COEF.agetime[[2]],2)`, z = `r round(o_c.tpm.rand.zinb.COEF.agetime[[3]],2)`, p = `r round(o_c.tpm.rand.zinb.COEF.agetime[[4]],2)`). There were no further significant effects in the count or zero-inflation models.^[This O--TC transition count model did not include by-child intercepts of time of day.]
 
 ## Sequence duration
-Sequences of interaction include periods of contingent turn taking with at least one target child vocalization and one target-child-directed prompt or response from another speaker. We use the same mechanism as before to detect contingent TC--O and O--TC transitions, but also allow for speakers to continue with multiple vocalizations in a row (e.g., TC--O--O--TC--OTH; [Figure 5](#fig5). Sequences are bounded by the earliest and latest vocalization for which there is no contingent prompt/response, respectively. Each target child vocalization can only appear in one sequence, and many sequences have more than one child vocalization. Because sequence durations were not zero-inflated, we modeled them in the random clips with negative binomial regression.
+Sequences of interaction include periods of contingent turn taking with at least one target child vocalization and one target-child-directed prompt or response from another speaker. We use the same mechanism as before to detect contingent TC--O and O--TC transitions, but also allow for speakers to continue with multiple vocalizations in a row (e.g., TC--O--O--TC--OTH; [Figure 7](#fig7). Sequences are bounded by the earliest and latest vocalization for which there is no contingent prompt/response, respectively. Each target child vocalization can only appear in one sequence, and many sequences have more than one child vocalization. Because sequence durations were not zero-inflated, we modeled them in the random clips with negative binomial regression.
 
 ```{r seqdur_models, message=FALSE, warning=FALSE, paged.print=FALSE}
 ## Sequence duration random sample ####
@@ -1894,13 +1890,161 @@ As expected, the turn-taking clips featured a much higher rate of contingent tur
 
 Crucially, children also heard much more TCDS in the turn-taking clips---`r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)` min/hr (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`)---while also hearing less ODS---`r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)` min/hr (median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`).
 
-We modeled each of these five speech environment measures with parallel models to those used above (with no zero-inflation model for TCDS, TC--O, and O--TC rates, given the nature of the sample). The impact of child age, time of day, household size, and number of speakers was qualitatively similar (basic sample comparisons are visualized in [Figure 2](#fig2), [Figure 3](#fig3), and [Figure 5](#fig5)) between the randomly selected clips and these peak periods of interaction with the following exceptions: older children heard significantly less ODS (B = `r round(ods.tt.zinb.COEF.age[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age[[4]],2)`), the presence of more speakers significantly decreased children's response rate to other's vocalizations (B = `r round(o_c.tpm.tt.nb.COEF.nsk[[1]],2)`, SD = `r round(o_c.tpm.tt.nb.COEF.nsk[[2]],2)`, z = `r round(o_c.tpm.tt.nb.COEF.nsk[[3]],2)`, p = `r round(o_c.tpm.tt.nb.COEF.nsk[[4]],2)`), and children's interactional sequences were shorter for older children (B = `r round(seqdur.sec.tt.nb.COEF.age[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.age[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.age[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.age[[4]],2)`), shorter for children in large households (B = `r round(seqdur.sec.tt.nb.COEF.hsz[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.hsz[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.hsz[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.hsz[[4]],2)`), and longer during peak periods in the mornings and afternoons (B = `r round(seqdur.sec.tt.nb.COEF.time[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.time[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.time[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.time[[4]],2)`). Full model outputs can be compared in the Supplementary Materials.
+We modeled each of these five speech environment measures with parallel models to those used above (with no zero-inflation model for TCDS, TC--O, and O--TC rates, given the nature of the sample). The impact of child age, time of day, household size, and number of speakers was qualitatively similar (basic sample comparisons are visualized in [Figure 3](#fig3), [Figure 4](#fig4), and [Figure 6](#fig6)) between the randomly selected clips and these peak periods of interaction with the following exceptions: older children heard significantly less ODS (B = `r round(ods.tt.zinb.COEF.age[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age[[4]],2)`), the presence of more speakers significantly decreased children's response rate to other's vocalizations (B = `r round(o_c.tpm.tt.nb.COEF.nsk[[1]],2)`, SD = `r round(o_c.tpm.tt.nb.COEF.nsk[[2]],2)`, z = `r round(o_c.tpm.tt.nb.COEF.nsk[[3]],2)`, p = `r round(o_c.tpm.tt.nb.COEF.nsk[[4]],2)`), and children's interactional sequences were shorter for older children (B = `r round(seqdur.sec.tt.nb.COEF.age[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.age[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.age[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.age[[4]],2)`), shorter for children in large households (B = `r round(seqdur.sec.tt.nb.COEF.hsz[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.hsz[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.hsz[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.hsz[[4]],2)`), and longer during peak periods in the mornings and afternoons (B = `r round(seqdur.sec.tt.nb.COEF.time[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.time[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.time[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.time[[4]],2)`). Full model outputs can be compared in the Supplementary Materials.
 
 ### Peak minutes in the day
-<!--TBC.-->
+```{r peakmins_prep, message=FALSE, warning=FALSE, paged.print=FALSE}
+# get average overall turn transition rate
+ttrate.all.avg.bychild <- turn.transitions %>%
+  filter(grepl("tt", segment)) %>%
+  replace_na(list(tm1.tier = 0, tp1.tier = 0)) %>%
+  mutate(tm1.bin = ifelse(tm1.tier == 0, 0, 1),
+         tp1.bin = ifelse(tp1.tier == 0, 0, 1)) %>%
+  group_by(aclew_child_id, segment) %>%
+  summarise(oct.raw = sum(tm1.bin), cot.raw = sum(tp1.bin)) %>%
+  mutate(segdur = ifelse(grepl('ext', segment), 5, 1)) %>%
+  group_by(aclew_child_id) %>%
+  summarise (alltts = sum(oct.raw + cot.raw), sampledur = sum(segdur)) %>%
+  mutate(peakttrate = alltts/sampledur)
+ttrate.all.avg <- mean(ttrate.all.avg.bychild$peakttrate)
 
+# set up a table of tt onset times within the randomly sampled segments
+tts.all.rand <- turn.transitions %>%
+  filter(grepl("rand", segment)) %>%
+  select(aclew_child_id, segment, tm1.stop, tp1.start)
+rand.seg.starts <- seg.info %>%
+  filter(grepl("rand", CodeName)) %>%
+  select(aclew_id, CodeName, clipoffset.sec)
+rand.seg.secs <- tibble()
+for (i in 1:nrow(rand.seg.starts)) {
+  seg.secs <- tibble(
+    aclew_child_id = rand.seg.starts$aclew_id[i],
+    segment = rand.seg.starts$CodeName[i],
+    segoffset.sec = c(0:299), # seconds in a (5-min) random clip
+    segtime.sec = seq(rand.seg.starts$clipoffset.sec[i],
+                      (rand.seg.starts$clipoffset.sec[i] + 299), 1),
+    bin.tt = 0
+  )
+  tts.all.rand.chi <- tts.all.rand %>%
+    filter(aclew_child_id == rand.seg.starts$aclew_id[i],
+           segment == rand.seg.starts$CodeName[i])
+  # add in tm1s
+  tts.all.rand.chi.tm1 <- tts.all.rand.chi$tm1.stop[!is.na(tts.all.rand.chi$tm1.stop)]
+  if (length(tts.all.rand.chi.tm1) > 0) {
+    tm1.onsets.sec <- tts.all.rand.chi.tm1/1000
+    # REMINDER: example use of findInterval:
+    # findInterval(c(2,5,7,8), c(4,5,6,8,9,10)) => [1] 0 2 3 4
+    tt.idx <- findInterval(tm1.onsets.sec, seg.secs$segtime.sec)
+    seg.secs$bin.tt[tt.idx] <- seg.secs$bin.tt[tt.idx] + 1
+  }
+  # add in tp1s
+  tts.all.rand.chi.tp1 <- tts.all.rand.chi$tp1.start[!is.na(tts.all.rand.chi$tp1.start)]
+  if (length(tts.all.rand.chi.tp1) > 0) {
+    tp1.onsets.sec <- tts.all.rand.chi.tp1/1000
+    tt.idx <- findInterval(tp1.onsets.sec, seg.secs$segtime.sec)
+    seg.secs$bin.tt[tt.idx] <- seg.secs$bin.tt[tt.idx] + 1
+  }
+  rand.seg.secs <- bind_rows(rand.seg.secs, seg.secs)
+}
 
+# get average tt rates in 1-min windows
+rand.window.tts <- rand.seg.secs %>%
+  filter(segoffset.sec >= 59) %>%
+  select(-bin.tt) %>%
+  mutate(ttr.min = 0)
+for (chi in unique(rand.seg.secs$aclew_child_id)) {
+  for (seg in unique(rand.seg.secs$segment)) {
+    for (minstart in c(1:241)) {
+      rand.window.tts$ttr.min[which(rand.window.tts$aclew_child_id == chi &
+                              rand.window.tts$segment == seg &
+                              rand.window.tts$segoffset.sec == minstart+59-1)] <-
+        sum(subset(rand.seg.secs, aclew_child_id == chi &
+                     segment == seg)$bin.tt[(minstart:(minstart+59))])
+    }
+  }
+}
+rand.window.tts <- rand.window.tts %>%
+  left_join(select(ttrate.all.avg.bychild, c(aclew_child_id, peakttrate))) %>%
+  mutate(GE.chipeak = ifelse(ttr.min >= peakttrate, 1, 0),
+         GE.allpeak = ifelse(ttr.min >= ttrate.all.avg, 1, 0))
+write_csv(rand.window.tts, "ttr.random.1minwindow.csv")
 
+# calculate # seconds in "peak" tt rates and duration of peaks
+ttrGEpeak.segs <- rand.window.tts %>%
+  filter(GE.allpeak == 1)
+ttrGEpeak.segs$prevpeak <- c(-1, ttrGEpeak.segs$segoffset.sec[1:nrow(ttrGEpeak.segs)-1])
+ttrGEpeak.segs$newstreak <- ifelse(ttrGEpeak.segs$prevpeak ==
+                                        (ttrGEpeak.segs$segoffset.sec - 1), 0, 1)
+ttrGEpeak.segs <- select(ttrGEpeak.segs, -prevpeak)
+ttrGEpeaks <- filter(ttrGEpeak.segs, newstreak == 1)
+ttrGEpeaks$end.sec <- 0
+for (i in 1:nrow(ttrGEpeaks)) {
+  chi <- ttrGEpeaks$aclew_child_id[i]
+  seg <- ttrGEpeaks$segment[i]
+  start <- ttrGEpeaks$segoffset.sec[i]
+  start.idx <- which(ttrGEpeak.segs$aclew_child_id == chi &
+                       ttrGEpeak.segs$segment == seg &
+                       ttrGEpeak.segs$segoffset.sec == start)
+  newstreaks <- which(ttrGEpeak.segs$aclew_child_id == chi &
+                        ttrGEpeak.segs$segment == seg &
+                        ttrGEpeak.segs$segoffset.sec > start &
+                        ttrGEpeak.segs$newstreak == 1)
+  if (length(newstreaks) > 0) {
+    end.sec <- ttrGEpeak.segs$segoffset.sec[newstreaks[1] - 1]
+  } else {
+    end.sec <- ttrGEpeak.segs$segoffset.sec[max(
+      which(ttrGEpeak.segs$aclew_child_id == chi &
+              ttrGEpeak.segs$segment == seg &
+              ttrGEpeak.segs$segoffset.sec >= start))]
+  }
+  ttrGEpeaks$end.sec[i] <- end.sec + 1
+}
+ttrGEpeaks <- ttrGEpeaks %>%
+  mutate(start.sec = segoffset.sec - 59,
+         peak.dur = end.sec - start.sec)
+ttrGEpeaks.summary <- ttrGEpeaks %>%
+  group_by(aclew_child_id) %>%
+  summarise(npeaks = n(),
+            pkdur.mean = mean(peak.dur),
+            pkdur.sum = sum(peak.dur),
+            pkdur.mph = ((pkdur.sum/60)/45) * 60) %>% # (peak mins/45 poss mins) * 60 for min/hr
+  # add back zero estimates for children with no tt peaks in the random data
+  full_join(select(ptcp.info, aclew_child_id)) %>%
+  replace_na(list(npeaks = 0, pkdur.mean = 0, pkdur.sum = 0, pkdur.mph = 0))
+
+ttrGEpeak.segs.chi <- rand.window.tts %>%
+  filter(GE.chipeak == 1)
+```
+
+```{r peakmins_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
+rand.window.tts <- rand.window.tts %>%
+  mutate(endoffsetsec = segoffset.sec + 1,
+         delta.allpeak = ttr.min - ttrate.all.avg) %>%
+  left_join(ptcp.info)
+ttr.random <- ggplot(rand.window.tts,
+                          aes(x = as.factor(age_mo_round), y = ttr.min)) +
+  geom_jitter(color = "gray80", size = 0.3) +
+  geom_violin(color = "black", fill = "black") + 
+  ylab("High-tt secs/min") + xlab("Age (months)")	+
+  scale_y_continuous(limits=c(-1, round(max(rand.window.tts$ttr.min) + 5, -1)),
+                     breaks=seq(0, round(max(rand.window.tts$ttr.min) + 5, -1), 10)) +
+  coord_cartesian(ylim=c(0, round(max(rand.window.tts$ttr.min) + 5, -1))) +
+  geom_hline(yintercept = ttrate.all.avg, color = "red") +
+  geom_point(color = "red", size = 2.5, aes(y = peakttrate)) +
+#  scale_color_manual(values = viridis(3)) +
+#  scale_fill_manual(values = viridis(3)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+```
+
+We used these interactional characteristics to find similar "high turn taking" minutes in the random samples in order to extrapolate to the number of high interactivity minutes in the whole day. To do this, we scanned each 60-second window (e.g., 0--60 sec, 1--61 sec, etc.^[60 seconds is the smallest clip sample size in the turn-taking segments]) of each random clip from each child and recorded the observed turn-transition rate. Only `r sum(ttrGEpeaks.summary$npeaks > 0)` of the 10 children showed at least one minute of their random sample that equalled or exceeded the grand average turn-transition rate (`r ttrate.all.avg` transitions per minute), and `r length(unique(ttrGEpeak.segs.chi$aclew_child_id))` of the 10 children showed at least one minute equalling or exceeding their own average turn transition rate from their turn-taking samples, as shown in [Figure 8](#fig8). Across children who did show turn-taking "peaks" in their random data (i.e., at or above rates from the sample-average from the turn-taking segments), periods of "peak" interaction were relatively long, ranging in duration from an average of `r min(ttrGEpeaks.summary$pkdur.mean)` to `r max(ttrGEpeaks.summary$pkdur.mean)` seconds across the 6 children with such peaks.
+
+```{r fig8, echo=FALSE, fig.cap="Turn-transitions rates, estimated over the last 60 seconds for each second of the random samples by child (nine 5-min clips each). The horizontal line indicates the group mean turn-transition rate in the turn-taking sample. The large points indicate the by-child mean turn-transition rate in the turn-taking sample.", message=FALSE, warning=FALSE, fig.height=2}
+ttr.random
+```
+
+Assuming approximately 12 waking hours, we therefore very roughly estimate that these Tseltal children spent an average of `r mean(ttrGEpeaks.summary$pkdur.mph)*12` minutes (`r round((mean(ttrGEpeaks.summary$pkdur.mph)*12)/60,2)` hours) in high turn-taking, dyadic interaction during their recording day. However, the range in the quantity of high turn-taking interaction varies enormously across children, starting at just a few minutes per day and topping out at more than `r max(ttrGEpeaks.summary$pkdur.mph)*12` minutes (`r round((max(ttrGEpeaks.summary$pkdur.mph)*12)/60,2)` hours) in our sample.
 
 # Discussion {#disc}
 <!--
