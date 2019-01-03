@@ -1112,7 +1112,7 @@ knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration.png
 ## Target-child-to-other turn transitions (TC--O)
 We detect contingent turn exchanges between the target child and other speakers based on turn timing [Figure 6](#fig6). If a child’s vocalization is followed by a target-child-directed utterance within -`r allowed.overlap`--`r allowed.gap`msec of the end of the child’s vocalization [@casillas2016turn; @hilbrink2015early], it is counted as a contingent response (i.e., a TC--O transition). We use the same idea to find other-to-target-child transitions below (i.e., a target-child-directed utterance followed by a target child vocalization with the same overlap/gap restrictions). Each target child vocalization can only have one prompt and one response and each target-child-directed utterance can maximally count once as a prompt and once as a response (e.g., in a TC--O--TC sequence, the ‘O’ is both a response and a prompt).
 
-Gap and overlap restrictions are based on prior studies of infant and young children's turn taking [@casillas2016turn; @hilbrink2015early], though the timing margins are increased slightly for the current dataset because the prior estimates come from relatively short, intense bouts of interaction in WEIRD parental contexts. Note, too, that much prior work has used maximum gaps of similar or greater length to detect verbal contingencies in  caregiver-child interaction; and any work based on LENA^TM conversational blocks is thereby based on a 5-second silence maximum [@bergelsoncasillas2018what; @romeo2018beyond; @kuchirko2017becoming; @broesch2016similarities; @bornstein2015mother; @vanegeren2001mother]; in comparison our timing restrictions are quite stringent.
+Gap and overlap restrictions are based on prior studies of infant and young children's turn taking [@casillas2016turn; @hilbrink2015early], though the timing margins are increased slightly for the current dataset because the prior estimates come from relatively short, intense bouts of interaction in WEIRD parental contexts. Note, too, that much prior work has used maximum gaps of similar or greater length to detect verbal contingencies in  caregiver-child interaction; and any work based on LENA^TM conversational blocks is thereby based on a 5-second silence maximum [@bergelsoncasillas2018what; @romeo2018beyond; @kuchirko2017becoming; @broesch2016similarities; @bornstein2015mother; @warlaumont2014social; @vanegeren2001mother]; in comparison our timing restrictions are quite stringent.
 
 ```{r interaction_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # All segment info
@@ -2092,14 +2092,26 @@ voc.mat.by.age <- ggplot(
 
 Is there room for quick vocmat findings here? See [Figure 9](#fig9).
 
+non-speech sounds 0-3 mo, vowel-like sounds ~3 mo, canonical babbling around 7mo, first words around 12mo (Kuhl 2004)
+
+protophones 2-3mo (Warlaumont 2016; Oller 1980)
+
+proportion of speech-like vocalizations increase from ~0.6 to ~0.85 for TD kids (inclusive high and low SES) between 8 and 48 months (Warlaumont et al. 2014).
+
 ```{r fig9, echo=FALSE, fig.cap="Vocal maturity YO.", message=FALSE, warning=FALSE, fig.height=2}
 voc.mat.by.age
 ```
 
-Read and then decide again---coming to this point is definitely anticipated by the intro.
-
 # Discussion {#disc}
 <!--
+
+- Warlaumont 2014: child initiations slightly higher than parent ones in WEIRD kids
+- Warlaumont 2016: reward-modulated neural plasticity model---infants may bootstrap their way to higher vocmat by learning from their own, more salient vocalizations + those produced by the people around them (which, in turn, are increased in frequency by the kids' own productions; linking back to her 2014 paper)
+- while the early presence of non-speech vocalizations appears relatively pre-programmed in humans (i.e., it occurs in the absence of social interaction and in the first few days of life), the use of speech-like productions increases gradually over the first few years and is variable across kids from different SES backgrounds and with different developmental profiles (ASD, hearing impaired), suggesting that it is a learned skill.
+- why vocmat? only way to measure production across this entire age range, in which vocalizations change dramatically
+- comparative value is high, especially early on: we don't expect lg-specific babbles until 7mo and later (though see Mampe et al. on Fr/De crying and prosody)
+
+
 - Discussion
   - Summary of findings
   - When thinking about quantity: Do we care about the avg over the day or do bursts matter more?
