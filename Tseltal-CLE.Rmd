@@ -229,11 +229,29 @@ avg.utt.len.tseltal <- all.data %>%
 ```
 
 ## Data selection and annotation {#methods-samples}
-We annotated video clips from 10 of the 55 children's recordings. We chose these 10 recordings to maximize variance in three demographic variables: child age (0--3;0), child sex, and maternal education. The sample is summarized in *Table 1* *[TASK: Make table]*. We then selected one hour's worth of non-overlapping clips from each recording in the following order: nine randomly selected 5-minute clips, five 1-minute clips manually selected as the top 'turn-taking' minutes of the recording, five 1-minute clips manually selected as the top 'vocal activity' minutes of the recording, and one, manually selected 5-minute extension of the best 1-minute sample (see [Figure 2](#fig2)). We created these different subsamples of each day to measure properties of (a) children's _average_ language environments (random samples) and (b) their _most input-dense_ language environments (turn-taking samples). The third sample (high-activity) gave us insight into children's productive speech abilities, but is discussed elsewhere [@casillasIPtrajectory].
+We annotated video clips from 10 of the 55 children's recordings. We chose these 10 recordings to maximize variance in three demographic variables: child age (0--3;0), child sex, and maternal education. The sample is summarized in [Table 1](#tab1). We then selected one hour's worth of non-overlapping clips from each recording in the following order: nine randomly selected 5-minute clips, five 1-minute clips manually selected as the top 'turn-taking' minutes of the recording, five 1-minute clips manually selected as the top 'vocal activity' minutes of the recording, and one, manually selected 5-minute extension of the best 1-minute sample (see [Figure 2](#fig2)). We created these different subsamples of each day to measure properties of (a) children's _average_ language environments (random samples) and (b) their _most input-dense_ language environments (turn-taking samples). The third sample (high-activity) gave us insight into children's productive speech abilities, but is discussed elsewhere [@casillasIPtrajectory].
+
+```{r demog_table_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+sample.demog <- ptcp.info %>%
+  mutate(mat_age_rd = as.integer(round(mother_age, 0)),
+         fat_age_rd = as.integer(round(father_age, 0)),
+         agev2 = gsub("[[:alpha:]]", "", age),
+         hszrd = as.integer(round(household_size + 1, 0))) %>%
+  select(homebank_child_id, agev2, child_sex, mat_age_rd, mat_ed, hszrd) %>%
+#  select(homebank_child_id, agev2, child_sex, mat_age_rd, mat_ed, fat_age_rd, fat_ed, hszrd) %>%
+  rename("HB ID" = homebank_child_id, "Age" = agev2, "Sex" = child_sex,
+         "Mot age" = mat_age_rd, "Mot edu" = mat_ed,
+#         "Fat age" = father_age, "Fat edu" = fat_ed,
+         "Ppl in house" = hszrd)
+```
+
+```{r tab1, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
+apa_table(sample.demog, caption="Demographic overview of the 10 children whose recordings we sampled.")
+```
 
 The turn-taking and high-activity clips were chosen by two trained annotators (the first author and a student assistant) who listened to each recording in its entirety at 1--2x speed while actively taking notes about potentially useful clips. Afterwards, the first author reviewed the list of candidate clips, listened again to each one (at 1x speed with multiple repetitions), and chose the best five 1-minute samples for each of the two types of activity. Good turn-taking activity was defined as closely timed sequences of contingent vocalization between the target child and at least one other person (i.e., frequent vocalization exchanges). The 'best' turn-taking clips were chosen because they had the most and most clear turn-switching activity between the target child and the other speaker(s). Good vocal activity clips were defined as clips in which the target child produced the most and most diverse spontaneous (i.e., not imitative) vocalizations. The 'best' vocal activity clips were chosen for representing the most linguistically mature and/or diverse vocalizations made by the child over the day. All else being equal, candidate clips were prioritized when they contained less background noise or featured speakers and speech that were not otherwise frequently represented (e.g., CDS from older males). The best turn-taking clips and vocal activity clips often overlapped; turn-taking clips were selected from the list of candidates first, and then vocal-activity clips were chosen from the remainder. Again, these manually selected clips were chosen from audio that did not overlap with the initial "random" clip selection. Therefore the true peak turn-taking and vocal-activity clips for the day could possibly occur during the random clips---the manually selected samples are the best examples from the remaining 8--10 hours of audio. The instructions for manually selecting clips and the notes from our Tseltal clip selection can be found at https://github.com/marisacasillas/Tseltal-CLE/blob/master/audio_scanning_instructions.md.
 
-```{r fig2, echo=FALSE, fig.align = "center", fig.cap="Recording duration (black line) and sampled clips (colored boxes) for each recording analyzed, sorted by child age.", message=FALSE, warning=FALSE, fig.height=2.5}
+```{r fig2, echo=FALSE, fig.cap="Recording duration (black line) and sampled clips (colored boxes) for each recording analyzed, sorted by child age.", message=FALSE, warning=FALSE, fig.height=2.5}
 ptcp.info <- mutate(ptcp.info,
                     rec.start.hr = lubridate::hour(start_of_recording) +
                       lubridate::minute(start_of_recording)/60 +
@@ -855,7 +873,7 @@ grid.arrange(tdsmph.segments.rand_and_tt.zoomedin, odsmph.segments.rand_and_tt, 
 ```
 
 ## Target-child-directed speech (TCDS)
-The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan data [@shneidman2012language], which are plotted with our data, along with estimates from a few other populations in [Figure 4](#fig4) [US/Canada: @bergelsoncasillas2018what; US urban and Yukatek: @shneidman2010language; Mozambique urban and rural, and Dutch: @vogt2015communicative; Tsimane: @scaffIPlanguage; see @scaffIPlanguage for a more detailed comparison].^[We convert the original estimates from @shneidman2010language into min/hr by using the median utterance duration in our dataset for all non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms). Note that, though this conversion is far from perfect, Yukatek and Tseltal are related languages.]. We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
+The Tseltal children in our study were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan data [@shneidman2012language], which are plotted with our data, along with estimates from a few other populations in [Figure 4](#fig4) [US/Canada: @bergelsoncasillas2018what; US urban and Yukatek: @shneidman2010language; Mozambique urban and rural, and Dutch: @vogt2015communicative; Tsimane: @scaffIPlanguage, see Scaff and colleagues -@scaffIPlanguage for a more detailed comparison].^[We convert the original estimates from @shneidman2010language into min/hr by using the median utterance duration in our dataset for all non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms). Note that, though this conversion is far from perfect, Yukatek and Tseltal are related languages.]. We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
 
 ```{r fig4, echo=FALSE, fig.cap="TCDS rate reported from daylong recordings made in different populations, including both urban (gray) and rural/indigenous (black) samples. Each point is the average TCDS rate reported for children at the indicated age, and size indicates number of children sampled (range: 1--26). See text for references to original studies.", message=FALSE, warning=FALSE, fig.height=2.5}
 # Prep comparison data for matching figures
@@ -917,8 +935,6 @@ tdsmph.comparison <- ggplot(comparison.data,
   theme(axis.line = element_line(color="black", size = 0.4))
 tdsmph.comparison
 ```
-
-
 
 ```{r tcds_models, message=FALSE, warning=FALSE, paged.print=FALSE}
 ## TCDS random sample ####
@@ -1105,7 +1121,7 @@ The count model of ODS in the randomly selected clips revealed that the presence
 
 Other-directed speech may have been so common because there were an average `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), and (typically) more than half of the speakers were adults. However, these estimates may be comparable to North American infants (6--7 months) living in nuclear family homes [@bergelson2018day], so a high incidence of ODS may be common for infants in many sociocultural contexts.
 
-``` {r fig6, echo=FALSE, fig.cap="Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.", out.width = '100%'}
+``` {r fig6, echo=FALSE, fig.align = "center", fig.cap="Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.", out.width = '100%'}
 knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration.png")
 ```
 
@@ -2029,7 +2045,7 @@ ttr.random <- ggplot(rand.window.tts,
         axis.line = element_line(color="black", size = 0.4))
 ```
 
-We used these interactional characteristics to find similar "high turn taking" minutes in the random samples in order to extrapolate to the number of high interactivity minutes in the whole day. To do this, we scanned each 60-second window (e.g., 0--60 sec, 1--61 sec, etc.^[60 seconds is the smallest clip sample size in the turn-taking segments]) of each random clip from each child and recorded the observed turn-transition rate. Only `r sum(ttrGEpeaks.summary$npeaks > 0)` of the 10 children showed at least one minute of their random sample that equalled or exceeded the grand average turn-transition rate (`r ttrate.all.avg` transitions per minute), and `r length(unique(ttrGEpeak.segs.chi$aclew_child_id))` of the 10 children showed at least one minute equalling or exceeding their own average turn transition rate from their turn-taking samples, as shown in [Figure 8](#fig8). Across children who did show turn-taking "peaks" in their random data (i.e., at or above rates from the sample-average from the turn-taking segments), periods of "peak" interaction were relatively long, ranging in duration from an average of `r min(ttrGEpeaks.summary$pkdur.mean)` to `r max(ttrGEpeaks.summary$pkdur.mean)` seconds across the 6 children with such peaks.
+Now knowing the interactional characteristics of the "high" turn-taking clips, we looked for similarly interactive 1-minute sections in the random samples in order to estimate the number of high interactivity minutes in the whole day. To do this, we scanned each 60-second window (e.g., 0--60 sec, 1--61 sec, etc.^[60 seconds is the smallest clip sample size in the turn-taking segments]) of each random clip from each child and recorded the observed turn-transition rate. Only `r sum(ttrGEpeaks.summary$npeaks > 0)` of the 10 children showed at least one minute of their random sample that equalled or exceeded the grand average turn-transition rate (`r ttrate.all.avg` transitions per minute), and `r length(unique(ttrGEpeak.segs.chi$aclew_child_id))` of the 10 children showed at least one minute equalling or exceeding their own average turn transition rate from their turn-taking samples, as shown in [Figure 8](#fig8). Across children who did show turn-taking "peaks" in their random data (i.e., at or above rates from the sample-average from the turn-taking segments), periods of "peak" interaction were relatively long, ranging in duration from an average of `r min(ttrGEpeaks.summary$pkdur.mean)` to `r max(ttrGEpeaks.summary$pkdur.mean)` seconds across the 6 children with such peaks.
 
 ```{r fig8, echo=FALSE, fig.cap="Turn-transitions rates, estimated over the last 60 seconds for each second of the random samples by child (nine 5-min clips each). The horizontal line indicates the group mean turn-transition rate in the turn-taking sample. The large points indicate the by-child mean turn-transition rate in the turn-taking sample.", message=FALSE, warning=FALSE, fig.height=2}
 ttr.random
@@ -2040,8 +2056,9 @@ Assuming approximately 12 waking hours, we therefore very roughly estimate that 
 
 ## Vocal maturity
 ``` {r vocmat_prep, message=FALSE, warning=FALSE, paged.print=FALSE}
+# all vocalization types
 chi.vm.lx.utts <- all.data %>%
-  filter((tier == "vcm@CHI" | tier == "lex@CHI" | tier == "mwu@CHI")) %>%
+  filter((tier == "vcm@CHI" | tier == "lex@CHI" | tier == "mwu@CHI") & !is.na(val)) %>%
   mutate(voc.rating = ifelse(val == "M", 4,
                              ifelse((val == "1" | val == "W"), 3,
                                     ifelse((val == "0" | val == "C"), 2,
@@ -2066,6 +2083,32 @@ chi.vm.lx.voc.type.props <- chi.vm.lx.utts %>%
   mutate(prop_voc.type = round(n_voc.type/n_vocs, 3)) %>%
   arrange(aclew_child_id, max_voc.rtg) %>%
   full_join(ptcp.info, by = "aclew_child_id")
+
+# speech-like vs. non-speech-like only, only under 19mo
+chi.vm.lx.utts.all <- all.data %>%
+  filter((tier == "vcm@CHI" | tier == "lex@CHI" | tier == "mwu@CHI") & !is.na(val) & age_mo_round < 19) %>%
+  mutate(voc.rating = ifelse(val == "M", 1,
+                             ifelse((val == "1" | val == "W"), 1,
+                                    ifelse((val == "0" | val == "C"), 1, 0)))) %>%
+  group_by(aclew_child_id, segment, sample, start) %>%
+  summarise(max_voc.rtg = max(voc.rating))
+all.voc.types.per.child.all <- tibble(
+  aclew_child_id = rep(ptcp.info$aclew_child_id, 2),
+  max_voc.rtg = c(rep(0, length(ptcp.info$aclew_child_id)),
+                  rep(1, length(ptcp.info$aclew_child_id)))
+)
+chi.nvocs.all <- chi.vm.lx.utts.all %>%
+  group_by(aclew_child_id) %>%
+  summarise(n_vocs = n())
+chi.vm.lx.voc.type.props.bin <- chi.vm.lx.utts.all %>%
+  group_by(aclew_child_id, max_voc.rtg) %>%
+  summarise(n_voc.type = n()) %>%
+  left_join(all.voc.types.per.child.all, by = c("aclew_child_id", "max_voc.rtg")) %>%
+  replace_na(list(n_voc.type = 0)) %>%
+  left_join(chi.nvocs.all, by = "aclew_child_id") %>%
+  mutate(prop_voc.type = round(n_voc.type/n_vocs, 3)) %>%
+  arrange(aclew_child_id, max_voc.rtg) %>%
+  left_join(ptcp.info, by = "aclew_child_id")
 ```
 
 ``` {r vocmat_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -2090,17 +2133,13 @@ voc.mat.by.age <- ggplot(
     axis.line = element_line(color="black", size = 0.4))
 ```
 
-Is there room for quick vocmat findings here? See [Figure 9](#fig9).
+Children's vocalizations appear to follow the normative benchmarks for productive speech development, as typically characterized by the _onset_ of new production features. Decades of research in WEIRD populations has shown that, typically, children begin producing non-canonical babbles around 0;2, with canonical babbling appearing around 0;7, first words around 1;0 [@warlaumont2016learning; @warlaumont2014social; @kuhl2004early; @oller1980emergence], and first multi-word utterances just after 1;6 [@frankIPvariability; @tomasello1999early; @pine1993reanalysing; @braine1976childrens]. These benchmarks are mirrored in the Tseltal data (see [Figure 9](#fig9)), which includes all annotated vocalizations from the random, turn-taking, and high vocal activity samples (N = `r sum(chi.nvocs$n_vocs)`): there is a decline in the use of non-canonical babble and an accompanying increase in the use of canonical babble from 0;6 to 1;0. Recognizable words are also observed for every child from age 11;0 and older. Multi-word utterances already appear with the child at 1;2 and make up ~10--15% of children's utterances through the child at 2;3. The oldest two children use multi-word utterances in 33% and 45% of their vocalizations respectively.
 
-non-speech sounds 0-3 mo, vowel-like sounds ~3 mo, canonical babbling around 7mo, first words around 12mo (Kuhl 2004)
-
-protophones 2-3mo (Warlaumont 2016; Oller 1980)
-
-proportion of speech-like vocalizations increase from ~0.6 to ~0.85 for TD kids (inclusive high and low SES) between 8 and 48 months (Warlaumont et al. 2014).
-
-```{r fig9, echo=FALSE, fig.cap="Vocal maturity YO.", message=FALSE, warning=FALSE, fig.height=2}
+```{r fig9, echo=FALSE, fig.cap="Proportion of vocalization types used by children across age (NCB = Non-canonical babble, CB = Canonical babble, SW = single word utterance, MW = multi-word utterance).", message=FALSE, warning=FALSE, fig.height=3.5}
 voc.mat.by.age
 ```
+
+These data are also consistent with usage statistics of speech-like vocalizations by WEIRD infants [@warlaumont2016learning; @warlaumont2014social; @oller1980emergence]. In their -@warlaumont2014social study, Warlaumont and colleagues found that the proportion of speech-like vocalizations (speech, non-word babble, and singing) was ~0.6 around age one in their <!--~0.85 at age four-->SES-variable dataset of 106 children. We estimated the number of speech-like (canonical babbling and lexical speech) and non-speech-like (cries, laughter, and non-canonical babbles) vocalizations from Tseltal children 14 months and younger^[We cannot compare speech-like vs. non-speech-like vocalizations after 1;6 due to a limitation of the ACLEW Annotation Scheme [@casillas2017ACLEWDAS].] across the random, turn-taking, and high vocal activity samples (N = `r sum(chi.nvocs.all$n_vocs)` from `r length(unique(chi.nvocs.all$aclew_child_id))` children). Between 2 and 14 months, Tseltal children demonstrated a large increase in the proportion of speech-like vocalizations (canonical babbling and lexical speech): from `r round(mean(subset(chi.vm.lx.voc.type.props.bin, max_voc.rtg == 1 & age_mo_round < 6)$prop_voc.type*100,2))`% before 0;6 to `r round(mean(subset(chi.vm.lx.voc.type.props.bin, max_voc.rtg == 1 & age_mo_round > 10)$prop_voc.type*100,2))`% between 0;10 and 1;2. Around age 1;0, their use of speech-like vocalizations (`r round(mean(subset(chi.vm.lx.voc.type.props.bin, max_voc.rtg == 1 & age_mo_round > 10)$prop_voc.type*100,2))`%) is nearly identical to that estimated by @warlaumont2014social for American children (~60%).
 
 # Discussion {#disc}
 <!--
@@ -2110,6 +2149,10 @@ voc.mat.by.age
 - while the early presence of non-speech vocalizations appears relatively pre-programmed in humans (i.e., it occurs in the absence of social interaction and in the first few days of life), the use of speech-like productions increases gradually over the first few years and is variable across kids from different SES backgrounds and with different developmental profiles (ASD, hearing impaired), suggesting that it is a learned skill.
 - why vocmat? only way to measure production across this entire age range, in which vocalizations change dramatically
 - comparative value is high, especially early on: we don't expect lg-specific babbles until 7mo and later (though see Mampe et al. on Fr/De crying and prosody)
+- The onset of two-word utterances between 18-24 months has been found to be consistent before: @slobin1970universals
+
+Work on children acquiring Tseltal in this same community has previously suggested somewhat later early vocal development. The in-depth study of two Tseltal children's early language production during longitudinal, short-format, at-home recordings showed that their first intelligible words emerged around 1;6 and their first verbs with an argument (one type of multi-word utterance) appeared at ages 1;10 and 2;1, repsectively [@brown1998childrens; @brown1998early; @brown1997isolating]. That said, low-frequency events, such as first words and first multi-word sequences, are less likely to be captured during short-format naturalistic recordings than they are during daylong recordings. Particularly considering that we include utterances manually selected as the child's most mature vocal activity over the entire day, it is unsurprising that children in the current analysis look slightly more precocious than those studied previously.
+
 
 
 - Discussion

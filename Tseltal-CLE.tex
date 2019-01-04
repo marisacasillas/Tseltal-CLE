@@ -506,10 +506,10 @@ audio from the child's recording.\footnote{Documentation and scripts for
 We annotated video clips from 10 of the 55 children's recordings. We
 chose these 10 recordings to maximize variance in three demographic
 variables: child age (0--3;0), child sex, and maternal education. The
-sample is summarized in \emph{Table 1} \emph{{[}TASK: Make table{]}}. We
-then selected one hour's worth of non-overlapping clips from each
-recording in the following order: nine randomly selected 5-minute clips,
-five 1-minute clips manually selected as the top \enquote{turn-taking}
+sample is summarized in \protect\hyperlink{tab1}{Table 1}. We then
+selected one hour's worth of non-overlapping clips from each recording
+in the following order: nine randomly selected 5-minute clips, five
+1-minute clips manually selected as the top \enquote{turn-taking}
 minutes of the recording, five 1-minute clips manually selected as the
 top \enquote{vocal activity} minutes of the recording, and one, manually
 selected 5-minute extension of the best 1-minute sample (see
@@ -519,6 +519,30 @@ subsamples of each day to measure properties of (a) children's
 \emph{most input-dense} language environments (turn-taking samples). The
 third sample (high-activity) gave us insight into children's productive
 speech abilities, but is discussed elsewhere (Casillas, in progress).
+
+\begin{table}[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:tab1}Demographic overview of the 10 children whose recordings we sampled.}
+\begin{tabular}{llllll}
+\toprule
+HB ID & \multicolumn{1}{c}{Age} & \multicolumn{1}{c}{Sex} & \multicolumn{1}{c}{Mot age} & \multicolumn{1}{c}{Mot edu} & \multicolumn{1}{c}{Ppl in house}\\
+\midrule
+CM50 & 01;25 & M & 26 & none & 8\\
+CM07 & 03;18 & M & 22 & preparatory & 9\\
+CM11 & 05;29 & F & 17 & secondary & 15\\
+CM23 & 07;15 & F & 24 & primary & 9\\
+CM38 & 10;21 & M & 24 & secondary & 5\\
+CM04 & 14;10 & M & 21 & none & 9\\
+CM17 & 22;03 & F & 31 & preparatory & 9\\
+CM25 & 26;25 & F & 17 & primary & 5\\
+CM47 & 32;05 & F & 28 & secondary & 5\\
+CM55 & 36;02 & M & 28 & primary & 6\\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{center}
+\end{table}
 
 The turn-taking and high-activity clips were chosen by two trained
 annotators (the first author and a student assistant) who listened to
@@ -552,12 +576,10 @@ our Tseltal clip selection can be found at
 \url{https://github.com/marisacasillas/Tseltal-CLE/blob/master/audio_scanning_instructions.md}.
 
 \begin{figure}
-
-{\centering \includegraphics{Tseltal-CLE_files/figure-latex/fig2-1} 
-
-}
-
-\caption{Recording duration (black line) and sampled clips (colored boxes) for each recording analyzed, sorted by child age.}\label{fig:fig2}
+\centering
+\includegraphics{Tseltal-CLE_files/figure-latex/fig2-1.pdf}
+\caption{\label{fig:fig2}Recording duration (black line) and sampled clips
+(colored boxes) for each recording analyzed, sorted by child age.}
 \end{figure}
 
 The first author and a native speaker of Tseltal jointly transcribed and
@@ -603,28 +625,28 @@ entire day and an outline of the trajectory for early vocal maturity.
 
 Unless otherwise stated, all analyses were conducted with generalized
 linear mixed-effects regressions using the glmmTMB package and all plots
-are generate with ggplot2 in R (Brooks et al., 2017a; R Core Team, 2018;
-Wickham, 2009).\footnote{The data and analysis code are freely available
-  on the web ({[}retracted for review{]}), as is a summary of the
-  results which will be updated as more transcriptions become available
-  ({[}retracted for review{]}).} Notably, all five speech environment
-measures are restricted to non-negative values (min/hr, turn
+are generate with ggplot2 in R (M. E. Brooks et al., 2017a; R Core Team,
+2018; Wickham, 2009).\footnote{The data and analysis code are freely
+  available on the web ({[}retracted for review{]}), as is a summary of
+  the results which will be updated as more transcriptions become
+  available ({[}retracted for review{]}).} Notably, all five speech
+environment measures are restricted to non-negative values (min/hr, turn
 transitions/min, and duration in seconds), with a subset of them also
 displaying extra cases of zero in the randomly sampled clips (min/hr,
 turn transitions/min; e.g., when the child is napping). The consequence
 of these boundary restrictions is that the variance of the distributions
 becomes non-gaussian (i.e., a long right tail). We account for this
 issue by using negative binomial regression, whish is useful for
-overdispersed count data (Brooks et al., 2017b; Smithson \& Merkle,
-2013). When extra cases of zero are present due to, e.g., no speakers
-being present, we used a zero-inflation negative binomial regression,
-which creates two models: (a) a binary model to evaluate the likelihood
-of none vs.~some presence of the variable (e.g., TCDS) and (b) a count
-model of the variable (e.g., \enquote{3} vs. \enquote{5} TCDS min/hr),
-using the negative binomial distribution as the linking function.
-Alternative analyses using gaussian models with logged dependent
-variables are available in the Supplementary Materials, but are
-qualitatively similar to the results we report here.
+overdispersed count data (M. E. Brooks et al., 2017b; Smithson \&
+Merkle, 2013). When extra cases of zero are present due to, e.g., no
+speakers being present, we used a zero-inflation negative binomial
+regression, which creates two models: (a) a binary model to evaluate the
+likelihood of none vs.~some presence of the variable (e.g., TCDS) and
+(b) a count model of the variable (e.g., \enquote{3} vs. \enquote{5}
+TCDS min/hr), using the negative binomial distribution as the linking
+function. Alternative analyses using gaussian models with logged
+dependent variables are available in the Supplementary Materials, but
+are qualitatively similar to the results we report here.
 
 Our primary predictors were as follows: child age (months), household
 size (number of people), and number of non-target-child speakers present
@@ -662,15 +684,15 @@ close to those reported for Yucatec Mayan data (Shneidman \&
 Goldin-Meadow, 2012), which are plotted with our data, along with
 estimates from a few other populations in
 \protect\hyperlink{fig4}{Figure 4} (US/Canada: Bergelson et al., 2018b;
-Tsimane: Scaff et al., in preparation, see {\textbf{???}} for a more
-detailed comparison; US urban and Yukatek: Shneidman, 2010; Mozambique
-urban and rural, and Dutch: Vogt et al., 2015).\footnote{We convert the
-  original estimates from Shneidman (2010) into min/hr by using the
-  median utterance duration in our dataset for all non-target child
-  speakers: (1029ms). Note that, though this conversion is far from
-  perfect, Yukatek and Tseltal are related languages.}. We modeled TCDS
-min/hr in the random clips with a zero-inflated negative binomial
-regression, as described above.
+Tsimane: Scaff et al., in preparation, see Scaff and colleagues Scaff et
+al. (in preparation) for a more detailed comparison; US urban and
+Yukatek: Shneidman, 2010; Mozambique urban and rural, and Dutch: Vogt et
+al., 2015).\footnote{We convert the original estimates from Shneidman
+  (2010) into min/hr by using the median utterance duration in our
+  dataset for all non-target child speakers: (1029ms). Note that, though
+  this conversion is far from perfect, Yukatek and Tseltal are related
+  languages.}. We modeled TCDS min/hr in the random clips with a
+zero-inflated negative binomial regression, as described above.
 
 \begin{figure}
 \centering
@@ -738,7 +760,12 @@ family homes (Bergelson et al., 2018a), so a high incidence of ODS may
 be common for infants in many sociocultural contexts.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration} \caption{Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.}\label{fig:fig6}
+
+{\centering \includegraphics[width=1\linewidth]{Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration} 
+
+}
+
+\caption{Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.}\label{fig:fig6}
 \end{figure}
 
 \subsection{Target-child-to-other turn transitions
@@ -769,8 +796,9 @@ on LENA\^{}TM conversational blocks is thereby based on a 5-second
 silence maximum (Bergelson et al., 2018b; M. H. Bornstein, Putnick,
 Cote, Haynes, \& Suwalsky, 2015; Broesch, Rochat, Olah, Broesch, \&
 Henrich, 2016; Egeren, Barratt, \& Roach, 2001; Y. Kuchirko, Tafuro, \&
-Tamis-LeMonda, 2018; Romeo et al., 2018); in comparison our timing
-restrictions are quite stringent.
+Tamis-LeMonda, 2018; Romeo et al., 2018; Warlaumont, Richards,
+Gilkerson, \& Oller, 2016); in comparison our timing restrictions are
+quite stringent.
 
 \begin{figure}
 \centering
@@ -874,23 +902,24 @@ can be compared in the Supplementary Materials.
 
 \subsubsection{Peak minutes in the day}\label{peak-minutes-in-the-day}
 
-We used these interactional characteristics to find similar
-\enquote{high turn taking} minutes in the random samples in order to
-extrapolate to the number of high interactivity minutes in the whole
-day. To do this, we scanned each 60-second window (e.g., 0--60 sec,
-1--61 sec, etc.\footnote{60 seconds is the smallest clip sample size in
-  the turn-taking segments}) of each random clip from each child and
-recorded the observed turn-transition rate. Only 6 of the 10 children
-showed at least one minute of their random sample that equalled or
-exceeded the grand average turn-transition rate (12.89 transitions per
-minute), and 7 of the 10 children showed at least one minute equalling
-or exceeding their own average turn transition rate from their
-turn-taking samples, as shown in \protect\hyperlink{fig8}{Figure 8}.
-Across children who did show turn-taking \enquote{peaks} in their random
-data (i.e., at or above rates from the sample-average from the
-turn-taking segments), periods of \enquote{peak} interaction were
-relatively long, ranging in duration from an average of 0 to 103 seconds
-across the 6 children with such peaks.
+Now knowing the interactional characteristics of the \enquote{high}
+turn-taking clips, we looked for similarly interactive 1-minute sections
+in the random samples in order to estimate the number of high
+interactivity minutes in the whole day. To do this, we scanned each
+60-second window (e.g., 0--60 sec, 1--61 sec, etc.\footnote{60 seconds
+  is the smallest clip sample size in the turn-taking segments}) of each
+random clip from each child and recorded the observed turn-transition
+rate. Only 6 of the 10 children showed at least one minute of their
+random sample that equalled or exceeded the grand average
+turn-transition rate (12.89 transitions per minute), and 7 of the 10
+children showed at least one minute equalling or exceeding their own
+average turn transition rate from their turn-taking samples, as shown in
+\protect\hyperlink{fig8}{Figure 8}. Across children who did show
+turn-taking \enquote{peaks} in their random data (i.e., at or above
+rates from the sample-average from the turn-taking segments), periods of
+\enquote{peak} interaction were relatively long, ranging in duration
+from an average of 0 to 103 seconds across the 6 children with such
+peaks.
 
 \begin{figure}
 \centering
@@ -912,17 +941,52 @@ our sample.
 
 \subsection{Vocal maturity}\label{vocal-maturity}
 
-Is there room for quick vocmat findings here? See
-\protect\hyperlink{fig9}{Figure 9}.
+Children's vocalizations appear to follow the normative benchmarks for
+productive speech development, as typically characterized by the
+\emph{onset} of new production features. Decades of research in WEIRD
+populations has shown that, typically, children begin producing
+non-canonical babbles around 0;2, with canonical babbling appearing
+around 0;7, first words around 1;0 (P. K. Kuhl, 2004; Oller, 1980;
+Warlaumont \& Finnegan, 2016; Warlaumont et al., 2016), and first
+multi-word utterances just after 1;6 (Braine \& Bowerman, 1976; Fine \&
+Lieven, 1993; Frank et al., in preparation; Tomasello \& Brooks, 1999).
+These benchmarks are mirrored in the Tseltal data (see
+\protect\hyperlink{fig9}{Figure 9}), which includes all annotated
+vocalizations from the random, turn-taking, and high vocal activity
+samples (N = 4725): there is a decline in the use of non-canonical
+babble and an accompanying increase in the use of canonical babble from
+0;6 to 1;0. Recognizable words are also observed for every child from
+age 11;0 and older. Multi-word utterances already appear with the child
+at 1;2 and make up \textasciitilde{}10--15\% of children's utterances
+through the child at 2;3. The oldest two children use multi-word
+utterances in 33\% and 45\% of their vocalizations respectively.
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig9-1.pdf}
-\caption{\label{fig:fig9}Vocal maturity YO.}
+\caption{\label{fig:fig9}Proportion of vocalization types used by children
+across age (NB = Non-canonical babble, CB = Canonical babble, SW =
+single word utterance, MW = multi-word utterance).}
 \end{figure}
 
-Read and then decide again---coming to this point is definitely
-anticipated by the intro.
+These data are also consistent with usage statistics of speech-like
+vocalizations by WEIRD infants (Oller, 1980; Warlaumont \& Finnegan,
+2016; Warlaumont et al., 2016). In their Warlaumont et al. (2016) study,
+Warlaumont and colleagues found that the proportion of speech-like
+vocalizations (speech, non-word babble, and singing) was
+\textasciitilde{}0.6 around age one in their SES-variable dataset of 106
+children. We estimated the number of speech-like (canonical babbling and
+lexical speech) and non-speech-like (cries, laughter, and non-canonical
+babbles) vocalizations from Tseltal children 14 months and
+younger\footnote{We cannot compare speech-like vs.~non-speech-like
+  vocalizations after 1;6 due to a limitation in the ACLEW Annotation
+  Scheme (Casillas et al., 2017).} across the random, turn-taking, and
+high vocal activity samples (N = 3020 from 6 children). Between 2 and 14
+months, Tseltal children demonstrated a large increase in the proportion
+of speech-like vocalizations (canonical babbling and lexical speech):
+from 9\% before 0;6 to 58\% between 0;10 and 1;2. Around age 1;0, their
+use of speech-like vocalizations is comparable to that found by
+Warlaumont et al. (2016) with American children.
 
 \section{Discussion}\label{disc}
 
@@ -1005,6 +1069,11 @@ language learners: Lexical spikes.
 Bornstein, M. H., Putnick, D. L., Cote, L. R., Haynes, O. M., \&
 Suwalsky, J. T. D. (2015). Mother-infant contingent vocalizations in 11
 countries. \emph{Psychological Science}, \emph{26}(8), 1272--1284.
+
+\hypertarget{ref-braine1976childrens}{}
+Braine, M. D. S., \& Bowerman, M. (1976). Children's first word
+combinations. \emph{Monographs of the Society for Research in Child
+Development}, 1--104.
 
 \hypertarget{ref-brinchmann2019direct}{}
 Brinchmann, E. I., Braeken, J., \& Lyster, S.-A. H. (2019). Is there a
@@ -1142,6 +1211,11 @@ Estigarribia, B., \& Clark, E. V. (2007). Getting and maintaining
 attention in talk to young children. \emph{Journal of Child Language},
 \emph{34}(4), 799--814.
 
+\hypertarget{ref-pine1993reanalysing}{}
+Fine, J. M., \& Lieven, E. V. M. (1993). Reanalysing rote-learned
+phrases: Individual differences in the transition to multi-word speech.
+\emph{Journal of Child Language}, 551--571.
+
 \hypertarget{ref-fortierURadhoc}{}
 Fortier, M. E., Kellier, D., Fernández Flecha, M., \& Frank, M. C.
 (under review). Ad-hoc pragmatic implicatures among Shipibo-Konibo
@@ -1262,6 +1336,10 @@ Kuchirko, Y., Tafuro, L., \& Tamis-LeMonda, C. S. (2018). Becoming a
 communicative partner: Infant contingent responsiveness to maternal
 language and gestures. \emph{Infancy}, \emph{23}(4), 558--576.
 
+\hypertarget{ref-kuhl2004early}{}
+Kuhl, P. K. (2004). Early language acquisition: Cracking the speech
+code. \emph{Nature Reviews Neuroscience}, \emph{5}(11), 831.
+
 \hypertarget{ref-deleon1998emergent}{}
 León, L. de. (1998). The emergent participant: Interactive patterns in
 the socialization of Tzotzil (Mayan) infants. \emph{Journal of
@@ -1326,6 +1404,12 @@ Cambridge University Press.
 Nielsen, M., Haun, D., Kärtner, J., \& Legare, C. H. (2017). The
 persistent sampling bias in developmental psychology: A call to action.
 \emph{Journal of Experimental Child Psychology}, \emph{162}, 31--38.
+
+\hypertarget{ref-oller1980emergence}{}
+Oller, D. K. (1980). The emergence of the sounds of speech in infancy.
+In G. H. Yeni-Komshian, J. F. Kavanagh, \& C. A. Ferguson (Eds.),
+\emph{Child phonology, volume 1: Production} (pp. 93--112). New York,
+NY: Academic Press.
 
 \hypertarget{ref-peterIPindividual}{}
 Peter, M., Durrant, S., Bidgood, A., Pine, J., \& Rowland, C. (in
@@ -1438,6 +1522,11 @@ naturalistic contexts. \emph{Developmental Science}, \emph{20}(6),
 XX--XX.
 doi:\href{https://doi.org/doi.org/10.1111/desc.12456}{doi.org/10.1111/desc.12456}
 
+\hypertarget{ref-tomasello1999early}{}
+Tomasello, M., \& Brooks, P. J. (1999). Early syntactic development: A
+construction grammar approach. In M. Barrett (Ed.), \emph{The
+development of language} (pp. 161--190). London, UK: Psychology Press.
+
 \hypertarget{ref-HomeBank}{}
 VanDam, M., Warlaumont, A. S., Bergelson, E., Cristia, A., De Palma, P.,
 \& MacWhinney, B. (2016). HomeBank: An online repository of daylong
@@ -1448,6 +1537,16 @@ Vogt, P., Mastin, J. D., \& Schots, D. M. A. (2015). Communicative
 intentions of child-directed speech in three different learning
 environments: Observations from the netherlands, and rural and urban
 mozambique. \emph{First Language}, \emph{35}(4-5), 341--358.
+
+\hypertarget{ref-warlaumont2016learning}{}
+Warlaumont, A. S., \& Finnegan, M. K. (2016). Learning to produce
+syllabic speech sounds via reward-modulated neural plasticity.
+\emph{PloS One}, \emph{11}(1), e0145096.
+
+\hypertarget{ref-warlaumont2014social}{}
+Warlaumont, A. S., Richards, J. A., Gilkerson, J., \& Oller, D. K.
+(2016). A social feedback loop for speech development and its reduction
+in Autism. \emph{PloS One}, \emph{11}(1), e0145096.
 
 \hypertarget{ref-wasow1997remarks}{}
 Wasow, T. (1997). Remarks on grammatical weight. \emph{Language
