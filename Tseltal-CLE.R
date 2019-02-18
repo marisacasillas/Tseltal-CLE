@@ -738,7 +738,7 @@ quantity.sa.rand_and_tt <- bind_rows(quantity.nonrand.sa.tt.minimum, quantity.ra
 # ODS min/hr
 odsmph.segments.rand_and_tt.1 <- ggplot(quantity.rand,
                           aes(x = age_mo_round, y = ods_mph)) +
-  geom_boxplot(aes(group = age_mo_round), fill = "gray80", color = "white",
+  geom_boxplot(aes(group = age_mo_round), fill = "gray50", color = "white",
                outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "white", color = "white", method = "lm") +
@@ -798,7 +798,7 @@ dev.off()
 # TDS min/hr - zoomed in
 tdsmph.segments.rand_and_tt.zoomedin.1 <- ggplot(quantity.rand,
                           aes(x = age_mo_round, y = tds_mph)) +
-  geom_boxplot(aes(group = age_mo_round), fill = "gray80", color = "white",
+  geom_boxplot(aes(group = age_mo_round), fill = "gray50", color = "white",
                outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "white", color = "white", method = "lm") +
@@ -1441,7 +1441,7 @@ cvc.ovc.per.seg.ttnonas.bychild <- cvc.ovc.per.seg.ttnonas %>%
 # CHI-OTH transitions per minute
 chi.oth.tts.rand_and_tt.1 <- ggplot(turn.transitions.rand,
                           aes(x = age_mo_round, y = n.c_o.tpm)) +
-  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray80", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray50", outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "white", color = "white", method = "lm") +
   ylab("CHI-OTH tts/min") + xlab("")	+
@@ -1502,7 +1502,7 @@ dev.off()
 # OTH-CHI transitions per minute
 oth.chi.tts.rand_and_tt.1 <- ggplot(turn.transitions.rand,
                           aes(x = age_mo_round, y = n.o_c.tpm)) +
-  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray80", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray50", outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "white", color = "white", method = "lm") +
   ylab("OTH-CHI tts/min") + xlab("Child age (mo)")	+
@@ -1571,7 +1571,7 @@ turn.sequences.rand_and_tt.byclip <- turn.sequences.rand_and_tt %>%
 
 seq.dur.rand_and_tt.1 <- ggplot(subset(turn.sequences.rand_and_tt.byclip, sample == "random"),
                           aes(x = age_mo_round, y = m.seqdur.sec)) +
-  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray80", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray50", outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "white", color = "white", method = "lm") +
   ylab("Seq. dur. (sec)") + xlab("")	+

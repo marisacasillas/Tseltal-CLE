@@ -89,7 +89,7 @@ Finally, prior work has typically focused on Western (primarily North American) 
 ## Language development in non-WEIRD communities {#intro-nonweird}
 A growing number of researchers are using methods from developmental psycholinguistics to describe the language environments and linguistic development of children growing up in traditional and/or non-Western communities [see also @ganek2018using; @garcia2018thematic; @hernik2018infant; @barrett2013early; @demuth2010three; @fortierURadhoc]. We briefly highlight two recent efforts along these lines, but see Cristia and colleagues' [-@cristia2017child] and Mastin and Vogt's work [-@mastin2016infant; -@vogt2015communicative] for similar examples.
 
-Scaff, Cristia, and colleagues [-@cristia2017child; -@scaffIPlanguage] have used a number of methods to estimate how much speech children hear in a Tsimane forager-horticulturalist population in the Bolivian lowlands. From daylong audio recordings, they estimate that Tsimane children between 0;6 and 6;0 hear maximally ~5 minutes of directly addressed speech per hour, regardless of their age. For comparison, children from North American homes between ages 0;3 and 3;0 are estimated to hear ~11 minutes of CDS per hour in daylong recordings [@bergelsoncasillas2018what]. Tsimane children also hear ~10 minutes of other-directed speech per hour (e.g., talk between adults) compared to the ~7 minutes per hour heard by young North American children [@bergelsoncasillas2018what]. This difference may be attributable to the fact that the Tsimane live in extended family clusters of 3--4 households, so speakers are typically in close proximity to 5--8 other people [@cristia2017child].
+Scaff, Cristia, and colleagues [-@cristia2017child; -@scaffIPlanguage] have used a number of methods to estimate how much speech children hear in a Tsimane forager-horticulturalist population in the Bolivian lowlands. From daylong audio recordings, they estimate that Tsimane children between 0;6 and 6;0 hear maximally ~4.8 minutes of directly addressed speech per hour, regardless of their age [@scaffIPlanguage; @cristia2017child]. For comparison, children from North American homes between ages 0;3 and 3;0 are estimated to hear ~11 minutes of CDS per hour in daylong recordings [@bergelsoncasillas2018what]. <!--Tsimane children also hear ~4.12 minutes of other-directed speech per hour (e.g., talk between adults) compared to the ~7 minutes per hour heard by young North American children [@bergelsoncasillas2018what]. This difference may be attributable to the fact that the Tsimane live in extended family clusters of 3--4 households, so speakers are typically in close proximity to 5--8 other people .-->
 
 Shneidman and colleagues [-@shneidman2012language; -@shneidman2010language] analyzed speech from one-hour at-home video recordings of children between ages 1;0 and 3;0 in two communities: Yucatec Mayan (Southern Mexico) and North American (a major U.S. city). Their analyses yielded four main findings: compared to the American children, (a) the Yucatec children heard many fewer utterances per hour, (b) a much smaller proportion of the utterances they heard were child-directed, (c) the proportion of utterances that were child-directed increased dramatically with age, matching U.S. children's by 3;0 months, and (d) most of the added CDS came from other children (e.g., older siblings and cousins). They also demonstrated that the lexical diversity of the CDS they hear at 24 months---particularly from adult speakers---predicted children's vocabulary knowledge at 35 months.
 
@@ -266,7 +266,6 @@ used.clips <- seg.info %>%
                            ifelse(grepl('tt', CodeName), "Turn taking", "High activity")))
 used.clips$sample.type = factor(used.clips$sample.type, levels = c("Random", "Turn taking", "High activity"))
   
-
 clip.distribution <- ggplot() +
   geom_segment(data = ptcp.info,
                aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order)) +
@@ -274,10 +273,11 @@ clip.distribution <- ggplot() +
                aes(x = start.hr, y = order, xend = start.hr + clip.dur/60, yend = order,
                    color = sample.type), size = 3) +
   theme_apa() +
+  theme(legend.position = "bottom") +
   scale_x_continuous(breaks = 7:21) +
   scale_y_continuous(breaks = 1:10, labels = ptcp.info$age_mo_round) +
   ylab("Child age (mo)") + xlab("Time of day (hr)") + labs(color = "Sample type") +
-  scale_color_manual(values = c("black", "red", "blue"))
+  scale_color_manual(values = c(viridis(3)[1], viridis(3)[2], "black"))
 clip.distribution
 ```
 
@@ -911,13 +911,16 @@ comparison.data <- bind_rows(comparison.data, by.chi.rand.avgs)
 
 comparison.data$Site <- factor(comparison.data$Site,
                                levels = unique(comparison.data$Site))
+comparison.data$Site <- factor(comparison.data$Site, levels =
+                                 c("US/Canada", "US", "Dutch", "MozambiqueUrb",
+                                   "MozambiqueRur", "Tsimane", "Yukatek", "Tseltal"))
 comparison.data.shapes <- unique(comparison.data$shape)
 
 # TDS min/hr comparison
 tdsmph.comparison <- ggplot(comparison.data,
                           aes(x = AgeMonths, y = tds_mph, stroke = 1,
                               color = Type, shape = Site, size = N)) +
-  geom_point() +
+  geom_point(fill = "gray50", alpha = 0.7) +
   scale_shape_manual(values=comparison.data.shapes) +
   ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,20),
@@ -925,8 +928,7 @@ tdsmph.comparison <- ggplot(comparison.data,
   scale_x_continuous(limits=c(0,38),
                      breaks=seq(0,38,6)) +
   coord_cartesian(ylim=c(0,20),xlim=c(0,38)) +
-  scale_color_manual(values = c("black", "gray60")) +
-  scale_fill_manual(values = c("black", "gray60")) +
+  scale_color_manual(values = c("black", "gray40")) +
   theme_apa() +
   guides(size = FALSE, color = FALSE) +
   theme(axis.line = element_line(color="black", size = 0.4))
@@ -1044,7 +1046,7 @@ propchitcds.tt.corr_age.test <- cor.test(
   data = propchitcds.tt.corr_age, method = "spearman")
 ```
 
-In contrast to findings from @shneidman2012language on Yucatec Mayan, most TCDS in the current data came from adult speakers (mean = `r round(mean(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%, median = `r round(median(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%, range = `r round(min(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%--`r round(max(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`), with no evidence for an increase in proportion TCDS from children with target child age (correlation between child age and proportion TCDS from children: Spearman’s _rho_ = `r round(propchitcds.rand.corr_age.test$estimate[[1]],2)`; _p_ = `r round(propchitcds.rand.corr_age.test$p.value[[1]],2)`).
+In contrast to findings from @shneidman2012language on Yucatec Mayan, most TCDS in the current data came from adult speakers (mean = `r round(mean(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%, median = `r round(median(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%, range = `r round(min(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%--`r round(max(1-propchitcds.rand.corr_age$avg_prpchitcds),4)*100`%), with no evidence for an increase in proportion TCDS from children with target child age (correlation between child age and proportion TCDS from children: Spearman’s _rho_ = `r round(propchitcds.rand.corr_age.test$estimate[[1]],2)`; _p_ = `r round(propchitcds.rand.corr_age.test$p.value[[1]],2)`).
 
 ## Other-directed speech (ODS)
 Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, 5--6 times as much speech as was directed to them. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression, as described above.
@@ -2018,6 +2020,12 @@ ttrGEpeaks.summary <- ttrGEpeaks %>%
 
 ttrGEpeak.segs.chi <- rand.window.tts %>%
   filter(GE.chipeak == 1)
+
+avg.random.peak.durs <- ttrGEpeaks %>%
+  group_by(aclew_child_id) %>%
+  summarise(meandur = mean(peak.dur), 
+            meddur = median(peak.dur))
+
 ```
 
 ```{r peakmins_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -2042,7 +2050,7 @@ ttr.random <- ggplot(rand.window.tts,
         axis.line = element_line(color="black", size = 0.4))
 ```
 
-Now knowing the interactional characteristics of the "high" turn-taking clips, we looked for similarly interactive 1-minute sections in the random samples in order to estimate the number of high interactivity minutes in the whole day. To do this, we scanned each 60-second window (e.g., 0--60 sec, 1--61 sec, etc.^[60 seconds is the smallest clip sample size in the turn-taking segments]) of each random clip from each child and recorded the observed turn-transition rate. Only `r sum(ttrGEpeaks.summary$npeaks > 0)` of the 10 children showed at least one minute of their random sample that equalled or exceeded the grand average turn-transition rate (`r ttrate.all.avg` transitions per minute), and `r length(unique(ttrGEpeak.segs.chi$aclew_child_id))` of the 10 children showed at least one minute equalling or exceeding their own average turn transition rate from their turn-taking samples, as shown in [Figure 8](#fig8). Across children who did show turn-taking "peaks" in their random data (i.e., at or above rates from the sample-average from the turn-taking segments), periods of "peak" interaction were relatively long, ranging in duration from an average of `r min(ttrGEpeaks.summary$pkdur.mean)` to `r max(ttrGEpeaks.summary$pkdur.mean)` seconds across the 6 children with such peaks.
+Now knowing the interactional characteristics of the "high" turn-taking clips, we looked for similarly interactive 1-minute sections in the random samples in order to estimate the number of high interactivity minutes in the whole day. To do this, we scanned each 60-second window (e.g., 0--60 sec, 1--61 sec, etc.^[60 seconds is the smallest clip sample size in the turn-taking segments]) of each random clip from each child and recorded the observed turn-transition rate. Only `r sum(ttrGEpeaks.summary$npeaks > 0)` of the 10 children showed at least one minute of their random sample that equalled or exceeded the grand average turn-transition rate (`r ttrate.all.avg` transitions per minute), and `r length(unique(ttrGEpeak.segs.chi$aclew_child_id))` of the 10 children showed at least one minute equalling or exceeding their own average turn transition rate from their turn-taking samples, as shown in [Figure 8](#fig8). Across children who did show turn-taking "peaks" in their random data (i.e., at or above rates from the sample-average from the turn-taking segments), periods of "peak" interaction were relatively long, at an average of `r round(mean(avg.random.peak.durs$meandur),2)` seconds (median = `r round(median(avg.random.peak.durs$meandur),2)` seconds; range = `r round(min(avg.random.peak.durs$meandur),2)`--`r round(max(avg.random.peak.durs$meandur),2)` seconds)` across the 6 children with such peaks.
 
 ```{r fig8, echo=FALSE, fig.cap="Turn-transitions rates, estimated over the last 60 seconds for each second of the random samples by child (nine 5-min clips each). The horizontal line indicates the group mean turn-transition rate in the turn-taking sample. The large points indicate the by-child mean turn-transition rate in the turn-taking sample.", message=FALSE, warning=FALSE, fig.height=2}
 ttr.random
