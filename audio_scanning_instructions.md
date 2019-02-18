@@ -19,7 +19,7 @@ For each child...
   * From the pool of candidate clips, select the N turn-taking clips based on the richest interaction.
     - Rich interaction: temporally contingent vocalization between the target child and at least one other person
     -  Ideal features: high variety in vocalization types and more frequent speaker transitions
-  * From the remainining clips, select the N vocal activity clips based on the highest-volume samples of the most mature and/or variable vocal behavior by the target child. The intention is to capture the child's (best) ability to produce different vocalizations.
+  * From the remainining clips, select the N vocal activity clips based on the highest-volume samples of the most mature and/or variable spontaneous (i.e., non-imitative) vocal behavior by the target child. The intention is to capture the child's (best) ability to produce different vocalizations.
     -  Rich vocal activity: clips featuring the target child's most mature and/or diverse vocalizations of the day are valued over clips that simply have dense target child vocalizations.
       * For children who are not yet using lexical utterances, top maturity is phonologically diverse canonical babbling.
       * For children using lexical utterances, maturity is morphological complexity and utterance length and bottom.
