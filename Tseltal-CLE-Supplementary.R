@@ -1,3 +1,8 @@
+```{r fig8, echo=FALSE, fig.cap="Turn-transition rates, estimated over the last 60 seconds for each second of the random samples by child (nine 5-min clips each). The horizontal line indicates the group mean turn-transition rate in the turn-taking sample. The large points indicate the by-child mean turn-transition rate in the turn-taking sample.", message=FALSE, warning=FALSE, fig.height=2}
+ttr.random
+```
+
+
 ################################################################################
 ####          RANDOM BASELINE SUPPLEMENTARY MODELS          ####
 ####                    ODS                    ####

@@ -359,7 +359,7 @@ communities (de León, 2011; Gaskins, 1996, 1999; e.g., León, 1998; Pye,
 1986; Rogoff et al., 1993, 2003; Shneidman \& Goldin-Meadow, 2012).
 
 The current data come from the Casillas HomeBank Corpus (Casillas,
-Brown, \& Levinson, 2017; VanDam et al., 2016), which includes daylong
+Brown, \& Levinson, 2017a; VanDam et al., 2016), which includes daylong
 recordings and other developmental language data from more than 100
 children under 4;0 across two indigenous, non-Western communities: the
 Tseltal Mayan community described here and a Papua New Guinean community
@@ -439,20 +439,20 @@ language environments (\enquote{Random}), (b) their most
 \begin{center}
 \begin{threeparttable}
 \caption{\label{tab:tab1}Demographic overview of the 10 children whose recordings we sampled.}
-\begin{tabular}{llllll}
+\begin{tabular}{lllll}
 \toprule
-HB ID & \multicolumn{1}{c}{Age} & \multicolumn{1}{c}{Sex} & \multicolumn{1}{c}{Mot age} & \multicolumn{1}{c}{Mot edu} & \multicolumn{1}{c}{Ppl in house}\\
+Age & \multicolumn{1}{c}{Sex} & \multicolumn{1}{c}{Mot age} & \multicolumn{1}{c}{Mot edu} & \multicolumn{1}{c}{People in house}\\
 \midrule
-CM50 & 01;25 & M & 26 & none & 8\\
-CM07 & 03;18 & M & 22 & preparatory & 9\\
-CM11 & 05;29 & F & 17 & secondary & 15\\
-CM23 & 07;15 & F & 24 & primary & 9\\
-CM38 & 10;21 & M & 24 & secondary & 5\\
-CM04 & 14;10 & M & 21 & none & 9\\
-CM17 & 22;03 & F & 31 & preparatory & 9\\
-CM25 & 26;25 & F & 17 & primary & 5\\
-CM47 & 32;05 & F & 28 & secondary & 5\\
-CM55 & 36;02 & M & 28 & primary & 6\\
+0;01.25 & M & 26 & none & 8\\
+0;03.18 & M & 22 & preparatory & 9\\
+0;05.29 & F & 17 & secondary & 15\\
+0;07.15 & F & 24 & primary & 9\\
+0;10.21 & M & 24 & secondary & 5\\
+1;02.10 & M & 21 & none & 9\\
+1;10.03 & F & 31 & preparatory & 9\\
+2;02.25 & F & 17 & primary & 5\\
+2;08.05 & F & 28 & secondary & 5\\
+3;00.02 & M & 28 & primary & 6\\
 \bottomrule
 \end{tabular}
 \end{threeparttable}
@@ -486,7 +486,7 @@ age.}
 The first author and a native speaker of Tseltal who knows all the
 recorded families personally jointly transcribed and annotated each clip
 in ELAN (Wittenburg, Brugman, Russel, Klassmann, \& Sloetjes, 2006)
-using the ACLEW Annotation Scheme (Casillas et al., 2017).
+using the ACLEW Annotation Scheme (Casillas et al., 2017b).
 Utterance-level annotations include: an orthographic transcription
 (Tseltal), a loose translation (Spanish), a vocal maturity rating for
 each target child utterance (non-linguistic/non-canonical
@@ -522,143 +522,133 @@ development.
 
 \section{Results}\label{results}
 
-\subsection{Data analysis}\label{data-analysis}
+\subsection{Statistical models}\label{statistical-models}
 
-Unless otherwise stated, all analyses were conducted with generalized
-linear mixed-effects regressions using the glmmTMB package and all plots
-are generate with ggplot2 in R (M. E. Brooks et al., 2017a; R Core Team,
-2018; Wickham, 2009).\footnote{The data and analysis code are freely
-  available on the web ({[}retracted for review{]}), as is a summary of
-  the results which will be updated as more transcriptions become
-  available ({[}retracted for review{]}).} Notably, all five speech
-environment measures are restricted to non-negative values (min/hr, turn
-transitions/min, and duration in seconds), with a subset of them also
-displaying extra cases of zero in the randomly sampled clips (min/hr,
-turn transitions/min; e.g., when the child is napping). The consequence
-of these boundary restrictions is that the variance of the distributions
-becomes non-gaussian (i.e., a long right tail). We account for this
-issue by using negative binomial regression, whish is useful for
-overdispersed count data (M. E. Brooks et al., 2017b; Smithson \&
-Merkle, 2013). When extra cases of zero are present due to, e.g., no
-speakers being present, we used a zero-inflation negative binomial
-regression, which creates two models: (a) a binary model to evaluate the
-likelihood of none vs.~some presence of the variable (e.g., TCDS) and
-(b) a count model of the variable (e.g., \enquote{3} vs. \enquote{5}
-TCDS min/hr), using the negative binomial distribution as the linking
-function. Alternative analyses using gaussian models with logged
-dependent variables are available in the Supplementary Materials, but
-are qualitatively similar to the results we report here.
+All analyses were conducted in R with generalized linear mixed-effects
+regressions using the glmmTMB package, and all plots were generated with
+ggplot2 (M. E. Brooks et al., 2017a; R Core Team, 2018; Wickham,
+2009).\footnote{Data and analysis code can be found at
+  \url{https://github.com/marisacasillas/Tseltal-CLE}.} Notably, all
+five dependent measures are restricted to non-negative (0--infinity)
+values. This implicit boundary restriction at zero causes the
+distributional variance of our measures to become non-gaussian (i.e.,
+with a long right tail). We handle this issue by using a negative
+binomial linking function in the regression, which estimates a
+dispersion parameter (in addition to the mean and variance) that allows
+the model to more closely fit our non-negative, overdispersed data (M.
+E. Brooks et al., 2017b; Smithson \& Merkle, 2013). When, in addition to
+this, extra cases of zero were evident in the distribution (e.g., TCDS
+min/hr was zero because children were alone), we also added a
+zero-inflation parameter to the regression. A zero-inflation negative
+binomial regression creates two models: (a) a binary model to evaluate
+the likelihood of none vs.~some presence of the variable (e.g., no
+vs.~some TCDS) and (b) a count model of the variable (e.g., \enquote{3}
+vs. \enquote{5} TCDS min/hr), using the negative binomial distribution
+as the linking function. Alternative analyses using gaussian
+mixed-effects regressions with logged dependent variables are available
+in the Supplementary Materials, but are qualitatively similar to the
+results we report here.
 
 Our primary predictors were as follows: child age (months), household
 size (number of people), and number of non-target-child speakers present
 in that clip, all centered and standardized, plus squared time of day at
 the start of the clip (in decimal hours; centered on noon and
-standardized). We always used squared time of day to model the cycle of
-activity at home: the mornings and evenings should be more similar to
-each other than midday because people tend to disperse for chores after
-breakfast. To this we also added two-way interactions between child age
-and number of speakers present, household size, and time of day.
-Finally, we included a random effect of child, with random slopes of
-time of day, unless doing so resulted in model non-convergence. Finally,
-for the zero-inflation models, we included child age, number of speakers
-present, and time of day. We have noted below when models needed to
-deviate from this core design to achieve convergence. We only report
-significant effects here; full model outputs are available in the
+standardized). We used squared time of day because the mornings and
+evenings should be more similar to each other than midday given that
+people disperse for chores after breakfast. We also added two-way
+interactions between child age and: (a) number of speakers present, (b)
+household size, and (c) time of day. Finally, we included a random
+effect of child, with random slopes of time of day. For the
+zero-inflation models, we included child age, number of speakers
+present, and time of day. We have noted below when models deviated from
+this core design to achieve convergence. We only report significant
+effects in the main text; full model outputs are available in the
 Supplementary Materials.
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig3-1.pdf}
 \caption{\label{fig:fig3}By-child estimates of minutes per hour of
-other-directed speech (left) and target-child-directed speech (right).
+target-child-directed speech (left) and other-directed speech (right).
 Data are shown for the random (purple; solid) and turn taking (green;
-dashed) samples. Bands on the solid linear trends show 95\% CIs.}
+dashed) samples. Bands on the linear trends show 95\% CIs.}
 \end{figure}
 
 \subsection{Target-child-directed speech
 (TCDS)}\label{target-child-directed-speech-tcds}
 
-The Tseltal children in our study were directly spoken to for an average
-of 3.63 minutes per hour in the random sample (median = 4.08; range =
-0.83--6.55; \protect\hyperlink{fig3}{Figure 3}). These estimates are
-close to those reported for Yucatec Mayan data (Shneidman \&
-Goldin-Meadow, 2012), which are plotted with our data, along with
-estimates from a few other populations in
-\protect\hyperlink{fig4}{Figure 4} (US/Canada: {\textbf{???}}; Tsimane:
-Scaff et al., in preparation, see Scaff and colleagues Scaff et al. (in
-preparation) for a more detailed comparison; US urban and Yukatek:
-Shneidman, 2010; Mozambique urban and rural, and Dutch: P. Vogt, Mastin,
-\& Schots, 2015).\footnote{We convert the original estimates from
-  Shneidman (2010) into min/hr by using the median utterance duration in
-  our dataset for all non-target child speakers: (1029ms). Note that,
-  though this conversion is far from perfect, Yukatek and Tseltal are
-  related languages.}. We modeled TCDS min/hr in the random clips with a
-zero-inflated negative binomial regression, as described above.
+The 10 Tseltal children in our sample were directly spoken to for an
+average of 3.63 minutes per hour in the random sample (median = 4.08;
+range = 0.83--6.55; \protect\hyperlink{fig3}{Figure 3}). These estimates
+are close to those reported for Yucatec Mayan children (Shneidman \&
+Goldin-Meadow, 2012), as illustrated in \protect\hyperlink{fig4}{Figure
+4} (see Scaff et al. (in preparation) for more detailed cross-language
+comparisons).\footnote{We convert Shneidman (2010)'s utterance/hr
+  estimates to min/hr with the median Tseltal utterance duration for
+  non-target child speakers: (1029ms) because Yucatec and Tseltal are
+  related languages.} We modeled TCDS min/hr in the random clips with a
+zero-inflated negative binomial regression, excluding the number of
+speakers present and time of day in the zero-inflation model to achieve
+convergence.
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig4-1.pdf}
-\caption{\label{fig:fig4}TCDS rate reported from daylong recordings made in
-different populations, including both urban (gray) and rural/indigenous
-(black) samples. Each point is the average TCDS rate reported for
-children at the indicated age, and size indicates number of children
-sampled (range: 1--26). See text for references to original studies.}
+\caption{\label{fig:fig4}TCDS rates reported from at-home recordings in
+different populations, including both urban (empty shape) and
+rural/indigenous (filled shape) samples. Each point shows the average
+TCDS rate at the indicated age, while size indicates the number of
+children sampled (range: 1--26). Data sources: Bergelson et al. (2019)
+US/Canada; Shneidman (2010) US and Yucatec; P. Vogt, Mastin, and Schots
+(2015) Dutch, Mozambique urban and rural; Scaff et al. (in preparation)
+Tsimane.}
 \end{figure}
 
 The rate of TCDS in the randomly sampled clips was primarily affected by
 factors relating to the time of day. The count model showed that,
-overall, children were more likely to hear TCDS in the mornings and
+overall, the children were more likely to hear TCDS in the mornings and
 evenings than around midday (B = 4.32, SD = 1.92, z = 2.25, p = 0.02).
-However, this pattern weakened for older children, some of whom even
-heard peak TCDS input around midday, as illustrated in
-\protect\hyperlink{fig5}{Figure 5} (B = -5.22, SD = 1.97, z = -2.64, p =
-0.01). There were no significant effects of child age, household size,
-or number of speakers present, no significant effects in the
-zero-inflation model.\footnote{This TCDS zero-inflation did not include
-  the number of speakers present or time of day.}
+Time-of-day effects were stronger for the older children, as illustrated
+in \protect\hyperlink{fig5}{Figure 5} (B = -5.22, SD = 1.97, z = -2.64,
+p = 0.01). There were no significant effects of child age, household
+size, or number of speakers present, and no significant effects in the
+zero-inflation model.
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig5-1.pdf}
 \caption{\label{fig:fig5}TCDS rate heard at different times of day by
 children 12 months and younger (left) and 13 months and older (right) in
-the randomly selected (purple) and turn-taking (green) clips.}
+the randomly selected (dark purple; solid) and turn-taking (light green;
+dashed) clips.}
 \end{figure}
 
 In contrast to findings from Shneidman and Goldin-Meadow (2012) on
 Yucatec Mayan, most TCDS in the current data came from adult speakers
 (mean = 80.61\%, median = 87.22\%, range = 45.90\%--100\%), with no
-evidence for an increase in proportion TCDS from children with target
-child age (correlation between child age and proportion TCDS from
-children: Spearman's \emph{rho} = -0.29; \emph{p} = 0.42).
+evidence for an increase in proportion of TCDS from children with target
+child age (Spearman's \emph{rho} = -0.29; \emph{p} = 0.42).
 
 \subsection{Other-directed speech
 (ODS)}\label{other-directed-speech-ods}
 
-Children heard an average of 21.05 minutes per hour in the random sample
-(median = 17.80; range = 3.57--42.80): that is, 5--6 times as much
-speech as was directed to them. We modeled ODS min/hr in the random
-clips with a zero-inflated negative binomial regression, as described
-above.
-
-The count model of ODS in the randomly selected clips revealed that the
-presence of more speakers was strongly associated with more ODS (B =
-1.06, SD = 0.09, z = 11.54, p = 0). Additionally, more ODS occurred in
-the mornings and evenings (B = 2.70, SD = 1.14, z = 2.36, p = 0.02), and
-was also more frequent in large households for older children compared
-to younger children (B = 0.33, SD = 0.16, z = 2.01, p = 0.04). There
-were no other significant effects on ODS rate, and no significant
-effects in the zero-inflation models.\footnote{This ODS count model did
-  not include by-child intercepts of time of day and its zero-inflation
-  did not include the number of speakers present.}
-
-Other-directed speech may have been so common because there were an
-average 3.44 speakers present other than the target child in the
-randomly selected clips (median = 3; range = 0--10), and (typically)
-more than half of the speakers were adults. However, these estimates may
-be comparable to North American infants (6--7 months) living in nuclear
-family homes (Bergelson et al., 2018), so a high incidence of ODS may be
-common for infants in many sociocultural contexts.
+Children heard an average of 21.05 minutes of ODS per hour in the random
+sample (median = 17.80; range = 3.57--42.80): that is, nearly six times
+as much speech as was directed to them, on average. We modeled ODS
+min/hr in the random clips with a zero-inflated negative binomial
+regression, excluding by-child intercepts of time of day in the count
+model and the number of speakers present in the zero-inflation model to
+achieve convergence. The count model of ODS in the randomly selected
+clips revealed that the presence of more speakers was strongly
+associated with more ODS (B = 1.06, SD = 0.09, z = 11.54, p = 0). There
+were an average of 3.44 speakers present other than the target child in
+the randomly selected clips (median = 3; range = 0--10), more than half
+of whom were typically adults. Additionally, more ODS occurred in the
+mornings and evenings (B = 2.70, SD = 1.14, z = 2.36, p = 0.02), and was
+also more frequent in large households for older target children
+compared to younger target children (B = 0.33, SD = 0.16, z = 2.01, p =
+0.04). There were no other significant effects on ODS rate, and no
+significant effects in the zero-inflation models.
 
 \begin{figure}
 
@@ -666,201 +656,182 @@ common for infants in many sociocultural contexts.
 
 }
 
-\caption{Illustration of a transcript clip between the target child (TCH), an older sister (SIS), and mother (MOT) in which transitions between the target child and other interlocutors are marked in solid and dashed lines and in which interactional sequences are marked with dotted lines. Light gray boxes indicate TCDS and dark gray boxes indicate ODS.}\label{fig:fig6}
+\caption{Illustration of an annotated audio clip including the target child (TC), an older sister (SI), and mother (MO). Transitions between the target child and others are marked with solid and dashed lines. Interactional sequences are boxed in with dotted lines. Box color indicates TCDS (blue) and ODS (light gray).}\label{fig:fig6}
 \end{figure}
 
 \subsection{Target-child-to-other turn transitions
 (TC--O)}\label{target-child-to-other-turn-transitions-tco}
 
-We detect contingent turn exchanges between the target child and other
-speakers based on turn timing \protect\hyperlink{fig6}{Figure 6}. If a
-child's vocalization is followed by a target-child-directed utterance
-within -1000--2000msec of the end of the child's vocalization (Casillas,
-Bobb, \& Clark, 2016; Hilbrink, Gattis, \& Levinson, 2015), it is
-counted as a contingent response (i.e., a TC--O transition). We use the
-same idea to find other-to-target-child transitions below (i.e., a
-target-child-directed utterance followed by a target child vocalization
-with the same overlap/gap restrictions). Each target child vocalization
-can only have one prompt and one response and each target-child-directed
-utterance can maximally count once as a prompt and once as a response
-(e.g., in a TC--O--TC sequence, the \enquote{O} is both a response and a
-prompt).
-
-Gap and overlap restrictions are based on prior studies of infant and
-young children's turn taking (Casillas et al., 2016; Hilbrink et al.,
-2015), though the timing margins are increased slightly for the current
-dataset because the prior estimates come from relatively short, intense
-bouts of interaction in WEIRD parental contexts. Note, too, that much
-prior work has used maximum gaps of similar or greater length to detect
-verbal contingencies in caregiver-child interaction; and any work based
-on LENA\textsuperscript{®} conversational blocks is thereby based on a
-5-second silence maximum ({\textbf{???}}; M. H. Bornstein, Putnick,
-Cote, Haynes, \& Suwalsky, 2015; T. Broesch, Rochat, Olah, Broesch, \&
-Henrich, 2016; Egeren, Barratt, \& Roach, 2001; Y. Kuchirko, Tafuro, \&
-Tamis-LeMonda, 2018; Romeo et al., 2018; Warlaumont, Richards,
-Gilkerson, \& Oller, 2016); in comparison our timing restrictions are
-quite stringent.
+Contingent responses by or to the target child are likely to occur at
+moments in which the child and another speaker are attentionally
+aligned; the rate at which these responses is an index of the frequency
+of these joint moments of high-quality linguistic evidence. We measured
+two types of contingent responses: target-child-to-other and
+other-to-target-child. We detect these contingent turn transitions based
+on utterance onset/offset times and the annotations of intended
+addressee for each non-target-child utterance
+(\protect\hyperlink{fig6}{Figure 6}). If a child's vocalization is
+followed by a target-child-directed utterance within -1000msec to
+2000msec after its end (Casillas, Bobb, \& Clark, 2016; Hilbrink,
+Gattis, \& Levinson, 2015), it is counted as a contingent response
+(i.e., a TC--O transition). We use the same idea to find
+other-to-target-child transitions (i.e., a target-child-directed
+utterance followed by a target child vocalization with the same timing
+restrictions). In our analysis, each target child vocalization can have
+maximally have one prompt and one response, and each
+target-child-directed utterance can maximally count once as a prompt and
+once as a response (e.g., in a TC--O--TC sequence, the \enquote{O} is
+both a response and a prompt). These timing restrictions are broadly
+based on prior studies of infant and young children's spontaneous turn
+taking (e.g., M. H. Bornstein, Putnick, Cote, Haynes, \& Suwalsky, 2015;
+T. Broesch, Rochat, Olah, Broesch, \& Henrich, 2016; Casillas et al.,
+2016; Hilbrink et al., 2015).
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig7-1.pdf}
-\caption{\label{fig:fig7}By-child estimates of contingent responses per
-minute to the target child's vocalizations (left), contingent responses
-per minute by the target child to others' target-child-directed speech
-(middle), and the average duration of contingent interactional sequences
-(right). Each datapoint represents the value for a single clip within
-the random (purple; solid) or turn taking (green; dashed) samples. Bands
-on the solid linear trends show 95\% CIs.}
+\caption{\label{fig:fig7}By-child estimates of target-child-to-other
+contingent responses (left), other-to-target-child contingent responses
+(middle), and the average duration of interactional sequences (right).
+Each boxplot represents the variance across clips within the random
+(dark purple; solid) or turn taking (light green; dashed) samples for
+each child. Bands on the linear trends show 95\% CIs.}
 \end{figure}
 
 Other speakers responded contingently to the target children's
 vocalizations at an average rate of 1.38 transitions per minute (median
-= 0.40; range = 0--8.60). We modeled TC--O transtions per minute in the
-random clips with a zero-inflated negative binomial regression, as
-described above.
-
-The rate at which children hear contingent response from others was
-primarily influenced by factors relating to the child's age. Older
-children heard more contingent responses then younger children when
-there were more speakers present (B = 0.47, SD = 0.22, z = 2.11, p =
-0.03). Also, as with the speech quantity measures, younger children
-heard more contingent responses in the mornings and evenings while this
-effect was less pronounced for older children (B = -6.46, SD = 2.56, z =
--2.52, p = 0.01).There were no other significant effects on TC--O
-transition rate, and no significant effects in the zero-inflation model
-either.\footnote{This TC--O transition count model did not include
-  by-child intercepts of time of day.}
+= 0.40; range = 0--8.60; \protect\hyperlink{fig7}{Figure 7}). We modeled
+TC--O transtions per minute in the random clips with a zero-inflated
+negative binomial regression, excluding by-child intercepts of time of
+day to achieve convergence. The rate at which target children heard
+contingent responses from others was primarily influenced by factors
+relating to the child's age. Older target children heard more contingent
+responses then younger ones when there were more speakers present (B =
+0.47, SD = 0.22, z = 2.11, p = 0.03). Also, as with the speech quantity
+measures, older target children heard more contingent responses in the
+mornings and evenings, while this effect was less pronounced for younger
+ones (B = -6.46, SD = 2.56, z = -2.52, p = 0.01). There were no further
+significant effects in the count or zero-inflation models.
 
 \subsection{Other-to-target-child turn transitions
 (O--TC)}\label{other-to-target-child-turn-transitions-otc}
 
-Tseltal children responded contingently to others' target-child
+The 10 Tseltal children responded contingently to others' target-child
 vocalizations at an average rate of 1.17 transitions per minute (median
-= 0.20; range = 0--8.80). We modeled O--TC transtions per minute in the
-random clips with a zero-inflated negative binomial regression, as
-described above.
-
-The rate at which children respond contingently to others (O--TC turn
-transitions per minute) was similarly influenced by child age and time
-of day: older children were less likely than young children to show peak
-response rates in the morning and evening (B = -7.30, SD = 2.61, z =
--2.80, p = 0.01). There were no further significant effects in the count
-or zero-inflation models.\footnote{This O--TC transition count model did
-  not include by-child intercepts of time of day.}
+= 0.20; range = 0--8.80; \protect\hyperlink{fig7}{Figure 7}). We modeled
+O--TC transtions per minute in the random clips with a zero-inflated
+negative binomial regression, excluding by-child intercepts of time of
+day to achieve convergence. The rate at which target children responded
+contingently to others (O--TC turn transitions per minute) was similarly
+influenced by child age and time of day: younger target children were
+less likely than older ones to show peak response rates in the morning
+and evening (B = -7.30, SD = 2.61, z = -2.80, p = 0.01). There were no
+further significant effects in the count or zero-inflation models.
 
 \subsection{Sequence duration}\label{sequence-duration}
 
-Sequences of interaction include periods of contingent turn taking with
-at least one target child vocalization and one target-child-directed
-prompt or response from another speaker. We use the same mechanism as
-before to detect contingent TC--O and O--TC transitions, but also allow
-for speakers to continue with multiple vocalizations in a row (e.g.,
-TC--O--O--TC--OTH; \protect\hyperlink{fig7}{Figure 7}. Sequences are
-bounded by the earliest and latest vocalization for which there is no
-contingent prompt/response, respectively. Each target child vocalization
-can only appear in one sequence, and many sequences have more than one
-child vocalization. Because sequence durations were not zero-inflated,
-we modeled them in the random clips with negative binomial regression.
+We defined sequences of interaction as periods of contingent turn taking
+with at least one target child vocalization and one
+target-child-directed prompt or response from another speaker. To detect
+sequences of interaction, we used the same mechanism as before to detect
+contingent TC--O and O--TC transitions, but also allowed for speakers to
+continue with multiple vocalizations in a row (e.g., TC--O--O--TC--OTH;
+\protect\hyperlink{fig6}{Figure 6}). We bounded sequences by the
+earliest and latest vocalization for which there is no contingent prompt
+or response, respectively. In our analysis, each target child
+vocalization can only appear in one sequence. We modeled these sequence
+durations in the random clips with negative binomial regression alone,
+excluding by-child intercepts of time of day to achieve convergence.
 
 We detected 311 interactional sequences in the 90 randomly selected
 clips, with an average sequence duration of 10.13 seconds (median = 7;
-range = 0.56--85.47). The average number of child vocalizations within
-these sequences was 3.75 (range = 1--29; median = 3). None of the
-predictors significantly impacted sequence duration (all \emph{p}
-\textgreater{} 0.09).\footnote{This sequence duration model did not
-  include by-child intercepts of time of day.}
+range = 0.56--85.47; \protect\hyperlink{fig7}{Figure 7}). The average
+number of child vocalizations within these sequences was 3.75 (range =
+1--29; median = 3). None of the predictors significantly impacted
+sequence duration (all \emph{p} \textgreater{} 0.09).
 
 \subsection{Peak interaction}\label{peak-interaction}
 
-As expected, the turn-taking clips featured a much higher rate of
-contingent turn transitions: the average TC--O transition rate was 7.73
-transitions per minute (median = 7.80; range = 0--25) and the average
-O--TC rate was 7.56 transitions per minute (median = 6.20; range =
-0--26). The interactional sequences were also longer on average: 12.27
-seconds (median = 8.10; range = 0.55--61.22).
+As expected, the high-quality turn taking clips featured a much higher
+rate of contingent turn transitions: the average TC--O transition rate
+was 7.73 transitions per minute (\textasciitilde{}5.5x the random sample
+rate; median = 7.80; range = 0--25) and the average O--TC rate was 7.56
+transitions per minute (\textasciitilde{}6.5x the random sample rate;
+median = 6.20; range = 0--26). The interactional sequences were also
+slightly longer on average: 12.27 seconds (\textasciitilde{}1.2x the
+random sample rate; median = 8.10; range = 0.55--61.22). Crucially,
+children also heard much more TCDS in the turn-taking clips---13.28
+min/hr (nearly 4x the random sample rate; median = 13.65; range =
+7.32--20.19)---while also hearing less ODS---11.93 min/hr (nearly half
+the random sample rate; median = 10.18; range = 1.37--24.42).
 
-Crucially, children also heard much more TCDS in the turn-taking
-clips---13.28 min/hr (median = 13.65; range = 7.32--20.19)---while also
-hearing less ODS---11.93 min/hr (median = 10.18; range = 1.37--24.42).
-
-We modeled each of these five speech environment measures with parallel
-models to those used above (with no zero-inflation model for TCDS,
-TC--O, and O--TC rates, given the nature of the sample). The impact of
-child age, time of day, household size, and number of speakers was
-qualitatively similar (basic sample comparisons are visualized in
-\protect\hyperlink{fig3}{Figure 3}, \protect\hyperlink{fig4}{Figure 4},
-and \protect\hyperlink{fig6}{Figure 6}) between the randomly selected
-clips and these peak periods of interaction with the following
-exceptions: older children heard significantly less ODS (B = -0.47, SD =
-0.20, z = -2.39, p = 0.02), the presence of more speakers significantly
-decreased children's response rate to other's vocalizations (B = -0.26,
-SD = 0.12, z = -2.19, p = 0.03), and children's interactional sequences
-were shorter for older children (B = -0.24, SD = 0.10, z = -2.42, p =
-0.02), shorter for children in large households (B = -0.21, SD = 0.10, z
-= -2.25, p = 0.02), and longer during peak periods in the mornings and
-afternoons (B = 2.76, SD = 1.11, z = 2.50, p = 0.01). Full model outputs
-can be compared in the Supplementary Materials.
+We modeled each of these speech environment measures with parallel
+models to those used for the random sample above, though with no
+zero-inflation parameter for TCDS, TC--O, and O--TC rates because these
+extra-zero cases don't exist in the manually selected turn-taking clips.
+The impact of child age, time of day, household size, and number of
+speakers was qualitatively similar (see \protect\hyperlink{fig3}{Figures
+3}, \protect\hyperlink{fig4}{4}, and \protect\hyperlink{fig6}{6})
+between the randomly selected clips and the turn taking clips with the
+following exceptions: children heard significantly less ODS with age (B
+= -0.47, SD = 0.20, z = -2.39, p = 0.02), the presence of more speakers
+significantly decreased children's response rate to other's
+vocalizations (B = -0.26, SD = 0.12, z = -2.19, p = 0.03), and
+children's interactional sequences were shorter for older children (B =
+-0.24, SD = 0.10, z = -2.42, p = 0.02), shorter for children in large
+households (B = -0.21, SD = 0.10, z = -2.25, p = 0.02), and longer
+during the mornings and evenings (B = 2.76, SD = 1.11, z = 2.50, p =
+0.01). Full model outputs can be viewed in the Supplementary Materials.
 
 \subsubsection{Peak minutes in the day}\label{peak-minutes-in-the-day}
 
-Now knowing the interactional characteristics of the \enquote{high}
-turn-taking clips, we looked for similarly interactive 1-minute sections
-in the random samples in order to estimate the number of high
-interactivity minutes in the whole day. To do this, we scanned each
-60-second window (e.g., 0--60 sec, 1--61 sec, etc.\footnote{60 seconds
-  is the smallest clip sample size in the turn-taking segments}) of each
-random clip from each child and recorded the observed turn-transition
-rate. Only 6 of the 10 children showed at least one minute of their
-random sample that equalled or exceeded the grand average
-turn-transition rate (12.89 transitions per minute), and 7 of the 10
-children showed at least one minute equalling or exceeding their own
-average turn transition rate from their turn-taking samples, as shown in
-\protect\hyperlink{fig8}{Figure 8}. Across children who did show
-turn-taking \enquote{peaks} in their random data (i.e., at or above
-rates from the sample-average from the turn-taking segments), periods of
-\enquote{peak} interaction were relatively long, at an average of 88.95
-seconds (median = 90.67 seconds; range = 71--103 seconds)` across the 6
-children with such peaks.
+Now knowing the interactional timing characteristics of the
+\enquote{high} turn-taking clips, we looked for similarly
+temporally-contingent 1-minute sections of interaction in the random
+samples in order to estimate the number of high interactivity minutes in
+the whole day. To do this, we scanned each 60-second window (e.g., 0--60
+sec, 1--61 sec, etc.) of each random clip and recorded the observed
+turn-transition rate. We then compared the resulting 1-minute transition
+rates to those typical for the high turn taking sample.
 
-\begin{figure}
-\centering
-\includegraphics{Tseltal-CLE_files/figure-latex/fig8-1.pdf}
-\caption{\label{fig:fig8}Turn-transitions rates, estimated over the last 60
-seconds for each second of the random samples by child (nine 5-min clips
-each). The horizontal line indicates the group mean turn-transition rate
-in the turn-taking sample. The large points indicate the by-child mean
-turn-transition rate in the turn-taking sample.}
-\end{figure}
-
-Assuming approximately 12 waking hours, we therefore very roughly
-estimate that these Tseltal children spent an average of 100.16 minutes
-(1.67 hours) in high turn-taking, dyadic interaction during their
-recording day. However, the range in the quantity of high turn-taking
-interaction varies enormously across children, starting at just a few
-minutes per day and topping out at more than 419.73 minutes (7 hours) in
-our sample.
+Only 6 of the 10 children showed at least one minute of their random
+sample that equalled or exceeded the average contingent transition rate
+(12.89 transitions/min), and 7 of the 10 children showed at least one
+minute equalling or exceeding their \emph{own} average turn transition
+rate from their turn-taking sample. Across the 6 children who did show
+turn-taking \enquote{peaks} in their random data, peak periods were
+relatively long, at an average of 88.95 seconds (median = 90.67 seconds;
+range = 71--103 seconds). Assuming approximately 14 waking hours (Hart
+\& Risley, 1995), we therefore very roughly estimate that the Tseltal
+child spends an average of 116.85 minutes (1.95 hours) in high
+turn-taking, dyadic interaction during their day. Importantly, however,
+the range in the quantity of high turn-taking interaction varies
+enormously across children, starting at just a few minutes per day and
+topping out at more than 489.69 minutes (8.16 hours) in our sample. Much
+more data, particularly from other Tseltal children in this age range,
+is required to get a stable estimate of peak minutes in the day.
 
 \subsection{Vocal maturity}\label{vocal-maturity}
 
-Children's vocalizations appear to follow the normative benchmarks for
-productive speech development, as typically characterized by the
-\emph{onset} of new production features. Decades of research in WEIRD
-populations has shown that, typically, children begin producing
-non-canonical babbles around 0;2, with canonical babbling appearing
-around 0;7, first words around 1;0 (P. K. Kuhl, 2004; Oller, 1980;
-Warlaumont \& Finnegan, 2016; Warlaumont et al., 2016), and first
-multi-word utterances just after 1;6 (Braine \& Bowerman, 1976; Fine \&
-Lieven, 1993; Frank et al., in preparation; Slobin, 1970; Tomasello \&
-Brooks, 1999). These benchmarks are mirrored in the Tseltal data (see
-\protect\hyperlink{fig9}{Figure 9}), which includes all annotated
+Tseltal children's vocalizations appear to follow the normative
+benchmarks for productive speech development, as typically characterized
+by the onset of new production features. Decades of research in
+post-industrial, typically Western populations has shown that,
+typically, children begin producing non-canonical babbles around 0;2,
+with canonical babbling appearing sometime around 0;7, first words
+around 1;0, with first multi-word utterances appearing just after 1;6
+(Fine \& Lieven, 1993; Frank et al., in preparation; P. K. Kuhl, 2004;
+Slobin, 1970; Tomasello \& Brooks, 1999; Warlaumont \& Finnegan, 2016;
+Warlaumont, Richards, Gilkerson, \& Oller, 2016). These benchmarks are
+mirrored in the Tseltal children's vocalizations, which are summarized
+in \protect\hyperlink{fig9}{Figure 9} based on all annotated
 vocalizations from the random, turn-taking, and high vocal activity
-samples (N = 4725): there is a decline in the use of non-canonical
-babble and an accompanying increase in the use of canonical babble from
-0;6 to 1;0. Recognizable words are also observed for every child from
-age 11;0 and older. Multi-word utterances already appear with the child
-at 1;2 and make up \textasciitilde{}10--15\% of children's utterances
-through the child at 2;3. The oldest two children use multi-word
-utterances in 33\% and 45\% of their vocalizations respectively.
+samples (N = 4725 vocalizations). There is a decline in the use of
+non-canonical babble and an accompanying increase in the use of
+canonical babble from 0;6 to 1;0. Recognizable words are observed for
+every child from age 11;0 and older. Multi-word utterances appear in all
+recordings at 1;2 and later, making up 45\% of the oldest child's (3;0)
+vocalizations.
 
 \begin{figure}
 \centering
@@ -871,24 +842,16 @@ single word utterance, MW = multi-word utterance).}
 \end{figure}
 
 These data are also consistent with usage statistics of speech-like
-vocalizations by WEIRD infants (Oller, 1980; Warlaumont \& Finnegan,
-2016; Warlaumont et al., 2016). In their Warlaumont et al. (2016) study,
-Warlaumont and colleagues found that the proportion of speech-like
-vocalizations (speech, non-word babble, and singing) was
-\textasciitilde{}0.6 around age one in their SES-variable dataset of 106
-children. We estimated the number of speech-like (canonical babbling and
-lexical speech) and non-speech-like (cries, laughter, and non-canonical
-babbles) vocalizations from Tseltal children 14 months and
-younger\footnote{We cannot compare speech-like vs.~non-speech-like
-  vocalizations after 1;6 due to a limitation of the ACLEW Annotation
-  Scheme (Casillas et al., 2017).} across the random, turn-taking, and
-high vocal activity samples (N = 3020 from 6 children). Between 2 and 14
-months, Tseltal children demonstrated a large increase in the proportion
-of speech-like vocalizations (canonical babbling and lexical speech):
-from 9\% before 0;6 to 58\% between 0;10 and 1;2. Around age 1;0, their
-use of speech-like vocalizations (58\%) is nearly identical to that
-estimated by Warlaumont et al. (2016) for American children
-(\textasciitilde{}60\%).
+vocalizations by English-acquiring infants (Oller, 1980; Warlaumont \&
+Finnegan, 2016; Warlaumont et al., 2016). Between 2 and 14 months, these
+Tseltal children demonstrated a large increase in the proportion of
+speech-like vocalizations (canonical babbling and lexical speech): from
+9\% before 0;6 to 58\% between 0;10 and 1;2. Around age 1;0, their use
+of speech-like vocalizations (58\%) is nearly identical to that
+estimated by Warlaumont et al. (2016) for American children around age
+1;0 in a variable SES sample (\textasciitilde{}60\%).\footnote{Speech-like
+  vs.~non-speech-like comparisons are limited to age 1;6 in the ACLEW
+  Annotation Scheme.}
 
 \section{Discussion}\label{disc}
 
@@ -923,7 +886,7 @@ speech around them. As suggested by prior work, the children were only
 infrequently directly spoken to: an average of 3.63 minutes per hour in
 the random sample. Compared to other studies based on daylong
 recordings, the Tseltal average TCDS rate is approximately a third of
-that found for North American children ({\textbf{???}}), but is
+that found for North American children (Bergelson et al., 2019), but is
 comparable to that for Tsimane children (Scaff et al., in preparation).
 The CDS estimates also fall almost precisely in-line with those based on
 short-format recordings in a Yucatec Mayan village (Shneidman, 2010;
@@ -941,14 +904,14 @@ it) is an ideal context for language learning since the child and
 interlocutor's coordinated attentional states decrease referential
 uncertainty, are a source of dynamic feedback, and can spur more
 interactions in the near future (M. H. Bornstein et al., 2015; T.
-Broesch et al., 2016; Egeren et al., 2001; Y. Kuchirko et al., 2018;
-Romeo et al., 2018; Warlaumont \& Finnegan, 2016; Warlaumont et al.,
-2016). Because our measure is a novel one, we cannot directly compare
-Tseltal children's data with those of children growing up in other
-communities. That said, 1.38 and 1.17 transitions per minute suggests
-that contingent responses---more so than speech directly addressed to
-the child---are rare across children's day. Importantly, however, this
-may be due to the fact that children did not vocalize very often.
+Broesch et al., 2016; Romeo et al., 2018; Warlaumont \& Finnegan, 2016;
+Warlaumont et al., 2016). Because our measure is a novel one, we cannot
+directly compare Tseltal children's data with those of children growing
+up in other communities. That said, 1.38 and 1.17 transitions per minute
+suggests that contingent responses---more so than speech directly
+addressed to the child---are rare across children's day. Importantly,
+however, this may be due to the fact that children did not vocalize very
+often.
 
 Preliminary analyses of children's vocal maturity showed that, on
 average, children only produced 472.50 vocalizations (many of which were
@@ -994,7 +957,7 @@ the \enquote{gap} otherwise left by the lower rate of CDS. In the
 randomly selected clips, children were within hearing distance of
 other-directed speech for an average of 21.05 minutes per hour. That is
 substantially more than the \textasciitilde{}7 minute per hour heard by
-North American children ({\textbf{???}}), but comparable to the
+North American children (Bergelson et al., 2019), but comparable to the
 \textasciitilde{}10 minutes per hour heard by Tsimane children (Scaff et
 al., in preparation). The large quantity of other-directed speech is
 likely due to the fact that Tseltal children (like Tsimane children)
@@ -1061,13 +1024,12 @@ interaction}\label{learning-from-short-periods-of-interaction}
 
 A third possibility is that these children learn effectively from short,
 routine language encounters. Bursty input appears to be the norm across
-a number of linguistic and interactive scales (Abney, Dale, Louwerse, \&
-Kello, 2018; Blasi et al., in preparation; Fusaroli,
-Razczaszek-Leonardi, \& Tylén, 2014), and experiment-based work suggests
-that children can benefit from massed presentation of new information
-(Schwab \& Lew-Williams, 2016). We propose two mechanisms through which
-Tseltal children might capitalize on the distribution of speech input in
-their environment: they experience most language input during routine
+a number of linguistic and interactive scales (e.g., Abney et al., 2017;
+Blasi et al., in preparation), and experiment-based work suggests that
+children can benefit from massed presentation of new information (Schwab
+\& Lew-Williams, 2016). We propose two mechanisms through which Tseltal
+children might capitalize on the distribution of speech input in their
+environment: they experience most language input during routine
 activities and they can consolidate experienced input during the
 downtime between interactive peaks. Neither of these mechanisms are
 proposed to be particular to Tseltal children, but might be employed to
@@ -1135,7 +1097,7 @@ There is little quantitative data on Mayan children's daytime and
 nighttime sleeping patterns, but one study estimates that Yucatec Mayan
 children between 0;0 and 2;0 sleep or rest nearly 15\% of the time
 between morning and evening (Gaskins, 2000), again, at times that suited
-the child (@ Morelli et al., 1992). If Tseltal children's interactional
+the child (Morelli et al., 1992). If Tseltal children's interactional
 peaks are bookended by short naps, it could contribute to efficient
 consolidation of new information encountered. How often Tseltal children
 sleep, how deeply, and how their sleeping patterns may relate to their
@@ -1155,19 +1117,17 @@ analysis of these children's receptive and productive lexical,
 morphological, and syntactic knowledge, including experiment and
 questionnaire based measures that build on past linguistic work (Brown,
 1997, 1998b, 1998c, 1998a, 2011, 2014; Brown \& Gaskins, 2014) is needed
-to establish trajectory of early language development in
-Tseltal.\footnote{Other corpus- and experiment-based data and analyses
-  from the Tseltal community are made available via the Casillas
-  HomeBank corpus.} To fully understand the extent to which language
-learning mechanisms are shared across ethnolinguistically diverse
-samples we cannot simply continue to compare developmental benchmarks.
-More promising long-term approaches include a focus on how
+to establish trajectory of early language development in Tseltal
+(Casillas et al., 2017a). To fully understand the extent to which
+language learning mechanisms are shared across ethnolinguistically
+diverse samples we cannot simply continue to compare developmental
+benchmarks. More promising long-term approaches include a focus on how
 within-community differences and/or cross-linguistic differences for
 related languages drive variation in learning (e.g., Pye, 2017;
 Weisleder \& Fernald, 2013). The current analyses are based on a corpus
 that is under active development. As new data are added, up-to-date
 versions of the same analyses will be available on the same page where
-the current data and analysis scripts can be found: URL.
+the current data and analysis scripts can be found: ADD-URL.
 
 \subsection{Conclusion}\label{disc-conclusion}
 
@@ -1213,13 +1173,6 @@ using the papaja library in RStudio (Aust \& Barth, 2018; RStudio Team,
 \setlength{\parindent}{-0.5in} \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
-\hypertarget{ref-abney2018bursts}{}
-Abney, D. H., Dale, R., Louwerse, M. M., \& Kello, C. T. (2018). The
-bursts and lulls of multimodal interaction: Temporal distributions of
-behavior reveal differences between verbal and non-verbal communication.
-\emph{Cognitive Science}, \emph{XX}, XX--XX.
-doi:\href{https://doi.org/10.1111/cogs.12612}{10.1111/cogs.12612}
-
 \hypertarget{ref-abney2017time}{}
 Abney, D. H., Smith, L. B., \& Yu, C. (2017). It's time: Quantifying the
 relevant time scales for joint attention. In G. Gunzelmann, A. Howes, T.
@@ -1241,6 +1194,13 @@ doi:\href{https://doi.org/doi.org/10.1080/016909697386628}{doi.org/10.1080/01690
 Bergelson, E., Amatuni, A., Dailey, S., Koorathota, S., \& Tor, S.
 (2018). Day by day, hour by hour: Naturalistic language input to
 infants. \emph{Developmental Science}, \emph{XX}, XX--XX.
+
+\hypertarget{ref-bergelsoncasillas2019what}{}
+Bergelson, E., Casillas, M., Soderstrom, M., Seidl, A., Warlaumont, A.
+S., \& Amatuni, A. (2019). What do north american babies hear? A
+large-scale cross-corpus analysis. \emph{Developmental Science},
+\emph{22}(1), e12724.
+doi:\href{https://doi.org/doi:10.1111/desc.12724}{doi:10.1111/desc.12724}
 
 \hypertarget{ref-blasiIPhuman}{}
 Blasi, D., Schikowski, R., Moran, S., Pfeiler, B., \& Stoll, S. (in
@@ -1352,12 +1312,12 @@ and planning in early language acquisition. \emph{Journal of Child
 Language}, \emph{43}, 1310--1337.
 
 \hypertarget{ref-Casillas-HB}{}
-Casillas, M., Brown, P., \& Levinson, S. C. (2017). Casillas HomeBank
+Casillas, M., Brown, P., \& Levinson, S. C. (2017a). Casillas HomeBank
 corpus.
 
 \hypertarget{ref-casillas2017ACLEWDAS}{}
 Casillas, M., Bunce, J., Soderstrom, M., Rosemberg, C., Migdalek, M.,
-Alam, F., \ldots{} Garrison, H. (2017). Introduction: The aclew das
+Alam, F., \ldots{} Garrison, H. (2017b). Introduction: The aclew das
 template {[}training materials{]}. Retrieved from
 \url{https://osf.io/aknjv/}
 
@@ -1402,11 +1362,6 @@ Dumay, N., \& Gaskell, M. G. (2007). Sleep-associated changes in the
 mental representation of spoken words. \emph{Psychological Science},
 \emph{18}(1), 35--39.
 
-\hypertarget{ref-vanegeren2001mother}{}
-Egeren, L. A. van, Barratt, M. S., \& Roach, M. A. (2001). Mother-infant
-responsiveness: Timing, mutual regulation, and interactional context.
-\emph{Developmental Psychology}, \emph{37}(5), 684--697.
-
 \hypertarget{ref-ferrier1978some}{}
 Ferrier, L. J. (1978). Some observations of error in context. In N.
 Waterson \& C. Snow (Eds.), \emph{The development of communication} (pp.
@@ -1427,12 +1382,6 @@ learning: The Wordbank project}. XX. Retrieved from
 Frost, R. L. A., \& Monaghan, P. (2017). Sleep-driven computations in
 speech processing. \emph{PloS One}, \emph{12}(1), e0169538.
 doi:\href{https://doi.org/doi:10.1371/journal.pone.0169538}{doi:10.1371/journal.pone.0169538}
-
-\hypertarget{ref-fusaroli2014synergy}{}
-Fusaroli, R., Razczaszek-Leonardi, J., \& Tylén, K. (2014). Dialog as
-interpersonal synergy. \emph{New Ideas in Psychology}, \emph{32},
-147--157.
-doi:\href{https://doi.org/10.1016/j.newideapsych.2013.03.005}{10.1016/j.newideapsych.2013.03.005}
 
 \hypertarget{ref-gaskins1996how}{}
 Gaskins, S. (1996). How Mayan parental theories come into play.
@@ -1524,11 +1473,6 @@ doi:\href{https://doi.org/10.1111/j.1467-7687.2008.00768.x\%5D}{10.1111/j.1467-7
 Huttenlocher, J., Waterfall, H., Vasilyeva, M., Vevea, J., \& Hedges, L.
 V. (2010). Sources of variability in children's language growth.
 \emph{Cognitive Psychology}, \emph{61}, 343--365.
-
-\hypertarget{ref-kuchirko2017becoming}{}
-Kuchirko, Y., Tafuro, L., \& Tamis-LeMonda, C. S. (2018). Becoming a
-communicative partner: Infant contingent responsiveness to maternal
-language and gestures. \emph{Infancy}, \emph{23}(4), 558--576.
 
 \hypertarget{ref-kuhl2004early}{}
 Kuhl, P. K. (2004). Early language acquisition: Cracking the speech
