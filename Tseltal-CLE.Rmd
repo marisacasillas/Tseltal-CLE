@@ -284,7 +284,7 @@ In what follows we first describe Tseltal children’s speech environments based
 ## Statistical models
 All analyses were conducted in R with generalized linear mixed-effects regressions using the glmmTMB package, and all plots were generated with ggplot2 [@R-glmmTMB; @R-ggplot2; @R-base].^[Data and analysis code can be found at https://github.com/marisacasillas/Tseltal-CLE.] Notably, all five dependent measures are restricted to non-negative (0--infinity) values. This implicit boundary restriction at zero causes the distributional variance of our measures to become non-gaussian (i.e., with a long right tail). We handle this issue by using a negative binomial linking function in the regression, which estimates a dispersion parameter (in addition to the mean and variance) that allows the model to more closely fit our non-negative, overdispersed data [@brooks2017modeling; @smithson2013generalized]. When, in addition to this, extra cases of zero were evident in the distribution (e.g., TCDS min/hr was zero because children were alone), we also added a zero-inflation parameter to the regression. A zero-inflation negative binomial regression creates two models: (a) a binary model to evaluate the likelihood of none vs. some presence of the variable (e.g., no vs. some TCDS) and (b) a count model of the variable (e.g., '3' vs. '5' TCDS min/hr), using the negative binomial distribution as the linking function. Alternative analyses using gaussian mixed-effects regressions with logged dependent variables are available in the Supplementary Materials, but are qualitatively similar to the results we report here.
 
-Our primary predictors were as follows: child age (months), household size (number of people), and number of non-target-child speakers present in that clip, all centered and standardized, plus squared time of day at the start of the clip (in decimal hours; centered on noon and standardized). We used squared time of day because the mornings and evenings should be more similar to each other than midday given that people disperse for chores after breakfast. We also added two-way interactions between child age and: (a) number of speakers present, (b) household size, and (c) time of day. Finally, we included a random effect of child, with random slopes of time of day. For the zero-inflation models, we included child age, number of speakers present, and time of day. We have noted below when models deviated from this core design to achieve convergence. We only report significant effects in the main text; full model outputs are available in the Supplementary Materials.
+Our primary predictors were as follows: child age (months), household size (number of people), and number of non-target-child speakers present in that clip, all centered and standardized, plus time of day at the start of the clip (as a factor; morning: up until 11:00; midday: 11:00--13:00; and afternoon: 13:00 onwards). We also added two-way interactions between child age and: (a) number of speakers present, (b) household size, and (c) time of day. We also included a random effect of child. For the zero-inflation models, we included number of speakers present.We only report significant effects in the main text; full model outputs are available in the Supplementary Materials.
 
 ```{r quantity_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # RANDOM
@@ -665,7 +665,13 @@ quantity.rand <- quantity.rand %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+quantity.rand$stthr.tri <- factor(quantity.rand$stthr.tri,
+                                  levels = c("midday", "morning", "afternoon"))
+quantity.rand$stthr.tri.a <- factor(quantity.rand$stthr.tri,
+                                  levels = c("afternoon", "midday", "morning"))
 
 quantity.rand.sa$child_sex <- as.factor(quantity.rand.sa$child_sex)
 quantity.rand.sa$mat_ed <- as.factor(quantity.rand.sa$mat_ed)
@@ -690,7 +696,14 @@ quantity.rand.sa <- quantity.rand.sa %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.sa.m)/nspkrs.sa.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+quantity.rand.sa$stthr.tri <- factor(quantity.rand.sa$stthr.tri,
+                                     levels = c("midday", "morning", "afternoon"))
+quantity.rand.sa$stthr.tri.a <- factor(quantity.rand.sa$stthr.tri,
+                                       levels = c("afternoon", "midday", "morning"))
+
 
 # tt sample
 quantity.nonrand.tt$child_sex <- as.factor(quantity.nonrand.tt$child_sex)
@@ -716,7 +729,13 @@ quantity.nonrand.tt <- quantity.nonrand.tt %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+quantity.nonrand.tt$stthr.tri <- factor(quantity.nonrand.tt$stthr.tri,
+                                        levels = c("midday", "morning", "afternoon"))
+quantity.nonrand.tt$stthr.tri.a <- factor(quantity.nonrand.tt$stthr.tri,
+                                          levels = c("afternoon", "midday", "morning"))
 
 quantity.nonrand.tt.sa$child_sex <- as.factor(quantity.nonrand.tt.sa$child_sex)
 quantity.nonrand.tt.sa$mat_ed <- as.factor(quantity.nonrand.tt.sa$mat_ed)
@@ -741,7 +760,14 @@ quantity.nonrand.tt.sa <- quantity.nonrand.tt.sa %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.sa.m)/nspkrs.sa.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+quantity.nonrand.tt.sa$stthr.tri <- factor(quantity.nonrand.tt.sa$stthr.tri,
+                                           levels = c("midday", "morning", "afternoon"))
+quantity.nonrand.tt.sa$stthr.tri.a <- factor(quantity.nonrand.tt.sa$stthr.tri,
+                                             levels = c("afternoon", "midday", "morning"))
+
 ```
 
 ```{r quantity_plots, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -864,8 +890,6 @@ grid.arrange(tdsmph.segments.rand_and_tt.zoomedin, odsmph.segments.rand_and_tt, 
 ```
 
 ## Target-child-directed speech (TCDS)
-The 10 Tseltal children in our sample were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan children [@shneidman2012language], as illustrated in [Figure 4](#fig4) (see @scaffIPlanguage for more detailed cross-language comparisons).^[We convert @shneidman2010language's utterance/hr estimates to min/hr with the median Tseltal utterance duration for non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms) because Yucatec and Tseltal are related languages.] We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, excluding the number of speakers present and time of day in the zero-inflation model to achieve convergence.
-
 ```{r fig4, echo=FALSE, fig.cap="TCDS rates reported from at-home recordings in different populations, including both urban (empty shape) and rural/indigenous (filled shape) samples. Each point shows the average TCDS rate at the indicated age, while size indicates the number of children sampled (range: 1--26). Data sources: @bergelsoncasillas2019what US/Canada; @shneidman2010language US and Yucatec; @vogt2015communicative Dutch, Mozambique urban and rural; @scaffIPlanguage Tsimane.", message=FALSE, warning=FALSE, fig.height=2.5}
 # Prep comparison data for matching figures
 comparison.data <- read_csv(comparison.file)
@@ -937,31 +961,71 @@ tdsmph.comparison
 # mean is much smaller than variance
 tds.rand.zinb <- glmmTMB(round(tds_mph,0) ~
                            tchiyr.std +
-                           I(stthr.std^2) +
+                           stthr.tri +
                            hsz.std +
                            nsk.std +
-                           tchiyr.std:I(stthr.std^2) +
+                           tchiyr.std:stthr.tri +
                            tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
-                           (1+I(stthr.std^2)|aclew_child_id),
+                           (1|aclew_child_id),
                          data=quantity.rand,
-                         ziformula=~tchiyr.std,#nsk.std,I(stthr.std^2)
+                         ziformula=~nsk.std,
                          family="nbinom1")
 #res = simulateResiduals(tds.rand.zinb)
 #plot(res, rank = T)
 #summary(tds.rand.zinb)
-#I(stthr.std^2)              4.3219     1.9170   2.254   0.02417 *  
-#nsk.std                     0.2440     0.1346   1.813   0.06982 .  
-#tchiyr.std:I(stthr.std^2)  -5.2174     1.9739  -2.643   0.00821 ** 
-# ZI effects (only marginal)
-#tchiyr.std    -7.772      4.161  -1.868   0.0618 .
+#Conditional model:
+#                              Estimate Std. Error z value Pr(>|z|)   
+#(Intercept)                    0.82318    0.38815   2.121  0.03394 * 
+#tchiyr.std                     0.44447    0.42262   1.052  0.29294   
+#stthr.trimorning               0.81894    0.39733   2.061  0.03929 * 
+#stthr.triafternoon             0.49070    0.37401   1.312  0.18952   
+#hsz.std                       -0.08792    0.26286  -0.334  0.73802   
+#nsk.std                       -0.12782    0.16269  -0.786  0.43206   
+#tchiyr.std:stthr.trimorning   -0.23599    0.39305  -0.600  0.54823   
+#tchiyr.std:stthr.triafternoon -0.81223    0.37874  -2.145  0.03199 * 
+#tchiyr.std:hsz.std            -0.21337    0.32104  -0.665  0.50629   
+#tchiyr.std:nsk.std             0.60579    0.19780   3.063  0.00219 **
+#---
+#Zero-inflation model:
+#            Estimate Std. Error z value Pr(>|z|)
+#(Intercept)   -56.90   14003.31  -0.004    0.997
+#nsk.std       -55.17   14243.76  -0.004    0.997
 # save for reporting
-tds.rand.zinb.COEF.time <-
-  coef(summary(tds.rand.zinb))[[1]]["I(stthr.std^2)",] 
+tds.rand.zinb.COEF.morn <-
+  coef(summary(tds.rand.zinb))[[1]]["stthr.trimorning",] 
+tds.rand.zinb.COEF.aft <-
+  coef(summary(tds.rand.zinb))[[1]]["stthr.triafternoon",] 
 tds.rand.zinb.COEF.agetime <-
-  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:I(stthr.std^2)",]
-tds.rand.zinb.COEF.ZI.age <-
-  coef(summary(tds.rand.zinb))[[2]]["tchiyr.std",] 
+  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",]
+tds.rand.zinb.COEF.agensk <-
+  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:nsk.std",] 
+
+# test the other two-way effects of time of day
+tds.rand.zinb.v2 <- glmmTMB(round(tds_mph,0) ~
+                           tchiyr.std +
+                           stthr.tri.a +
+                           hsz.std +
+                           nsk.std +
+                           tchiyr.std:stthr.tri.a +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:nsk.std +
+                           (1|aclew_child_id),
+                         data=quantity.rand,
+                         ziformula=~nsk.std,
+                         family="nbinom1")
+#summary(tds.rand.zinb.v2)
+#stthr.tri.amidday              -0.4886     0.3787  -1.290       0.19700    
+#stthr.tri.amorning              0.3044     0.2879   1.057       0.29048    
+#tchiyr.std:stthr.tri.amidday    0.7326     0.3588   2.042       0.04114 *  
+#tchiyr.std:stthr.tri.amorning   0.4552     0.2766   1.646       0.09984 .  
+# save for reporting
+tds.rand.zinb.v2.COEF.aft.vs.morn <-
+  coef(summary(tds.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
+tds.rand.zinb.v2.COEF.age.aft.vs.morn <-
+  coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
+tds.rand.zinb.v2.COEF.age.aft.vs.midd <-
+  coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
 
 ## TCDS tt sample ####
 #ggplot(quantity.nonrand.tt, aes(round(tds_mph,0))) + geom_histogram()
@@ -971,48 +1035,91 @@ tds.rand.zinb.COEF.ZI.age <-
 # not zero-inflated (nature of this sample)
 tds.tt.nb <- glmmTMB(round(tds_mph,0) ~
                        tchiyr.std +
-                       I(stthr.std^2) +
+                       stthr.tri +
                        hsz.std +
                        nsk.std +
-                       tchiyr.std:I(stthr.std^2) +
+                       tchiyr.std:stthr.tri +
                        tchiyr.std:hsz.std +
                        tchiyr.std:nsk.std +
-                       (1|aclew_child_id), #I(stthr.std^2)
+                       (1|aclew_child_id),
                      data=quantity.nonrand.tt,
                      family="nbinom1")
 #res = simulateResiduals(tds.tt.nb)
 #plot(res, rank = T)
 #summary(tds.tt.nb)
-#tchiyr.std:I(stthr.std^2)  -2.7328     1.6065  -1.701    0.0889 .  
-#tchiyr.std:hsz.std         -0.3726     0.2152  -1.732    0.0834 .
+#Conditional model:
+#                              Estimate Std. Error z value  Pr(>|z|)    
+#(Intercept)                    2.18313    0.21298  10.250  <0.0001 ***
+#tchiyr.std                    -0.22751    0.19781  -1.150  0.2501    
+#stthr.trimorning               0.35533    0.23475   1.514  0.1301    
+#stthr.triafternoon             0.14484    0.21939   0.660  0.5091    
+#hsz.std                       -0.25282    0.15437  -1.638  0.1015    
+#nsk.std                       -0.06740    0.09198  -0.733  0.4637    
+#tchiyr.std:stthr.trimorning   -0.24161    0.22835  -1.058  0.2900    
+#tchiyr.std:stthr.triafternoon -0.15237    0.20725  -0.735  0.4622    
+#tchiyr.std:hsz.std            -0.46538    0.19241  -2.419  0.0156 *  
+#tchiyr.std:nsk.std             0.04160    0.11620   0.358  0.7203    
+#--
+#Zero-inflation model:
+#            Estimate Std. Error z value Pr(>|z|)    
+#(Intercept)  -3.7900     1.0050  -3.771 0.000162 ***
+#nsk.std       0.8721     0.7178   1.215 0.224397
+# save for reporting
+tds.tt.zinb.COEF.time <-
+  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:hsz.std",]
+
+# test the other two-way effects of time of day
+tds.tt.nb.v2 <- glmmTMB(round(tds_mph,0) ~
+                           tchiyr.std +
+                           stthr.tri.a +
+                           hsz.std +
+                           nsk.std +
+                           tchiyr.std:stthr.tri.a +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:nsk.std +
+                           (1|aclew_child_id),
+                         data=quantity.rand,
+                         ziformula=~nsk.std,
+                         family="nbinom1")
+#summary(tds.rand.zinb.v2)
 ```
 
-The rate of TCDS in the randomly sampled clips was primarily affected by factors relating to the time of day. The count model showed that, overall, the children were more likely to hear TCDS in the mornings and evenings than around midday (B = `r round(tds.rand.zinb.COEF.time[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.time[[2]],2)`, z = `r round(tds.rand.zinb.COEF.time[[3]],2)`, p = `r round(tds.rand.zinb.COEF.time[[4]],2)`). Time-of-day effects were stronger for the older children, as illustrated in [Figure 5](#fig5) (B = `r round(tds.rand.zinb.COEF.agetime[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.agetime[[2]],2)`, z = `r round(tds.rand.zinb.COEF.agetime[[3]],2)`, p = `r round(tds.rand.zinb.COEF.agetime[[4]],2)`). There were no significant effects of child age, household size, or number of speakers present, and no significant effects in the zero-inflation model.
+The 10 Tseltal children in our sample were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan children [@shneidman2012language], as illustrated in [Figure 4](#fig4) (see @scaffIPlanguage for more detailed cross-language comparisons).^[We convert @shneidman2010language's utterance/hr estimates to min/hr with the median Tseltal utterance duration for non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms) because Yucatec and Tseltal are related languages.] We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, excluding the number of speakers present and time of day in the zero-inflation model to achieve convergence.
 
-``` {r fig5, echo=FALSE, fig.cap="TCDS rate heard at different times of day by children 12 months and younger (left) and 13 months and older (right) in the randomly selected (dark purple; solid) and turn-taking (light green; dashed) clips.", message=FALSE, warning=FALSE, fig.height=2.5}
+The rate of TCDS in the randomly sampled clips was primarily affected by factors relating to the time of day (see [Figure 5](#fig5)). The count model showed that the children were more likely to hear TCDS in the mornings than around midday (B = `r round(tds.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.morn[[2]],2)`, z = `r round(tds.rand.zinb.COEF.morn[[3]],2)`, p = `r round(tds.rand.zinb.COEF.morn[[4]],2)`), with no difference between morning and afternoon (p = `r round(tds.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`) or midday and afternoon (p = `r round(tds.rand.zinb.COEF.aft[[4]],2)`) TCDS rates. Time of day effects varied by age: relative to younger target children, older children were significantly more likely to hear TCDS at midday (B = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[1]],2)`, SD = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[2]],2)`, z = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[3]],2)`, p = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[4]],2)`) and marginally more likely to hear it in the morning (B = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[1]],2)`, SD = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[2]],2)`, z = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[3]],2)`, p = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`), compared to the afternoon. Older target children were also significantly more likely to hear TCDS when more speakers were present, compared to younger children (B = `r round(tds.rand.zinb.COEF.agensk[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.agensk[[2]],2)`, z = `r round(tds.rand.zinb.COEF.agensk[[3]],2)`, p = `r round(tds.rand.zinb.COEF.agensk[[4]],3)`). There were no significant effects of target child age or household size, and no significant effects in the zero-inflation model.
+
+``` {r fig5, echo=FALSE, fig.cap="TCDS rate heard at different times of day in the randomly selected (left) and turn-taking (right) clips by children age 1;0 and younger (light colors) and 1;0 and older (dark colors) .", message=FALSE, warning=FALSE, fig.height=2.5}
 quantity.nonrand.tt$Sample <- "Turn taking"
 quantity.rand$Sample <- "Random"
 quantity.rand_and_tt.all <- bind_rows(quantity.nonrand.tt, quantity.rand)
-tod.tcds <- ggplot(data = quantity.rand_and_tt.all) +
-  geom_point(data = quantity.rand_and_tt.all,
-             aes(y = round(tds_mph,0), x = start.hr, color = Sample,
-                 group = interaction(as.factor(ifelse(age_mo_round < 13, -1, 1)), Sample))) +
-  geom_smooth(data = quantity.rand_and_tt.all,
-              aes(y = round(tds_mph,0), x = start.hr, color = Sample, fill = Sample,
-                  group = interaction(as.factor(ifelse(age_mo_round < 13, -1, 1)), Sample)),
-              method = "lm", formula = y ~ poly(x, 2)) +
-  facet_grid(~ as.factor(ifelse(age_mo_round < 13, "<13mo", "13+mo"))) +
-  ylab("TCDS (min/hr)") + xlab("Time of day (hour)")	+
+quantity.rand_and_tt.all$stthr.tri.centered <- factor(
+  quantity.rand_and_tt.all$stthr.tri,
+  levels = c("morning", "midday", "afternoon"))
+quantity.rand_and_tt.all$SplitAge <- ifelse(
+  quantity.rand_and_tt.all$age_mo_round < 13, "Under 1;0", "1;0+")
+quantity.rand_and_tt.all$SplitAge <- factor(quantity.rand_and_tt.all$SplitAge,
+  levels = c("Under 1;0", "1;0+"))
+tod.tcds <- ggplot(data = quantity.rand_and_tt.all, aes(
+  y = round(tds_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  facet_grid(~ Sample) +
+  ylab("TCDS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
   scale_y_continuous(limits=c(-10,40),
                      breaks=c(0,10,20, 30, 40)) +
-  scale_x_continuous(limits=c(8,18),
-                     breaks=seq(8,18,2)) +
-  coord_cartesian(ylim=c(0,40),xlim=c(8,18)) +
-  scale_color_manual(values = viridis(3)) +
-  scale_fill_manual(values = viridis(3)) +
+  scale_color_manual(guide = FALSE, values = viridis(3)) +
+  scale_fill_manual(guide = FALSE, values = viridis(3)) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,40)) +
   theme_apa() +
   theme(legend.position="right",
-        axis.line = element_line(color="black", size = 0.4))
+        axis.line = element_line(color="black", size = 0.4)) +
+  guides(alpha = guide_legend(override.aes = list(fill = c("gray80", "gray30"))))
 tod.tcds
 ```
 
@@ -1050,31 +1157,73 @@ In contrast to findings from @shneidman2012language on Yucatec Mayan, most TCDS 
 # mean is much smaller than variance
 ods.rand.zinb <- glmmTMB(round(ods_mph,0) ~
                            tchiyr.std +
-                           I(stthr.std^2) +
+                           stthr.tri +
                            hsz.std +
                            nsk.std +
-                           tchiyr.std:I(stthr.std^2) +
+                           tchiyr.std:stthr.tri +
                            tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
-                           (1|aclew_child_id), #I(stthr.std^2)
+                           (1|aclew_child_id),
                          data=quantity.rand,
-                         ziformula=~tchiyr.std+I(stthr.std^2),#nsk.std
+                         ziformula=~nsk.std,
                          family="nbinom1")
 #res = simulateResiduals(ods.rand.zinb)
 #plot(res, rank = T)
 #summary(ods.rand.zinb)
-#I(stthr.std^2)             2.70263    1.14392   2.363   0.0181 *  
-#nsk.std                    1.05622    0.09153  11.540   <2e-16 ***
-#tchiyr.std:I(stthr.std^2)  2.18657    1.23314   1.773   0.0762 .  
-#tchiyr.std:hsz.std         0.32649    0.16254   2.009   0.0446 *  
-# No significant ZI effects
+#Conditional model:
+#                              Estimate Std. Error z value  Pr(>|z|)    
+#(Intercept)                    2.86750    0.15974  17.951  < 0.001 ***
+#tchiyr.std                    -0.12805    0.18369  -0.697  0.4857    
+#stthr.trimorning               0.36202    0.17348   2.087  0.0369 *  
+#stthr.triafternoon             0.29431    0.15573   1.890  0.0588 .  
+#hsz.std                        0.04324    0.09867   0.438  0.6612    
+#nsk.std                        0.64982    0.08871   7.325  < 0.001 ***
+#tchiyr.std:stthr.trimorning    0.09915    0.20802   0.477  0.6336    
+#tchiyr.std:stthr.triafternoon  0.37800    0.17103   2.210  0.0271 *  
+#tchiyr.std:hsz.std             0.31660    0.13159   2.406  0.0161 *  
+#tchiyr.std:nsk.std            -0.01992    0.13093  -0.152  0.8791    
+#---
+#Zero-inflation model:
+#            Estimate Std. Error z value Pr(>|z|)
+#(Intercept)   -50.25   10421.88  -0.005    0.996
+#nsk.std       -53.75   10600.83  -0.005    0.996
 # save for reporting
-ods.rand.zinb.COEF.time <-
-  coef(summary(ods.rand.zinb))[[1]]["I(stthr.std^2)",] 
+ods.rand.zinb.COEF.morn <-
+  coef(summary(ods.rand.zinb))[[1]]["stthr.trimorning",] 
+ods.rand.zinb.COEF.aft <-
+  coef(summary(ods.rand.zinb))[[1]]["stthr.triafternoon",] 
 ods.rand.zinb.COEF.nsk <-
   coef(summary(ods.rand.zinb))[[1]]["nsk.std",] 
-ods.rand.zinb.COEF.agehsz <-
-  coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:hsz.std",]
+ods.rand.zinb.COEF.age.morn <-
+  coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:stthr.trimorning",]
+ods.rand.zinb.COEF.age.aft <-
+  coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",]
+ods.rand.zinb.COEF.age.hsz <-
+  coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:hsz.std",] 
+
+# test the other two-way effects of time of day
+ods.rand.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
+                           tchiyr.std +
+                           stthr.tri.a +
+                           hsz.std +
+                           nsk.std +
+                           tchiyr.std:stthr.tri.a +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:nsk.std +
+                           (1|aclew_child_id),
+                         data=quantity.rand,
+                         ziformula=~nsk.std,
+                         family="nbinom1")
+# save for reporting
+#summary(ods.rand.zinb.v2)
+#stthr.tri.amidday             -0.29431    0.15573  -1.890               0.0588 .  
+#stthr.tri.amorning             0.06770    0.14238   0.476               0.6344    
+#tchiyr.std:stthr.tri.amidday  -0.37800    0.17103  -2.210               0.0271 *  
+#tchiyr.std:stthr.tri.amorning -0.27885    0.17162  -1.625               0.1042    
+ods.rand.zinb.v2.COEF.aft.vs.morn <-
+  coef(summary(ods.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
+ods.rand.zinb.v2.COEF.age.aft.vs.morn <-
+  coef(summary(ods.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
 
 ## ODS tt sample ####
 #ggplot(quantity.nonrand.tt, aes(round(ods_mph,0))) + geom_histogram()
@@ -1108,8 +1257,38 @@ ods.tt.zinb.COEF.nsk <-
 ```
 
 ## Other-directed speech (ODS)
-Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes of ODS per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, nearly six times as much speech as was directed to them, on average. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression, excluding by-child intercepts of time of day in the count model and the number of speakers present in the zero-inflation model to achieve convergence. The count model of ODS in the randomly selected clips revealed that the presence of more speakers was strongly associated with more ODS (B = `r round(ods.rand.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.rand.zinb.COEF.nsk[[3]],2)`, p = `r round(ods.rand.zinb.COEF.nsk[[4]],2)`). There were an average of `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), more than half of whom were typically adults. Additionally, more ODS occurred in the mornings and evenings (B = `r round(ods.rand.zinb.COEF.time[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.time[[2]],2)`, z = `r round(ods.rand.zinb.COEF.time[[3]],2)`, p = `r round(ods.rand.zinb.COEF.time[[4]],2)`), and was also more frequent in large households for older target children compared to younger target children (B = `r round(ods.rand.zinb.COEF.agehsz[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.agehsz[[2]],2)`, z = `r round(ods.rand.zinb.COEF.agehsz[[3]],2)`, p = `r round(ods.rand.zinb.COEF.agehsz[[4]],2)`). There were no other significant effects on ODS rate, and no significant effects in the zero-inflation models.
+Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes of ODS per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, nearly six times as much speech as was directed to them, on average. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression, excluding by-child intercepts of time of day in the count model and the number of speakers present in the zero-inflation model to achieve convergence.
+
+The count model of ODS in the randomly selected clips revealed that the presence of more speakers was strongly associated with more ODS (B = `r round(ods.rand.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.rand.zinb.COEF.nsk[[3]],2)`, p = `r round(ods.rand.zinb.COEF.nsk[[4]],2)`). There were an average of `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), more than half of whom were typically adults. Older target children were also significantly more likely to hear ODS in large households, compared to younger children (B = `r round(ods.rand.zinb.COEF.age.hsz[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.hsz[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.hsz[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.hsz[[4]],3)`).
 <!--That said, these estimates may be comparable to young North American infants (6--7 months) living in nuclear family homes [@bergelson2018day], so a high incidence of ODS may be common for infants in many cultural contexts.-->
+
+``` {r fig5, echo=FALSE, fig.cap="TCDS rate heard at different times of day in the randomly selected (left) and turn-taking (right) clips by children age 1;0 and younger (light colors) and 1;0 and older (dark colors) .", message=FALSE, warning=FALSE, fig.height=2.5}
+tod.ods <- ggplot(data = quantity.rand_and_tt.all, aes(
+  y = round(ods_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  facet_grid(~ Sample) +
+  ylab("ODS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,80),
+                     breaks=seq(0,80,20)) +
+  scale_color_manual(guide = FALSE, values = viridis(3)) +
+  scale_fill_manual(guide = FALSE, values = viridis(3)) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,80)) +
+  theme_apa() +
+  theme(legend.position="right",
+        axis.line = element_line(color="black", size = 0.4)) +
+  guides(alpha = guide_legend(override.aes = list(fill = c("gray80", "gray30"))))
+tod.ods
+```
+
+Like TCDS, ODS was also strongly affected by time of day. Compared to midday, target children were significantly more likely to hear ODS in the mornings (B = `r round(ods.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.morn[[2]],2)`, z = `r round(ods.rand.zinb.COEF.morn[[3]],2)`, p = `r round(ods.rand.zinb.COEF.morn[[4]],2)`) and marginally more likely to hear it in the afternoons (B = `r round(ods.rand.zinb.COEF.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.aft[[4]],2)`), with no significant difference between ODS rates in the mornings and afternoons (p = `r round(ods.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`). Compared to younger target children, older children were significantly more likely to hear ODS in the afternoon than at midday (B = `r round(ods.rand.zinb.COEF.age.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.aft[[4]],2)`), with no significant differences in age between afternoon and morning (p = `r round(ods.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`) or midday and morning (p = `r round(ods.rand.zinb.COEF.age.morn[[4]],2)`). There were no other significant effects on ODS rate, and no significant effects in the zero-inflation models.
+
 
 ``` {r fig6, echo=FALSE, fig.align = "center", fig.cap="Illustration of an annotated audio clip including the target child (TC), an older sister (SI), and mother (MO). Transitions between the target child and others are marked with solid and dashed lines. Interactional sequences are boxed in with dotted lines. Box color indicates TCDS (blue) and ODS (light gray).", out.width = '100%'}
 knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration.png")
@@ -2154,9 +2333,9 @@ The non-increase in CDS with age may be due to the fact CDS from other children 
 ### Learning from short periods of interaction
 A third possibility is that these children learn effectively from short, routine language encounters. Bursty input appears to be the norm across a number of linguistic and interactive scales [e.g., @abney2017time; @blasiIPhuman], and experiment-based work suggests that children can benefit from massed presentation of new information [@schwab2016repetition]. We propose two mechanisms through which Tseltal children might capitalize on the distribution of speech input in their environment: they experience most language input during routine activities and they can consolidate experienced input during the downtime between interactive peaks. Neither of these mechanisms are proposed to be particular to Tseltal children, but might be employed to explain their efficient learning.
 
-Tseltal children's linguistic input is not uniformly distributed over the day: all five measures of children's linguistic environment were more likely to occur in the mornings and afternoons than around midday, though younger children showed this pattern more robustly than older children. We had predicted a dip in linguistic input around midday because household members tend to disperse after breakfast to do their daily work before returning for another late afternoon meal. Young children, who are typically carried by their mothers for the majority of the day, followed this pattern more strongly than older children, who may have been more free to seek out interactions between mealtimes. A similar midday dip has been previously found for North American children's daylong recordings [@greenwood2011assessing; @soderstrom2013when], suggesting that non-uniform distributions of linguistic input may be the norm for children in a variety of different cultural-economic contexts. Our paper is the first to show that those time of day effects change with age in the first few years on a number of speech environment features (TCDS, TC--O transitions, O--TC transitions, and (marginally) ODS).
+Tseltal children's linguistic input is not uniformly distributed over the day: all five measures of children's linguistic environment were more likely to occur in the mornings and late afternoons than around midday, though younger children showed this pattern more robustly than older children. We had predicted a dip in linguistic input around midday because household members tend to disperse after breakfast to do their daily work before returning for another late afternoon meal. Young children, who are typically carried by their mothers for the majority of the day, followed this pattern more strongly than older children, who may have been more free to seek out interactions between mealtimes. A similar midday dip has been previously found for North American children's daylong recordings [@greenwood2011assessing; @soderstrom2013when], suggesting that non-uniform distributions of linguistic input may be the norm for children in a variety of different cultural-economic contexts. Our paper is the first to show that those time of day effects change with age in the first few years on a number of speech environment features (TCDS, TC--O transitions, O--TC transitions, and (marginally) ODS).
 
-Our impression from having transcribed these data is that the time of day effects likely arise from the activities that typically occur in the mornings and afternoons---meal preparation and dining times in particular---while napping could contribute to the midday dip [@soderstrom2013when].  Indeed, time of day effects in daylong recordings at Canadian homes and daycares were substantially weakened when naptimes were excluded from the analysis [@soderstrom2013when]. However, in the same Canadian data, the highest density speech input came during storytime and organized playtime (e.g., sing-alongs, painting), while mealtime was associated with less speech input. We expect that follow-up research which tracks activities in the Tseltal data will lead to very different conclusions: storytime and organized playtime are vanishingly rare in this non-child-centric community, and mealtime may represent a time of routine and rich linguistic experience. In both cases, however, the underlying association with activity (not hour) implies the possibility for action routines that may help children optimally extract information about what they will encounter and what they are expected to do in response, even over short periods [tamis2018routine; @nelson1985making; @snow1983turn; @bruner1983childs; @ferrier1978some; @shatz1978development].
+Our impression from having transcribed these data is that the time of day effects likely arise from the activities that typically occur in the mornings and late afternoons---meal preparation and dining times in particular---while napping could contribute to the midday dip [@soderstrom2013when].  Indeed, time of day effects in daylong recordings at Canadian homes and daycares were substantially weakened when naptimes were excluded from the analysis [@soderstrom2013when]. However, in the same Canadian data, the highest density speech input came during storytime and organized playtime (e.g., sing-alongs, painting), while mealtime was associated with less speech input. We expect that follow-up research which tracks activities in the Tseltal data will lead to very different conclusions: storytime and organized playtime are vanishingly rare in this non-child-centric community, and mealtime may represent a time of routine and rich linguistic experience. In both cases, however, the underlying association with activity (not hour) implies the possibility for action routines that may help children optimally extract information about what they will encounter and what they are expected to do in response, even over short periods [tamis2018routine; @nelson1985making; @snow1983turn; @bruner1983childs; @ferrier1978some; @shatz1978development].
 
 A more speculative possibility is that Tseltal children learn language on a natural input-consolidation cycle: the rarity of interactional peaks throughout the day may be complemented by an opportunity to consolidate new information. Sleep has been shown to benefit language learning tasks in both adults [@frost2017sleep; @mirkovic2016does; @dumay2007sleep] and children [@horvath2016daytime; @williams2014goodnight; @hupbach2009nap; @gomez2006naps], including word learning, phonotactic constraints, and syntactic structure. Our impression, both from the recordings and informal observations made during visits to the community, is that young Tseltal children take frequent naps, particularly at younger ages when they spend much of their day wrapped within the shawl on their mother's back. Mayan children tend to pick their own resting times [i.e., there are no formalized "sleep" times, even at bedtime @morelli1992cultural], and Mayan mothers take special care to keep infants in a calm and soothing environment in the first few months of life [e.g., @deleon2000emergent; @pye1992acquisition; @brazelton1972implications; @vogt1976tortillas]. There is little quantitative data on Mayan children's daytime and nighttime sleeping patterns, but one study estimates that Yucatec Mayan children between 0;0 and 2;0 sleep or rest nearly 15% of the time between morning and evening [@gaskins2000childrens], again, at times that suited the child [@morelli1992cultural]. If Tseltal children's interactional peaks are bookended by short naps, it could contribute to efficient consolidation of new information encountered. How often Tseltal children sleep, how deeply, and how their sleeping patterns may relate to their linguistic development is an important topic for future research.
 
