@@ -539,7 +539,7 @@ the model to more closely fit our non-negative, overdispersed data (M.
 E. Brooks et al., 2017b; Smithson \& Merkle, 2013). When, in addition to
 this, extra cases of zero were evident in the distribution (e.g., TCDS
 min/hr was zero because children were alone), we also added a
-zero-inflation parameter to the regression. A zero-inflation negative
+zero-inflation model to the regression. A zero-inflation negative
 binomial regression creates two models: (a) a binary model to evaluate
 the likelihood of none vs.~some presence of the variable (e.g., no
 vs.~some TCDS) and (b) a count model of the variable (e.g., \enquote{3}
@@ -551,19 +551,14 @@ results we report here.
 
 Our primary predictors were as follows: child age (months), household
 size (number of people), and number of non-target-child speakers present
-in that clip, all centered and standardized, plus squared time of day at
-the start of the clip (in decimal hours; centered on noon and
-standardized). We used squared time of day because the mornings and
-evenings should be more similar to each other than midday given that
-people disperse for chores after breakfast. We also added two-way
+in that clip, all centered and standardized, plus time of day at the
+start of the clip (as a factor; morning: up until 11:00; midday:
+11:00--13:00; and afternoon: 13:00 onwards). We also added two-way
 interactions between child age and: (a) number of speakers present, (b)
-household size, and (c) time of day. Finally, we included a random
-effect of child, with random slopes of time of day. For the
-zero-inflation models, we included child age, number of speakers
-present, and time of day. We have noted below when models deviated from
-this core design to achieve convergence. We only report significant
-effects in the main text; full model outputs are available in the
-Supplementary Materials.
+household size, and (c) time of day. We also included a random effect of
+child. For the zero-inflation models, we included number of speakers
+present. We only report significant effects in the main text; full model
+outputs are available in the Supplementary Materials.
 
 \begin{figure}
 \centering
@@ -576,20 +571,6 @@ dashed) samples. Bands on the linear trends show 95\% CIs.}
 
 \subsection{Target-child-directed speech
 (TCDS)}\label{target-child-directed-speech-tcds}
-
-The 10 Tseltal children in our sample were directly spoken to for an
-average of 3.63 minutes per hour in the random sample (median = 4.08;
-range = 0.83--6.55; \protect\hyperlink{fig3}{Figure 3}). These estimates
-are close to those reported for Yucatec Mayan children (Shneidman \&
-Goldin-Meadow, 2012), as illustrated in \protect\hyperlink{fig4}{Figure
-4} (see Scaff et al. (in preparation) for more detailed cross-language
-comparisons).\footnote{We convert Shneidman (2010)'s utterance/hr
-  estimates to min/hr with the median Tseltal utterance duration for
-  non-target child speakers: (1029ms) because Yucatec and Tseltal are
-  related languages.} We modeled TCDS min/hr in the random clips with a
-zero-inflated negative binomial regression, excluding the number of
-speakers present and time of day in the zero-inflation model to achieve
-convergence.
 
 \begin{figure}
 \centering
@@ -604,30 +585,39 @@ US/Canada; Shneidman (2010) US and Yucatec; P. Vogt, Mastin, and Schots
 Tsimane.}
 \end{figure}
 
-The rate of TCDS in the randomly sampled clips was primarily affected by
-factors relating to the time of day. The count model showed that the
-children were more likely to hear TCDS in the mornings than around
-midday (B = 0.82, SD = 0.40, z = 2.06, p = 0.04), with no difference
-between morning and afternoon (p = 0.29) or midday and afternoon (p =
-0.19) TCDS rates. Time of day effects varied by age: compared to the
-afternoons, during which children showed similar TCDS rates across age,
-older children were significantly more likely than younger children to
-hear TCDS at midday (B = 0.73, SD = 0.36, z = 2.04, p = 0.04) and
-marginally more likely than younger children to hear TCDS in the morning
-(B = 0.46, SD = 0.28, z = 1.65, p = 0.10; see
-\protect\hyperlink{fig5}{Figure 5}). Older target children were also
+The children in our sample were directly spoken to for an average of
+3.63 minutes per hour in the random sample (median = 4.08; range =
+0.83--6.55; \protect\hyperlink{fig3}{Figure 3}). These estimates are
+close to those reported for Yucatec Mayan children (Shneidman \&
+Goldin-Meadow, 2012), as illustrated in \protect\hyperlink{fig4}{Figure
+4} (see Scaff et al. (in preparation) for more detailed cross-language
+comparisons).\footnote{We convert Shneidman (2010)'s utterance/hr
+  estimates to min/hr with the median Tseltal utterance duration for
+  non-target child speakers: (1029ms) because Yucatec and Tseltal are
+  related languages.} We modeled TCDS min/hr in the random clips with a
+zero-inflated negative binomial regression. The rate of TCDS in the
+randomly sampled clips was primarily affected by factors relating to the
+time of day (see \protect\hyperlink{fig5}{Figure 5}). The count model
+showed that the children were more likely to hear TCDS in the mornings
+than around midday (B = 0.82, SD = 0.40, z = 2.06, p = 0.04), with no
+difference between morning and afternoon (p = 0.29) or midday and
+afternoon (p = 0.19) TCDS rates. Time of day effects varied by age:
+older children were significantly more likely to hear TCDS at midday (B
+= 0.73, SD = 0.36, z = 2.04, p = 0.04) and marginally more likely to
+hear it in the morning (B = 0.46, SD = 0.28, z = 1.65, p = 0.10)
+compared to the afternoons. Older target children were also
 significantly more likely to hear TCDS when more speakers were present,
-compared to younger children (B = 0.61, SD = 0.20, z = 3.06, p = 0).
+compared to younger children (B = 0.61, SD = 0.20, z = 3.06, p = 0.00).
 There were no significant effects of target child age or household size,
 and no significant effects in the zero-inflation model.
 
 \begin{figure}
 \centering
 \includegraphics{Tseltal-CLE_files/figure-latex/fig5-1.pdf}
-\caption{\label{fig:fig5}TCDS rate heard at different times of day by
-children 12 months and younger (left) and 13 months and older (right) in
-the randomly selected (dark purple; solid) and turn-taking (light green;
-dashed) clips.}
+\caption{\label{fig:fig5}TCDS (left) and ODS (right) rates heard at
+different times of day in the random (top) and turn-taking (bottom) clip
+samples by children age 1;0 and younger (light) and 1;0 and older
+(dark).}
 \end{figure}
 
 In contrast to findings from Shneidman and Goldin-Meadow (2012) on
@@ -643,19 +633,27 @@ Children heard an average of 21.05 minutes of ODS per hour in the random
 sample (median = 17.80; range = 3.57--42.80): that is, nearly six times
 as much speech as was directed to them, on average. We modeled ODS
 min/hr in the random clips with a zero-inflated negative binomial
-regression, excluding by-child intercepts of time of day in the count
-model and the number of speakers present in the zero-inflation model to
-achieve convergence. The count model of ODS in the randomly selected
-clips revealed that the presence of more speakers was strongly
-associated with more ODS (B = 1.06, SD = 0.09, z = 11.54, p = 0). There
+regression. The count model of ODS in the randomly selected clips
+revealed that the presence of more speakers was strongly associated with
+more ODS (B = 0.65, SD = 0.09, z = 7.32, p \textless{} 0.0001). There
 were an average of 3.44 speakers present other than the target child in
 the randomly selected clips (median = 3; range = 0--10), more than half
-of whom were typically adults. Additionally, more ODS occurred in the
-mornings and evenings (B = 2.70, SD = 1.14, z = 2.36, p = 0.02), and was
-also more frequent in large households for older target children
-compared to younger target children (B = 0.33, SD = 0.16, z = 2.01, p =
-0.04). There were no other significant effects on ODS rate, and no
-significant effects in the zero-inflation models.
+of whom were typically adults. Older target children were also
+significantly more likely to hear ODS in large households, compared to
+younger children (B = 0.32, SD = 0.13, z = 2.41, p = 0.02).
+
+Like TCDS, ODS was also strongly affected by time of day (see
+\protect\hyperlink{fig5}{Figure 5}). Compared to midday, target children
+were significantly more likely to hear ODS in the mornings (B = 0.36, SD
+= 0.17, z = 2.09, p = 0.04) and marginally more likely to hear it in the
+afternoons (B = 0.29, SD = 0.16, z = 1.89, p = 0.06), with no
+significant difference between ODS rates in the mornings and afternoons
+(p = 0.63). As before, ODS rate varied across the day by target child
+age: older children were significantly more likely to hear ODS in the
+afternoon than at midday (B = 0.38, SD = 0.17, z = 2.21, p = 0.03), with
+no significant differences between afternoon and morning (p = 0.10) or
+midday and morning (p = 0.63). There were no other significant effects
+on ODS rate, and no significant effects in the zero-inflation models.
 
 \begin{figure}
 
@@ -709,31 +707,40 @@ Other speakers responded contingently to the target children's
 vocalizations at an average rate of 1.38 transitions per minute (median
 = 0.40; range = 0--8.60; \protect\hyperlink{fig7}{Figure 7}). We modeled
 TC--O transtions per minute in the random clips with a zero-inflated
-negative binomial regression, excluding by-child intercepts of time of
-day to achieve convergence. The rate at which target children heard
+negative binomial regression. The rate at which target children heard
 contingent responses from others was primarily influenced by factors
-relating to the child's age. Older target children heard more contingent
-responses then younger ones when there were more speakers present (B =
-0.47, SD = 0.22, z = 2.11, p = 0.03). Also, as with the speech quantity
-measures, older target children heard more contingent responses in the
-mornings and evenings, while this effect was less pronounced for younger
-ones (B = -6.46, SD = 2.56, z = -2.52, p = 0.01). There were no further
-significant effects in the count or zero-inflation models.
+relating to target child age. The rate of contingent responses to target
+child vocalizations varied across the day by target child age: older
+children heard significantly more contingent responses around midday (B
+= 1.08, SD = 0.44, z = 2.44, p = 0.01) and in the morning (B = 0.94, SD
+= 0.37, z = 2.51, p = 0.01), compared to the afternoon, with no
+significant difference between morning and midday (p = 0.77). Older
+target children also heard significantly more contingent responses then
+younger ones when there were more speakers present (B = 0.56, SD = 0.23,
+z = 2.48, p = 0.01).There were no further significant effects in the
+count or zero-inflation models.
 
 \subsection{Other-to-target-child turn transitions
 (O--TC)}\label{other-to-target-child-turn-transitions-otc}
 
-The 10 Tseltal children responded contingently to others' target-child
-vocalizations at an average rate of 1.17 transitions per minute (median
-= 0.20; range = 0--8.80; \protect\hyperlink{fig7}{Figure 7}). We modeled
-O--TC transtions per minute in the random clips with a zero-inflated
-negative binomial regression, excluding by-child intercepts of time of
-day to achieve convergence. The rate at which target children responded
-contingently to others (O--TC turn transitions per minute) was similarly
-influenced by child age and time of day: younger target children were
-less likely than older ones to show peak response rates in the morning
-and evening (B = -7.30, SD = 2.61, z = -2.80, p = 0.01). There were no
-further significant effects in the count or zero-inflation models.
+The children in our sample responded contingently to others'
+target-child vocalizations at an average rate of 1.17 transitions per
+minute (median = 0.20; range = 0--8.80; \protect\hyperlink{fig7}{Figure
+7}). We modeled O--TC transtions per minute in the random clips with a
+zero-inflated negative binomial regression, excluding by-child
+intercepts of time of day to achieve convergence. The rate at which
+target children responded contingently to others (O--TC turn transitions
+per minute) was similarly influenced by child age and time of day: older
+children responded contingently to others' utterances significantly more
+often around midday (B = 1.46, SD = 0.46, z = 3.13, p = 0.00) and in the
+morning (B = 1.33, SD = 0.42, z = 3.19, p = 0.00), compared to the
+afternoon, with no significant difference between morning and midday (p
+= 0.81). Overall, older children responded to others' utterances at a
+marginally higher rate (B = 1.14, SD = 0.66, z = 1.74, p = 0.08). Older
+target children also gave significantly more contingent responses then
+younger ones when there were more speakers present (B = 0.52, SD = 0.22,
+z = 2.30, p = 0.02).There were no further significant effects in the
+count or zero-inflation models.
 
 \subsection{Sequence duration}\label{sequence-duration}
 
@@ -747,15 +754,14 @@ continue with multiple vocalizations in a row (e.g., TC--O--O--TC--OTH;
 earliest and latest vocalization for which there is no contingent prompt
 or response, respectively. In our analysis, each target child
 vocalization can only appear in one sequence. We modeled these sequence
-durations in the random clips with negative binomial regression alone,
-excluding by-child intercepts of time of day to achieve convergence.
-
-We detected 311 interactional sequences in the 90 randomly selected
-clips, with an average sequence duration of 10.13 seconds (median = 7;
-range = 0.56--85.47; \protect\hyperlink{fig7}{Figure 7}). The average
-number of child vocalizations within these sequences was 3.75 (range =
-1--29; median = 3). None of the predictors significantly impacted
-sequence duration (all \emph{p} \textgreater{} 0.09).
+durations in the random clips with negative binomial regression alone
+(i.e., with no zero-inflation model). We detected 311 interactional
+sequences in the 90 randomly selected clips, with an average sequence
+duration of 10.13 seconds (median = 7; range = 0.56--85.47;
+\protect\hyperlink{fig7}{Figure 7}). The average number of child
+vocalizations within these sequences was 3.75 (range = 1--29; median =
+3). None of the predictors significantly impacted sequence duration (all
+\emph{p} \&ge 0.21).
 
 \subsection{Peak interaction}\label{peak-interaction}
 
@@ -774,21 +780,57 @@ the random sample rate; median = 10.18; range = 1.37--24.42).
 
 We modeled each of these speech environment measures with parallel
 models to those used for the random sample above, though with no
-zero-inflation parameter for TCDS, TC--O, and O--TC rates because these
-extra-zero cases don't exist in the manually selected turn-taking clips.
-The impact of child age, time of day, household size, and number of
-speakers was qualitatively similar (see \protect\hyperlink{fig3}{Figures
-3}, \protect\hyperlink{fig4}{4}, and \protect\hyperlink{fig6}{6})
-between the randomly selected clips and the turn taking clips with the
-following exceptions: children heard significantly less ODS with age (B
-= -0.47, SD = 0.20, z = -2.39, p = 0.02), the presence of more speakers
-significantly decreased children's response rate to other's
-vocalizations (B = -0.26, SD = 0.12, z = -2.19, p = 0.03), and
-children's interactional sequences were shorter for older children (B =
--0.24, SD = 0.10, z = -2.42, p = 0.02), shorter for children in large
-households (B = -0.21, SD = 0.10, z = -2.25, p = 0.02), and longer
-during the mornings and evenings (B = 2.76, SD = 1.11, z = 2.50, p =
-0.01). Full model outputs can be viewed in the Supplementary Materials.
+zero-inflation model for TCDS, TC--O, and O--TC rates because extra-zero
+clips (e.g., due to no other speakers being present) do not exist in the
+turn-taking clips. Overall, the factors impacting the five speech
+environment measures look rather different when focusing on
+interactional peaks instead of randomly sampled clips (see
+\protect\hyperlink{fig3}{Figures 3}, \protect\hyperlink{fig5}{5} and
+\protect\hyperlink{fig7}{7}). In what follows, we briefly highlight
+differences between the random and turn-taking samples with respect to
+the influence of time of day and number of speakers present. Full model
+outputs are available in the Supplementary Materials.
+
+Time-of-day effects were consistently weaker in the turn-taking sample:
+interactional peaks tend to be similar across different hours of the
+daylong recording. In the random sample, TCDS and ODS rates both showed
+strong time-of-day effects, including an overall dip in both speech
+types at midday, and interactions between time of day and age. In
+contrast, TCDS rates in the turn-taking sample show no time-of-day
+effects or interactions between time-of-day and age, and ODS rates
+\emph{do} show a dip, but later in the day (i.e., afternoon, not midday;
+afternoon-vs.-midday: B = 0.70, SD = 0.29, z = 2.39, p = 0.02,
+afternoon-vs.morning: B = 0.72, SD = 0.25, z = 2.91, p = 0.00). Older
+children were also significantly more likely to hear ODS around midday
+compared to the morning (B = -0.56, SD = 0.28, z = -1.99, p = 0.05). In
+fact, the trend for ODS in the turn-taking sample is a dip around midday
+for younger children and a peak around midday for older children.
+Interestingly, older children also heard significantly less ODS than
+younger children in the turn-taking sample (B = -0.45, SD = 0.21, z =
+-2.19, p = 0.03), suggesting that older children may have different ODS
+experiences, distributed differently over the day. These findings also
+demonstrate that older children in the turn-taking sample had the
+highest TCDS:ODS ratio in our dataset. We see some shift in time-of-day
+effects for contingent response behavior as well. Whereas contingent
+response rates (TC--O and O--TC) in the random sample showed significant
+dips in the afternoon hours for older children, there were no
+time-of-day effects at all in the turn-taking sample. Running counter to
+this overall pattern, sequence duration in in the turn-taking sample
+showed significant time-of-day effects not found in the random sample:
+sequences were significantly longer in the afternoon compared to morning
+and midday (afternoon-vs.-morning: B = -0.32, SD = 0.15, z = -2.12, p =
+0.03; afternoon-vs.-midday: B = 0.38, SD = 0.15, z = 2.61, p = 0.01).
+
+Effects relating to the number of speakers present were also somewhat
+weaker in the turn-taking sample, though inconsistently. In the random
+sample, older children heard more TCDS, and participated in more
+contingent responses (both TC--O and O--TC) when more speakers were
+present, but this effect did not hold up in the turn-taking sample on
+any of the three measures. On the other hand, the number of speakers
+present was associated with significantly more ODS in both the random
+and turn-taking samples (random sample: B = 0.71, SD = 0.11, z = 6.63, p
+\textless{} 0.001), suggesting that the number of speakers is a robust
+predictor of ODS quantity across different contexts.
 
 \subsubsection{Peak minutes in the day}\label{peak-minutes-in-the-day}
 

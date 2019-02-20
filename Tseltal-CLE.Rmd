@@ -282,9 +282,9 @@ In what follows we first describe Tseltal children’s speech environments based
 
 # Results {#results}
 ## Statistical models
-All analyses were conducted in R with generalized linear mixed-effects regressions using the glmmTMB package, and all plots were generated with ggplot2 [@R-glmmTMB; @R-ggplot2; @R-base].^[Data and analysis code can be found at https://github.com/marisacasillas/Tseltal-CLE.] Notably, all five dependent measures are restricted to non-negative (0--infinity) values. This implicit boundary restriction at zero causes the distributional variance of our measures to become non-gaussian (i.e., with a long right tail). We handle this issue by using a negative binomial linking function in the regression, which estimates a dispersion parameter (in addition to the mean and variance) that allows the model to more closely fit our non-negative, overdispersed data [@brooks2017modeling; @smithson2013generalized]. When, in addition to this, extra cases of zero were evident in the distribution (e.g., TCDS min/hr was zero because children were alone), we also added a zero-inflation parameter to the regression. A zero-inflation negative binomial regression creates two models: (a) a binary model to evaluate the likelihood of none vs. some presence of the variable (e.g., no vs. some TCDS) and (b) a count model of the variable (e.g., '3' vs. '5' TCDS min/hr), using the negative binomial distribution as the linking function. Alternative analyses using gaussian mixed-effects regressions with logged dependent variables are available in the Supplementary Materials, but are qualitatively similar to the results we report here.
+All analyses were conducted in R with generalized linear mixed-effects regressions using the glmmTMB package, and all plots were generated with ggplot2 [@R-glmmTMB; @R-ggplot2; @R-base].^[Data and analysis code can be found at https://github.com/marisacasillas/Tseltal-CLE.] Notably, all five dependent measures are restricted to non-negative (0--infinity) values. This implicit boundary restriction at zero causes the distributional variance of our measures to become non-gaussian (i.e., with a long right tail). We handle this issue by using a negative binomial linking function in the regression, which estimates a dispersion parameter (in addition to the mean and variance) that allows the model to more closely fit our non-negative, overdispersed data [@brooks2017modeling; @smithson2013generalized]. When, in addition to this, extra cases of zero were evident in the distribution (e.g., TCDS min/hr was zero because children were alone), we also added a zero-inflation model to the regression. A zero-inflation negative binomial regression creates two models: (a) a binary model to evaluate the likelihood of none vs. some presence of the variable (e.g., no vs. some TCDS) and (b) a count model of the variable (e.g., '3' vs. '5' TCDS min/hr), using the negative binomial distribution as the linking function. Alternative analyses using gaussian mixed-effects regressions with logged dependent variables are available in the Supplementary Materials, but are qualitatively similar to the results we report here.
 
-Our primary predictors were as follows: child age (months), household size (number of people), and number of non-target-child speakers present in that clip, all centered and standardized, plus time of day at the start of the clip (as a factor; morning: up until 11:00; midday: 11:00--13:00; and afternoon: 13:00 onwards). We also added two-way interactions between child age and: (a) number of speakers present, (b) household size, and (c) time of day. We also included a random effect of child. For the zero-inflation models, we included number of speakers present.We only report significant effects in the main text; full model outputs are available in the Supplementary Materials.
+Our primary predictors were as follows: child age (months), household size (number of people), and number of non-target-child speakers present in that clip, all centered and standardized, plus time of day at the start of the clip (as a factor; morning: up until 11:00; midday: 11:00--13:00; and afternoon: 13:00 onwards). We also added two-way interactions between child age and: (a) number of speakers present, (b) household size, and (c) time of day. We also included a random effect of child. For the zero-inflation models, we included number of speakers present. We only report significant effects in the main text; full model outputs are available in the Supplementary Materials.
 
 ```{r quantity_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # RANDOM
@@ -883,6 +883,143 @@ tdsprp.segments.rand_and_tt.sa <- ggplot(subset(quantity.sa.rand_and_tt, SpkrAge
   theme_apa() +
   theme(legend.position="none",
         axis.line = element_line(color="black", size = 0.4))
+
+## TOD plots
+quantity.nonrand.tt$Sample <- "Turn taking"
+quantity.rand$Sample <- "Random"
+quantity.rand_and_tt.all <- bind_rows(quantity.nonrand.tt, quantity.rand)
+quantity.rand_and_tt.all$stthr.tri.centered <- factor(
+  quantity.rand_and_tt.all$stthr.tri,
+  levels = c("morning", "midday", "afternoon"))
+quantity.rand_and_tt.all$SplitAge <- ifelse(
+  quantity.rand_and_tt.all$age_mo_round < 13, "Under 1;0", "1;0+")
+quantity.rand_and_tt.all$SplitAge <- factor(quantity.rand_and_tt.all$SplitAge,
+  levels = c("Under 1;0", "1;0+"))
+
+tod.tcds <- ggplot(data = quantity.rand_and_tt.all, aes(
+  y = round(tds_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  facet_grid(~ Sample) +
+  ylab("TCDS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,40),
+                     breaks=c(0,10,20, 30, 40)) +
+  scale_color_manual(guide = FALSE, values = viridis(3)) +
+  scale_fill_manual(guide = FALSE, values = viridis(3)) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,40)) +
+  theme_apa() +
+  theme(legend.position="right",
+        axis.line = element_line(color="black", size = 0.4)) +
+  guides(alpha = guide_legend(override.aes = list(fill = c("gray80", "gray30"))))
+
+tod.ods <- ggplot(data = quantity.rand_and_tt.all, aes(
+  y = round(ods_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  facet_grid(~ Sample) +
+  ylab("ODS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,80),
+                     breaks=seq(0,80,20)) +
+  scale_color_manual(guide = FALSE, values = viridis(3)) +
+  scale_fill_manual(guide = FALSE, values = viridis(3)) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,80)) +
+  theme_apa() +
+  theme(legend.position="right",
+        axis.line = element_line(color="black", size = 0.4)) +
+  guides(alpha = guide_legend(override.aes = list(fill = c("gray80", "gray30"))))
+
+# individual TOD plots
+tod.tcds.rand <- ggplot(data = subset(quantity.rand_and_tt.all, Sample == "Random"), aes(
+  y = round(tds_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  ylab("TCDS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,40),
+                     breaks=c(0,10,20, 30, 40)) +
+  scale_color_manual(guide = FALSE, values = viridis(3)) +
+  scale_fill_manual(guide = FALSE, values = viridis(3)) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,40)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+tod.ods.rand <- ggplot(data = subset(quantity.rand_and_tt.all, Sample == "Random"), aes(
+  y = round(ods_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  ylab("ODS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,80),
+                     breaks=seq(0,80,20)) +
+  scale_color_manual(guide = FALSE, values = viridis(3)) +
+  scale_fill_manual(guide = FALSE, values = viridis(3)) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,80)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+tod.tcds.tt <- ggplot(data = subset(quantity.rand_and_tt.all, Sample == "Turn taking"), aes(
+  y = round(tds_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  ylab("TCDS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,40),
+                     breaks=c(0,10,20, 30, 40)) +
+  scale_color_manual(guide = FALSE, values = c("#21908CFF", "#21908CFF", "#FDE725FF")) +
+  scale_fill_manual(guide = FALSE, values = c("#21908CFF", "#21908CFF", "#FDE725FF")) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,40)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
+
+tod.ods.tt <- ggplot(data = subset(quantity.rand_and_tt.all, Sample == "Turn taking"), aes(
+  y = round(ods_mph, 0), x = stthr.tri.centered,
+  group = interaction(SplitAge, stthr.tri.centered),
+  color = Sample,
+  fill = Sample,
+  alpha = SplitAge)) +
+  geom_jitter() +
+  geom_boxplot(color = "black") +
+  ylab("ODS (min/hr)") + xlab("Time of day")	+
+  labs(alpha = "Age") +
+  scale_y_continuous(limits=c(-10,80),
+                     breaks=seq(0,80,20)) +
+  scale_color_manual(guide = FALSE, values = c("#21908CFF", "#21908CFF", "#FDE725FF")) +
+  scale_fill_manual(guide = FALSE, values = c("#21908CFF", "#21908CFF", "#FDE725FF")) +
+  scale_alpha_discrete(range = c(0.2, 0.8)) +
+  coord_cartesian(ylim=c(0,80)) +
+  theme_apa() +
+  theme(legend.position="none",
+        axis.line = element_line(color="black", size = 0.4))
 ```
 
 ```{r fig3, echo=FALSE, fig.cap="By-child estimates of minutes per hour of target-child-directed speech (left) and other-directed speech (right). Data are shown for the random (purple; solid) and turn taking (green; dashed) samples. Bands on the linear trends show 95% CIs.", message=FALSE, warning=FALSE, fig.height=2.5}
@@ -1065,62 +1202,33 @@ tds.tt.nb <- glmmTMB(round(tds_mph,0) ~
 #(Intercept)  -3.7900     1.0050  -3.771 0.000162 ***
 #nsk.std       0.8721     0.7178   1.215 0.224397
 # save for reporting
-tds.tt.zinb.COEF.time <-
-  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:hsz.std",]
+tds.tt.nb.COEF.age.hsz <-
+  coef(summary(tds.tt.nb))[[1]]["tchiyr.std:hsz.std",]
 
 # test the other two-way effects of time of day
 tds.tt.nb.v2 <- glmmTMB(round(tds_mph,0) ~
-                           tchiyr.std +
-                           stthr.tri.a +
-                           hsz.std +
-                           nsk.std +
-                           tchiyr.std:stthr.tri.a +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:nsk.std +
-                           (1|aclew_child_id),
-                         data=quantity.rand,
-                         ziformula=~nsk.std,
-                         family="nbinom1")
-#summary(tds.rand.zinb.v2)
+                       tchiyr.std +
+                       stthr.tri.a +
+                       hsz.std +
+                       nsk.std +
+                       tchiyr.std:stthr.tri.a +
+                       tchiyr.std:hsz.std +
+                       tchiyr.std:nsk.std +
+                       (1|aclew_child_id),
+                     data=quantity.nonrand.tt,
+                     family="nbinom1")
+#summary(tds.tt.nb.v2)
+#stthr.tri.amidday             -0.06471    0.23241  -0.278              0.7807    
+#stthr.tri.amorning             0.26769    0.21593   1.240              0.2151    
+#tchiyr.std:stthr.tri.amidday   0.03344    0.21400   0.156              0.8758    
+#tchiyr.std:stthr.tri.amorning -0.23644    0.21540  -1.098              0.2723    
+# no results to save for reporting
 ```
 
-The 10 Tseltal children in our sample were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan children [@shneidman2012language], as illustrated in [Figure 4](#fig4) (see @scaffIPlanguage for more detailed cross-language comparisons).^[We convert @shneidman2010language's utterance/hr estimates to min/hr with the median Tseltal utterance duration for non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms) because Yucatec and Tseltal are related languages.] We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression, excluding the number of speakers present and time of day in the zero-inflation model to achieve convergence.
+The children in our sample were directly spoken to for an average of `r round(mean(quantity.rand.bychild$tds_mph),2)` minutes per hour in the random sample (median = `r round(median(quantity.rand.bychild$tds_mph),2)`; range = `r round(min(quantity.rand.bychild$tds_mph),2)`--`r round(max(quantity.rand.bychild$tds_mph),2)`; [Figure 3](#fig3)). These estimates are close to those reported for Yucatec Mayan children [@shneidman2012language], as illustrated in [Figure 4](#fig4) (see @scaffIPlanguage for more detailed cross-language comparisons).^[We convert @shneidman2010language's utterance/hr estimates to min/hr with the median Tseltal utterance duration for non-target child speakers: (`r avg.utt.len.tseltal$median.utt.len`ms) because Yucatec and Tseltal are related languages.] We modeled TCDS min/hr in the random clips with a zero-inflated negative binomial regression. The rate of TCDS in the randomly sampled clips was primarily affected by factors relating to the time of day (see [Figure 5](#fig5)). The count model showed that the children were more likely to hear TCDS in the mornings than around midday (B = `r round(tds.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.morn[[2]],2)`, z = `r round(tds.rand.zinb.COEF.morn[[3]],2)`, p = `r round(tds.rand.zinb.COEF.morn[[4]],2)`), with no difference between morning and afternoon (p = `r round(tds.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`) or midday and afternoon (p = `r round(tds.rand.zinb.COEF.aft[[4]],2)`) TCDS rates. Time of day effects varied by age: older children were significantly more likely to hear TCDS at midday (B = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[1]],2)`, SD = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[2]],2)`, z = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[3]],2)`, p = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[4]],2)`) and marginally more likely to hear it in the morning (B = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[1]],2)`, SD = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[2]],2)`, z = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[3]],2)`, p = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`) compared to the afternoons. Older target children were also significantly more likely to hear TCDS when more speakers were present, compared to younger children (B = `r round(tds.rand.zinb.COEF.agensk[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.agensk[[2]],2)`, z = `r round(tds.rand.zinb.COEF.agensk[[3]],2)`, p = `r round(tds.rand.zinb.COEF.agensk[[4]],3)`). There were no significant effects of target child age or household size, and no significant effects in the zero-inflation model.
 
-The rate of TCDS in the randomly sampled clips was primarily affected by factors relating to the time of day (see [Figure 5](#fig5)). The count model showed that the children were more likely to hear TCDS in the mornings than around midday (B = `r round(tds.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.morn[[2]],2)`, z = `r round(tds.rand.zinb.COEF.morn[[3]],2)`, p = `r round(tds.rand.zinb.COEF.morn[[4]],2)`), with no difference between morning and afternoon (p = `r round(tds.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`) or midday and afternoon (p = `r round(tds.rand.zinb.COEF.aft[[4]],2)`) TCDS rates. Time of day effects varied by age: relative to younger target children, older children were significantly more likely to hear TCDS at midday (B = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[1]],2)`, SD = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[2]],2)`, z = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[3]],2)`, p = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.midd[[4]],2)`) and marginally more likely to hear it in the morning (B = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[1]],2)`, SD = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[2]],2)`, z = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[3]],2)`, p = `r round(tds.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`), compared to the afternoon. Older target children were also significantly more likely to hear TCDS when more speakers were present, compared to younger children (B = `r round(tds.rand.zinb.COEF.agensk[[1]],2)`, SD = `r round(tds.rand.zinb.COEF.agensk[[2]],2)`, z = `r round(tds.rand.zinb.COEF.agensk[[3]],2)`, p = `r round(tds.rand.zinb.COEF.agensk[[4]],3)`). There were no significant effects of target child age or household size, and no significant effects in the zero-inflation model.
-
-``` {r fig5, echo=FALSE, fig.cap="TCDS rate heard at different times of day in the randomly selected (left) and turn-taking (right) clips by children age 1;0 and younger (light colors) and 1;0 and older (dark colors) .", message=FALSE, warning=FALSE, fig.height=2.5}
-quantity.nonrand.tt$Sample <- "Turn taking"
-quantity.rand$Sample <- "Random"
-quantity.rand_and_tt.all <- bind_rows(quantity.nonrand.tt, quantity.rand)
-quantity.rand_and_tt.all$stthr.tri.centered <- factor(
-  quantity.rand_and_tt.all$stthr.tri,
-  levels = c("morning", "midday", "afternoon"))
-quantity.rand_and_tt.all$SplitAge <- ifelse(
-  quantity.rand_and_tt.all$age_mo_round < 13, "Under 1;0", "1;0+")
-quantity.rand_and_tt.all$SplitAge <- factor(quantity.rand_and_tt.all$SplitAge,
-  levels = c("Under 1;0", "1;0+"))
-tod.tcds <- ggplot(data = quantity.rand_and_tt.all, aes(
-  y = round(tds_mph, 0), x = stthr.tri.centered,
-  group = interaction(SplitAge, stthr.tri.centered),
-  color = Sample,
-  fill = Sample,
-  alpha = SplitAge)) +
-  geom_jitter() +
-  geom_boxplot(color = "black") +
-  facet_grid(~ Sample) +
-  ylab("TCDS (min/hr)") + xlab("Time of day")	+
-  labs(alpha = "Age") +
-  scale_y_continuous(limits=c(-10,40),
-                     breaks=c(0,10,20, 30, 40)) +
-  scale_color_manual(guide = FALSE, values = viridis(3)) +
-  scale_fill_manual(guide = FALSE, values = viridis(3)) +
-  scale_alpha_discrete(range = c(0.2, 0.8)) +
-  coord_cartesian(ylim=c(0,40)) +
-  theme_apa() +
-  theme(legend.position="right",
-        axis.line = element_line(color="black", size = 0.4)) +
-  guides(alpha = guide_legend(override.aes = list(fill = c("gray80", "gray30"))))
-tod.tcds
+``` {r fig5, echo=FALSE, fig.cap="TCDS (left) and ODS (right) rates heard at different times of day in the random (top) and turn-taking (bottom) clip samples by children age 1;0 and younger (light) and 1;0 and older (dark).", message=FALSE, warning=FALSE, fig.height=4}
+grid.arrange(tod.tcds.rand, tod.ods.rand, tod.tcds.tt, tod.ods.tt, nrow=2, ncol=2)
 ```
 
 ``` {r chitcdscorrs, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -1203,17 +1311,17 @@ ods.rand.zinb.COEF.age.hsz <-
 
 # test the other two-way effects of time of day
 ods.rand.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
-                           tchiyr.std +
-                           stthr.tri.a +
-                           hsz.std +
-                           nsk.std +
-                           tchiyr.std:stthr.tri.a +
-                           tchiyr.std:hsz.std +
-                           tchiyr.std:nsk.std +
-                           (1|aclew_child_id),
-                         data=quantity.rand,
-                         ziformula=~nsk.std,
-                         family="nbinom1")
+                              tchiyr.std +
+                              stthr.tri.a +
+                              hsz.std +
+                              nsk.std +
+                              tchiyr.std:stthr.tri.a +
+                              tchiyr.std:hsz.std +
+                              tchiyr.std:nsk.std +
+                              (1|aclew_child_id),
+                            data=quantity.rand,
+                            ziformula=~nsk.std,
+                            family="nbinom1")
 # save for reporting
 #summary(ods.rand.zinb.v2)
 #stthr.tri.amidday             -0.29431    0.15573  -1.890               0.0588 .  
@@ -1233,62 +1341,86 @@ ods.rand.zinb.v2.COEF.age.aft.vs.morn <-
 # still zero-inflated
 ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
                          tchiyr.std +
-                         I(stthr.std^2) +
+                         stthr.tri +
                          hsz.std +
                          nsk.std +
-                         tchiyr.std:I(stthr.std^2) +
+                         tchiyr.std:stthr.tri +
                          tchiyr.std:hsz.std +
                          tchiyr.std:nsk.std +
-                         (1|aclew_child_id), #I(stthr.std^2)
+                         (1|aclew_child_id),
                        data=quantity.nonrand.tt,
-                       ziformula=~nsk.std, #I(stthr.std^2)+tchiyr.std
+                       ziformula=~nsk.std,
                        family="nbinom1")
 #res = simulateResiduals(ods.tt.zinb)
 #plot(res, rank = T)
 #summary(ods.tt.zinb)
-#tchiyr.std                -0.46926    0.19644  -2.389   0.0169 *  
-#nsk.std                    0.60497    0.10473   5.777   0.00000000763 ***
-# No significant ZI effects
+#Conditional model:
+#                              Estimate Std. Error z value  Pr(>|z|)    
+#(Intercept)                    2.47226    0.21894  11.292  < 0.001 ***
+#tchiyr.std                    -0.44969    0.20523  -2.191  0.02844 *  
+#stthr.trimorning               0.02291    0.25858   0.089  0.92941    
+#stthr.triafternoon            -0.69960    0.29240  -2.393  0.01673 *  
+#hsz.std                       -0.43839    0.16870  -2.599  0.00936 ** 
+#nsk.std                        0.70801    0.10686   6.626  < 0.001 ***
+#tchiyr.std:stthr.trimorning   -0.56061    0.28206  -1.988  0.04686 *  
+#tchiyr.std:stthr.triafternoon -0.14065    0.30202  -0.466  0.64142    
+#tchiyr.std:hsz.std            -0.37513    0.21525  -1.743  0.08137 .  
+#tchiyr.std:nsk.std             0.10420    0.14355   0.726  0.46792    
+#---
+#Zero-inflation model:
+#            Estimate Std. Error z value Pr(>|z|)
+#(Intercept)   -32.21   12233.79  -0.003    0.998
+#nsk.std       -31.55   12037.74  -0.003    0.998
 # save for reporting
 ods.tt.zinb.COEF.age <-
   coef(summary(ods.tt.zinb))[[1]]["tchiyr.std",] 
+ods.tt.zinb.COEF.morn <-
+  coef(summary(ods.tt.zinb))[[1]]["stthr.trimorning",] 
+ods.tt.zinb.COEF.aft <-
+  coef(summary(ods.tt.zinb))[[1]]["stthr.triafternoon",] 
+ods.tt.zinb.COEF.hsz <-
+  coef(summary(ods.tt.zinb))[[1]]["hsz.std",] 
 ods.tt.zinb.COEF.nsk <-
   coef(summary(ods.tt.zinb))[[1]]["nsk.std",] 
+ods.tt.zinb.COEF.age.morn <-
+  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.trimorning",] 
+ods.tt.zinb.COEF.age.aft <-
+  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.triafternoon",] 
+ods.tt.zinb.COEF.age.hsz <-
+  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:hsz.std",] 
+
+# test the other two-way effects of time of day
+ods.tt.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
+                            tchiyr.std +
+                            stthr.tri.a +
+                            hsz.std +
+                            nsk.std +
+                            tchiyr.std:stthr.tri.a +
+                            tchiyr.std:hsz.std +
+                            tchiyr.std:nsk.std +
+                            (1|aclew_child_id),
+                          data=quantity.nonrand.tt,
+                          ziformula=~nsk.std,
+                          family="nbinom1")
+# save for reporting
+#summary(ods.tt.zinb.v2)
+#stthr.tri.amidday               0.6996     0.2924   2.393         0.01673 *  
+#stthr.tri.amorning              0.7225     0.2485   2.907         0.00364 ** 
+#tchiyr.std:stthr.tri.amidday    0.1407     0.3020   0.466         0.64142    
+#tchiyr.std:stthr.tri.amorning  -0.4200     0.2720  -1.544         0.12266   
+ods.tt.zinb.v2.COEF.aft.vs.morn <-
+  coef(summary(ods.tt.zinb.v2))[[1]]["stthr.tri.amorning",] 
+ods.tt.zinb.v2.COEF.aft.vs.midd <-
+  coef(summary(ods.tt.zinb.v2))[[1]]["stthr.tri.amidday",] 
+ods.tt.zinb.v2.COEF.age.aft.vs.morn <-
+  coef(summary(ods.tt.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
 ```
 
 ## Other-directed speech (ODS)
-Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes of ODS per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, nearly six times as much speech as was directed to them, on average. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression, excluding by-child intercepts of time of day in the count model and the number of speakers present in the zero-inflation model to achieve convergence.
-
-The count model of ODS in the randomly selected clips revealed that the presence of more speakers was strongly associated with more ODS (B = `r round(ods.rand.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.rand.zinb.COEF.nsk[[3]],2)`, p = `r round(ods.rand.zinb.COEF.nsk[[4]],2)`). There were an average of `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), more than half of whom were typically adults. Older target children were also significantly more likely to hear ODS in large households, compared to younger children (B = `r round(ods.rand.zinb.COEF.age.hsz[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.hsz[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.hsz[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.hsz[[4]],3)`).
+Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes of ODS per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, nearly six times as much speech as was directed to them, on average. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression. The count model of ODS in the randomly selected clips revealed that the presence of more speakers was strongly associated with more ODS (B = `r round(ods.rand.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.rand.zinb.COEF.nsk[[3]],2)`, p < 0.0001). There were an average of `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), more than half of whom were typically adults. Older target children were also significantly more likely to hear ODS in large households, compared to younger children (B = `r round(ods.rand.zinb.COEF.age.hsz[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.hsz[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.hsz[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.hsz[[4]],3)`).
 <!--That said, these estimates may be comparable to young North American infants (6--7 months) living in nuclear family homes [@bergelson2018day], so a high incidence of ODS may be common for infants in many cultural contexts.-->
 
-``` {r fig5, echo=FALSE, fig.cap="TCDS rate heard at different times of day in the randomly selected (left) and turn-taking (right) clips by children age 1;0 and younger (light colors) and 1;0 and older (dark colors) .", message=FALSE, warning=FALSE, fig.height=2.5}
-tod.ods <- ggplot(data = quantity.rand_and_tt.all, aes(
-  y = round(ods_mph, 0), x = stthr.tri.centered,
-  group = interaction(SplitAge, stthr.tri.centered),
-  color = Sample,
-  fill = Sample,
-  alpha = SplitAge)) +
-  geom_jitter() +
-  geom_boxplot(color = "black") +
-  facet_grid(~ Sample) +
-  ylab("ODS (min/hr)") + xlab("Time of day")	+
-  labs(alpha = "Age") +
-  scale_y_continuous(limits=c(-10,80),
-                     breaks=seq(0,80,20)) +
-  scale_color_manual(guide = FALSE, values = viridis(3)) +
-  scale_fill_manual(guide = FALSE, values = viridis(3)) +
-  scale_alpha_discrete(range = c(0.2, 0.8)) +
-  coord_cartesian(ylim=c(0,80)) +
-  theme_apa() +
-  theme(legend.position="right",
-        axis.line = element_line(color="black", size = 0.4)) +
-  guides(alpha = guide_legend(override.aes = list(fill = c("gray80", "gray30"))))
-tod.ods
-```
-
-Like TCDS, ODS was also strongly affected by time of day. Compared to midday, target children were significantly more likely to hear ODS in the mornings (B = `r round(ods.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.morn[[2]],2)`, z = `r round(ods.rand.zinb.COEF.morn[[3]],2)`, p = `r round(ods.rand.zinb.COEF.morn[[4]],2)`) and marginally more likely to hear it in the afternoons (B = `r round(ods.rand.zinb.COEF.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.aft[[4]],2)`), with no significant difference between ODS rates in the mornings and afternoons (p = `r round(ods.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`). Compared to younger target children, older children were significantly more likely to hear ODS in the afternoon than at midday (B = `r round(ods.rand.zinb.COEF.age.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.aft[[4]],2)`), with no significant differences in age between afternoon and morning (p = `r round(ods.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`) or midday and morning (p = `r round(ods.rand.zinb.COEF.age.morn[[4]],2)`). There were no other significant effects on ODS rate, and no significant effects in the zero-inflation models.
-
+Like TCDS, ODS was also strongly affected by time of day (see [Figure 5](#fig5)). Compared to midday, target children were significantly more likely to hear ODS in the mornings (B = `r round(ods.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.morn[[2]],2)`, z = `r round(ods.rand.zinb.COEF.morn[[3]],2)`, p = `r round(ods.rand.zinb.COEF.morn[[4]],2)`) and marginally more likely to hear it in the afternoons (B = `r round(ods.rand.zinb.COEF.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.aft[[4]],2)`), with no significant difference between ODS rates in the mornings and afternoons (p = `r round(ods.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`). As before, ODS rate varied across the day by target child age: older children were significantly more likely to hear ODS in the afternoon than at midday (B = `r round(ods.rand.zinb.COEF.age.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.aft[[4]],2)`), with no significant differences between afternoon and morning (p = `r round(ods.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`) or midday and morning (p = `r round(ods.rand.zinb.COEF.age.morn[[4]],2)`). There were no other significant effects on ODS rate, and no significant effects in the zero-inflation models.
 
 ``` {r fig6, echo=FALSE, fig.align = "center", fig.cap="Illustration of an annotated audio clip including the target child (TC), an older sister (SI), and mother (MO). Transitions between the target child and others are marked with solid and dashed lines. Interactional sequences are boxed in with dotted lines. Box color indicates TCDS (blue) and ODS (light gray).", out.width = '100%'}
 knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration.png")
@@ -1648,7 +1780,6 @@ cvc.ovc.per.seg.rand_and_tt <- bind_rows(mutate(cvc.ovc.per.seg.rand, sample = "
 cvc.ovc.per.seg.rand_and_tt.nonas <- filter(cvc.ovc.per.seg.rand_and_tt, !(is.na(cvc.ovc.delta.norm)))
 
 ## Prepare variables for modeling
-# prepare predictors for modeling
 turn.transitions.rand <- filter(turn.transitions.rand_and_tt, sample == "random")
 turn.transitions.rand$child_sex <- as.factor(turn.transitions.rand$child_sex)
 turn.transitions.rand$mat_ed <- as.factor(turn.transitions.rand$mat_ed)
@@ -1669,7 +1800,13 @@ turn.transitions.rand <- turn.transitions.rand %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+turn.transitions.rand$stthr.tri <- factor(turn.transitions.rand$stthr.tri,
+                                          levels = c("midday", "morning", "afternoon"))
+turn.transitions.rand$stthr.tri.a <- factor(turn.transitions.rand$stthr.tri,
+                                            levels = c("afternoon", "midday", "morning"))
 
 turn.sequences.rand <- filter(turn.sequences.rand_and_tt, sample == "random")
 turn.sequences.rand$child_sex <- as.factor(turn.sequences.rand$child_sex)
@@ -1691,7 +1828,13 @@ turn.sequences.rand <- turn.sequences.rand %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+turn.sequences.rand$stthr.tri <- factor(turn.sequences.rand$stthr.tri,
+                                        levels = c("midday", "morning", "afternoon"))
+turn.sequences.rand$stthr.tri.a <- factor(turn.sequences.rand$stthr.tri,
+                                          levels = c("afternoon", "midday", "morning"))
 
 cvc.ovc.per.seg.randnonas <- filter(cvc.ovc.per.seg.rand_and_tt.nonas, sample == "random")
 cvc.ovc.per.seg.randnonas$child_sex <- as.factor(cvc.ovc.per.seg.randnonas$child_sex)
@@ -1740,7 +1883,13 @@ turn.transitions.tt <- turn.transitions.tt %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+turn.transitions.tt$stthr.tri <- factor(turn.transitions.tt$stthr.tri,
+                                        levels = c("midday", "morning", "afternoon"))
+turn.transitions.tt$stthr.tri.a <- factor(turn.transitions.tt$stthr.tri,
+                                          levels = c("afternoon", "midday", "morning"))
 
 turn.sequences.tt <- filter(turn.sequences.rand_and_tt, sample == "turn-taking")
 turn.sequences.tt$child_sex <- as.factor(turn.sequences.tt$child_sex)
@@ -1762,7 +1911,13 @@ turn.sequences.tt <- turn.sequences.tt %>%
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
     hsz.std = ((household_size - hsz.m)/hsz.sd),
     nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12)
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+turn.sequences.tt$stthr.tri <- factor(turn.sequences.tt$stthr.tri,
+                                      levels = c("midday", "morning", "afternoon"))
+turn.sequences.tt$stthr.tri.a <- factor(turn.sequences.tt$stthr.tri,
+                                        levels = c("afternoon", "midday", "morning"))
 
 cvc.ovc.per.seg.ttnonas <- filter(cvc.ovc.per.seg.rand_and_tt.nonas, sample == "turn-taking")
 cvc.ovc.per.seg.ttnonas$child_sex <- as.factor(cvc.ovc.per.seg.ttnonas$child_sex)
@@ -1869,35 +2024,69 @@ grid.arrange(chi.oth.tts.rand_and_tt, oth.chi.tts.rand_and_tt,
 # zero inflated
 c_o.tpm.rand.zinb <- glmmTMB(round(n.c_o.tpm,0) ~
                                tchiyr.std +
-                               I(stthr.std^2) +
+                               stthr.tri +
                                hsz.std +
                                nsk.std +
-                               tchiyr.std:I(stthr.std^2) +
+                               tchiyr.std:stthr.tri +
                                tchiyr.std:hsz.std +
                                tchiyr.std:nsk.std +
-                               (1|aclew_child_id), #I(stthr.std^2)
+                               (1|aclew_child_id),
                              data=turn.transitions.rand,
-                             ziformula=~tchiyr.std+I(stthr.std^2)+nsk.std,
+                             ziformula=~nsk.std,
                              family="nbinom1")
 #res = simulateResiduals(c_o.tpm.rand.zinb)
 #plot(res, rank = T)
 #summary(c_o.tpm.rand.zinb)
-#tchiyr.std                  0.8214     0.4774   1.721   0.0853 .
-#nsk.std                    -0.3253     0.1779  -1.828   0.0675 .
-#tchiyr.std:I(stthr.std^2)  -6.4614     2.5642  -2.520   0.0117 *
-#tchiyr.std:nsk.std          0.4745     0.2248   2.110   0.0348 *
-# ZI:
-#I(stthr.std^2) -26.8775    15.6249  -1.720   0.0854 .
-#nsk.std         -3.1740     1.8207  -1.743   0.0813 .
+#Conditional model:
+#                              Estimate Std. Error z value Pr(>|z|)  
+#(Intercept)                    -0.1257     0.5037  -0.250   0.8029  
+#tchiyr.std                      0.8867     0.6063   1.462   0.1436  
+#stthr.trimorning                0.4825     0.4500   1.072   0.2836  
+#stthr.triafternoon              0.3405     0.3993   0.853   0.3938  
+#hsz.std                        -0.1728     0.4541  -0.381   0.7035  
+#nsk.std                        -0.1769     0.1746  -1.014   0.3107  
+#tchiyr.std:stthr.trimorning    -0.1398     0.4751  -0.294   0.7686  
+#tchiyr.std:stthr.triafternoon  -1.0820     0.4443  -2.436   0.0149 *
+#tchiyr.std:hsz.std              0.1109     0.5569   0.199   0.8421  
+#tchiyr.std:nsk.std              0.5639     0.2270   2.484   0.0130 *
+#---
+#Zero-inflation model:
+#            Estimate Std. Error z value Pr(>|z|)
+#(Intercept)   -116.7    53056.2  -0.002    0.998
+#nsk.std       -100.0    52343.8  -0.002    0.998
 # save for reporting
-c_o.tpm.rand.zinb.COEF.agetime <-
-  coef(summary(c_o.tpm.rand.zinb))[[1]]["tchiyr.std:I(stthr.std^2)",] 
-c_o.tpm.rand.zinb.COEF.agensk <-
+c_o.tpm.rand.zinb.COEF.age.morn <-
+  coef(summary(c_o.tpm.rand.zinb))[[1]]["tchiyr.std:stthr.trimorning",] 
+c_o.tpm.rand.zinb.COEF.age.aft <-
+  coef(summary(c_o.tpm.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",] 
+c_o.tpm.rand.zinb.COEF.age.nsk <-
   coef(summary(c_o.tpm.rand.zinb))[[1]]["tchiyr.std:nsk.std",]
-c_o.tpm.rand.zinb.COEF.ZItime <-
-  coef(summary(c_o.tpm.rand.zinb))[[2]]["I(stthr.std^2)",]
-c_o.tpm.rand.zinb.COEF.ZInsk <-
-  coef(summary(c_o.tpm.rand.zinb))[[2]]["nsk.std",]
+
+# test the other two-way effects of time of day
+c_o.tpm.rand.zinb.v2 <- glmmTMB(round(n.c_o.tpm,0) ~
+                                  tchiyr.std +
+                                  stthr.tri.a +
+                                  hsz.std +
+                                  nsk.std +
+                                  tchiyr.std:stthr.tri.a +
+                                  tchiyr.std:hsz.std +
+                                  tchiyr.std:nsk.std +
+                                  (1|aclew_child_id),
+                                data=turn.transitions.rand,
+                                ziformula=~nsk.std,
+                                family="nbinom1")
+#summary(c_o.tpm.rand.zinb.v2)
+#stthr.tri.amidday              -0.3405     0.3993  -0.853   0.3938  
+#stthr.tri.amorning              0.1420     0.3254   0.436   0.6626  
+#tchiyr.std:stthr.tri.amidday    1.0820     0.4443   2.436   0.0149 *
+#tchiyr.std:stthr.tri.amorning   0.9422     0.3746   2.515   0.0119 *
+# save for reporting
+c_o.tpm.rand.zinb.v2.COEF.aft.vs.morn <-
+  coef(summary(c_o.tpm.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
+c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.morn <-
+  coef(summary(c_o.tpm.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
+c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.midd <-
+  coef(summary(c_o.tpm.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
 
 ## CHI-OTH tts/min tt sample ####
 #ggplot(turn.transitions.tt, aes(round(n.c_o.tpm,0))) + geom_histogram()
@@ -1906,24 +2095,56 @@ c_o.tpm.rand.zinb.COEF.ZInsk <-
 # mean isn't much smaller than variance
 # not zero-inflated (nature of sample)
 c_o.tpm.tt.nb <- glmmTMB(round(n.c_o.tpm,0) ~
-                               tchiyr.std +
-                               I(stthr.std^2) +
-                               hsz.std +
-                               nsk.std +
-                               tchiyr.std:I(stthr.std^2) +
-                               tchiyr.std:hsz.std +
-                               tchiyr.std:nsk.std +
-                               (1|aclew_child_id), #I(stthr.std^2)
-                             data=turn.transitions.tt,
-                             family="nbinom1")
+                           tchiyr.std +
+                           stthr.tri +
+                           hsz.std +
+                           nsk.std +
+                           tchiyr.std:stthr.tri +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:nsk.std +
+                           (1|aclew_child_id),
+                         data=turn.transitions.tt,
+                         family="nbinom1")
 #res = simulateResiduals(c_o.tpm.tt.nb)
 #plot(res, rank = T)
 #summary(c_o.tpm.tt.nb)
-#nsk.std                   -0.26254    0.11330  -2.317   0.0205 *  
-#tchiyr.std:I(stthr.std^2) -3.22865    1.58125  -2.042   0.0412 *  
+#Conditional model:
+#                              Estimate Std. Error z value       Pr(>|z|)    
+#(Intercept)                    1.78448    0.28828   6.190 0.000000000602 ***
+#tchiyr.std                     0.11866    0.29273   0.405         0.6852    
+#stthr.trimorning               0.05827    0.31932   0.182         0.8552    
+#stthr.triafternoon             0.11001    0.26991   0.408         0.6836    
+#hsz.std                       -0.03938    0.22998  -0.171         0.8640    
+#nsk.std                       -0.21384    0.11634  -1.838         0.0661 .  
+#tchiyr.std:stthr.trimorning   -0.03954    0.29729  -0.133         0.8942    
+#tchiyr.std:stthr.triafternoon -0.18839    0.25152  -0.749         0.4539    
+#tchiyr.std:hsz.std            -0.19196    0.28233  -0.680         0.4966    
+#tchiyr.std:nsk.std             0.05446    0.13186   0.413         0.6796    
+# save for reporting
+c_o.tpm.tt.nb.COEF.nsk <-
+  coef(summary(c_o.tpm.tt.nb))[[1]]["nsk.std",] 
+
+# test the other two-way effects of time of day
+c_o.tpm.tt.nb.v2 <- glmmTMB(round(n.c_o.tpm,0) ~
+                              tchiyr.std +
+                              stthr.tri.a +
+                              hsz.std +
+                              nsk.std +
+                              tchiyr.std:stthr.tri.a +
+                              tchiyr.std:hsz.std +
+                              tchiyr.std:nsk.std +
+                              (1|aclew_child_id),
+                            data=turn.transitions.tt,
+                            family="nbinom1")
+#summary(c_o.tpm.tt.nb.v2)
+#stthr.tri.amidday             -0.11002    0.26991  -0.408              0.6835    
+#stthr.tri.amorning            -0.05176    0.24239  -0.214              0.8309    
+#tchiyr.std:stthr.tri.amidday   0.18840    0.25152   0.749              0.4538    
+#tchiyr.std:stthr.tri.amorning  0.14885    0.26612   0.559              0.5759    
+# no results to save for reporting
 ```
 
-Other speakers responded contingently to the target children's vocalizations at an average rate of `r round(mean(turn.transitions.rand$n.c_o.tpm),2)` transitions per minute (median = `r round(median(turn.transitions.rand$n.c_o.tpm),2)`; range = `r round(min(turn.transitions.rand$n.c_o.tpm),2)`--`r round(max(turn.transitions.rand$n.c_o.tpm),2)`; [Figure 7](#fig7)). We modeled TC--O transtions per minute in the random clips with a zero-inflated negative binomial regression, excluding by-child intercepts of time of day to achieve convergence. The rate at which target children heard contingent responses from others was primarily influenced by factors relating to the child's age. Older target children heard more contingent responses then younger ones when there were more speakers present (B = `r round(c_o.tpm.rand.zinb.COEF.agensk[[1]],2)`, SD = `r round(c_o.tpm.rand.zinb.COEF.agensk[[2]],2)`, z = `r round(c_o.tpm.rand.zinb.COEF.agensk[[3]],2)`, p = `r round(c_o.tpm.rand.zinb.COEF.agensk[[4]],2)`). Also, as with the speech quantity measures, older target children heard more contingent responses in the mornings and evenings, while this effect was less pronounced for younger ones (B = `r round(c_o.tpm.rand.zinb.COEF.agetime[[1]],2)`, SD = `r round(c_o.tpm.rand.zinb.COEF.agetime[[2]],2)`, z = `r round(c_o.tpm.rand.zinb.COEF.agetime[[3]],2)`, p = `r round(c_o.tpm.rand.zinb.COEF.agetime[[4]],2)`). There were no further significant effects in the count or zero-inflation models.
+Other speakers responded contingently to the target children's vocalizations at an average rate of `r round(mean(turn.transitions.rand$n.c_o.tpm),2)` transitions per minute (median = `r round(median(turn.transitions.rand$n.c_o.tpm),2)`; range = `r round(min(turn.transitions.rand$n.c_o.tpm),2)`--`r round(max(turn.transitions.rand$n.c_o.tpm),2)`; [Figure 7](#fig7)). We modeled TC--O transtions per minute in the random clips with a zero-inflated negative binomial regression. The rate at which target children heard contingent responses from others was primarily influenced by factors relating to target child age. The rate of contingent responses to target child vocalizations varied across the day by target child age: older children heard significantly more contingent responses around midday (B = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.midd[[1]],2)`, SD = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.midd[[2]],2)`, z = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.midd[[3]],2)`, p = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.midd[[4]],2)`) and in the morning (B = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.morn[[1]],2)`, SD = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.morn[[2]],2)`, z = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.morn[[3]],2)`, p = `r round(c_o.tpm.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`), compared to the afternoon, with no significant difference between morning and midday (p = `r round(c_o.tpm.rand.zinb.COEF.age.morn[[4]],2)`). Older target children also heard significantly more contingent responses then younger ones when there were more speakers present (B = `r round(c_o.tpm.rand.zinb.COEF.age.nsk[[1]],2)`, SD = `r round(c_o.tpm.rand.zinb.COEF.age.nsk[[2]],2)`, z = `r round(c_o.tpm.rand.zinb.COEF.age.nsk[[3]],2)`, p = `r round(c_o.tpm.rand.zinb.COEF.age.nsk[[4]],2)`).There were no further significant effects in the count or zero-inflation models.
 
 ```{r o-tctt_models, message=FALSE, warning=FALSE, paged.print=FALSE}
 ## OTH-CHI tts/min random sample ####
@@ -1934,26 +2155,71 @@ Other speakers responded contingently to the target children's vocalizations at 
 # zero-inflated
 o_c.tpm.rand.zinb <- glmmTMB(round(n.o_c.tpm,0) ~
                                tchiyr.std +
-                               I(stthr.std^2) +
+                               stthr.tri +
                                hsz.std +
                                nsk.std +
-                               tchiyr.std:I(stthr.std^2) +
+                               tchiyr.std:stthr.tri +
                                tchiyr.std:hsz.std +
                                tchiyr.std:nsk.std +
-                               (1|aclew_child_id), #I(stthr.std^2)
+                               (1|aclew_child_id),
                              data=turn.transitions.rand,
-                             ziformula=~tchiyr.std+I(stthr.std^2)+nsk.std,
+                             ziformula=~nsk.std,
                              family="nbinom1")
 #res = simulateResiduals(o_c.tpm.rand.zinb)
 #plot(res, rank = T)
 #summary(o_c.tpm.rand.zinb)
-#tchiyr.std                  0.9137     0.4955   1.844  0.06520 . 
-#tchiyr.std:I(stthr.std^2)  -7.2977     2.6100  -2.796  0.00517 **
-# ZI:
-#I(stthr.std^2) -23.7206    13.7559  -1.724   0.0846 .
+#Conditional model:
+#                              Estimate Std. Error z value Pr(>|z|)   
+#(Intercept)                    -0.4586     0.5436  -0.844  0.39890   
+#tchiyr.std                      1.1417     0.6570   1.738  0.08226 . 
+#stthr.trimorning                0.3179     0.4878   0.652  0.51462   
+#stthr.triafternoon              0.4948     0.4082   1.212  0.22542   
+#hsz.std                        -0.2025     0.4947  -0.409  0.68226   
+#nsk.std                        -0.1414     0.1784  -0.793  0.42796   
+#tchiyr.std:stthr.trimorning    -0.1238     0.5059  -0.245  0.80671   
+#tchiyr.std:stthr.triafternoon  -1.4569     0.4647  -3.135  0.00172 **
+#tchiyr.std:hsz.std              0.1412     0.6070   0.233  0.81610   
+#tchiyr.std:nsk.std              0.5175     0.2247   2.303  0.02130 * 
+#---
+#Zero-inflation model:
+#            Estimate Std. Error z value Pr(>|z|)
+#(Intercept)  -115.46   43943.60  -0.003    0.998
+#nsk.std       -98.63   42142.48  -0.002    0.998
 # save for reporting
-o_c.tpm.rand.zinb.COEF.agetime <-
-  coef(summary(o_c.tpm.rand.zinb))[[1]]["tchiyr.std:I(stthr.std^2)",]
+o_c.tpm.rand.zinb.COEF.age <-
+  coef(summary(o_c.tpm.rand.zinb))[[1]]["tchiyr.std",]
+o_c.tpm.rand.zinb.COEF.age.morn <-
+  coef(summary(o_c.tpm.rand.zinb))[[1]]["tchiyr.std:stthr.trimorning",]
+o_c.tpm.rand.zinb.COEF.age.aft <-
+  coef(summary(o_c.tpm.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",]
+o_c.tpm.rand.zinb.COEF.age.nsk <-
+  coef(summary(o_c.tpm.rand.zinb))[[1]]["tchiyr.std:nsk.std",]
+
+# test the other two-way effects of time of day
+o_c.tpm.rand.zinb.v2 <- glmmTMB(round(n.o_c.tpm,0) ~
+                                  tchiyr.std +
+                                  stthr.tri.a +
+                                  hsz.std +
+                                  nsk.std +
+                                  tchiyr.std:stthr.tri.a +
+                                  tchiyr.std:hsz.std +
+                                  tchiyr.std:nsk.std +
+                                  (1|aclew_child_id),
+                                data=turn.transitions.rand,
+                                ziformula=~nsk.std,
+                                family="nbinom1")
+#summary(o_c.tpm.rand.zinb.v2)
+#stthr.tri.amidday             -0.49479    0.40816  -1.212  0.22542   
+#stthr.tri.amorning            -0.17693    0.36072  -0.490  0.62379   
+#tchiyr.std:stthr.tri.amidday   1.45689    0.46472   3.135  0.00172 **
+#tchiyr.std:stthr.tri.amorning  1.33312    0.41759   3.192  0.00141 **
+# save for reporting
+o_c.tpm.rand.zinb.v2.COEF.morn <-
+  coef(summary(o_c.tpm.rand.zinb.v2))[[1]]["stthr.tri.amorning",]
+o_c.tpm.rand.zinb.v2.COEF.age.morn <-
+  coef(summary(o_c.tpm.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",]
+o_c.tpm.rand.zinb.v2.COEF.age.midd <-
+  coef(summary(o_c.tpm.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",]
 
 ## OTH-CHI tts/min tt sample ####
 #ggplot(turn.transitions.tt, aes(round(n.o_c.tpm,0))) + geom_histogram()
@@ -1962,28 +2228,57 @@ o_c.tpm.rand.zinb.COEF.agetime <-
 # mean is much smaller than variance
 # not really zero-inflated
 o_c.tpm.tt.nb <- glmmTMB(round(n.o_c.tpm,0) ~
-                               tchiyr.std +
-                               I(stthr.std^2) +
-                               hsz.std +
-                               nsk.std +
-                               tchiyr.std:I(stthr.std^2) +
-                               tchiyr.std:hsz.std +
-                               tchiyr.std:nsk.std +
-                               (1|aclew_child_id), #I(stthr.std^2)
-                             data=turn.transitions.tt,
-                             family="nbinom1")
+                           tchiyr.std +
+                           stthr.tri +
+                           hsz.std +
+                           nsk.std +
+                           tchiyr.std:stthr.tri +
+                           tchiyr.std:hsz.std +
+                           tchiyr.std:nsk.std +
+                           (1|aclew_child_id),
+                         data=turn.transitions.tt,
+                         family="nbinom1")
 #res = simulateResiduals(o_c.tpm.tt.nb)
 #plot(res, rank = T)
 #summary(o_c.tpm.tt.nb)
-#nsk.std                   -0.26295    0.11984  -2.194   0.0282 *  
-#tchiyr.std:I(stthr.std^2) -3.06715    1.68891  -1.816   0.0694 .  
+#Conditional model:
+#                              Estimate Std. Error z value       Pr(>|z|)    
+#(Intercept)                    1.84121    0.29135   6.319 0.000000000262 ***
+#tchiyr.std                     0.05962    0.29556   0.202         0.8401    
+#stthr.trimorning              -0.04921    0.33317  -0.148         0.8826    
+#stthr.triafternoon             0.02709    0.28235   0.096         0.9236    
+#hsz.std                       -0.03631    0.23216  -0.156         0.8757    
+#nsk.std                       -0.22871    0.12170  -1.879         0.0602 .  
+#tchiyr.std:stthr.trimorning    0.12037    0.30574   0.394         0.6938    
+#tchiyr.std:stthr.triafternoon -0.07718    0.26007  -0.297         0.7667    
+#tchiyr.std:hsz.std            -0.18813    0.28410  -0.662         0.5078    
+#tchiyr.std:nsk.std             0.08522    0.13646   0.624         0.5323
 # save for reporting
 o_c.tpm.tt.nb.COEF.nsk <-
   coef(summary(o_c.tpm.tt.nb))[[1]]["nsk.std",]
+
+# test the other two-way effects of time of day
+o_c.tpm.tt.nb.v2 <- glmmTMB(round(n.o_c.tpm,0) ~
+                              tchiyr.std +
+                              stthr.tri.a +
+                              hsz.std +
+                              nsk.std +
+                              tchiyr.std:stthr.tri.a +
+                              tchiyr.std:hsz.std +
+                              tchiyr.std:nsk.std +
+                              (1|aclew_child_id),
+                            data=turn.transitions.tt,
+                            family="nbinom1")
+#summary(o_c.tpm.tt.nb.v2)
+#stthr.tri.amidday             -0.02712    0.28236  -0.096             0.9235    
+#stthr.tri.amorning            -0.07632    0.25647  -0.298             0.7660    
+#tchiyr.std:stthr.tri.amidday   0.07718    0.26007   0.297             0.7666    
+#tchiyr.std:stthr.tri.amorning  0.19755    0.27015   0.731             0.4646    
+# no results to save for reporting
 ```
 
 ## Other-to-target-child turn transitions (O--TC)
-The 10 Tseltal children responded contingently to others' target-child vocalizations at an average rate of `r round(mean(turn.transitions.rand$n.o_c.tpm),2)` transitions per minute (median = `r round(median(turn.transitions.rand$n.o_c.tpm),2)`; range = `r round(min(turn.transitions.rand$n.o_c.tpm),2)`--`r round(max(turn.transitions.rand$n.o_c.tpm),2)`; [Figure 7](#fig7)). We modeled O--TC transtions per minute in the random clips with a zero-inflated negative binomial regression, excluding by-child intercepts of time of day to achieve convergence. The rate at which target children responded contingently to others (O--TC turn transitions per minute) was similarly influenced by child age and time of day: younger target children were less likely than older ones to show peak response rates in the morning and evening (B = `r round(o_c.tpm.rand.zinb.COEF.agetime[[1]],2)`, SD = `r round(o_c.tpm.rand.zinb.COEF.agetime[[2]],2)`, z = `r round(o_c.tpm.rand.zinb.COEF.agetime[[3]],2)`, p = `r round(o_c.tpm.rand.zinb.COEF.agetime[[4]],2)`). There were no further significant effects in the count or zero-inflation models.
+The children in our sample responded contingently to others' target-child vocalizations at an average rate of `r round(mean(turn.transitions.rand$n.o_c.tpm),2)` transitions per minute (median = `r round(median(turn.transitions.rand$n.o_c.tpm),2)`; range = `r round(min(turn.transitions.rand$n.o_c.tpm),2)`--`r round(max(turn.transitions.rand$n.o_c.tpm),2)`; [Figure 7](#fig7)). We modeled O--TC transtions per minute in the random clips with a zero-inflated negative binomial regression, excluding by-child intercepts of time of day to achieve convergence. The rate at which target children responded contingently to others (O--TC turn transitions per minute) was similarly influenced by child age and time of day: older children responded contingently to others' utterances significantly more often around midday (B = `r round(o_c.tpm.rand.zinb.v2.COEF.age.midd[[1]],2)`, SD = `r round(o_c.tpm.rand.zinb.v2.COEF.age.midd[[2]],2)`, z = `r round(o_c.tpm.rand.zinb.v2.COEF.age.midd[[3]],2)`, p = `r round(o_c.tpm.rand.zinb.v2.COEF.age.midd[[4]],3)`) and in the morning (B = `r round(o_c.tpm.rand.zinb.v2.COEF.age.morn[[1]],2)`, SD = `r round(o_c.tpm.rand.zinb.v2.COEF.age.morn[[2]],2)`, z = `r round(o_c.tpm.rand.zinb.v2.COEF.age.morn[[3]],2)`, p = `r round(o_c.tpm.rand.zinb.v2.COEF.age.morn[[4]],3)`), compared to the afternoon, with no significant difference between morning and midday (p = `r round(o_c.tpm.rand.zinb.COEF.age.morn[[4]],2)`). Overall, older children responded to others' utterances at a marginally higher rate (B = `r round(o_c.tpm.rand.zinb.COEF.age[[1]],2)`, SD = `r round(o_c.tpm.rand.zinb.COEF.age[[2]],2)`, z = `r round(o_c.tpm.rand.zinb.COEF.age[[3]],2)`, p = `r round(o_c.tpm.rand.zinb.COEF.age[[4]],2)`). Older target children also gave significantly more contingent responses then younger ones when there were more speakers present (B = `r round(o_c.tpm.rand.zinb.COEF.age.nsk[[1]],2)`, SD = `r round(o_c.tpm.rand.zinb.COEF.age.nsk[[2]],2)`, z = `r round(o_c.tpm.rand.zinb.COEF.age.nsk[[3]],2)`, p = `r round(o_c.tpm.rand.zinb.COEF.age.nsk[[4]],2)`).There were no further significant effects in the count or zero-inflation models.
 
 ```{r seqdur_models, message=FALSE, warning=FALSE, paged.print=FALSE}
 ## Sequence duration random sample ####
@@ -1991,28 +2286,57 @@ The 10 Tseltal children responded contingently to others' target-child vocalizat
 #sd(round((turn.sequences.rand$seq.dur*60),0))^2
 #mean(round((turn.sequences.rand$seq.dur*60),0))
 # mean is much smaller than variance
-# non-zero values
+# non-zero values -- no zero inflation
 turn.sequences.rand$uniq.segment <- paste0(turn.sequences.rand$aclew_child_id, "-",
                                           turn.sequences.rand$segment)
 seqdur.sec.rand.nb <- glmmTMB(round((seq.dur*60),0) ~
                                 tchiyr.std +
-                                I(stthr.std^2) +
+                                stthr.tri +
                                 hsz.std +
                                 nsk.std +
-                                tchiyr.std:I(stthr.std^2) +
+                                tchiyr.std:stthr.tri +
                                 tchiyr.std:hsz.std +
                                 tchiyr.std:nsk.std +
                                 (1|uniq.segment) +
-                                (1|aclew_child_id), #I(stthr.std^2)
+                                (1|aclew_child_id),
                               data=turn.sequences.rand,
                               family="nbinom1")
 #res = simulateResiduals(seqdur.sec.rand.nb)
 #plot(res, rank = T)
 #summary(seqdur.sec.rand.nb) # (no significant effects)
-#tchiyr.std:hsz.std         0.18889    0.11012   1.715    0.0863 .   
-# save for reporting
-seqdur.sec.rand.nb.COEF.agehsz <-
-  coef(summary(seqdur.sec.rand.nb))[[1]]["tchiyr.std:hsz.std",]
+#Conditional model:
+#                               Estimate Std. Error z value            Pr(>|z|)    
+#(Intercept)                    2.216674   0.142451  15.561 <0.0000000000000002 ***
+#tchiyr.std                     0.105663   0.193521   0.546               0.585    
+#stthr.trimorning               0.136008   0.174476   0.780               0.436    
+#stthr.triafternoon             0.128729   0.160016   0.804               0.421    
+#hsz.std                        0.010461   0.083797   0.125               0.901    
+#nsk.std                        0.006317   0.048557   0.130               0.896    
+#tchiyr.std:stthr.trimorning    0.196619   0.188012   1.046               0.296    
+#tchiyr.std:stthr.triafternoon  0.045138   0.176905   0.255               0.799    
+#tchiyr.std:hsz.std             0.142867   0.113612   1.257               0.209    
+#tchiyr.std:nsk.std            -0.032344   0.063522  -0.509               0.611 
+# no results to save for reporting
+
+# test the other two-way effects of time of day
+seqdur.sec.rand.nb.v2 <- glmmTMB(round((seq.dur*60),0) ~
+                                   tchiyr.std +
+                                   stthr.tri.a +
+                                   hsz.std +
+                                   nsk.std +
+                                   tchiyr.std:stthr.tri.a +
+                                   tchiyr.std:hsz.std +
+                                   tchiyr.std:nsk.std +
+                                   (1|uniq.segment) +
+                                   (1|aclew_child_id),
+                                 data=turn.sequences.rand,
+                                 family="nbinom1")
+#summary(seqdur.sec.rand.nb.v2) # (no significant effects)
+#stthr.tri.amidday             -0.128729   0.160016  -0.804               0.421    
+#stthr.tri.amorning             0.007280   0.116200   0.063               0.950    
+#tchiyr.std:stthr.tri.amidday  -0.045138   0.176905  -0.255               0.799    
+#tchiyr.std:stthr.tri.amorning  0.151481   0.129067   1.174               0.241    
+# no results to save for reporting
 
 ## Sequence duration tt sample ####
 #ggplot(turn.sequences.tt, aes(round((seq.dur*60),0))) + geom_histogram()
@@ -2024,42 +2348,76 @@ turn.sequences.tt$uniq.segment <- paste0(turn.sequences.tt$aclew_child_id, "-",
                                           turn.sequences.tt$segment)
 seqdur.sec.tt.nb <- glmmTMB(round((seq.dur*60),0) ~
                                 tchiyr.std +
-                                I(stthr.std^2) +
+                                stthr.tri +
                                 hsz.std +
                                 nsk.std +
-                                tchiyr.std:I(stthr.std^2) +
+                                tchiyr.std:stthr.tri +
                                 tchiyr.std:hsz.std +
                                 tchiyr.std:nsk.std +
                                 (1|uniq.segment) +
-                                (1+I(stthr.std^2)|aclew_child_id),
+                                (1|aclew_child_id),
                               data=turn.sequences.tt,
                               family="nbinom1")
 #res = simulateResiduals(seqdur.sec.tt.nb)
 #plot(res, rank = T)
 #summary(seqdur.sec.tt.nb)
-#tchiyr.std                -0.242902   0.100557  -2.416   0.0157 *  
-#I(stthr.std^2)             2.764077   1.107589   2.496   0.0126 *  
-#hsz.std                   -0.213677   0.095170  -2.245   0.0248 *  
-#tchiyr.std:hsz.std        -0.205633   0.117426  -1.751   0.0799 .
+#Conditional model:
+#                              Estimate Std. Error z value  Pr(>|z|)    
+#(Intercept)                    2.24687    0.13586  16.539  < 0.0001 ***
+#tchiyr.std                    -0.18273    0.12115  -1.508  0.13149    
+#stthr.trimorning               0.05915    0.16101   0.367  0.71336    
+#stthr.triafternoon             0.37875    0.14522   2.608  0.00911 ** 
+#hsz.std                       -0.17315    0.09966  -1.737  0.08233 .  
+#nsk.std                       -0.01070    0.05785  -0.185  0.85333    
+#tchiyr.std:stthr.trimorning   -0.02062    0.16977  -0.121  0.90331    
+#tchiyr.std:stthr.triafternoon  0.01937    0.14365   0.135  0.89271    
+#tchiyr.std:hsz.std            -0.17535    0.12841  -1.366  0.17207    
+#tchiyr.std:nsk.std             0.03003    0.07884   0.381  0.70327
 # save for reporting
-seqdur.sec.tt.nb.COEF.age <-
-  coef(summary(seqdur.sec.tt.nb))[[1]]["tchiyr.std",]
-seqdur.sec.tt.nb.COEF.time <-
-  coef(summary(seqdur.sec.tt.nb))[[1]]["I(stthr.std^2)",]
+seqdur.sec.tt.nb.COEF.morn <-
+  coef(summary(seqdur.sec.tt.nb))[[1]]["stthr.trimorning",]
+seqdur.sec.tt.nb.COEF.aft <-
+  coef(summary(seqdur.sec.tt.nb))[[1]]["stthr.triafternoon",]
 seqdur.sec.tt.nb.COEF.hsz <-
   coef(summary(seqdur.sec.tt.nb))[[1]]["hsz.std",]
+
+# test the other two-way effects of time of day
+seqdur.sec.tt.nb.v2 <- glmmTMB(round((seq.dur*60),0) ~
+                                 tchiyr.std +
+                                 stthr.tri.a +
+                                 hsz.std +
+                                 nsk.std +
+                                 tchiyr.std:stthr.tri.a +
+                                 tchiyr.std:hsz.std +
+                                 tchiyr.std:nsk.std +
+                                 (1|uniq.segment) +
+                                 (1|aclew_child_id),
+                               data=turn.sequences.tt,
+                               family="nbinom1")
+#summary(seqdur.sec.tt.nb.v2)
+#stthr.tri.amidday             -0.37875    0.14522  -2.608              0.00911 ** 
+#stthr.tri.amorning            -0.31960    0.15110  -2.115              0.03442 *  
+#tchiyr.std:stthr.tri.amidday  -0.01937    0.14365  -0.135              0.89271    
+#tchiyr.std:stthr.tri.amorning -0.04000    0.16605  -0.241              0.80965    
+# save for reporting
+seqdur.sec.tt.nb.v2.COEF.morn <-
+  coef(summary(seqdur.sec.tt.nb.v2))[[1]]["stthr.tri.amorning",]
+seqdur.sec.tt.nb.v2.COEF.age.morn <-
+  coef(summary(seqdur.sec.tt.nb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",]
 
 ```
 
 ## Sequence duration
-We defined sequences of interaction as periods of contingent turn taking with at least one target child vocalization and one target-child-directed prompt or response from another speaker. To detect sequences of interaction, we used the same mechanism as before to detect contingent TC--O and O--TC transitions, but also allowed for speakers to continue with multiple vocalizations in a row (e.g., TC--O--O--TC--OTH; [Figure 6](#fig6)). We bounded sequences by the earliest and latest vocalization for which there is no contingent prompt or response, respectively. In our analysis, each target child vocalization can only appear in one sequence. We modeled these sequence durations in the random clips with negative binomial regression alone, excluding by-child intercepts of time of day to achieve convergence.
-
-We detected `r nrow(turn.sequences.rand)` interactional sequences in the 90 randomly selected clips, with an average sequence duration of `r round(mean(turn.sequences.rand$seq.dur)*60,2)` seconds (median = `r round(median(turn.sequences.rand$seq.dur)*60,2)`; range = `r round(min(turn.sequences.rand$seq.dur)*60,2)`--`r round(max(turn.sequences.rand$seq.dur)*60,2)`; [Figure 7](#fig7)). The average number of child vocalizations within these sequences was `r round(mean(turn.sequences.rand$n_cvcs_seq),2)` (range = `r round(min(turn.sequences.rand$n_cvcs_seq),2)`--`r round(max(turn.sequences.rand$n_cvcs_seq),2)`; median = `r round(median(turn.sequences.rand$n_cvcs_seq),2)`). None of the predictors significantly impacted sequence duration (all _p_ > `r round(min(coef(summary(seqdur.sec.rand.nb))[[1]][2:nrow(coef(summary(seqdur.sec.rand.nb))[[1]]),"Pr(>|z|)"]),2)`).
+We defined sequences of interaction as periods of contingent turn taking with at least one target child vocalization and one target-child-directed prompt or response from another speaker. To detect sequences of interaction, we used the same mechanism as before to detect contingent TC--O and O--TC transitions, but also allowed for speakers to continue with multiple vocalizations in a row (e.g., TC--O--O--TC--OTH; [Figure 6](#fig6)). We bounded sequences by the earliest and latest vocalization for which there is no contingent prompt or response, respectively. In our analysis, each target child vocalization can only appear in one sequence. We modeled these sequence durations in the random clips with negative binomial regression alone (i.e., with no zero-inflation model). We detected `r nrow(turn.sequences.rand)` interactional sequences in the 90 randomly selected clips, with an average sequence duration of `r round(mean(turn.sequences.rand$seq.dur)*60,2)` seconds (median = `r round(median(turn.sequences.rand$seq.dur)*60,2)`; range = `r round(min(turn.sequences.rand$seq.dur)*60,2)`--`r round(max(turn.sequences.rand$seq.dur)*60,2)`; [Figure 7](#fig7)). The average number of child vocalizations within these sequences was `r round(mean(turn.sequences.rand$n_cvcs_seq),2)` (range = `r round(min(turn.sequences.rand$n_cvcs_seq),2)`--`r round(max(turn.sequences.rand$n_cvcs_seq),2)`; median = `r round(median(turn.sequences.rand$n_cvcs_seq),2)`). None of the predictors significantly impacted sequence duration (all _p_ &ge `r round(min(coef(summary(seqdur.sec.rand.nb))[[1]][2:nrow(coef(summary(seqdur.sec.rand.nb))[[1]]),"Pr(>|z|)"]),2)`).
 
 ## Peak interaction
 As expected, the high-quality turn taking clips featured a much higher rate of contingent turn transitions: the average TC--O transition rate was `r round(mean(turn.transitions.tt$n.c_o.tpm),2)` transitions per minute (~5.5x the random sample rate; median = `r round(median(turn.transitions.tt$n.c_o.tpm),2)`; range = `r round(min(turn.transitions.tt$n.c_o.tpm),2)`--`r round(max(turn.transitions.tt$n.c_o.tpm),2)`) and the average O--TC rate was `r round(mean(turn.transitions.tt$n.o_c.tpm),2)` transitions per minute (~6.5x the random sample rate; median = `r round(median(turn.transitions.tt$n.o_c.tpm),2)`; range = `r round(min(turn.transitions.tt$n.o_c.tpm),2)`--`r round(max(turn.transitions.tt$n.o_c.tpm),2)`). The interactional sequences were also slightly longer on average: `r round(mean(turn.sequences.tt$seq.dur)*60,2)` seconds (~1.2x the random sample rate; median = `r round(median(turn.sequences.tt$seq.dur)*60,2)`; range = `r round(min(turn.sequences.tt$seq.dur)*60,2)`--`r round(max(turn.sequences.tt$seq.dur)*60,2)`). Crucially, children also heard much more TCDS in the turn-taking clips---`r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)` min/hr (nearly 4x the random sample rate; median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$tds_mph),2)`)---while also hearing less ODS---`r round(mean(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)` min/hr (nearly half the random sample rate; median = `r round(median(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`; range = `r round(min(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`--`r round(max(subset(quantity.nonrand.bychild, sample == "turn-taking")$ods_mph),2)`).
 
-We modeled each of these speech environment measures with parallel models to those used for the random sample above, though with no zero-inflation parameter for TCDS, TC--O, and O--TC rates because these extra-zero cases don't exist in the manually selected turn-taking clips. The impact of child age, time of day, household size, and number of speakers was qualitatively similar (see [Figures 3](#fig3), [4](#fig4), and [6](#fig6)) between the randomly selected clips and the turn taking clips with the following exceptions: children heard significantly less ODS with age (B = `r round(ods.tt.zinb.COEF.age[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age[[4]],2)`), the presence of more speakers significantly decreased children's response rate to other's vocalizations (B = `r round(o_c.tpm.tt.nb.COEF.nsk[[1]],2)`, SD = `r round(o_c.tpm.tt.nb.COEF.nsk[[2]],2)`, z = `r round(o_c.tpm.tt.nb.COEF.nsk[[3]],2)`, p = `r round(o_c.tpm.tt.nb.COEF.nsk[[4]],2)`), and children's interactional sequences were shorter for older children (B = `r round(seqdur.sec.tt.nb.COEF.age[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.age[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.age[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.age[[4]],2)`), shorter for children in large households (B = `r round(seqdur.sec.tt.nb.COEF.hsz[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.hsz[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.hsz[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.hsz[[4]],2)`), and longer during the mornings and evenings (B = `r round(seqdur.sec.tt.nb.COEF.time[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.time[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.time[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.time[[4]],2)`). Full model outputs can be viewed in the Supplementary Materials.
+We modeled each of these speech environment measures with parallel models to those used for the random sample above, though with no zero-inflation model for TCDS, TC--O, and O--TC rates because extra-zero clips (e.g., due to no other speakers being present) do not exist in the turn-taking clips. Overall, the factors impacting the five speech environment measures look rather different when focusing on interactional peaks instead of randomly sampled clips (see [Figures 3](#fig3), [5](#fig5) and [7](#fig7)). In what follows, we briefly highlight differences between the random and turn-taking samples with respect to the influence of time of day and number of speakers present. Full model outputs are available in the Supplementary Materials.
+
+Time-of-day effects were consistently weaker in the turn-taking sample: interactional peaks tend to be similar across different hours of the daylong recording. In the random sample, TCDS and ODS rates both showed strong time-of-day effects, including an overall dip in both speech types at midday, and interactions between time of day and age. In contrast, TCDS rates in the turn-taking sample show no time-of-day effects or interactions between time-of-day and age, and ODS rates _do_ show a dip, but later in the day (i.e., afternoon, not midday; afternoon-vs.-midday: B = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[1]],2)`, SD = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[2]],2)`, z = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[3]],2)`, p = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[4]],2)`, afternoon-vs.morning: B = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[1]],2)`, SD = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[2]],2)`, z = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[3]],2)`, p = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[4]],3)`). Older children were also significantly more likely to hear ODS around midday compared to the morning (B = `r round(ods.tt.zinb.COEF.age.morn[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age.morn[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age.morn[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age.morn[[4]],2)`). In fact, the trend for ODS in the turn-taking sample is a dip around midday for younger children and a peak around midday for older children. Interestingly, older children also heard significantly less ODS than younger children in the turn-taking sample (B = `r round(ods.tt.zinb.COEF.age[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age[[4]],2)`), suggesting that older children may have different ODS experiences, distributed differently over the day. These findings also demonstrate that older children in the turn-taking sample had the highest TCDS:ODS ratio in our dataset. We see some shift in time-of-day effects for contingent response behavior as well. Whereas contingent response rates (TC--O and O--TC) in the random sample showed significant dips in the afternoon hours for older children, there were no time-of-day effects at all in the turn-taking sample. Running counter to this overall pattern, sequence duration in in the turn-taking sample showed significant time-of-day effects not found in the random sample: sequences were significantly longer in the afternoon compared to morning and midday (afternoon-vs.-morning: B = `r round(seqdur.sec.tt.nb.v2.COEF.morn[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.v2.COEF.morn[[2]],2)`, z = `r round(seqdur.sec.tt.nb.v2.COEF.morn[[3]],2)`, p = `r round(seqdur.sec.tt.nb.v2.COEF.morn[[4]],2)`; afternoon-vs.-midday: B = `r round(seqdur.sec.tt.nb.COEF.aft[[1]],2)`, SD = `r round(seqdur.sec.tt.nb.COEF.aft[[2]],2)`, z = `r round(seqdur.sec.tt.nb.COEF.aft[[3]],2)`, p = `r round(seqdur.sec.tt.nb.COEF.aft[[4]],2)`). 
+
+Effects relating to the number of speakers present were also somewhat weaker in the turn-taking sample, though inconsistently. In the random sample, older children heard more TCDS, and participated in more contingent responses (both TC--O and O--TC) when more speakers were present, but this effect did not hold up in the turn-taking sample on any of the three measures. On the other hand, the number of speakers present was associated with significantly more ODS in both the random and turn-taking samples (random sample: B = `r round(ods.tt.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.tt.zinb.COEF.nsk[[3]],2)`, p < 0.001), suggesting that the number of speakers is a robust predictor of ODS quantity across different contexts.
 
 ### Peak minutes in the day
 ```{r peakmins_prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
