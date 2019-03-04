@@ -1,0 +1,13 @@
+name: Tseltal_Child_Language_Environment
+title: Tseltal_Child_Language_Environment
+username:
+account: middycasillas
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 743722
+bundleId: 1906325
+url: https://middycasillas.shinyapps.io/Tseltal_Child_Language_Environment/
+when: 1551365942.05405
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: 0-Anonymize_Transcripts.R|0-Helper.R|audio_scanning_instructions.md|Tseltal-CLE-20190226.docx|Tseltal-CLE-Supplementary.R|Tseltal-CLE.bib|Tseltal-CLE.fff|Tseltal-CLE.html|Tseltal-CLE.pdf|Tseltal-CLE.R|Tseltal-CLE.Rmd|Tseltal-CLE.tex|metadata/comparison_studies.csv|metadata/recording-info.csv|metadata/Segment-order-inventory.csv|metadata/tod-adjustments.csv|metadata/ttr.random.1minwindow.csv|core_readings|diff_figs|transcripts|Tseltal-CLE_files
