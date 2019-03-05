@@ -22,6 +22,7 @@ affiliation:
 header-includes: #allows you to add in your own Latex packages
 - \usepackage{float} #use the 'float' package
 - \floatplacement{figure}{H} #make every figure with caption = h
+- \usepackage{placeins}
 
 bibliography      : ["Tseltal-CLE.bib"]
 
@@ -34,24 +35,13 @@ mask              : no
 
 class             : "man"
 output            : papaja::apa6_pdf
-#  citation_package : natbib
 ---
 
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
 library(papaja)
-#library(ggplot2)
 library(tidyverse)
 library(knitr)
-#library(viridis)
-#library(grid)
-#library(gridExtra)
-#library(ggpirate)
-#library(lme4)
-#library(glmmTMB)
-#library(DHARMa)
-#library(bbmle)
-#library(broom.mixed)
-#source("0-Helper.R")
+knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 ```{r analysis_presets, include=FALSE}
@@ -63,40 +53,32 @@ model.results$term[rand.effect.rows] <- model.results$group[rand.effect.rows]
 model.results <- model.results %>%
   select(-effect, -group) %>%
   mutate_if(is.numeric, round, 3)
-
-#knitr::opts_chunk$set(fig.pos = 'H')
-
-
-metadata.path <- "metadata/"
-plot.path <- "plots/" # output plots
-shiny.input.path <- "shiny_input/"
-samplelabels <- c("High activity  ", "Random  ")
-col.sample.bu <- list(
-  scale_fill_manual(labels=samplelabels, values=viridis(2)),
-  scale_color_manual(labels=samplelabels, values=viridis(2)))
-col.sample.bu3 <- list(
-  scale_fill_manual(labels=samplelabels, values=viridis(3)),
-  scale_color_manual(labels=samplelabels, values=viridis(3)))
 ```
 
 # Full model outputs {#models}
-In the main text we only report significant effects from the models used to analyze the five speech environment variables. Here we give the full model outputs, figures showing the distribution of each variable and the residuals of each model, and the output of a comparably constructed gaussian mixed-effects linear regression for: TCDS min/hr, ODS min/hr, TC--O transitions/min, O--TC transitions/min, and sequence duration.
+In the main text we only report _significant_ effects on the five speech environment variables: TCDS min/hr, ODS min/hr, TC--O transitions/min, O--TC transitions/min, and sequence duration. Here in the Supplementary Materials we give the full model outputs for each analysis, including re-leveled versions of each model to show all three of the two-way tests between the three-level time-of-day factor. We also show, for each of the five measures, a figure showing how the variable is distributed across clips and a figure showing the distribution of model residuals. We also include full model output and residuals for a pair of comparably constructed gaussian mixed-effects regressions using a logged dependent measure. A gaussian model with logged measures is a more common solution to analyzing non-normal distributions in current psycholinguistics, but is not suitable for the current data given how our five speech environment measures are distributed, particularly in the randomly sampled clips (see, e.g., Figures [1](#fig1), [7](#fig7), [10](#fig10), [13](#fig13), [19](#fig19)). Overall, however, the gaussian models show a qualitatively similar pattern of results. None of the gaussian model results are presented in the main text---only here as supplementary information.
 
-The predictors in the models are abbreviated: tchiyr.std = centered, standardized target child age in months; stthr.tri = the start time of the clip as either morning, midday, or afternoon; hsz.std = centered, standardized household size of the target child; nsk.std = centered, standardized number of speakers present in the clip, aclew_child_it = the unique identifier for each child.
+In what follows, the same information is shown for each of the five speech environment measures. All models were run with the glmm-TMB library in R [@R-glmmTMB; @brooks2017modeling]. Note that in all negative binomial regressions, the dependent variables have been rounded to the nearest integer (e.g., 3.2 minutes of TCDS per hour becomes 3 minutes per hour in the model).
+
+The predictors in the models are abbreviated as follows: tchiyr.std = centered, standardized target child age in months; stthr.tri = the start time of the clip as either morning, midday, or afternoon; hsz.std = centered, standardized household size of the target child; nsk.std = centered, standardized number of speakers present in the clip, aclew_child_it = the unique identifier for each child. The predictors are sometimes combined in two-way interactions, as shown below with a ':' separator between predictor names (e.g., tchiyr.std:nsk.std = a two-way interaction of target child age and number of speakers present). In each model output table, the "component" shows what kind of model the estimate derives from (e.g., the zero-inflated models include both a conditional "cond" set of predictors, random effects, and zero-inflation "zi" predictors). The "term" is the estimated predictor. The "statistic" is the estimated _z_-statistic for each predictor's effect. The other labels are self-explanatory.
+
+As more data are added to this corpus, the analyses will also be updated, as will this supplementary model information, all of which will be available at: https://middycasillas.shinyapps.io/Tseltal_Child_Language_Environment/.
 
 ## Target-child-directed speech (TCDS) {#models-tcds}
 ### Random clips {#models-tcds-random}
-TCDS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression. In order to do this, we rounded the rate of TCDS min/hr to the nearest integer in modeling the influence of time of day, child age, and so on.
+TCDS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
 
-In what follows we first show the distribution of TCDS min/hr across clips. We then show the full output of the model reported in the text---both the original, with midday as the reference point for time of day and then a second version with afternoon as the reference point for time of day. We follow these model outputs with a figure showing two residual plots for the main model [Table 1](#tab1). Finally, we show the full output for a gaussian linear mixed-effects model of the data using logged TCDS min/hr as the dependent variable, which is more common in current psycholinguistics, but is not appropriate for this distribution of data [Figure 1](#fig1). However, the gaussian model shows a similar pattern of results as the zero-inflated negative binomial model. As before, we show the model results with both midday and afternoon as the reference levels for time of day, followed by the residuals for the gaussian model.
+\FloatBarrier
 
 ``` {r fig1, echo=FALSE, fig.align = "center", fig.cap="The distribution of TCDS rates found across the 90 random clips.", out.width = '40%'}
 knitr::include_graphics("www/TCDS_random_distribution.png")
 ```
 
+\FloatBarrier
+
 ```{r tab1, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "TCDS_random_z-inb") %>% select(-model),
-          caption="Full output of the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample.")
+          caption="Full output of the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab2, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -104,9 +86,13 @@ apa_table(filter(model.results, model == "TCDS_random_z-inb.v2") %>% select(-mod
           caption="Model output of the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig2, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/TCDS_random_z-inb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab3, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "TCDS_random_log_gaus") %>% select(-model),
@@ -118,21 +104,28 @@ apa_table(filter(model.results, model == "TCDS_random_log_gaus.v2") %>% select(-
           caption="Model output of the gaussian mixed-effects regression of TCDS min/hr for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig3, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of TCDS min/hr for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/TCDS_random_log_gaus_res_plot.png")
 ```
 
+\FloatBarrier
 
 ### Turn-taking clips {#models-tcds-turntaking}
-TCDS rate in the turn-taking clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression. In order to do this, we rounded the rate of TCDS min/hr to the nearest integer in modeling the influence of time of day, child age, and so on, as before. Below we show the distribution of TCDS min/hr across clips, the full output for the models reported in the text (both with the midday and afternoon reference level versions for time-of-day), the residual plots for the main model [Table 6](#tab6), and parallel models using gaussian linear mixed-effects analyses. Again, the gaussian model shows a similar pattern of results as the negative binomial model.
+TCDS rate in the turn-taking clips demonstrated a slightly skewed, but unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression. 
 
-``` {r fig4, echo=FALSE, fig.align = "center", fig.cap="The distribution of TCDS rates found across the 90 turn-taking clips.", out.width = '40%'}
+\FloatBarrier
+
+``` {r fig4, echo=FALSE, fig.align = "center", fig.cap="The distribution of TCDS rates found across the 59 turn-taking clips.", out.width = '40%'}
 knitr::include_graphics("www/TCDS_turntaking_distribution.png")
 ```
 
+\FloatBarrier
+
 ```{r tab5, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "TCDS_turntaking_nb") %>% select(-model),
-          caption="Full output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.")
+          caption="Full output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab6, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -140,9 +133,13 @@ apa_table(filter(model.results, model == "TCDS_turntaking_nb.v2") %>% select(-mo
           caption="Model output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
-``` {r fig5, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.", out.width = '90%'}
+\FloatBarrier
+
+``` {r fig5, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/TCDS_turntaking_nb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab7, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "TCDS_turntaking_log_gaus") %>% select(-model),
@@ -154,22 +151,29 @@ apa_table(filter(model.results, model == "TCDS_turntaking_log_gaus.v2") %>% sele
           caption="Model output of the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig6, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/TCDS_turntaking_log_gaus_res_plot.png")
 ```
 
+\FloatBarrier
 
 ## Other-directed speech (ODS) {#models-ods}
 ### Random clips {#models-ods-random}
-ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression. In order to do this, we rounded the rate of ODS min/hr to the nearest integer in modeling the influence of time of day, child age, and so on. Below first show the distribution of ODS min/hr across clips. We then show the full output of the model reported in the text---both the original, with midday as the reference point for time of day and then a second version with afternoon as the reference point for time of day. We follow these model outputs with a figure showing two residual plots for the main model [Table 10](#tab10). Finally, we show the full output for a gaussian linear mixed-effects model of the data using logged ODS min/hr as the dependent variable, which is not appropriate for this distribution of data [Figure 7](#fig7). However, the gaussian model shows a similar pattern of results as the zero-inflated negative binomial model. As before, we show the model results with both midday and afternoon as the reference levels for time of day, followed by the residuals for the gaussian model.
+ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+
+\FloatBarrier
 
 ``` {r fig7, echo=FALSE, fig.align = "center", fig.cap="The distribution of ODS rates found across the 90 random clips.", out.width = '40%'}
 knitr::include_graphics("www/ODS_random_distribution.png")
 ```
 
+\FloatBarrier
+
 ```{r tab9, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "ODS_random_z-inb") %>% select(-model),
-          caption="Full output of the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample.")
+          caption="Full output of the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab10, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -177,9 +181,13 @@ apa_table(filter(model.results, model == "ODS_random_z-inb.v2") %>% select(-mode
           caption="Model output of the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig8, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/ODS_random_z-inb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab11, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "ODS_random_log_gaus") %>% select(-model),
@@ -191,65 +199,76 @@ apa_table(filter(model.results, model == "ODS_random_log_gaus.v2") %>% select(-m
           caption="Model output of the gaussian mixed-effects regression of ODS min/hr for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig9, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of ODS min/hr for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/ODS_random_log_gaus_res_plot.png")
 ```
 
-\newpage
+\FloatBarrier
 
 ### Turn-taking clips {#models-ods-turntaking}
-ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression. In order to do this, we rounded the rate of ODS min/hr to the nearest integer in modeling the influence of time of day, child age, and so on, as before. Below we show the distribution of ODS min/hr across clips, the full output for the models reported in the text (both with the midday and afternoon reference level versions for time-of-day), the residual plots for the main model [Table 13](#tab13), and parallel models using gaussian linear mixed-effects analyses. Again, the gaussian model shows a similar pattern of results as the negative binomial model.
+ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
 
-``` {r fig10, echo=FALSE, fig.align = "center", fig.cap="The distribution of TCDS rates found across the 90 turn-taking clips.", out.width = '40%'}
-knitr::include_graphics("www/TCDS_turntaking_distribution.png")
+\FloatBarrier
+
+``` {r fig10, echo=FALSE, fig.align = "center", fig.cap="The distribution of ODS rates found across the 59 turn-taking clips.", out.width = '40%'}
+knitr::include_graphics("www/ODS_turntaking_distribution.png")
 ```
 
+\FloatBarrier
+
 ```{r tab13, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
-apa_table(filter(model.results, model == "TCDS_turntaking_nb") %>% select(-model),
-          caption="Full output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.")
+apa_table(filter(model.results, model == "ODS_turntaking_z-inb") %>% select(-model),
+          caption="Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab14, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
-apa_table(filter(model.results, model == "TCDS_turntaking_nb.v2") %>% select(-model),
-          caption="Model output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.")
+apa_table(filter(model.results, model == "ODS_turntaking_z-inb.v2") %>% select(-model),
+          caption="Model output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
-``` {r fig11, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.", out.width = '90%'}
-knitr::include_graphics("www/TCDS_turntaking_nb_res_plot.png")
+\FloatBarrier
+
+``` {r fig11, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample.", out.width = '90%'}
+knitr::include_graphics("www/ODS_turntaking_z-inb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab15, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
-apa_table(filter(model.results, model == "TCDS_turntaking_log_gaus") %>% select(-model),
-          caption="Full output of the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample, with midday as the reference level for time of day.")
+apa_table(filter(model.results, model == "ODS_turntaking_log_gaus") %>% select(-model),
+          caption="Full output of the gaussian mixed-effects regression of ODS min/hr for the turn-taking sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab16, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
-apa_table(filter(model.results, model == "TCDS_turntaking_log_gaus.v2") %>% select(-model),
-          caption="Model output of the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.")
+apa_table(filter(model.results, model == "ODS_turntaking_log_gaus.v2") %>% select(-model),
+          caption="Model output of the gaussian mixed-effects regression of ODS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
-``` {r fig12, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample.", out.width = '90%'}
-knitr::include_graphics("www/TCDS_turntaking_log_gaus_res_plot.png")
+\FloatBarrier
+
+``` {r fig12, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of ODS min/hr for the turn-taking sample.", out.width = '90%'}
+knitr::include_graphics("www/ODS_turntaking_log_gaus_res_plot.png")
 ```
 
-
-\newpage
-
-
-
-
+\FloatBarrier
 
 ## Target-child-to-other turn transitions (TC--O) {#models-tc_o}
 ### Random clips {#models-tc_o-random}
-Target-child-to-other contingent response rate (TC--O transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression. In order to do this, we rounded the rate of TC--O transitions/min to the nearest integer in modeling the influence of time of day, child age, and so on. Below we first show the distribution of TC--O transitions/min across clips. We then show the full output of the model reported in the text---both the original, with midday as the reference point for time of day and then a second version with afternoon as the reference point for time of day. We follow these model outputs with a figure showing two residual plots for the main model [Table 17](#tab17). Finally, we show the full output for a gaussian linear mixed-effects model of the data using logged TC--O transitions/min as the dependent variable, which is not appropriate for this distribution of data [Figure 13](#fig13). However, the gaussian model shows a similar pattern of results as the zero-inflated negative binomial model. As before, we show the model results with both midday and afternoon as the reference levels for time of day, followed by the residuals for the gaussian model.
+Target-child-to-other contingent response rate (TC--O transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+
+\FloatBarrier
 
 ``` {r fig13, echo=FALSE, fig.align = "center", fig.cap="The distribution of TC--O turn transitions/min rates found across the 90 random clips.", out.width = '40%'}
 knitr::include_graphics("www/c_o_tpm_random_distribution.png")
 ```
 
+\FloatBarrier
+
 ```{r tab17, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "c_o.tpm_random_z-inb") %>% select(-model),
-          caption="Full output of the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample.")
+          caption="Full output of the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab18, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -257,9 +276,13 @@ apa_table(filter(model.results, model == "c_o.tpm_random_z-inb.v2") %>% select(-
           caption="Model output of the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig14, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/c_o_tpm_random_z-inb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab19, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "c_o.tpm_random_log_gaus") %>% select(-model),
@@ -271,22 +294,29 @@ apa_table(filter(model.results, model == "c_o.tpm_random_log_gaus.v2") %>% selec
           caption="Model output of the gaussian mixed-effects regression of TC--O turn transitions/min for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig15, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of TC--O turn transitions/min for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/c_o_tpm_random_log_gaus_res_plot.png")
 ```
 
-\newpage
+\FloatBarrier
+
 
 ### Turn-taking clips {#models-tc_o-turntaking}
-TC--O transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression. In order to do this, we rounded the rate of ODS min/hr to the nearest integer in modeling the influence of time of day, child age, and so on, as before. Below we show the distribution of TC--O transitions/min across clips, the full output for the models reported in the text (both with the midday and afternoon reference level versions for time-of-day), the residual plots for the main model [Table 21](#tab21), and parallel models using gaussian linear mixed-effects analyses. Again, the gaussian model shows a similar pattern of results as the negative binomial model.
+TC--O transitions/min in the random clips demonstrated a slightly skewed, unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
 
-``` {r fig16, echo=FALSE, fig.align = "center", fig.cap="The distribution of TC--O turn transitions/min found across the 90 turn-taking clips.", out.width = '40%'}
+\FloatBarrier
+
+``` {r fig16, echo=FALSE, fig.align = "center", fig.cap="The distribution of TC--O turn transitions/min found across the 59 turn-taking clips.", out.width = '40%'}
 knitr::include_graphics("www/c_o_tpm_turntaking_distribution.png")
 ```
 
+\FloatBarrier
+
 ```{r tab21, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "c_o.tpm_turntaking_nb") %>% select(-model),
-          caption="Full output of the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.")
+          caption="Full output of the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample, with midday as the reference level for time of day.")
 ```
 
 ```{r tab22, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -294,9 +324,13 @@ apa_table(filter(model.results, model == "c_o.tpm_turntaking_nb.v2") %>% select(
           caption="Model output of the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
-``` {r fig17, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.", out.width = '90%'}
+\FloatBarrier
+
+``` {r fig17, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/c_o_tpm_turntaking_nb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab23, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "c_o.tpm_turntaking_log_gaus") %>% select(-model),
@@ -308,23 +342,25 @@ apa_table(filter(model.results, model == "c_o.tpm_turntaking_log_gaus.v2") %>% s
           caption="Model output of the gaussian mixed-effects regression of TC--O turn transitions/min for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig18, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/c_o_tpm_turntaking_log_gaus_res_plot.png")
 ```
 
-
-\newpage
-
-
-
+\FloatBarrier
 
 ## Other-to-target-child turn transitions (O--TC) {#models-o_tc}
 ### Random clips {#models-o_tc-random}
-Other-to-target-child contingent response rate (O--TC transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression. In order to do this, we rounded the rate of O--TC transitions/min to the nearest integer in modeling the influence of time of day, child age, and so on. Below we first show the distribution of O--TC transitions/min across clips. We then show the full output of the model reported in the text---both the original, with midday as the reference point for time of day and then a second version with afternoon as the reference point for time of day. We follow these model outputs with a figure showing two residual plots for the main model [Table 25](#tab25). Finally, we show the full output for a gaussian linear mixed-effects model of the data using logged O--TC transitions/min as the dependent variable, which is not appropriate for this distribution of data [Figure 19](#fig19). However, the gaussian model shows a similar pattern of results as the zero-inflated negative binomial model. As before, we show the model results with both midday and afternoon as the reference levels for time of day, followed by the residuals for the gaussian model.
+Other-to-target-child contingent response rate (O--TC transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+
+\FloatBarrier
 
 ``` {r fig19, echo=FALSE, fig.align = "center", fig.cap="The distribution of O--TC turn transitions/min rates found across the 90 random clips.", out.width = '40%'}
 knitr::include_graphics("www/o_c_tpm_random_distribution.png")
 ```
+
+\FloatBarrier
 
 ```{r tab25, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "o_c.tpm_random_z-inb") %>% select(-model),
@@ -336,9 +372,13 @@ apa_table(filter(model.results, model == "o_c.tpm_random_z-inb.v2") %>% select(-
           caption="Model output of the zero-inflated negative binomial mixed-effects regression of O--TC turn transitions/min for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig20, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of O--TC turn transitions/min for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/o_c_tpm_random_z-inb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab27, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "o_c.tpm_random_log_gaus") %>% select(-model),
@@ -350,18 +390,24 @@ apa_table(filter(model.results, model == "o_c.tpm_random_log_gaus.v2") %>% selec
           caption="Model output of the gaussian mixed-effects regression of O--TC turn transitions/min for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig21, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of O--TC turn transitions/min for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/o_c_tpm_random_log_gaus_res_plot.png")
 ```
 
-\newpage
+\FloatBarrier
 
 ### Turn-taking clips {#models-o_tc-turntaking}
-O--TC transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression. In order to do this, we rounded the rate of O--TC transitions/min to the nearest integer in modeling the influence of time of day, child age, and so on, as before. Below we show the distribution of O--TC transitions/min across clips, the full output for the models reported in the text (both with the midday and afternoon reference level versions for time-of-day), the residual plots for the main model [Table 29](#tab29), and parallel models using gaussian linear mixed-effects analyses. Again, the gaussian model shows a similar pattern of results as the negative binomial model.
+O--TC transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
+
+\FloatBarrier
 
 ``` {r fig22, echo=FALSE, fig.align = "center", fig.cap="The distribution of O--TC turn transitions/min found across the 90 turn-taking clips.", out.width = '40%'}
 knitr::include_graphics("www/o_c_tpm_turntaking_distribution.png")
 ```
+
+\FloatBarrier
 
 ```{r tab29, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "o_c.tpm_turntaking_nb") %>% select(-model),
@@ -373,9 +419,13 @@ apa_table(filter(model.results, model == "o_c.tpm_turntaking_nb.v2") %>% select(
           caption="Model output of the negative binomial mixed-effects regression of O--TC turn transitions/min for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig23, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the negative binomial mixed-effects regression of O--TC turn transitions/min for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/o_c_tpm_turntaking_nb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab31, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "o_c.tpm_turntaking_log_gaus") %>% select(-model),
@@ -387,23 +437,26 @@ apa_table(filter(model.results, model == "o_c.tpm_turntaking_log_gaus.v2") %>% s
           caption="Model output of the gaussian mixed-effects regression of O--TC turn transitions/min for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig24, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of O--TC turn transitions/min for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/o_c_tpm_turntaking_log_gaus_res_plot.png")
 ```
 
-
-\newpage
-
-
+\FloatBarrier
 
 
 ## Interactive sequence duration {#models-seqdur}
 ### Random clips {#models-seqdur-random}
-Other-to-target-child contingent response rate (O--TC transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression. In order to do this, we rounded the rate of O--TC transitions/min to the nearest integer in modeling the influence of time of day, child age, and so on. Below we first show the distribution of O--TC transitions/min across clips. We then show the full output of the model reported in the text---both the original, with midday as the reference point for time of day and then a second version with afternoon as the reference point for time of day. We follow these model outputs with a figure showing two residual plots for the main model [Table 17](#tab17). Finally, we show the full output for a gaussian linear mixed-effects model of the data using logged O--TC transitions/min as the dependent variable, which is not appropriate for this distribution of data [Figure 13](#fig13). However, the gaussian model shows a similar pattern of results as the zero-inflated negative binomial model. As before, we show the model results with both midday and afternoon as the reference levels for time of day, followed by the residuals for the gaussian model.
+Other-to-target-child contingent response rate (O--TC transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+
+\FloatBarrier
 
 ``` {r fig25, echo=FALSE, fig.align = "center", fig.cap="The distribution of interactive sequence duration (sec) found across the 90 random clips.", out.width = '40%'}
 knitr::include_graphics("www/seqdur_random_distribution.png")
 ```
+
+\FloatBarrier
 
 ```{r tab33, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "seqdur.sec_random_nb") %>% select(-model),
@@ -415,9 +468,13 @@ apa_table(filter(model.results, model == "seqdur.sec_random_nb.v2") %>% select(-
           caption="Model output of the negative binomial mixed-effects regression of interactive sequence duration (sec) for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig26, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the negative binomial mixed-effects regression of interactive sequence duration (sec) for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/seqdur_random_nb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab35, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "seqdur.sec_random_log_gaus") %>% select(-model),
@@ -429,18 +486,25 @@ apa_table(filter(model.results, model == "seqdur.sec_random_log_gaus.v2") %>% se
           caption="Model output of the gaussian mixed-effects regression of interactive sequence duration (sec) for the random sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig27, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of interactive sequence duration (sec) for the random sample.", out.width = '90%'}
 knitr::include_graphics("www/seqdur_random_log_gaus_res_plot.png")
 ```
 
-\newpage
+\FloatBarrier
+
 
 ### Turn-taking clips {#models-seqdur-turntaking}
-O--TC transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression. In order to do this, we rounded the rate of O--TC transitions/min to the nearest integer in modeling the influence of time of day, child age, and so on, as before. Below we show the distribution of O--TC transitions/min across clips, the full output for the models reported in the text (both with the midday and afternoon reference level versions for time-of-day), the residual plots for the main model [Table 21](#tab21), and parallel models using gaussian linear mixed-effects analyses. Again, the gaussian model shows a similar pattern of results as the negative binomial model.
+O--TC transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
+
+\FloatBarrier
 
 ``` {r fig28, echo=FALSE, fig.align = "center", fig.cap="The distribution of interactive sequence duration (sec) found across the 90 turn-taking clips.", out.width = '40%'}
 knitr::include_graphics("www/seqdur_turntaking_distribution.png")
 ```
+
+\FloatBarrier
 
 ```{r tab37, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "seqdur.sec_turntaking_nb") %>% select(-model),
@@ -452,9 +516,13 @@ apa_table(filter(model.results, model == "seqdur.sec_turntaking_nb.v2") %>% sele
           caption="Model output of the negative binomial mixed-effects regression of interactive sequence duration (sec) for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig29, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the negative binomial mixed-effects regression of interactive sequence duration (sec) for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/seqdur_turntaking_nb_res_plot.png")
 ```
+
+\FloatBarrier
 
 ```{r tab39, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "seqdur.sec_turntaking_log_gaus") %>% select(-model),
@@ -466,13 +534,15 @@ apa_table(filter(model.results, model == "seqdur.sec_turntaking_log_gaus.v2") %>
           caption="Model output of the gaussian mixed-effects regression of interactive sequence duration (sec) for the turn-taking sample, with afternoon as the reference level for time of day.")
 ```
 
+\FloatBarrier
+
 ``` {r fig30, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the gaussian mixed-effects regression of interactive sequence duration (sec) for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/seqdur_turntaking_log_gaus_res_plot.png")
 ```
 
+\FloatBarrier
 
 \newpage
-
 
 # References {#refs}
 

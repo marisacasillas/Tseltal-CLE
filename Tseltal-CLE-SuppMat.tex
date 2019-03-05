@@ -126,6 +126,7 @@ village}
 
   \usepackage{float}
   \floatplacement{figure}{H}
+  \usepackage{placeins}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[section]
@@ -151,19 +152,54 @@ village}
 
 \section{Full model outputs}\label{models}
 
-In the main text we only report significant effects from the models used
-to analyze the five speech environment variables. Here we give the full
-model outputs, figures showing the distribution of each variable and the
-residuals of each model, and the output of a comparably constructed
-gaussian mixed-effects linear regression for: TCDS min/hr, ODS min/hr,
-TC--O transitions/min, O--TC transitions/min, and sequence duration.
+In the main text we only report \emph{significant} effects on the five
+speech environment variables: TCDS min/hr, ODS min/hr, TC--O
+transitions/min, O--TC transitions/min, and sequence duration. Here in
+the Supplementary Materials we give the full model outputs for each
+analysis, including re-leveled versions of each model to show all three
+of the two-way tests between the three-level time-of-day factor. We also
+show, for each of the five measures, a figure showing how the variable
+is distributed across clips and a figure showing the distribution of
+model residuals. We also include full model output and residuals for a
+pair of comparably constructed gaussian mixed-effects regressions using
+a logged dependent measure. A gaussian model with logged measures is a
+more common solution to analyzing non-normal distributions in current
+psycholinguistics, but is not suitable for the current data given how
+our five speech environment measures are distributed, particularly in
+the randomly sampled clips (see, e.g., Figures
+\protect\hyperlink{fig1}{1}, \protect\hyperlink{fig7}{7},
+\protect\hyperlink{fig10}{10}, \protect\hyperlink{fig13}{13},
+\protect\hyperlink{fig19}{19}). Overall, however, the gaussian models
+show a qualitatively similar pattern of results.
 
-The predictors in the models are abbreviated: tchiyr.std = centered,
-standardized target child age in months; stthr.tri = the start time of
-the clip as either morning, midday, or afternoon; hsz.std = centered,
-standardized household size of the target child; nsk.std = centered,
-standardized number of speakers present in the clip, aclew\_child\_it =
-the unique identifier for each child.
+In what follows, the same information is shown for each of the five
+speech environment measures. All models were run with the glmm-TMB
+library in R (Brooks et al., 2017a, 2017b). Note that in all negative
+binomial regressions, the dependent variables have been rounded to the
+nearest integer (e.g., 3.2 minutes of TCDS per hour becomes 3 minutes
+per hour in the model).
+
+The predictors in the models are abbreviated as follows: tchiyr.std =
+centered, standardized target child age in months; stthr.tri = the start
+time of the clip as either morning, midday, or afternoon; hsz.std =
+centered, standardized household size of the target child; nsk.std =
+centered, standardized number of speakers present in the clip,
+aclew\_child\_it = the unique identifier for each child. The predictors
+are sometimes combined in two-way interactions, as shown below with a
+\enquote{:} separator between predictor names (e.g., tchiyr.std:nsk.std
+= a two-way interaction of target child age and number of speakers
+present). In each model output table, the \enquote{component} shows what
+kind of model the estimate derives from (e.g., the zero-inflated models
+include both a conditional \enquote{cond} set of predictors, random
+effects, and zero-inflation \enquote{zi} predictors). The \enquote{term}
+is the estimated predictor. The \enquote{statistic} is the estimated
+\emph{z}-statistic for each predictor's effect. The other labels are
+self-explanatory.
+
+As more data are added to this corpus, the analyses will also be
+updated, as will this supplementary model information, all of which will
+be available at:
+\url{https://middycasillas.shinyapps.io/Tseltal_Child_Language_Environment/}.
 
 \subsection{Target-child-directed speech (TCDS)}\label{models-tcds}
 
@@ -171,27 +207,11 @@ the unique identifier for each child.
 
 TCDS rate in the random clips demonstrated a skewed distribution with
 extra cases of zero. We therefore modeled it using a zero-inflated
-negative binomial mixed-effects regression. In order to do this, we
-rounded the rate of TCDS min/hr to the nearest integer in modeling the
-influence of time of day, child age, and so on.
+negative binomial mixed-effects regression.
 
-In what follows we first show the distribution of TCDS min/hr across
-clips. We then show the full output of the model reported in the
-text---both the original, with midday as the reference point for time of
-day and then a second version with afternoon as the reference point for
-time of day. We follow these model outputs with a figure showing two
-residual plots for the main model \protect\hyperlink{tab1}{Table 1}.
-Finally, we show the full output for a gaussian linear mixed-effects
-model of the data using logged TCDS min/hr as the dependent variable,
-which is more common in current psycholinguistics, but is not
-appropriate for this distribution of data
-\protect\hyperlink{fig1}{Figure 1}. However, the gaussian model shows a
-similar pattern of results as the zero-inflated negative binomial model.
-As before, we show the model results with both midday and afternoon as
-the reference levels for time of day, followed by the residuals for the
-gaussian model.
+\FloatBarrier
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/TCDS_random_distribution} 
 
@@ -199,6 +219,8 @@ gaussian model.
 
 \caption{The distribution of TCDS rates found across the 90 random clips.}\label{fig:fig1}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -254,7 +276,9 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/TCDS_random_z-inb_res_plot} 
 
@@ -262,6 +286,8 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 
 \caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample.}\label{fig:fig2}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -315,7 +341,9 @@ random\_effect & Residual & 0.84 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/TCDS_random_log_gaus_res_plot} 
 
@@ -324,21 +352,17 @@ random\_effect & Residual & 0.84 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of TCDS min/hr for the random sample.}\label{fig:fig3}
 \end{figure}
 
+\FloatBarrier
+
 \subsubsection{Turn-taking clips}\label{models-tcds-turntaking}
 
 TCDS rate in the turn-taking clips demonstrated a fairly normal
 distribution. We therefore modeled it using a plain (i.e.,
-non-zero-inflated) negative binomial mixed-effects regression. In order
-to do this, we rounded the rate of TCDS min/hr to the nearest integer in
-modeling the influence of time of day, child age, and so on, as before.
-Below we show the distribution of TCDS min/hr across clips, the full
-output for the models reported in the text (both with the midday and
-afternoon reference level versions for time-of-day), the residual plots
-for the main model \protect\hyperlink{tab6}{Table 6}, and parallel
-models using gaussian linear mixed-effects analyses. Again, the gaussian
-model shows a similar pattern of results as the negative binomial model.
+non-zero-inflated) negative binomial mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/TCDS_turntaking_distribution} 
 
@@ -346,6 +370,8 @@ model shows a similar pattern of results as the negative binomial model.
 
 \caption{The distribution of TCDS rates found across the 90 turn-taking clips.}\label{fig:fig4}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -397,7 +423,9 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/TCDS_turntaking_nb_res_plot} 
 
@@ -405,6 +433,8 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 
 \caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.}\label{fig:fig5}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -458,7 +488,9 @@ random\_effect & Residual & 0.71 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/TCDS_turntaking_log_gaus_res_plot} 
 
@@ -467,30 +499,19 @@ random\_effect & Residual & 0.71 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample.}\label{fig:fig6}
 \end{figure}
 
+\FloatBarrier
+
 \subsection{Other-directed speech (ODS)}\label{models-ods}
 
 \subsubsection{Random clips}\label{models-ods-random}
 
 ODS rate in the random clips demonstrated a skewed distribution with
 extra cases of zero. We therefore modeled it using a zero-inflated
-negative binomial mixed-effects regression. In order to do this, we
-rounded the rate of ODS min/hr to the nearest integer in modeling the
-influence of time of day, child age, and so on. Below first show the
-distribution of ODS min/hr across clips. We then show the full output of
-the model reported in the text---both the original, with midday as the
-reference point for time of day and then a second version with afternoon
-as the reference point for time of day. We follow these model outputs
-with a figure showing two residual plots for the main model
-\protect\hyperlink{tab10}{Table 10}. Finally, we show the full output
-for a gaussian linear mixed-effects model of the data using logged ODS
-min/hr as the dependent variable, which is not appropriate for this
-distribution of data \protect\hyperlink{fig7}{Figure 7}. However, the
-gaussian model shows a similar pattern of results as the zero-inflated
-negative binomial model. As before, we show the model results with both
-midday and afternoon as the reference levels for time of day, followed
-by the residuals for the gaussian model.
+negative binomial mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/ODS_random_distribution} 
 
@@ -498,6 +519,8 @@ by the residuals for the gaussian model.
 
 \caption{The distribution of ODS rates found across the 90 random clips.}\label{fig:fig7}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -553,7 +576,9 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/ODS_random_z-inb_res_plot} 
 
@@ -561,6 +586,8 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 
 \caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample.}\label{fig:fig8}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -614,7 +641,9 @@ random\_effect & Residual & 0.72 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/ODS_random_log_gaus_res_plot} 
 
@@ -623,49 +652,47 @@ random\_effect & Residual & 0.72 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of ODS min/hr for the random sample.}\label{fig:fig9}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsubsection{Turn-taking clips}\label{models-ods-turntaking}
 
 ODS rate in the random clips demonstrated a skewed distribution with
 extra cases of zero. We therefore modeled it using a zero-inflated
-negative binomial mixed-effects regression. In order to do this, we
-rounded the rate of ODS min/hr to the nearest integer in modeling the
-influence of time of day, child age, and so on, as before. Below we show
-the distribution of ODS min/hr across clips, the full output for the
-models reported in the text (both with the midday and afternoon
-reference level versions for time-of-day), the residual plots for the
-main model \protect\hyperlink{tab13}{Table 13}, and parallel models
-using gaussian linear mixed-effects analyses. Again, the gaussian model
-shows a similar pattern of results as the negative binomial model.
+negative binomial mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
 
-{\centering \includegraphics[width=0.4\linewidth]{www/TCDS_turntaking_distribution} 
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.4\linewidth]{www/ODS_turntaking_distribution} 
 
 }
 
-\caption{The distribution of TCDS rates found across the 90 turn-taking clips.}\label{fig:fig10}
+\caption{The distribution of ODS rates found across the 90 turn-taking clips.}\label{fig:fig10}
 \end{figure}
 
+\FloatBarrier
+
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab13}Full output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.}
+\caption{\label{tab:tab13}Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
 \midrule
-cond & (Intercept) & 2.22 & 0.23 & 9.85 & 0.00\\
-cond & tchiyr.std & -0.16 & 0.21 & -0.77 & 0.44\\
-cond & stthr.trimorning & 0.33 & 0.25 & 1.32 & 0.19\\
-cond & stthr.triafternoon & 0.06 & 0.23 & 0.28 & 0.78\\
-cond & hsz.std & -0.16 & 0.16 & -1.01 & 0.31\\
-cond & nsk.std & -0.10 & 0.10 & -0.96 & 0.33\\
-cond & tchiyr.std:stthr.trimorning & -0.27 & 0.25 & -1.10 & 0.27\\
-cond & tchiyr.std:stthr.triafternoon & -0.03 & 0.21 & -0.16 & 0.88\\
-cond & tchiyr.std:hsz.std & -0.49 & 0.20 & -2.42 & 0.02\\
-cond & tchiyr.std:nsk.std & 0.14 & 0.12 & 1.15 & 0.25\\
+cond & (Intercept) & 2.47 & 0.22 & 11.29 & 0.00\\
+cond & tchiyr.std & -0.45 & 0.20 & -2.19 & 0.03\\
+cond & stthr.trimorning & 0.02 & 0.26 & 0.09 & 0.93\\
+cond & stthr.triafternoon & -0.70 & 0.29 & -2.39 & 0.02\\
+cond & hsz.std & -0.44 & 0.17 & -2.60 & 0.01\\
+cond & nsk.std & 0.71 & 0.11 & 6.63 & 0.00\\
+cond & tchiyr.std:stthr.trimorning & -0.56 & 0.28 & -1.99 & 0.05\\
+cond & tchiyr.std:stthr.triafternoon & -0.14 & 0.30 & -0.47 & 0.64\\
+cond & tchiyr.std:hsz.std & -0.38 & 0.22 & -1.74 & 0.08\\
+cond & tchiyr.std:nsk.std & 0.10 & 0.14 & 0.73 & 0.47\\
+zi & (Intercept) & -32.21 & 12,233.79 & 0.00 & 1.00\\
+zi & nsk.std & -31.55 & 12,037.74 & 0.00 & 1.00\\
 random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \bottomrule
 \end{tabular}
@@ -676,21 +703,23 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab14}Model output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.}
+\caption{\label{tab:tab14}Model output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
 \midrule
-cond & (Intercept) & 2.29 & 0.20 & 11.32 & 0.00\\
-cond & tchiyr.std & -0.19 & 0.20 & -0.95 & 0.34\\
-cond & stthr.tri.amidday & -0.06 & 0.23 & -0.28 & 0.78\\
-cond & stthr.tri.amorning & 0.27 & 0.22 & 1.24 & 0.22\\
-cond & hsz.std & -0.16 & 0.16 & -1.01 & 0.31\\
-cond & nsk.std & -0.10 & 0.10 & -0.96 & 0.33\\
-cond & tchiyr.std:stthr.tri.amidday & 0.03 & 0.21 & 0.16 & 0.88\\
-cond & tchiyr.std:stthr.tri.amorning & -0.24 & 0.22 & -1.10 & 0.27\\
-cond & tchiyr.std:hsz.std & -0.49 & 0.20 & -2.42 & 0.02\\
-cond & tchiyr.std:nsk.std & 0.14 & 0.12 & 1.15 & 0.25\\
+cond & (Intercept) & 1.77 & 0.27 & 6.64 & 0.00\\
+cond & tchiyr.std & -0.59 & 0.28 & -2.10 & 0.04\\
+cond & stthr.tri.amidday & 0.70 & 0.29 & 2.39 & 0.02\\
+cond & stthr.tri.amorning & 0.72 & 0.25 & 2.91 & 0.00\\
+cond & hsz.std & -0.44 & 0.17 & -2.60 & 0.01\\
+cond & nsk.std & 0.71 & 0.11 & 6.63 & 0.00\\
+cond & tchiyr.std:stthr.tri.amidday & 0.14 & 0.30 & 0.47 & 0.64\\
+cond & tchiyr.std:stthr.tri.amorning & -0.42 & 0.27 & -1.54 & 0.12\\
+cond & tchiyr.std:hsz.std & -0.38 & 0.22 & -1.74 & 0.08\\
+cond & tchiyr.std:nsk.std & 0.10 & 0.14 & 0.73 & 0.47\\
+zi & (Intercept) & -32.46 & 13,260.31 & 0.00 & 1.00\\
+zi & nsk.std & -31.79 & 13,047.81 & 0.00 & 1.00\\
 random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \bottomrule
 \end{tabular}
@@ -698,35 +727,39 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
 
-{\centering \includegraphics[width=0.9\linewidth]{www/TCDS_turntaking_nb_res_plot} 
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.9\linewidth]{www/ODS_turntaking_z-inb_res_plot} 
 
 }
 
-\caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.}\label{fig:fig11}
+\caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample.}\label{fig:fig11}
 \end{figure}
 
+\FloatBarrier
+
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab15}Full output of the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample, with midday as the reference level for time of day.}
+\caption{\label{tab:tab15}Full output of the gaussian mixed-effects regression of ODS min/hr for the turn-taking sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
 \midrule
-cond & (Intercept) & 2.08 & 0.24 & 8.55 & 0.00\\
-cond & tchiyr.std & -0.13 & 0.23 & -0.55 & 0.58\\
-cond & stthr.trimorning & 0.38 & 0.30 & 1.28 & 0.20\\
-cond & stthr.triafternoon & 0.11 & 0.27 & 0.40 & 0.69\\
-cond & hsz.std & -0.15 & 0.17 & -0.85 & 0.39\\
-cond & nsk.std & -0.08 & 0.12 & -0.67 & 0.50\\
-cond & tchiyr.std:stthr.trimorning & -0.34 & 0.30 & -1.16 & 0.24\\
-cond & tchiyr.std:stthr.triafternoon & 0.00 & 0.26 & -0.02 & 0.99\\
-cond & tchiyr.std:hsz.std & -0.49 & 0.22 & -2.24 & 0.02\\
-cond & tchiyr.std:nsk.std & 0.17 & 0.15 & 1.13 & 0.26\\
+cond & (Intercept) & 2.24 & 0.24 & 9.52 & 0.00\\
+cond & tchiyr.std & -0.26 & 0.23 & -1.13 & 0.26\\
+cond & stthr.trimorning & -0.19 & 0.29 & -0.65 & 0.51\\
+cond & stthr.triafternoon & -0.75 & 0.26 & -2.89 & 0.00\\
+cond & hsz.std & -0.39 & 0.17 & -2.32 & 0.02\\
+cond & nsk.std & 1.12 & 0.11 & 10.06 & 0.00\\
+cond & tchiyr.std:stthr.trimorning & -0.29 & 0.29 & -1.01 & 0.31\\
+cond & tchiyr.std:stthr.triafternoon & 0.04 & 0.25 & 0.17 & 0.86\\
+cond & tchiyr.std:hsz.std & -0.21 & 0.21 & -1.00 & 0.32\\
+cond & tchiyr.std:nsk.std & -0.03 & 0.14 & -0.22 & 0.82\\
 random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
-random\_effect & Residual & 0.71 & NA & NA & NA\\
+random\_effect & Residual & 0.69 & NA & NA & NA\\
 \bottomrule
 \end{tabular}
 \end{threeparttable}
@@ -736,39 +769,41 @@ random\_effect & Residual & 0.71 & NA & NA & NA\\
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab16}Model output of the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.}
+\caption{\label{tab:tab16}Model output of the gaussian mixed-effects regression of ODS min/hr for the turn-taking sample, with afternoon as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
 \midrule
-cond & (Intercept) & 2.19 & 0.21 & 10.47 & 0.00\\
-cond & tchiyr.std & -0.13 & 0.23 & -0.58 & 0.56\\
-cond & stthr.tri.amidday & -0.11 & 0.27 & -0.40 & 0.69\\
-cond & stthr.tri.amorning & 0.28 & 0.26 & 1.04 & 0.30\\
-cond & hsz.std & -0.15 & 0.17 & -0.85 & 0.39\\
-cond & nsk.std & -0.08 & 0.12 & -0.67 & 0.50\\
-cond & tchiyr.std:stthr.tri.amidday & 0.00 & 0.26 & 0.02 & 0.99\\
-cond & tchiyr.std:stthr.tri.amorning & -0.34 & 0.28 & -1.23 & 0.22\\
-cond & tchiyr.std:hsz.std & -0.49 & 0.22 & -2.24 & 0.02\\
-cond & tchiyr.std:nsk.std & 0.17 & 0.15 & 1.13 & 0.26\\
+cond & (Intercept) & 1.49 & 0.20 & 7.38 & 0.00\\
+cond & tchiyr.std & -0.21 & 0.22 & -0.96 & 0.34\\
+cond & stthr.tri.amidday & 0.75 & 0.26 & 2.89 & 0.00\\
+cond & stthr.tri.amorning & 0.56 & 0.26 & 2.18 & 0.03\\
+cond & hsz.std & -0.39 & 0.17 & -2.32 & 0.02\\
+cond & nsk.std & 1.12 & 0.11 & 10.06 & 0.00\\
+cond & tchiyr.std:stthr.tri.amidday & -0.04 & 0.25 & -0.17 & 0.86\\
+cond & tchiyr.std:stthr.tri.amorning & -0.33 & 0.27 & -1.24 & 0.21\\
+cond & tchiyr.std:hsz.std & -0.21 & 0.21 & -1.00 & 0.32\\
+cond & tchiyr.std:nsk.std & -0.03 & 0.14 & -0.22 & 0.82\\
 random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
-random\_effect & Residual & 0.71 & NA & NA & NA\\
+random\_effect & Residual & 0.69 & NA & NA & NA\\
 \bottomrule
 \end{tabular}
 \end{threeparttable}
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
 
-{\centering \includegraphics[width=0.9\linewidth]{www/TCDS_turntaking_log_gaus_res_plot} 
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.9\linewidth]{www/ODS_turntaking_log_gaus_res_plot} 
 
 }
 
-\caption{The model residuals from the gaussian mixed-effects regression of TCDS min/hr for the turn-taking sample.}\label{fig:fig12}
+\caption{The model residuals from the gaussian mixed-effects regression of ODS min/hr for the turn-taking sample.}\label{fig:fig12}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsection{Target-child-to-other turn transitions
 (TC--O)}\label{models-tc_o}
@@ -778,25 +813,11 @@ random\_effect & Residual & 0.71 & NA & NA & NA\\
 Target-child-to-other contingent response rate (TC--O transitions/min)
 in the random clips demonstrated a skewed distribution with extra cases
 of zero. We therefore modeled it using a zero-inflated negative binomial
-mixed-effects regression. In order to do this, we rounded the rate of
-TC--O transitions/min to the nearest integer in modeling the influence
-of time of day, child age, and so on. Below we first show the
-distribution of TC--O transitions/min across clips. We then show the
-full output of the model reported in the text---both the original, with
-midday as the reference point for time of day and then a second version
-with afternoon as the reference point for time of day. We follow these
-model outputs with a figure showing two residual plots for the main
-model \protect\hyperlink{tab17}{Table 17}. Finally, we show the full
-output for a gaussian linear mixed-effects model of the data using
-logged TC--O transitions/min as the dependent variable, which is not
-appropriate for this distribution of data
-\protect\hyperlink{fig13}{Figure 13}. However, the gaussian model shows
-a similar pattern of results as the zero-inflated negative binomial
-model. As before, we show the model results with both midday and
-afternoon as the reference levels for time of day, followed by the
-residuals for the gaussian model.
+mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/c_o_tpm_random_distribution} 
 
@@ -804,6 +825,8 @@ residuals for the gaussian model.
 
 \caption{The distribution of TC--O turn transitions/min rates found across the 90 random clips.}\label{fig:fig13}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -859,7 +882,9 @@ random\_effect & aclew\_child\_id & 0.71 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/c_o_tpm_random_z-inb_res_plot} 
 
@@ -867,6 +892,8 @@ random\_effect & aclew\_child\_id & 0.71 & NA & NA & NA\\
 
 \caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample.}\label{fig:fig14}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -920,7 +947,9 @@ random\_effect & Residual & 0.38 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/c_o_tpm_random_log_gaus_res_plot} 
 
@@ -929,24 +958,17 @@ random\_effect & Residual & 0.38 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of TC--O turn transitions/min for the random sample.}\label{fig:fig15}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsubsection{Turn-taking clips}\label{models-tc_o-turntaking}
 
 TC--O transitions/min in the random clips demonstrated a fairly normal
 distribution. We therefore modeled it using a plain (i.e.,
-non-zero-inflated) negative binomial mixed-effects regression. In order
-to do this, we rounded the rate of ODS min/hr to the nearest integer in
-modeling the influence of time of day, child age, and so on, as before.
-Below we show the distribution of TC--O transitions/min across clips,
-the full output for the models reported in the text (both with the
-midday and afternoon reference level versions for time-of-day), the
-residual plots for the main model \protect\hyperlink{tab21}{Table 21},
-and parallel models using gaussian linear mixed-effects analyses. Again,
-the gaussian model shows a similar pattern of results as the negative
-binomial model.
+non-zero-inflated) negative binomial mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/c_o_tpm_turntaking_distribution} 
 
@@ -954,6 +976,8 @@ binomial model.
 
 \caption{The distribution of TC--O turn transitions/min found across the 90 turn-taking clips.}\label{fig:fig16}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1005,7 +1029,9 @@ random\_effect & aclew\_child\_id & 0.32 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/c_o_tpm_turntaking_nb_res_plot} 
 
@@ -1013,6 +1039,8 @@ random\_effect & aclew\_child\_id & 0.32 & NA & NA & NA\\
 
 \caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.}\label{fig:fig17}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1066,7 +1094,9 @@ random\_effect & Residual & 0.51 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/c_o_tpm_turntaking_log_gaus_res_plot} 
 
@@ -1075,7 +1105,7 @@ random\_effect & Residual & 0.51 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.}\label{fig:fig18}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsection{Other-to-target-child turn transitions
 (O--TC)}\label{models-o_tc}
@@ -1085,25 +1115,11 @@ random\_effect & Residual & 0.51 & NA & NA & NA\\
 Other-to-target-child contingent response rate (O--TC transitions/min)
 in the random clips demonstrated a skewed distribution with extra cases
 of zero. We therefore modeled it using a zero-inflated negative binomial
-mixed-effects regression. In order to do this, we rounded the rate of
-O--TC transitions/min to the nearest integer in modeling the influence
-of time of day, child age, and so on. Below we first show the
-distribution of O--TC transitions/min across clips. We then show the
-full output of the model reported in the text---both the original, with
-midday as the reference point for time of day and then a second version
-with afternoon as the reference point for time of day. We follow these
-model outputs with a figure showing two residual plots for the main
-model \protect\hyperlink{tab25}{Table 25}. Finally, we show the full
-output for a gaussian linear mixed-effects model of the data using
-logged O--TC transitions/min as the dependent variable, which is not
-appropriate for this distribution of data
-\protect\hyperlink{fig19}{Figure 19}. However, the gaussian model shows
-a similar pattern of results as the zero-inflated negative binomial
-model. As before, we show the model results with both midday and
-afternoon as the reference levels for time of day, followed by the
-residuals for the gaussian model.
+mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/o_c_tpm_random_distribution} 
 
@@ -1111,6 +1127,8 @@ residuals for the gaussian model.
 
 \caption{The distribution of O--TC turn transitions/min rates found across the 90 random clips.}\label{fig:fig19}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1166,7 +1184,9 @@ random\_effect & aclew\_child\_id & 0.80 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/o_c_tpm_random_z-inb_res_plot} 
 
@@ -1174,6 +1194,8 @@ random\_effect & aclew\_child\_id & 0.80 & NA & NA & NA\\
 
 \caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of O--TC turn transitions/min for the random sample.}\label{fig:fig20}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1227,7 +1249,9 @@ random\_effect & Residual & 0.36 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/o_c_tpm_random_log_gaus_res_plot} 
 
@@ -1236,24 +1260,17 @@ random\_effect & Residual & 0.36 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of O--TC turn transitions/min for the random sample.}\label{fig:fig21}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsubsection{Turn-taking clips}\label{models-o_tc-turntaking}
 
 O--TC transitions/min in the random clips demonstrated a fairly normal
 distribution. We therefore modeled it using a plain (i.e.,
-non-zero-inflated) negative binomial mixed-effects regression. In order
-to do this, we rounded the rate of O--TC transitions/min to the nearest
-integer in modeling the influence of time of day, child age, and so on,
-as before. Below we show the distribution of O--TC transitions/min
-across clips, the full output for the models reported in the text (both
-with the midday and afternoon reference level versions for time-of-day),
-the residual plots for the main model \protect\hyperlink{tab29}{Table
-29}, and parallel models using gaussian linear mixed-effects analyses.
-Again, the gaussian model shows a similar pattern of results as the
-negative binomial model.
+non-zero-inflated) negative binomial mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/o_c_tpm_turntaking_distribution} 
 
@@ -1261,6 +1278,8 @@ negative binomial model.
 
 \caption{The distribution of O--TC turn transitions/min found across the 90 turn-taking clips.}\label{fig:fig22}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1312,7 +1331,9 @@ random\_effect & aclew\_child\_id & 0.31 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/o_c_tpm_turntaking_nb_res_plot} 
 
@@ -1320,6 +1341,8 @@ random\_effect & aclew\_child\_id & 0.31 & NA & NA & NA\\
 
 \caption{The model residuals from the negative binomial mixed-effects regression of O--TC turn transitions/min for the turn-taking sample.}\label{fig:fig23}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1373,7 +1396,9 @@ random\_effect & Residual & 0.53 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/o_c_tpm_turntaking_log_gaus_res_plot} 
 
@@ -1382,7 +1407,7 @@ random\_effect & Residual & 0.53 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of O--TC turn transitions/min for the turn-taking sample.}\label{fig:fig24}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsection{Interactive sequence duration}\label{models-seqdur}
 
@@ -1391,25 +1416,11 @@ random\_effect & Residual & 0.53 & NA & NA & NA\\
 Other-to-target-child contingent response rate (O--TC transitions/min)
 in the random clips demonstrated a skewed distribution with extra cases
 of zero. We therefore modeled it using a zero-inflated negative binomial
-mixed-effects regression. In order to do this, we rounded the rate of
-O--TC transitions/min to the nearest integer in modeling the influence
-of time of day, child age, and so on. Below we first show the
-distribution of O--TC transitions/min across clips. We then show the
-full output of the model reported in the text---both the original, with
-midday as the reference point for time of day and then a second version
-with afternoon as the reference point for time of day. We follow these
-model outputs with a figure showing two residual plots for the main
-model \protect\hyperlink{tab17}{Table 17}. Finally, we show the full
-output for a gaussian linear mixed-effects model of the data using
-logged O--TC transitions/min as the dependent variable, which is not
-appropriate for this distribution of data
-\protect\hyperlink{fig13}{Figure 13}. However, the gaussian model shows
-a similar pattern of results as the zero-inflated negative binomial
-model. As before, we show the model results with both midday and
-afternoon as the reference levels for time of day, followed by the
-residuals for the gaussian model.
+mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/seqdur_random_distribution} 
 
@@ -1417,6 +1428,8 @@ residuals for the gaussian model.
 
 \caption{The distribution of interactive sequence duration (sec) found across the 90 random clips.}\label{fig:fig25}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1470,7 +1483,9 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/seqdur_random_nb_res_plot} 
 
@@ -1478,6 +1493,8 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 
 \caption{The model residuals from the negative binomial mixed-effects regression of interactive sequence duration (sec) for the random sample.}\label{fig:fig26}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1533,7 +1550,9 @@ random\_effect & Residual & 0.85 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/seqdur_random_log_gaus_res_plot} 
 
@@ -1542,24 +1561,17 @@ random\_effect & Residual & 0.85 & NA & NA & NA\\
 \caption{The model residuals from the gaussian mixed-effects regression of interactive sequence duration (sec) for the random sample.}\label{fig:fig27}
 \end{figure}
 
-\newpage
+\FloatBarrier
 
 \subsubsection{Turn-taking clips}\label{models-seqdur-turntaking}
 
 O--TC transitions/min in the random clips demonstrated a fairly normal
 distribution. We therefore modeled it using a plain (i.e.,
-non-zero-inflated) negative binomial mixed-effects regression. In order
-to do this, we rounded the rate of O--TC transitions/min to the nearest
-integer in modeling the influence of time of day, child age, and so on,
-as before. Below we show the distribution of O--TC transitions/min
-across clips, the full output for the models reported in the text (both
-with the midday and afternoon reference level versions for time-of-day),
-the residual plots for the main model \protect\hyperlink{tab21}{Table
-21}, and parallel models using gaussian linear mixed-effects analyses.
-Again, the gaussian model shows a similar pattern of results as the
-negative binomial model.
+non-zero-inflated) negative binomial mixed-effects regression.
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{www/seqdur_turntaking_distribution} 
 
@@ -1567,6 +1579,8 @@ negative binomial model.
 
 \caption{The distribution of interactive sequence duration (sec) found across the 90 turn-taking clips.}\label{fig:fig28}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1620,7 +1634,9 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/seqdur_turntaking_nb_res_plot} 
 
@@ -1628,6 +1644,8 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 
 \caption{The model residuals from the negative binomial mixed-effects regression of interactive sequence duration (sec) for the turn-taking sample.}\label{fig:fig29}
 \end{figure}
+
+\FloatBarrier
 
 \begin{table}[tbp]
 \begin{center}
@@ -1683,7 +1701,9 @@ random\_effect & Residual & 0.89 & NA & NA & NA\\
 \end{center}
 \end{table}
 
-\begin{figure}
+\FloatBarrier
+
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.9\linewidth]{www/seqdur_turntaking_log_gaus_res_plot} 
 
@@ -1691,6 +1711,8 @@ random\_effect & Residual & 0.89 & NA & NA & NA\\
 
 \caption{The model residuals from the gaussian mixed-effects regression of interactive sequence duration (sec) for the turn-taking sample.}\label{fig:fig30}
 \end{figure}
+
+\FloatBarrier
 
 \newpage
 
@@ -1700,6 +1722,19 @@ random\_effect & Residual & 0.89 & NA & NA & NA\\
 \setlength{\parindent}{-0.5in} \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
+\hypertarget{ref-R-glmmTMB}{}
+Brooks, M. E., Kristensen, K., van Benthem, K. J., Magnusson, A., Berg,
+C. W., Nielsen, A., \ldots{} Bolker, B. M. (2017a). glmmTMB balances
+speed and flexibility among packages for zero-inflated generalized
+linear mixed modeling. \emph{The R Journal}, \emph{9}(2), 378--400.
+Retrieved from
+\url{https://journal.r-project.org/archive/2017/RJ-2017-066/index.html}
+
+\hypertarget{ref-brooks2017modeling}{}
+Brooks, M. E., Kristensen, K., van Benthem, K. J., Magnusson, A., Berg,
+C. W., Nielsen, A., \ldots{} Bolker, B. M. (2017b). Modeling
+zero-inflated count data with glmmTMB. \emph{bioRxiv}.
+doi:\href{https://doi.org/10.1101/132753}{10.1101/132753}
 
 \endgroup
 
