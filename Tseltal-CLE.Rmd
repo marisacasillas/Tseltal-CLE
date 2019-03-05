@@ -26,7 +26,7 @@ abstract: |
   We analyzed 9--11-hour at-home audio recordings from 10 Tseltal Mayan children between 0;2 and 3;0 to investigate how often they engaged in verbal interaction with others and whether their speech environment changed with age, time of day, household size, and number of speakers present. We found that Tseltal children are not often directly spoken to, that most directed speech comes from adults, and that directed speech does not increase with age. Most of children's directed speech came in the mornings or early evenings, particularly for younger children, and high interactional peaks tended to occur in ~1-minute bursts of turn taking. These findings only partly support previous characterizations of Mayan caregiver-child talk. An initial analysis of children's vocal development suggests that, despite relatively little directed speech, these children develop early language skills on a similar timescale to American English-learning children. Given the present findings, we discuss multiple proposals for how Tseltal children might be efficient learners.
 
 keywords          : "Child-directed speech, linguistic input, non-WEIRD, vocal maturity, turn taking, interaction, Mayan"
-wordcount         : "X"
+wordcount         : "11140 (8632 not including references)"
 
 bibliography      : ["Tseltal-CLE.bib"]
 
@@ -112,7 +112,7 @@ The current data come from the Casillas HomeBank Corpus [@Casillas-HB; @HomeBank
 
 We used a novel combination of a lightweight stereo audio recorder (Olympus WS-832) and wearable photo camera (Narrative Clip 1) fitted with a fish-eye lens to track children's interactions over the course of a 9--11-hour period at home in which the experimenter was not present. Ambulatory children wore both devices at once (see [Figure 1](#fig1)) while other children wore the recorder in a onesie while their primary caregiver wore the camera on an elastic vest. The camera was set to take photos at 30-second intervals and was synchronized to the audio in post-processing to generate snapshot-linked audio.^[Post-processing scripts are available at https://github.com/marisacasillas/Weave.] We used these recordings to capture a wide range of the linguistic patterns children encounter as they participate in different activities over the course of their day [@bergelson2018day; @greenwood2011assessing; @tamislemonda2017power].
 
-``` {r fig1, echo=FALSE, fig.align = "center", fig.cap="The recording vest included an audio recorder in the front horizontal pocket and a camera with a fisheye lens on the shoulder strap.", out.width = '50%'}
+``` {r fig1, echo=FALSE, fig.align = "center", fig.cap="The recording vest included an audio recorder in the front horizontal pocket and a camera with a fisheye lens on the shoulder strap.", out.width = '30%'}
 knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-RecordingVest.jpg")
 ```
 
