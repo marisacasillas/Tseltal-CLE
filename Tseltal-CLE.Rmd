@@ -63,6 +63,7 @@ data.path <- "transcripts/anon/" # text files exported from ELAN
 metadata.path <- "metadata/"
 plot.path <- "plots/" # output plots
 shiny.input.path <- "shiny_input/"
+shiny.input.img.path <- "www/"
 seg.index.file <- paste0(metadata.path, "Segment-order-inventory.csv")
 ptcp.info.file <- paste0(metadata.path, "recording-info.csv")
 comparison.file <- paste0(metadata.path, "comparison_studies.csv")
@@ -1124,7 +1125,7 @@ tcds.random.distribution <- ggplot(quantity.rand,
   ylab("# of clips") +
   xlab ("TCDS min/hr") +
   basic.theme
-ggsave(paste0(shiny.input.path, "TCDS_random.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "TCDS_random_distribution.png"),
        plot = tcds.random.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(quantity.rand$tds_mph,0))^2
@@ -1205,7 +1206,7 @@ tcds.tt.distribution <- ggplot(quantity.nonrand.tt,
   ylab("# of clips") +
   xlab ("TCDS min/hr") +
   basic.theme
-ggsave(paste0(shiny.input.path, "TCDS_turntaking.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "TCDS_turntaking_distribution.png"),
        plot = tcds.tt.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(quantity.nonrand.tt$tds_mph,0))^2
@@ -1426,7 +1427,7 @@ ods.random.distribution <- ggplot(quantity.rand,
   ylab("# of clips") +
   xlab ("ODS min/hr") +
   basic.theme
-ggsave(paste0(shiny.input.path, "ODS_random.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "ODS_random_distribution.png"),
        plot = ods.random.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(quantity.rand$ods_mph,0))^2
@@ -1509,7 +1510,7 @@ ods.tt.distribution <- ggplot(quantity.nonrand.tt,
   ylab("# of clips") +
   xlab ("ODS min/hr") +
   basic.theme
-ggsave(paste0(shiny.input.path, "ODS_turntaking.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "ODS_turntaking_distribution.png"),
        plot = ods.tt.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(quantity.nonrand.tt$ods_mph,0))^2
@@ -2325,7 +2326,7 @@ c_o.tpm.random.distribution <- ggplot(turn.transitions.rand,
   ylab("# of clips") +
   xlab ("TC-O transitions/min") +
   basic.theme
-ggsave(paste0(shiny.input.path, "c_o.tpm_random.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "c_o_tpm_random_distribution.png"),
        plot = c_o.tpm.random.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(turn.transitions.rand$n.c_o.tpm,0))^2
@@ -2405,7 +2406,7 @@ c_o.tpm.tt.distribution <- ggplot(turn.transitions.tt,
   ylab("# of clips") +
   xlab ("TC-O transitions/min") +
   basic.theme
-ggsave(paste0(shiny.input.path, "c_o.tpm_turntaking.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "c_o_tpm_turntaking_distribution.png"),
        plot = c_o.tpm.tt.distribution,
        width = 8, height = 6, dpi = 300)
 #ggplot(turn.transitions.tt, aes(round(n.c_o.tpm,0))) + geom_histogram()
@@ -2591,7 +2592,7 @@ o_c.tpm.random.distribution <- ggplot(turn.transitions.rand,
   ylab("# of clips") +
   xlab ("O-TC transitions/min") +
   basic.theme
-ggsave(paste0(shiny.input.path, "o_c.tpm_random.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "o_c_tpm_random_distribution.png"),
        plot = o_c.tpm.random.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(turn.transitions.rand$n.o_c.tpm,0))^2
@@ -2673,7 +2674,7 @@ o_c.tpm.tt.distribution <- ggplot(turn.transitions.tt,
   ylab("# of clips") +
   xlab ("O-TC transitions/min") +
   basic.theme
-ggsave(paste0(shiny.input.path, "o_c.tpm_turntaking.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "o_c_tpm_turntaking_distribution.png"),
        plot = o_c.tpm.tt.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round(turn.transitions.tt$n.o_c.tpm,0))^2
@@ -2858,7 +2859,7 @@ seqdur.random.distribution <- ggplot(turn.sequences.rand,
   ylab("# of clips") +
   xlab ("Sequence duration (sec)") +
   basic.theme
-ggsave(paste0(shiny.input.path, "seqdur_random.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "seqdur_random_distribution.png"),
        plot = seqdur.random.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round((turn.sequences.rand$seq.dur*60),0))^2
@@ -2923,7 +2924,7 @@ seqdur.tt.distribution <- ggplot(turn.sequences.tt,
   ylab("# of clips") +
   xlab ("Sequence duration (sec)") +
   basic.theme
-ggsave(paste0(shiny.input.path, "seqdur_turntaking.distribution.png"),
+ggsave(paste0(shiny.input.img.path, "seqdur_turntaking_distribution.png"),
        plot = seqdur.tt.distribution,
        width = 8, height = 6, dpi = 300)
 #sd(round((turn.sequences.tt$seq.dur*60),0))^2
