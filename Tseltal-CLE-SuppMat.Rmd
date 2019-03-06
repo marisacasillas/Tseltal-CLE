@@ -34,7 +34,7 @@ lineno            : yes
 mask              : no
 
 class             : "man"
-output            : papaja::apa6_pdf
+output            : papaja::apa6_word
 ---
 
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
@@ -208,7 +208,7 @@ knitr::include_graphics("www/ODS_random_log_gaus_res_plot.png")
 \FloatBarrier
 
 ### Turn-taking clips {#models-ods-turntaking}
-ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+ODS rate in the turn-taking clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
 
 \FloatBarrier
 
@@ -304,7 +304,7 @@ knitr::include_graphics("www/c_o_tpm_random_log_gaus_res_plot.png")
 
 
 ### Turn-taking clips {#models-tc_o-turntaking}
-TC--O transitions/min in the random clips demonstrated a slightly skewed, unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
+TC--O transitions/min in the turn-taking clips demonstrated a slightly skewed, unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
 
@@ -399,11 +399,11 @@ knitr::include_graphics("www/o_c_tpm_random_log_gaus_res_plot.png")
 \FloatBarrier
 
 ### Turn-taking clips {#models-o_tc-turntaking}
-O--TC transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
+O--TC transitions/min in the turn-taking clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
 
-``` {r fig22, echo=FALSE, fig.align = "center", fig.cap="The distribution of O--TC turn transitions/min found across the 90 turn-taking clips.", out.width = '40%'}
+``` {r fig22, echo=FALSE, fig.align = "center", fig.cap="The distribution of O--TC turn transitions/min found across the 59 turn-taking clips.", out.width = '40%'}
 knitr::include_graphics("www/o_c_tpm_turntaking_distribution.png")
 ```
 
@@ -448,7 +448,7 @@ knitr::include_graphics("www/o_c_tpm_turntaking_log_gaus_res_plot.png")
 
 ## Interactive sequence duration {#models-seqdur}
 ### Random clips {#models-seqdur-random}
-Other-to-target-child contingent response rate (O--TC transitions/min) in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+Interactive sequence duration (in seconds) in the random clips demonstrated a slightly skewed, but unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
 
@@ -496,11 +496,11 @@ knitr::include_graphics("www/seqdur_random_log_gaus_res_plot.png")
 
 
 ### Turn-taking clips {#models-seqdur-turntaking}
-O--TC transitions/min in the random clips demonstrated a fairly normal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
+Interactive sequence duration (in seconds) in the turn-taking clips also demonstrated a slightly skewed, but unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
 
-``` {r fig28, echo=FALSE, fig.align = "center", fig.cap="The distribution of interactive sequence duration (sec) found across the 90 turn-taking clips.", out.width = '40%'}
+``` {r fig28, echo=FALSE, fig.align = "center", fig.cap="The distribution of interactive sequence duration (sec) found across the 59 turn-taking clips.", out.width = '40%'}
 knitr::include_graphics("www/seqdur_turntaking_distribution.png")
 ```
 
