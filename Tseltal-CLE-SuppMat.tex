@@ -170,7 +170,9 @@ the randomly sampled clips (see, e.g., Figures
 \protect\hyperlink{fig1}{1}, \protect\hyperlink{fig7}{7},
 \protect\hyperlink{fig10}{10}, \protect\hyperlink{fig13}{13},
 \protect\hyperlink{fig19}{19}). Overall, however, the gaussian models
-show a qualitatively similar pattern of results.
+show a qualitatively similar pattern of results. None of the gaussian
+model results are presented in the main text---only here as
+supplementary information.
 
 In what follows, the same information is shown for each of the five
 speech environment measures. All models were run with the glmm-TMB
@@ -225,7 +227,7 @@ negative binomial mixed-effects regression.
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab1}Full output of the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample.}
+\caption{\label{tab:tab1}Full output of the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the random sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
@@ -356,8 +358,8 @@ random\_effect & Residual & 0.84 & NA & NA & NA\\
 
 \subsubsection{Turn-taking clips}\label{models-tcds-turntaking}
 
-TCDS rate in the turn-taking clips demonstrated a fairly normal
-distribution. We therefore modeled it using a plain (i.e.,
+TCDS rate in the turn-taking clips demonstrated a slightly skewed, but
+unimodal distribution. We therefore modeled it using a plain (i.e.,
 non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
@@ -368,7 +370,7 @@ non-zero-inflated) negative binomial mixed-effects regression.
 
 }
 
-\caption{The distribution of TCDS rates found across the 90 turn-taking clips.}\label{fig:fig4}
+\caption{The distribution of TCDS rates found across the 59 turn-taking clips.}\label{fig:fig4}
 \end{figure}
 
 \FloatBarrier
@@ -376,7 +378,7 @@ non-zero-inflated) negative binomial mixed-effects regression.
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab5}Full output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.}
+\caption{\label{tab:tab5}Full output of the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
@@ -431,7 +433,7 @@ random\_effect & aclew\_child\_id & 0.00 & NA & NA & NA\\
 
 }
 
-\caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.}\label{fig:fig5}
+\caption{The model residuals from the negative binomial mixed-effects regression of TCDS min/hr for the turn-taking sample.}\label{fig:fig5}
 \end{figure}
 
 \FloatBarrier
@@ -525,7 +527,7 @@ negative binomial mixed-effects regression.
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab9}Full output of the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample.}
+\caption{\label{tab:tab9}Full output of the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the random sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
@@ -656,8 +658,8 @@ random\_effect & Residual & 0.72 & NA & NA & NA\\
 
 \subsubsection{Turn-taking clips}\label{models-ods-turntaking}
 
-ODS rate in the random clips demonstrated a skewed distribution with
-extra cases of zero. We therefore modeled it using a zero-inflated
+ODS rate in the turn-taking clips demonstrated a skewed distribution
+with extra cases of zero. We therefore modeled it using a zero-inflated
 negative binomial mixed-effects regression.
 
 \FloatBarrier
@@ -668,7 +670,7 @@ negative binomial mixed-effects regression.
 
 }
 
-\caption{The distribution of ODS rates found across the 90 turn-taking clips.}\label{fig:fig10}
+\caption{The distribution of ODS rates found across the 59 turn-taking clips.}\label{fig:fig10}
 \end{figure}
 
 \FloatBarrier
@@ -676,7 +678,7 @@ negative binomial mixed-effects regression.
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab13}Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample.}
+\caption{\label{tab:tab13}Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
@@ -831,7 +833,7 @@ mixed-effects regression.
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab17}Full output of the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample.}
+\caption{\label{tab:tab17}Full output of the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the random sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
@@ -962,9 +964,9 @@ random\_effect & Residual & 0.38 & NA & NA & NA\\
 
 \subsubsection{Turn-taking clips}\label{models-tc_o-turntaking}
 
-TC--O transitions/min in the random clips demonstrated a fairly normal
-distribution. We therefore modeled it using a plain (i.e.,
-non-zero-inflated) negative binomial mixed-effects regression.
+TC--O transitions/min in the turn-taking clips demonstrated a slightly
+skewed, unimodal distribution. We therefore modeled it using a plain
+(i.e., non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
 
@@ -974,7 +976,7 @@ non-zero-inflated) negative binomial mixed-effects regression.
 
 }
 
-\caption{The distribution of TC--O turn transitions/min found across the 90 turn-taking clips.}\label{fig:fig16}
+\caption{The distribution of TC--O turn transitions/min found across the 59 turn-taking clips.}\label{fig:fig16}
 \end{figure}
 
 \FloatBarrier
@@ -982,7 +984,7 @@ non-zero-inflated) negative binomial mixed-effects regression.
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:tab21}Full output of the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.}
+\caption{\label{tab:tab21}Full output of the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample, with midday as the reference level for time of day.}
 \begin{tabular}{llllll}
 \toprule
 component & \multicolumn{1}{c}{term} & \multicolumn{1}{c}{estimate} & \multicolumn{1}{c}{std.error} & \multicolumn{1}{c}{statistic} & \multicolumn{1}{c}{p.value}\\
@@ -1037,7 +1039,7 @@ random\_effect & aclew\_child\_id & 0.32 & NA & NA & NA\\
 
 }
 
-\caption{The model residuals from the zero-inflated negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.}\label{fig:fig17}
+\caption{The model residuals from the negative binomial mixed-effects regression of TC--O turn transitions/min for the turn-taking sample.}\label{fig:fig17}
 \end{figure}
 
 \FloatBarrier
@@ -1264,8 +1266,8 @@ random\_effect & Residual & 0.36 & NA & NA & NA\\
 
 \subsubsection{Turn-taking clips}\label{models-o_tc-turntaking}
 
-O--TC transitions/min in the random clips demonstrated a fairly normal
-distribution. We therefore modeled it using a plain (i.e.,
+O--TC transitions/min in the turn-taking clips demonstrated a fairly
+normal distribution. We therefore modeled it using a plain (i.e.,
 non-zero-inflated) negative binomial mixed-effects regression.
 
 \FloatBarrier
@@ -1276,7 +1278,7 @@ non-zero-inflated) negative binomial mixed-effects regression.
 
 }
 
-\caption{The distribution of O--TC turn transitions/min found across the 90 turn-taking clips.}\label{fig:fig22}
+\caption{The distribution of O--TC turn transitions/min found across the 59 turn-taking clips.}\label{fig:fig22}
 \end{figure}
 
 \FloatBarrier
@@ -1413,9 +1415,9 @@ random\_effect & Residual & 0.53 & NA & NA & NA\\
 
 \subsubsection{Random clips}\label{models-seqdur-random}
 
-Other-to-target-child contingent response rate (O--TC transitions/min)
-in the random clips demonstrated a skewed distribution with extra cases
-of zero. We therefore modeled it using a zero-inflated negative binomial
+Interactive sequence duration (in seconds) in the random clips
+demonstrated a slightly skewed, but unimodal distribution. We therefore
+modeled it using a plain (i.e., non-zero-inflated) negative binomial
 mixed-effects regression.
 
 \FloatBarrier
@@ -1565,9 +1567,10 @@ random\_effect & Residual & 0.85 & NA & NA & NA\\
 
 \subsubsection{Turn-taking clips}\label{models-seqdur-turntaking}
 
-O--TC transitions/min in the random clips demonstrated a fairly normal
-distribution. We therefore modeled it using a plain (i.e.,
-non-zero-inflated) negative binomial mixed-effects regression.
+Interactive sequence duration (in seconds) in the turn-taking clips also
+demonstrated a slightly skewed, but unimodal distribution. We therefore
+modeled it using a plain (i.e., non-zero-inflated) negative binomial
+mixed-effects regression.
 
 \FloatBarrier
 
@@ -1577,7 +1580,7 @@ non-zero-inflated) negative binomial mixed-effects regression.
 
 }
 
-\caption{The distribution of interactive sequence duration (sec) found across the 90 turn-taking clips.}\label{fig:fig28}
+\caption{The distribution of interactive sequence duration (sec) found across the 59 turn-taking clips.}\label{fig:fig28}
 \end{figure}
 
 \FloatBarrier
