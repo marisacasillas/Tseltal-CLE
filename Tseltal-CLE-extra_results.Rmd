@@ -1644,6 +1644,13 @@ Having now established the interactional timing characteristics of the "high" tu
 
 In total, `r sum(ttrGEpeaks.summary$npeaks > 0)` of the 10 children showed at least one minute of their random sample that equaled or exceeded the combined average contingent transition rate (`r ttrate.all.avg` transitions/min), and `r length(unique(ttrGEpeak.segs.chi$aclew_child_id))` of the 10 children showed at least one minute equaling or exceeding their _own_ average turn transition rate from their turn-taking sample. Across the `r sum(ttrGEpeaks.summary$npeaks > 0)` children who did show turn-taking "peaks" in their random data, peak periods were relatively long, at an average of `r round(mean(avg.random.peak.durs$meandur),2)` seconds (median = `r round(median(avg.random.peak.durs$meandur),2)` seconds; range = `r round(min(avg.random.peak.durs$meandur),2)`--`r round(max(avg.random.peak.durs$meandur),2)` seconds). Overall, children spent an average of `r round(mean(ttrGEpeaks.summary$pkdur.mph),2)` minutes per hour (median = `r round(median(ttrGEpeaks.summary$pkdur.mph),2)`; range = `r round(min(ttrGEpeaks.summary$pkdur.mph),2)`--`r round(max(ttrGEpeaks.summary$pkdur.mph),2)`) in these peak interactions during the 45 scanned minutes. Assuming approximately `r waking.hours` waking hours [@hart1995meaningful], we therefore very roughly estimate that the average Tseltal child under 3;0 spends an average of `r mean(ttrGEpeaks.summary$pkdur.mph)*waking.hours` minutes (`r round((mean(ttrGEpeaks.summary$pkdur.mph)*waking.hours)/60,2)` hours) in high turn-taking, dyadic interaction during their day. Crucially, however, the range in the quantity of high turn-taking interaction varies enormously across children, starting at just a few minutes per day and topping out at more than `r max(ttrGEpeaks.summary$pkdur.mph)*waking.hours` minutes (`r round((max(ttrGEpeaks.summary$pkdur.mph)*waking.hours)/60,2)` hours) in our 10-child sample. Much more data, particularly from other Tseltal children in this age range, is required to get stable estimates for the typical quantity and variance in peak interactional minutes experienced in a waking day.
 
+``` {r all_model_tabless, message=FALSE, warning=FALSE, paged.print=FALSE}
+all.models <- bind_rows(TCDS.models, ODS.models,
+                        c_o.tpm.models, o_c.tpm.models,
+                        seqdur.sec.models)
+write_csv(all.models, paste0(shiny.input.path, "all_model_tables_five_measures.csv"))
+```
+
 
 \begingroup
 \setlength{\parindent}{-0.5in}
