@@ -50,33 +50,9 @@ library("papaja")
 set.seed(42)
 ```
 
-
-
-# Methods
-We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
-
-## Participants
-
-## Material
-
-## Procedure
-
-## Data analysis
-We used `r cite_r("r-references.bib")` for all our analyses.
-
-
-# Results
-
-# Discussion
-
-
-\newpage
-
-# References
-```{r create_r-references}
-r_refs(file = "r-references.bib")
+``` {r fig6, echo=FALSE, fig.align = "center", fig.cap="Illustration of an annotated audio clip including the target child (TC), an older sister (SI), and their mother (MO). Turn transitions between the target child and others are marked with solid and dashed lines. Interactional sequences are boxed in with dotted lines. Box color indicates TCDS (blue) and ODS (light gray).", out.width = '100%'}
+knitr::include_graphics("Tseltal-CLE_files/TseltalCLE-TurnTimingIllustration.png")
 ```
-
 
 ## Target-child-to-other turn transitions (TC--O)
 Contingent responses by or to the target child are likely to occur at moments in which the child and another speaker are attentionally aligned, and so the rate at which these responses occur is a partial index of children's experience with joint moments of high-quality linguistic evidence. We measured two types of contingent responses: target-child-to-other and other-to-target-child. We detect these contingent turn transitions based on utterance onset and offset times and the annotations of intended addressee for each non-target-child utterance (the solid and dashed lines connecting vocalizations in [Figure 6](#fig6)). If a child's vocalization is followed by a target-child-directed utterance within -`r allowed.overlap` msec to `r allowed.gap` msec after its end [@casillas2016turn; @hilbrink2015early], it is counted as a contingent response (i.e., a TC--O transition). We use the same idea to find other-to-target-child transitions  (i.e., a target-child-directed utterance followed by a target child vocalization with the same timing restrictions). In our analysis, each target child vocalization can have maximally one prompt and one response, and each target-child-directed utterance can maximally count once as a prompt and once as a response (e.g., in a TC--O--TC sequence, the 'O' is both a response and a prompt). These timing restrictions are based on prior studies of infant and young children's spontaneous turn taking [e.g., @bornstein2015mother; @broesch2016similarities; @casillas2016turn; @hilbrink2015early]. 
@@ -1650,6 +1626,15 @@ all.models <- bind_rows(TCDS.models, ODS.models,
                         seqdur.sec.models)
 write_csv(all.models, paste0(shiny.input.path, "all_model_tables_five_measures.csv"))
 ```
+
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
 
 
 \begingroup
