@@ -1252,14 +1252,19 @@ tds.rand.zinb <- glmmTMB(round(tds_mph,0) ~
 # (Intercept)   -57.43   15426.18  -0.004    0.997
 # nsk.std       -55.68   15691.06  -0.004    0.997
 # save for reporting
-tds.rand.zinb.COEF.morn <-
+tds.rand.zinb.disp <- round(sigma(tds.rand.zinb), 2)
+tds.rand.zinb.COEF.age <-
+  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std",] 
+tds.rand.zinb.COEF.midd.morn <-
   coef(summary(tds.rand.zinb))[[1]]["stthr.trimorning",] 
-tds.rand.zinb.COEF.aft <-
+tds.rand.zinb.COEF.midd.aft <-
   coef(summary(tds.rand.zinb))[[1]]["stthr.triafternoon",] 
-tds.rand.zinb.COEF.agetime <-
+tds.rand.zinb.COEF.age.midd.morn <-
+  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:stthr.trimorning",]
+tds.rand.zinb.COEF.age.midd.aft <-
   coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",]
 tds.rand.zinb.COEF.agensk <-
-  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:nsk.std",] 
+  coef(summary(tds.rand.zinb))[[1]]["tchiyr.std:nsk.std",]
 
 # test the other two-way effects of time of day
 tds.rand.zinb.v2 <- glmmTMB(round(tds_mph,0) ~
@@ -1274,16 +1279,12 @@ tds.rand.zinb.v2 <- glmmTMB(round(tds_mph,0) ~
                          ziformula=~nsk.std,
                          family="nbinom1")
 #summary(tds.rand.zinb.v2)
-# stthr.tri.amidday             -0.488374   0.373406  -1.308  0.19091    
 # stthr.tri.amorning             0.339309   0.268777   1.262  0.20680    
-# tchiyr.std:stthr.tri.amidday   0.853459   0.377811   2.259  0.02389 *  
 # tchiyr.std:stthr.tri.amorning  0.569710   0.300505   1.896  0.05798 .  
 # save for reporting
-tds.rand.zinb.v2.COEF.aft.vs.morn <-
+tds.rand.zinb.v2.COEF.aft.morn <-
   coef(summary(tds.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
-tds.rand.zinb.v2.COEF.age.aft.vs.midd <-
-  coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
-tds.rand.zinb.v2.COEF.age.aft.vs.morn <-
+tds.rand.zinb.v2.COEF.age.aft.morn <-
   coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
 
 ## TCDS tt sample ####
@@ -1337,7 +1338,8 @@ tds.tt.nb <- glmmTMB(round(tds_mph,0) ~
 # tchiyr.std:stthr.trimorning   -0.133363   0.285654  -0.467  0.641    
 # tchiyr.std:stthr.triafternoon  0.001369   0.236523   0.006  0.995    
 # tchiyr.std:nsk.std             0.059666   0.131088   0.455  0.649  
-# no results to save for reporting
+# save for reporting
+tds.tt.nb.disp <- round(sigma(tds.tt.nb), 2)
 
 # test the other two-way effects of time of day
 tds.tt.nb.v2 <- glmmTMB(round(tds_mph,0) ~
@@ -1351,11 +1353,9 @@ tds.tt.nb.v2 <- glmmTMB(round(tds_mph,0) ~
                      data=quantity.nonrand.tt,
                      family="nbinom1")
 #summary(tds.tt.nb.v2)
-# stthr.tri.amidday             -0.06227    0.26729  -0.233   0.816    
 # stthr.tri.amorning             0.07575    0.22426   0.338   0.736    
-# tchiyr.std:stthr.tri.amidday  -0.00137    0.23652  -0.006   0.995    
 # tchiyr.std:stthr.tri.amorning -0.13474    0.26270  -0.513   0.608    
-# no results to save for reportin
+# no results to save for reporting
 ```
 
 ```{r tcds_models_gaussian, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -1399,7 +1399,7 @@ tds.rand.gaus <- glmmTMB(log(tds_mph+1) ~
 # tchiyr.std:stthr.triafternoon  -0.6810     0.2388  -2.851  0.00436 ** 
 # tchiyr.std:nsk.std              0.2308     0.1392   1.658  0.09726 .  
 # DIFFERENCES between z-i nb and logged gaussian?
-# broadly similar; some . <-> *
+# broadly similar
 
 # test the other two-way effects of time of day
 tds.rand.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
@@ -1412,12 +1412,10 @@ tds.rand.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
                            (1|aclew_child_id),
                          data=quantity.rand)
 #summary(tds.rand.gaus.v2)
-# stthr.tri.amidday              -0.2897     0.2211  -1.310  0.19012    
 # stthr.tri.amorning              0.2151     0.2193   0.981  0.32662    
-# tchiyr.std:stthr.tri.amidday    0.6810     0.2388   2.851  0.00436 ** 
 # tchiyr.std:stthr.tri.amorning   0.5073     0.2298   2.207  0.02729 *  
 # DIFFERENCES between z-i nb and logged gaussian?
-# broadly similar; one . -> *
+# broadly similar
 
 ## TCDS tt sample ####
 tds.tt.gaus <- glmmTMB(log(tds_mph+1) ~
@@ -1459,7 +1457,7 @@ tds.tt.gaus <- glmmTMB(log(tds_mph+1) ~
 # tchiyr.std:stthr.triafternoon  0.04031    0.27258   0.148  0.882    
 # tchiyr.std:nsk.std             0.07303    0.14829   0.492  0.622    
 # DIFFERENCES between z-i nb and logged gaussian?
-# no qualitative differences
+# broadly similar
 
 
 # test the other two-way effects of time of day
@@ -1473,12 +1471,10 @@ tds.tt.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
                        (1|aclew_child_id),
                      data=quantity.nonrand.tt)
 #summary(tds.tt.gaus.v2)
-# stthr.tri.amidday             -0.05228    0.30508  -0.171   0.864    
 # stthr.tri.amorning             0.07467    0.25899   0.288   0.773    
-# tchiyr.std:stthr.tri.amidday  -0.04031    0.27258  -0.148   0.882    
 # tchiyr.std:stthr.tri.amorning -0.20595    0.29278  -0.703   0.482    
 # DIFFERENCES between z-i nb and logged gaussian?
-# no qualitative differences
+# broadly similar
 
 # Write model results out for input to shiny
 TCDS.models <- bind_rows(
@@ -1597,17 +1593,18 @@ ods.rand.zinb <- glmmTMB(round(ods_mph,0) ~
 # (Intercept)   -51.51   13502.22  -0.004    0.997
 # nsk.std       -55.02   13734.07  -0.004    0.997
 # save for reporting
+ods.rand.zinb.disp <- round(sigma(ods.rand.zinb), 2)
 ods.rand.zinb.COEF.age <-
   coef(summary(ods.rand.zinb))[[1]]["tchiyr.std",] 
-ods.rand.zinb.COEF.morn <-
+ods.rand.zinb.COEF.midd.morn <-
   coef(summary(ods.rand.zinb))[[1]]["stthr.trimorning",] 
-ods.rand.zinb.COEF.aft <-
+ods.rand.zinb.COEF.midd.aft <-
   coef(summary(ods.rand.zinb))[[1]]["stthr.triafternoon",] 
 ods.rand.zinb.COEF.nsk <-
   coef(summary(ods.rand.zinb))[[1]]["nsk.std",] 
-ods.rand.zinb.COEF.age.morn <-
+ods.rand.zinb.COEF.age.midd.morn <-
   coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:stthr.trimorning",]
-ods.rand.zinb.COEF.age.aft <-
+ods.rand.zinb.COEF.age.midd.aft <-
   coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",]
 
 # test the other two-way effects of time of day
@@ -1629,21 +1626,14 @@ ods.rand.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
 # residuals look okay and the other estimates look similar
 # to those from the converging model above, so I will go with these
 # results for now (hopefully more data in the future will help here)
-
 # save for reporting
 #summary(ods.rand.zinb.v2)
-# stthr.tri.amidday             -0.32721    0.16402  -1.995               0.0461 *  
 # stthr.tri.amorning             0.12240    0.14739   0.830               0.4063    
-# tchiyr.std:stthr.tri.amidday  -0.42014    0.17366  -2.419               0.0155 *  
 # tchiyr.std:stthr.tri.amorning -0.15681    0.16012  -0.979               0.3274    
-ods.rand.zinb.v2.COEF.aft.vs.morn <-
+ods.rand.zinb.v2.COEF.aft.morn <-
   coef(summary(ods.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
-ods.rand.zinb.v2.COEF.aft.vs.midd <-
-  coef(summary(ods.rand.zinb.v2))[[1]]["stthr.tri.amidday",] 
-ods.rand.zinb.v2.COEF.age.aft.vs.morn <-
+ods.rand.zinb.v2.COEF.age.aft.morn <-
   coef(summary(ods.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
-ods.rand.zinb.v2.COEF.age.aft.vs.midd <-
-  coef(summary(ods.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
 
 ## ODS tt sample ####
 ods.tt.distribution <- ggplot(quantity.nonrand.tt,
@@ -1709,20 +1699,21 @@ ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
 # (Intercept)   -31.97   11304.01  -0.003    0.998
 # nsk.std       -31.33   11122.86  -0.003    0.998
 # save for reporting
+ods.tt.zinb.disp <- round(sigma(ods.tt.zinb), 2)
 ods.tt.zinb.COEF.age <-
   coef(summary(ods.tt.zinb))[[1]]["tchiyr.std",] 
-ods.tt.zinb.COEF.morn <-
-  coef(summary(ods.tt.zinb))[[1]]["stthr.tri.omidday",] 
-ods.tt.zinb.COEF.aft <-
+ods.tt.zinb.COEF.morn.aft <-
   coef(summary(ods.tt.zinb))[[1]]["stthr.tri.oafternoon",] 
+ods.tt.zinb.COEF.morn.midd <-
+  coef(summary(ods.tt.zinb))[[1]]["stthr.tri.omidday",] 
 ods.tt.zinb.COEF.hsz <-
   coef(summary(ods.tt.zinb))[[1]]["hsz.std",] 
 ods.tt.zinb.COEF.nsk <-
   coef(summary(ods.tt.zinb))[[1]]["nsk.std",] 
-ods.tt.zinb.COEF.age.morn <-
-  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.tri.omidday",] 
-ods.tt.zinb.COEF.age.aft <-
+ods.tt.zinb.COEF.age.morn.aft <-
   coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.tri.oafternoon",] 
+ods.tt.zinb.COEF.age.morn.midd <-
+  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.tri.omidday",] 
 
 # test the other two-way effects of time of day
 ods.tt.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
@@ -1739,15 +1730,11 @@ ods.tt.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
 #summary(ods.tt.zinb.v2)
 # save for reporting
 # stthr.tri.amidday              0.60584    0.29290   2.068   0.0386 *  
-# stthr.tri.amorning             0.60834    0.25196   2.414   0.0158 *  
 # tchiyr.std:stthr.tri.amidday   0.06081    0.31055   0.196   0.8448    
-# tchiyr.std:stthr.tri.amorning -0.47548    0.29436  -1.615   0.1062    
-ods.tt.zinb.v2.COEF.aft.vs.morn <-
-  coef(summary(ods.tt.zinb.v2))[[1]]["stthr.tri.amorning",] 
-ods.tt.zinb.v2.COEF.aft.vs.midd <-
+ods.tt.zinb.v2.COEF.aft.midd <-
   coef(summary(ods.tt.zinb.v2))[[1]]["stthr.tri.amidday",] 
-ods.tt.zinb.v2.COEF.age.aft.vs.morn <-
-  coef(summary(ods.tt.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
+ods.tt.zinb.v2.COEF.age.aft.midd <-
+  coef(summary(ods.tt.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
 ```
 
 ```{r ods_models_gaussian, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -1791,8 +1778,7 @@ ods.rand.gaus <- glmmTMB(log(ods_mph+1) ~
 # tchiyr.std:stthr.triafternoon  0.42755    0.20507   2.085   0.037084 *  
 # tchiyr.std:nsk.std             0.17956    0.11344   1.583   0.113435    
 # DIFFERENCES between z-i nb and logged gaussian?
-# child age and tod (midd vs. morn) sig effects in z-i nb not in gaussian
-# hsz sig effects in gaussian not in z-i nb
+# some non-sig <-> sig (age, morn-vs-midd, hsz), but all going in the same direction
 
 # test the other two-way effects of time of day
 ods.rand.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
@@ -1805,13 +1791,11 @@ ods.rand.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
                               (1|aclew_child_id),
                             data=quantity.rand)
 #summary(ods.rand.gaus.v2)
-# save for reporting
-# stthr.tri.amidday             -0.35269    0.18999  -1.856   0.063407 .  
 # stthr.tri.amorning            -0.11983    0.18738  -0.640   0.522494    
-# tchiyr.std:stthr.tri.amidday  -0.42755    0.20507  -2.085   0.037084 *  
 # tchiyr.std:stthr.tri.amorning -0.35659    0.19600  -1.819   0.068861 .  
+# save for reporting
 # DIFFERENCES between z-i nb and logged gaussian?
-# no qualitative differences
+# broadly similar
 
 ## ODS tt sample ####
 ods.tt.gaus <- glmmTMB(log(ods_mph+1) ~
@@ -1848,7 +1832,7 @@ ods.tt.gaus <- glmmTMB(log(ods_mph+1) ~
 # tchiyr.std:stthr.triafternoon  0.05821    0.25601   0.227   0.82013    
 # tchiyr.std:nsk.std            -0.08266    0.13667  -0.605   0.54531  
 # DIFFERENCES between z-i nb and logged gaussian?
-# child age sig effects in z-i nb not in gaussian
+# some non-sig <-> sig (age), but all going in the same direction
 
 # test the other two-way effects of time of day
 ods.tt.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
@@ -1861,13 +1845,11 @@ ods.tt.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
                             (1|aclew_child_id),
                           data=quantity.nonrand.tt)
 #summary(ods.tt.gaus.v2)
-# save for reporting
-# stthr.tri.amidday              0.71950    0.25935   2.774              0.00553 ** 
 # stthr.tri.amorning             0.47338    0.24385   1.941              0.05222 .  
-# tchiyr.std:stthr.tri.amidday  -0.05821    0.25601  -0.227              0.82013    
 # tchiyr.std:stthr.tri.amorning -0.30443    0.26895  -1.132              0.25767    
+# save for reporting
 # DIFFERENCES between z-i nb and logged gaussian?
-# no qualitative differences
+# broadly similar
 
 # Write model results out for input to shiny
 ODS.models <- bind_rows(
