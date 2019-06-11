@@ -1932,12 +1932,11 @@ The rate of ODS during interactional peaks was also still impacted by time of da
 
 
 ``` {r dist_tt_samples, message=FALSE, warning=FALSE, paged.print=FALSE}
-# DERP DERP DERP
+# decided not to pursue this b/c too little data 
+# Overall, the results from the randomly selected clips suggest that kids are most likely to hear TCDS in the mornings and ODS in the mornings and afternoons. Does this distribution hold up for the top 5 interactive clips in the day?
 ```
 
-DERP DERP DERP while the random baseline shows that kids are most likely to hear TCDS and ODS in the mornings and afternoons, the manually selected 'top' peaks of the day suggest that ...
-
-In sum, our results provide compelling evidence in support of prior work claiming that Tseltal children hear very little directly addressed speech [@brown1998conversational; @brown2011cultural; @brown2014interactional] and that their speech input is non-uniformly distributed over the course of the day [@abney2017time; @blasiIPhuman]. Do Tseltal children then show any obvious evidence of delay in their early vocal development?
+In sum, our results provide compelling evidence in support of prior work claiming that Tseltal children hear very little directly addressed speech [@brown1998conversational; @brown2011cultural; @brown2014interactional] and that their speech input is non-uniformly distributed over the course of the day [@abney2017time; @blasiIPhuman], primarily in the mornings (TCDS and ODS) and afternoons (ODS), when most of the household is likely to be present for group meals before and after mid-day work. Do Tseltal children then show any obvious evidence of delay in their early vocal development?
 
 ``` {r all_model_tables, message=FALSE, warning=FALSE, paged.print=FALSE}
 all.models <- bind_rows(TCDS.models, ODS.models)
