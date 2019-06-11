@@ -42,7 +42,8 @@ output            : papaja::apa6_pdf
 ---
 
 <!--
-Revision checklist
+Revision checklist:
+- carefully re-run code to check for possible errors
 - intro
   x get rid of direct equivalency argument
     x "[we should expect] onsets of some basic language measures such as first words or combining words at reasonable ages" & "Mayan children sampled in this study showed patterns of language emergence or onset times that crudely align with what is seen in other samples"
@@ -65,7 +66,8 @@ x results
     - be more specific when talking about 'robustness' (or don't use it); reviewer points out that it doesn't apply to volubility
   - mention that onset != usage
     - we need more detailed measures of phonological, lexical, and syntactic growth to better understand the input effect in Tseltal >> still to come
-- appendices
+- supplementary materials
+  - get rid of (now) extra analyses
   - add more context where it might be critically helpful
 - abstract (do last!!)
   - update in-line with other changes
@@ -119,16 +121,20 @@ However, the role of CDS in typical language development is less clear once we t
 Past work on child language development in communities with reportedly infrequent CDS [e.g., @brown2011cultural; @deleon2011language; @gaskins2006cultural; @ochs1984language] has tended to use rich linguistic and ethnographic methods that, while well-suited to characterizing language socialization, lack the quantitative rigor that would otherwise enable reproducible results derived from reasonably representative participant samples [but see @shneidman2012language]. This situation calls for work that applies quantitative methods from developmental language science in diverse ethnolinguistic contexts in order to build more robust theories of language learning. In this paper we investigate the language environment and early vocal development of 10 Tseltal Mayan children growing up in a community where caregivers have been previously reported to infrequently directly speak to young children [@brown1998conversational; @brown2011cultural; @brown2014interactional]. Our aims are to quantitatively ground these prior qualitative claims in order to reason about the fundamental factors for learning language in Tseltal Mayan (and similar) communities.
 
 ## Child-directed speech  {#intro-cds}
-Prior work, conducted primarily in Western contexts, has shown that the amount of CDS children hear influences their language development; more CDS is associated with faster-growing receptive and productive vocabularies [e.g., @hart1995meaningful; @hoff2003specificity; @shneidman2012language], faster lexical retrieval [@weisleder2013talking], and faster syntactic development [@huttenlocher2010sources]. Given that CDS is designed for a child hearer, it is more likely than ADS or other-directed speech to align with the child's attention, and may thereby facilitate early language development. There are, however, a few caveats to the body of work relating CDS quantity and language development.
+Prior work, conducted primarily in Western contexts, has shown that the amount of CDS children hear influences their language development; more CDS is associated with faster-growing receptive and productive vocabularies [e.g., @hart1995meaningful; @hoff2003specificity; @shneidman2012language], faster lexical retrieval [@weisleder2013talking], and faster syntactic development [@huttenlocher2010sources]. Given that CDS is designed for a child hearer, it is more likely than ADS or other-directed speech to align with the child's attention, and may thereby facilitate early language development. There are, however, a few caveats to the body of work relating CDS quantity and language development. We touch upon three issues here: its link to grammatical development, its varied use across activities, and its limited presence in other cultures.
 
 First, while there is overwhelming evidence linking CDS quantity to vocabulary size, links to grammatical development are more scant [but see @brinchmann2019direct; @frankIPvariability; @huttenlocher2010sources]. While the advantage of CDS for referential word learning is clear, it is less obvious how it facilitates syntactic learning [@yurovsky2018communicative]. On the other hand, there is a wealth of evidence that syntactic knowledge is lexically specified [e.g., @lieven1997lexically], and that, crosslinguistically, children's vocabulary size is one of the most robust predictors of their early syntactic development [@frankIPvariability; @marchman2004language]---what is good for the lexicon may also be good for syntax.
 <!-- For example, utterance length [a proxy for syntactic complexity; @wasow1997remarks] doesn't appear to increase with child age [@newport1977mother], and parents may be less likely to directly correct their children's syntactic errors than their semantic ones [@brown1997introduction; but see @chouinard2003adult]---sometimes themselves producing ungrammatical utterances to make individual words salient [@aslin1996models]. For now, a direct link between CDS and grammatical development still needs further exploration.-->
 
-Second, most work on CDS _quantity_ (i.e., how often children hear CDS) uses summary measures that average over the ebb and flow of the recorded session. In reality, verbal behaviors are highly temporally structured: infants' and adults' vocal behavior is clustered across multiple time scales of daylong recordings [@abney2017time], and nouns and verbs are used within short bursts separated by long periods across languages [@blasiIPhuman]. In fact, experimental work has shown that children sometimes learn better from bursty exposure to words [@schwab2016repetition]. Recordings of children's language experience over the course of entire waking days is critical for understanding the full range and distribution of linguistic interactions included in children's everyday language experiences [@soderstrom2013when; @tamislemonda2018routine].
+Second, most work on CDS quantity (i.e., how often children hear CDS) uses summary measures that average over the ebb and flow of the recorded session. In reality, verbal behaviors are highly temporally structured: infants' and adults' vocal behavior is clustered across multiple time scales of daylong recordings [@abney2017time], and nouns and verbs are used within short bursts separated by long periods across languages [@blasiIPhuman]. In fact, experimental work has shown that children sometimes learn better from bursty exposure to words [@schwab2016repetition].
+
+What's more, the ebbs and flows in children's language exposure are likely to be associated with different activities during the day, each of which may carry their own linguistic profile (e.g., vocabulary used during bookreading vs. mealtime; @bruner1983childs; @tamislemonda2018routine). Different activities also elicit different quantities of talk; one study done in Canadian children's homes and daycares found that the highest density of adult speech came during storytime and organized playtimes (e.g., sing-alongs, painting)---activities that contained nearly twice as much talk as others [e.g., mealtime; @soderstrom2013when]. Some of these activity-driven effects on CDS can even be observed based simply on time of day given the systematic timing of different activities in children's daily routines [@greenwood2011assessing; @soderstrom2013when]. If children indeed benefit from bursty, activity-driven patterns in CDS [@schwab2016repetition]---which appears to be characteristic of their input [@abney2017time; @blasiIPhuman; @bruner1983childs; @tamislemonda2018routine]---researchers should attend more to the typical range, distribution, and characteristics of the speech they encounter over the different parts of the day [@greenwood2011assessing; @soderstrom2013when].
 
 Third, prior work has typically focused on Western (primarily North American) populations, limiting our ability to generalize effects of CDS to children elsewhere [@brown2014language; @henrich2010beyond; @nielsen2017persistent]. While we gain valuable insight by looking at within-population variation, we can more effectively find places where our assumptions break down by studying language development in communities that diverge meaningfully (linguistically and culturally) from those already well-studied. Linguistic anthropologists working in non-Western communities have long reported that caregiver-child interaction varies immensely from place to place, but that, despite this variation, children appear to achieve major communicative benchmarks (e.g., pointing, first words) on a similar timescale [@brown2011cultural; @brown2014interactional; @brown2014language; @gaskins2006cultural; @liszkowski2012prelinguistic; @ochs1984language]. These findings have had a limited impact on mainstream theories of language development, partly due to a lack of directly comparable methods [@brown2014interactional; @brown2014language].
 
-A number of recent or ongoing research projects have used standard psycholinguistic methods to investigate language learning environments in traditional, non-Western communities, with several substantiating the claim that children in many parts of the world hear little CDS. Scaff, Cristia, and colleagues [-@cristia2017child; -@scaffIPlanguage] estimate, based on daylong recordings, that Tsimane children (Bolivian lowlands; forager-horticulturalist) hear approximately 4.8 minutes of CDS per hour between ages 0;6 and 3;0 when considering all possible environmental speech (Cristia et al., 2017; Scaff et al., in preparation; see also @vogt2015communicative). Shneidman and Goldin-Meadow [-@shneidman2012language] analyzed speech from one-hour at-home video recordings of children between 1;0 and 3;0 in a Yucatec Mayan and a North American community. Their analyses yielded four main findings: compared to the American children, (a) Yucatec children heard many fewer utterances per hour, (b) a much smaller proportion of the utterances they heard were child-directed, (c) the proportion of utterances that were child-directed increased dramatically with age, matching U.S. children's CDS proportion by 3;0, and (d) most of the added CDS in the Yucatec sample came from other children (e.g., older siblings/cousins). The lexical diversity of the CDS that Yucatec Mayan children heard at 24 months---particularly from adult speakers---predicted their vocabulary knowledge at 35 months, suggesting that CDS characteristics still play a role in that context. The current study uses both daylong audio recordings and standard measures of vocal development to better understand the process of language learning in a Tseltal Mayan community.
+A number of recent or ongoing research projects have used standard psycholinguistic methods to investigate language learning environments in traditional, non-Western communities, with several substantiating the claim that children in many parts of the world hear little CDS. Scaff, Cristia, and colleagues [-@cristia2017child; -@scaffIPlanguage] estimate, based on daylong recordings, that Tsimane children (Bolivian lowlands; forager-horticulturalist) hear approximately 4.8 minutes of CDS per hour between ages 0;6 and 3;0 when considering all possible environmental speech (Cristia et al., 2017; Scaff et al., in preparation; see also @vogt2015communicative). Shneidman and Goldin-Meadow [-@shneidman2012language] analyzed speech from one-hour at-home video recordings of children between 1;0 and 3;0 in a Yucatec Mayan and a North American community. Their analyses yielded four main findings: compared to the American children, (a) Yucatec children heard many fewer utterances per hour, (b) a much smaller proportion of the utterances they heard were child-directed, (c) the proportion of utterances that were child-directed increased dramatically with age, matching U.S. children's CDS proportion by 3;0, and (d) most of the added CDS in the Yucatec sample came from other children (e.g., older siblings/cousins). The lexical diversity of the CDS that Yucatec Mayan children heard at 24 months---particularly from adult speakers---predicted their vocabulary knowledge at 35 months, suggesting that CDS characteristics still play a role in that context. Notably, links between activity-type and CDS [e.g., @soderstrom2013what] have not yet been systematically investigated; known high-density CDS activities (e.g., bookreading) are reported to be vanishingly rare in some of these communities, and so the peaks in interactive talk may be associated with different routine activities at different times of day.
+
+The current study aimed to address two of these three issues by using both daylong audio recordings and standard measures of vocal development to better understand how much CDS Tseltal Mayan children hear over the first three years of life, what times of day they are most likely to hear CDS, and how their spontaneous vocalizations change in maturity during that same period.
 <!--For comparison, children from North American homes between ages 0;3 and 3;0 are estimated to hear ~11 minutes of CDS per hour in daylong recordings [@bergelsoncasillas2019what]. Note however, that these estimates from from a non-random sample of clips that were selected based on the presence of adult speech.-> 
 <!--A growing number of researchers are using methods from developmental psycholinguistics to describe the linguistic development of children growing up in traditional or non-Western communities [see also @barrett2013early; @demuth2010three; @fortierURadhoc; @garcia2018thematic; @ganek2018using; @hernik2018infant]. We briefly highlight two recent efforts along these lines, but see Cristia and colleagues' [-@cristia2017child] and Mastin and Vogt's work [-@mastin2016infant; -@vogt2015communicative] for similar examples.-->
 <!--Tsimane children also hear ~4.12 minutes of other-directed speech per hour (e.g., talk between adults) compared to the ~7 minutes per hour heard by young North American children [@bergelsoncasillas2019what]. This difference may be attributable to the fact that the Tsimane live in extended family clusters of 3--4 households, so speakers are typically in close proximity to 5--8 other people .-->
@@ -144,12 +150,14 @@ Therefore, if we indeed find that Tseltal children hear relatively little CDS, o
 ## The current study {#intro-currentstudy}
 We examined the early language experience of 10 Tseltal Mayan children under age 3;0 using daylong photo-linked audio recordings. Prior ethnographic work suggests that Tseltal caregivers do not frequently directly speak to their children until the children themselves begin to actively initiate verbal interactions [@brown2014interactional; @brown2011cultural]. Nonetheless, Tseltal children develop language with no apparent delays [@brown2011cultural; @brown2014interactional; @liszkowski2012prelinguistic; see also @pye2017comparative]. We provide more details on the community and dataset in the [Methods section](#methods). We analyzed two basic measures of Tseltal children's language environments: (a) the quantity of speech directed to them (TCDS; target-child-directed speech) and (b) the quantity of other-directed speech (ODS; speech directed to anyone but the target child). We also then coarsely outline children's linguistic development using vocal maturity estimates from their spontaneous vocalizations.
 
-Based on prior work, we predicted that Tseltal Mayan children would be infrequently directly addressed, that the amount of TCDS would increase with age, that most TCDS would come from other children, and that, despite this, their early vocal development would show no sign of delay with respect to known Western onset benchmarks.
+Based on prior work, we predicted that Tseltal Mayan children would be infrequently directly addressed, that the amount of TCDS would increase with age, that most TCDS would come from other children, that TCDS would be most common in during the morning and afternoon family gatherings, and that children's early vocal development would show no sign of delay with respect to known Western onset benchmarks.
 <!-- We additionally predicted that children's language environments would be bursty---that high-intensity interactions would be brief and sparsely distributed throughout the day, accounting for the majority of children's daily TCDS.-->
 
 # Methods {#methods}
 ## Corpus {#methods-dataset}
-The children in this dataset come from a small-scale, subsistence farming community in the highlands of Chiapas (Southern Mexico). The vast majority of children in the community grow up speaking Tseltal monolingually at home. Nuclear families are typically organized into patrlineal clusters of large, multi-generation households. <!--More than forty years of ethnographic work by the second author has supported the idea that Tseltal children's language environments are non-child-centered and non-object-centered-->Tseltal children's language environments have previously been characterized as non-child-centered and non-object-centered [@brown1998conversational; @brown2011cultural; @brown2014interactional]. During their waking hours, infants are typically tied to their mother's back while she goes about her work for the day. When not on their mother's back, young children are often cared for by other family members, especially older siblings. Typically, TCDS is limited until children themselves begin to initiate interactions, usually around age 1;0. Interactional exchanges, when they do occur, are often brief or non-verbal (e.g., object exchange routines) and take place within a multi-participant context [@brown2014interactional]. Interactions tend to focus on appropriate actions and responses (not on words and their meanings), and young children are socialized to attend to the activities taking place around them [see also @deleon2011language; @rogoff2003firsthand]. By age five, most children are competent speakers who engage in daily chores and the caregiving of their younger siblings. The Tseltal approach to caregiving is similar to that described for other Mayan communities [e.g., @deleon2011language; @gaskins2000childrens; @pye1986quiche; @rogoff2003firsthand; @shneidman2012language].
+The children in this dataset come from a small-scale, subsistence farming community in the highlands of Chiapas (Southern Mexico). The vast majority of children in the community grow up speaking Tseltal monolingually at home. Nuclear families are typically organized into patrlineal clusters of large, multi-generation households. <!--More than forty years of ethnographic work by the second author has supported the idea that Tseltal children's language environments are non-child-centered and non-object-centered-->Tseltal children's language environments have previously been characterized as non-child-centered and non-object-centered [@brown1998conversational; @brown2011cultural; @brown2014interactional]. During their waking hours, infants are typically tied to their mother's back while she goes about her work for the day. The arc of a typical day might include getting washed and dressed for the day, a meal including most of the household, dispersal of household members for work in the field, at home, or elsewhere, washing and a late afternoon snack with the most of the household now back home and/or visiting nearby family, food preparation for the next day, a final meal, and then bedtime.
+
+When not on their mother's back, young children are often cared for by other family members, especially older siblings. Typically, TCDS is limited until children themselves begin to initiate interactions, usually around age 1;0. Interactional exchanges, when they do occur, are often brief or non-verbal (e.g., object exchange routines) and take place within a multi-participant context [@brown2014interactional]. Interactions tend to focus on appropriate actions and responses (not on words and their meanings), and young children are socialized to attend to the activities taking place around them [see also @deleon2011language; @rogoff2003firsthand]. By age five, most children are competent speakers who engage in daily chores and the caregiving of their younger siblings. The Tseltal approach to caregiving is similar to that described for other Mayan communities [e.g., @deleon2011language; @gaskins2000childrens; @pye1986quiche; @rogoff2003firsthand; @shneidman2012language].
 <!--That said, other properties of Tseltal CDS may facilitate word and language learning, including conversational repetition and semantically specific verbs [@brown2011cultural]. -->
 <!--Infants are rarely put on the ground. Therefore, children can't usually pick up the objects around them until they are old enough to walk. Toys are scarce and books are vanishingly rare, so the objects children do get their hands on tend to be natural or household objects (e.g., rocks, sticks, spoons, baskets, etc.). -->
 
@@ -327,7 +335,7 @@ clip.distribution <- ggplot() +
 clip.distribution
 ```
 
-The 10 hours of clips were then transcribed and annotated by the first author and a native speaker of Tseltal who personally knows all the recorded families. Transcription was done in ELAN [@ELAN] using the ACLEW Annotation Scheme [full documentation at https://osf.io/b2jep/wiki/home/, @casillas2017ACLEWDAS]. Utterance-level annotations included: an orthographic transcription (Tseltal), a loose translation (Spanish), a vocal maturity rating for each target child utterance (non-linguistic/non-canonical babbling/canonical babbling/single words/multiple words), and the intended addressee type for all non-target-child utterances (target-child/other-child/adult/adult-and-child/animal/other-speaker-type). Intended addressee was determined using contextual and interactional information from the photos, audio, and preceding and following footage; utterances with no clear intended addressee were marked as 'unsure'. We annotated lexical utterances as single- or multi-word based on the word boundaries provided by the single native speaker who reviewed all transcriptions; Tseltal is a mildly polysynthetic language (words typically contain multiple morphemes).
+The 10 hours of clips were then transcribed and annotated by the first author and a native speaker of Tseltal who personally knows all the recorded families. Transcription was done in ELAN [@ELAN] using the ACLEW Annotation Scheme [full documentation at https://osf.io/b2jep/wiki/home/, @casillas2017ACLEWDAS]. Utterance-level annotations included: an orthographic transcription (Tseltal), a loose translation (Spanish), a vocal maturity rating for each target child utterance (non-linguistic/non-canonical babbling/canonical babbling/single words/multiple words), and the intended addressee type for all non-target-child utterances (target-child/other-child/adult/adult-and-child/animal/other-speaker-type). Intended addressee was determined using contextual and interactional information from the photos, audio, and preceding and following footage; utterances with no clear intended addressee were marked as 'unsure'. We annotated lexical utterances as single- or multi-word based on the word boundaries provided by the single native speaker who reviewed all transcriptions; Tseltal is a mildly polysynthetic language (words typically contain multiple morphemes). Note that we did not annotate individual activity types in the clips; we instead use time of day as a proxy for the activities associated with the daily routines associated with subsistence farming and family life in this community (see above).
 
 ## Data analysis {#methods-analysisinfo}
 In what follows we first describe Tseltal children's speech environments based on the nine randomly selected 5-minute clips from each child. We investigate the effects of child age, time of day, household size, and number of speakers on both TCDS min/hr and ODS min/hr. We then repeat these analyses, only now looking at the high "turn-taking" clips. Finally, we wrap up by outlining a coarse trajectory of Tseltal children's early vocal development.
@@ -724,6 +732,8 @@ quantity.rand$stthr.tri <- factor(quantity.rand$stthr.tri,
                                   levels = c("midday", "morning", "afternoon"))
 quantity.rand$stthr.tri.a <- factor(quantity.rand$stthr.tri,
                                   levels = c("afternoon", "midday", "morning"))
+quantity.rand$stthr.tri.o <- factor(quantity.rand$stthr.tri,
+                                  levels = c("morning", "afternoon", "midday"))
 
 quantity.rand.sa$child_sex <- as.factor(quantity.rand.sa$child_sex)
 quantity.rand.sa$mat_ed <- as.factor(quantity.rand.sa$mat_ed)
@@ -755,6 +765,8 @@ quantity.rand.sa$stthr.tri <- factor(quantity.rand.sa$stthr.tri,
                                      levels = c("midday", "morning", "afternoon"))
 quantity.rand.sa$stthr.tri.a <- factor(quantity.rand.sa$stthr.tri,
                                        levels = c("afternoon", "midday", "morning"))
+quantity.rand.sa$stthr.tri.o <- factor(quantity.rand.sa$stthr.tri,
+                                       levels = c("morning", "afternoon", "midday"))
 
 
 # tt sample
@@ -788,6 +800,8 @@ quantity.nonrand.tt$stthr.tri <- factor(quantity.nonrand.tt$stthr.tri,
                                         levels = c("midday", "morning", "afternoon"))
 quantity.nonrand.tt$stthr.tri.a <- factor(quantity.nonrand.tt$stthr.tri,
                                           levels = c("afternoon", "midday", "morning"))
+quantity.nonrand.tt$stthr.tri.o <- factor(quantity.nonrand.tt$stthr.tri,
+                                          levels = c("morning", "afternoon", "midday"))
 
 quantity.nonrand.tt.sa$child_sex <- as.factor(quantity.nonrand.tt.sa$child_sex)
 quantity.nonrand.tt.sa$mat_ed <- as.factor(quantity.nonrand.tt.sa$mat_ed)
@@ -819,6 +833,8 @@ quantity.nonrand.tt.sa$stthr.tri <- factor(quantity.nonrand.tt.sa$stthr.tri,
                                            levels = c("midday", "morning", "afternoon"))
 quantity.nonrand.tt.sa$stthr.tri.a <- factor(quantity.nonrand.tt.sa$stthr.tri,
                                              levels = c("afternoon", "midday", "morning"))
+quantity.nonrand.tt.sa$stthr.tri.o <- factor(quantity.nonrand.tt.sa$stthr.tri,
+                                             levels = c("morning", "afternoon", "midday"))
 
 ```
 
@@ -1177,7 +1193,7 @@ tdsmph.comparison
 ## TCDS random sample ####
 tcds.random.distribution <- ggplot(quantity.rand,
                             aes(round(tds_mph,0))) +
-  geom_histogram() +
+  geom_histogram(binwidth = 2) +
   ylab("# of clips") +
   xlab ("TCDS min/hr") +
   basic.theme
@@ -1193,7 +1209,6 @@ tds.rand.zinb <- glmmTMB(round(tds_mph,0) ~
                            hsz.std +
                            nsk.std +
                            tchiyr.std:stthr.tri +
-                           tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
                            (1|aclew_child_id),
                          data=quantity.rand,
@@ -1202,23 +1217,38 @@ tds.rand.zinb <- glmmTMB(round(tds_mph,0) ~
 #tds.rand.zinb.res = simulateResiduals(tds.rand.zinb)
 #plot(tds.rand.zinb.res, rank = T) # (manually saved)
 #summary(tds.rand.zinb)
-#Conditional model:
-#                              Estimate Std. Error z value Pr(>|z|)   
-#(Intercept)                    0.82318    0.38815   2.121  0.03394 * 
-#tchiyr.std                     0.44447    0.42262   1.052  0.29294   
-#stthr.trimorning               0.81894    0.39733   2.061  0.03929 * 
-#stthr.triafternoon             0.49070    0.37401   1.312  0.18952   
-#hsz.std                       -0.08792    0.26286  -0.334  0.73802   
-#nsk.std                       -0.12782    0.16269  -0.786  0.43206   
-#tchiyr.std:stthr.trimorning   -0.23599    0.39305  -0.600  0.54823   
-#tchiyr.std:stthr.triafternoon -0.81223    0.37874  -2.145  0.03199 * 
-#tchiyr.std:hsz.std            -0.21337    0.32104  -0.665  0.50629   
-#tchiyr.std:nsk.std             0.60579    0.19780   3.063  0.00219 **
-#---
-#Zero-inflation model:
-#            Estimate Std. Error z value Pr(>|z|)
-#(Intercept)   -56.90   14003.31  -0.004    0.997
-#nsk.std       -55.17   14243.76  -0.004    0.997
+# Data: quantity.rand
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    397.9    430.4   -186.0    371.9       77 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance Std.Dev.
+#  aclew_child_id (Intercept) 0.09779  0.3127  
+# Number of obs: 90, groups:  aclew_child_id, 10
+# 
+# Overdispersion parameter for nbinom1 family (): 4.39 
+# 
+# Conditional model:
+#                               Estimate Std. Error z value Pr(>|z|)   
+# (Intercept)                    0.91432    0.36101   2.533  0.01132 * 
+# tchiyr.std                     0.59969    0.35796   1.675  0.09387 . 
+# stthr.trimorning               0.82768    0.39530   2.094  0.03628 * 
+# stthr.triafternoon             0.48838    0.37341   1.308  0.19091   
+# hsz.std                        0.00822    0.22447   0.037  0.97079   
+# nsk.std                       -0.12070    0.16013  -0.754  0.45098   
+# tchiyr.std:stthr.trimorning   -0.28375    0.38955  -0.728  0.46636   
+# tchiyr.std:stthr.triafternoon -0.85346    0.37781  -2.259  0.02389 * 
+# tchiyr.std:nsk.std             0.57376    0.19449   2.950  0.00318 **
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Zero-inflation model:
+#             Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   -57.43   15426.18  -0.004    0.997
+# nsk.std       -55.68   15691.06  -0.004    0.997
 # save for reporting
 tds.rand.zinb.COEF.morn <-
   coef(summary(tds.rand.zinb))[[1]]["stthr.trimorning",] 
@@ -1236,29 +1266,28 @@ tds.rand.zinb.v2 <- glmmTMB(round(tds_mph,0) ~
                            hsz.std +
                            nsk.std +
                            tchiyr.std:stthr.tri.a +
-                           tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
                            (1|aclew_child_id),
                          data=quantity.rand,
                          ziformula=~nsk.std,
                          family="nbinom1")
 #summary(tds.rand.zinb.v2)
-#stthr.tri.amidday              -0.4886     0.3787  -1.290       0.19700    
-#stthr.tri.amorning              0.3044     0.2879   1.057       0.29048    
-#tchiyr.std:stthr.tri.amidday    0.7326     0.3588   2.042       0.04114 *  
-#tchiyr.std:stthr.tri.amorning   0.4552     0.2766   1.646       0.09984 .  
+# stthr.tri.amidday             -0.488374   0.373406  -1.308  0.19091    
+# stthr.tri.amorning             0.339309   0.268777   1.262  0.20680    
+# tchiyr.std:stthr.tri.amidday   0.853459   0.377811   2.259  0.02389 *  
+# tchiyr.std:stthr.tri.amorning  0.569710   0.300505   1.896  0.05798 .  
 # save for reporting
 tds.rand.zinb.v2.COEF.aft.vs.morn <-
   coef(summary(tds.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
-tds.rand.zinb.v2.COEF.age.aft.vs.morn <-
-  coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
 tds.rand.zinb.v2.COEF.age.aft.vs.midd <-
   coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
+tds.rand.zinb.v2.COEF.age.aft.vs.morn <-
+  coef(summary(tds.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
 
 ## TCDS tt sample ####
 tcds.tt.distribution <- ggplot(quantity.nonrand.tt,
                             aes(round(tds_mph,0))) +
-  geom_histogram() +
+  geom_histogram(binwidth = 2) +
   ylab("# of clips") +
   xlab ("TCDS min/hr") +
   basic.theme
@@ -1275,7 +1304,6 @@ tds.tt.nb <- glmmTMB(round(tds_mph,0) ~
                        hsz.std +
                        nsk.std +
                        tchiyr.std:stthr.tri +
-                       tchiyr.std:hsz.std +
                        tchiyr.std:nsk.std +
                        (1|aclew_child_id),
                      data=quantity.nonrand.tt,
@@ -1283,26 +1311,31 @@ tds.tt.nb <- glmmTMB(round(tds_mph,0) ~
 #tds.tt.nb.res = simulateResiduals(tds.tt.nb)
 #plot(tds.tt.nb.res, rank = T) # (manually saved)
 #summary(tds.tt.nb)
-#Conditional model:
-#                              Estimate Std. Error z value  Pr(>|z|)    
-#(Intercept)                    2.18313    0.21298  10.250  <0.0001 ***
-#tchiyr.std                    -0.22751    0.19781  -1.150  0.2501    
-#stthr.trimorning               0.35533    0.23475   1.514  0.1301    
-#stthr.triafternoon             0.14484    0.21939   0.660  0.5091    
-#hsz.std                       -0.25282    0.15437  -1.638  0.1015    
-#nsk.std                       -0.06740    0.09198  -0.733  0.4637    
-#tchiyr.std:stthr.trimorning   -0.24161    0.22835  -1.058  0.2900    
-#tchiyr.std:stthr.triafternoon -0.15237    0.20725  -0.735  0.4622    
-#tchiyr.std:hsz.std            -0.46538    0.19241  -2.419  0.0156 *  
-#tchiyr.std:nsk.std             0.04160    0.11620   0.358  0.7203    
-#--
-#Zero-inflation model:
-#            Estimate Std. Error z value Pr(>|z|)    
-#(Intercept)  -3.7900     1.0050  -3.771 0.000162 ***
-#nsk.std       0.8721     0.7178   1.215 0.224397
-# save for reporting
-tds.tt.nb.COEF.age.hsz <-
-  coef(summary(tds.tt.nb))[[1]]["tchiyr.std:hsz.std",]
+# Data: quantity.nonrand.tt
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    432.2    455.0   -205.1    410.2       48 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance Std.Dev.
+#  aclew_child_id (Intercept) 0.03781  0.1944  
+# Number of obs: 59, groups:  aclew_child_id, 10
+# 
+# Overdispersion parameter for nbinom1 family (): 4.98 
+# 
+#                                Estimate Std. Error z value Pr(>|z|)   
+# (Intercept)                    2.515650   0.222213  11.321 <0.001 ***
+# tchiyr.std                     0.081027   0.212018   0.382  0.702    
+# stthr.trimorning               0.138024   0.287574   0.480  0.631    
+# stthr.triafternoon             0.062270   0.267289   0.233  0.816    
+# hsz.std                        0.117579   0.136842   0.859  0.390    
+# nsk.std                       -0.129227   0.105435  -1.226  0.220    
+# tchiyr.std:stthr.trimorning   -0.133363   0.285654  -0.467  0.641    
+# tchiyr.std:stthr.triafternoon  0.001369   0.236523   0.006  0.995    
+# tchiyr.std:nsk.std             0.059666   0.131088   0.455  0.649  
+# no results to save for reporting
 
 # test the other two-way effects of time of day
 tds.tt.nb.v2 <- glmmTMB(round(tds_mph,0) ~
@@ -1311,17 +1344,16 @@ tds.tt.nb.v2 <- glmmTMB(round(tds_mph,0) ~
                        hsz.std +
                        nsk.std +
                        tchiyr.std:stthr.tri.a +
-                       tchiyr.std:hsz.std +
                        tchiyr.std:nsk.std +
                        (1|aclew_child_id),
                      data=quantity.nonrand.tt,
                      family="nbinom1")
 #summary(tds.tt.nb.v2)
-#stthr.tri.amidday             -0.06471    0.23241  -0.278              0.7807    
-#stthr.tri.amorning             0.26769    0.21593   1.240              0.2151    
-#tchiyr.std:stthr.tri.amidday   0.03344    0.21400   0.156              0.8758    
-#tchiyr.std:stthr.tri.amorning -0.23644    0.21540  -1.098              0.2723    
-# no results to save for reporting
+# stthr.tri.amidday             -0.06227    0.26729  -0.233   0.816    
+# stthr.tri.amorning             0.07575    0.22426   0.338   0.736    
+# tchiyr.std:stthr.tri.amidday  -0.00137    0.23652  -0.006   0.995    
+# tchiyr.std:stthr.tri.amorning -0.13474    0.26270  -0.513   0.608    
+# no results to save for reportin
 ```
 
 ```{r tcds_models_gaussian, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -1332,27 +1364,40 @@ tds.rand.gaus <- glmmTMB(log(tds_mph+1) ~
                            hsz.std +
                            nsk.std +
                            tchiyr.std:stthr.tri +
-                           tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
                            (1|aclew_child_id),
                          data=quantity.rand)
 #tds.rand.gaus.res = simulateResiduals(tds.rand.gaus)
 #plot(tds.rand.gaus.res, rank = T) # (manually saved)
 #summary(tds.rand.gaus)
-#Conditional model:
-#                              Estimate Std. Error z value Pr(>|z|)    
-#(Intercept)                    0.77507    0.22523   3.441 0.000579 ***
-#tchiyr.std                     0.49352    0.25950   1.902 0.057198 .  
-#stthr.trimorning               0.50824    0.25050   2.029 0.042465 *  
-#stthr.triafternoon             0.29315    0.22126   1.325 0.185203    
-#hsz.std                       -0.19656    0.19595  -1.003 0.315809    
-#nsk.std                        0.23224    0.11838   1.962 0.049776 *  
-#tchiyr.std:stthr.trimorning   -0.16002    0.26992  -0.593 0.553276    
-#tchiyr.std:stthr.triafternoon -0.68051    0.23874  -2.850 0.004366 ** 
-#tchiyr.std:hsz.std            -0.08496    0.23915  -0.355 0.722381    
-#tchiyr.std:nsk.std             0.24923    0.14810   1.683 0.092402 .  
-# DIFFERENCES?
-# broadly similar to z-i nb model
+# Data: quantity.rand
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    250.4    277.9   -114.2    228.4       79 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance Std.Dev.
+#  aclew_child_id (Intercept) 0.04233  0.2057  
+#  Residual                   0.70589  0.8402  
+# Number of obs: 90, groups:  aclew_child_id, 10
+# 
+# Dispersion estimate for gaussian family (sigma^2): 0.706 
+# 
+# Conditional model:
+#                               Estimate Std. Error z value  Pr(>|z|)    
+# (Intercept)                     0.8188     0.1891   4.329  0.000015 ***
+# tchiyr.std                      0.5404     0.2235   2.418  0.01560 *
+# stthr.trimorning                0.5048     0.2505   2.015  0.04386 *  
+# stthr.triafternoon              0.2897     0.2211   1.310  0.19012    
+# hsz.std                        -0.1547     0.1565  -0.989  0.32269    
+# nsk.std                         0.2290     0.1185   1.933  0.05328 .
+# tchiyr.std:stthr.trimorning    -0.1737     0.2676  -0.649  0.51642    
+# tchiyr.std:stthr.triafternoon  -0.6810     0.2388  -2.851  0.00436 ** 
+# tchiyr.std:nsk.std              0.2308     0.1392   1.658  0.09726 .  
+# DIFFERENCES between z-i nb and logged gaussian?
+# broadly similar; some . <-> *
 
 # test the other two-way effects of time of day
 tds.rand.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
@@ -1361,17 +1406,16 @@ tds.rand.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
                            hsz.std +
                            nsk.std +
                            tchiyr.std:stthr.tri.a +
-                           tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
                            (1|aclew_child_id),
                          data=quantity.rand)
 #summary(tds.rand.gaus.v2)
-#tthr.tri.amidday             -0.29314    0.22126  -1.325       0.18521    
-#stthr.tri.amorning             0.21510    0.21916   0.981       0.32635    
-#tchiyr.std:stthr.tri.amidday   0.68050    0.23874   2.850       0.00437 ** 
-#tchiyr.std:stthr.tri.amorning  0.52049    0.23242   2.239       0.02512 *  
-# DIFFERENCES?
-# broadly similar to z-i nb model
+# stthr.tri.amidday              -0.2897     0.2211  -1.310  0.19012    
+# stthr.tri.amorning              0.2151     0.2193   0.981  0.32662    
+# tchiyr.std:stthr.tri.amidday    0.6810     0.2388   2.851  0.00436 ** 
+# tchiyr.std:stthr.tri.amorning   0.5073     0.2298   2.207  0.02729 *  
+# DIFFERENCES between z-i nb and logged gaussian?
+# broadly similar; one . -> *
 
 ## TCDS tt sample ####
 tds.tt.gaus <- glmmTMB(log(tds_mph+1) ~
@@ -1380,27 +1424,41 @@ tds.tt.gaus <- glmmTMB(log(tds_mph+1) ~
                        hsz.std +
                        nsk.std +
                        tchiyr.std:stthr.tri +
-                       tchiyr.std:hsz.std +
                        tchiyr.std:nsk.std +
                        (1|aclew_child_id),
                      data=quantity.nonrand.tt)
 #tds.tt.gaus.res = simulateResiduals(tds.tt.gaus)
 #plot(tds.tt.gaus.res, rank = T) # (manually saved)
 #summary(tds.tt.gaus)
-#Conditional model:
+# Data: quantity.nonrand.tt
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    153.2    176.1    -65.6    131.2       48 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance Std.Dev.
+#  aclew_child_id (Intercept) 0.04876  0.2208  
+#  Residual                   0.50110  0.7079  
+# Number of obs: 59, groups:  aclew_child_id, 10
+# 
+# Dispersion estimate for gaussian family (sigma^2): 0.501 
+# 
+# Conditional model:
 #                               Estimate Std. Error z value  Pr(>|z|)    
-#(Intercept)                    2.081105   0.243378   8.551  <0.0001 ***
-#tchiyr.std                    -0.128497   0.233182  -0.551  0.5816    
-#stthr.trimorning               0.380764   0.298155   1.277  0.2016    
-#stthr.triafternoon             0.105890   0.267468   0.396  0.6922    
-#hsz.std                       -0.147307   0.172597  -0.853  0.3934    
-#nsk.std                       -0.077111   0.114714  -0.672  0.5015    
-#tchiyr.std:stthr.trimorning   -0.344770   0.296548  -1.163  0.2450    
-#tchiyr.std:stthr.triafternoon -0.004403   0.262779  -0.017  0.9866    
-#tchiyr.std:hsz.std            -0.491258   0.219527  -2.238  0.0252 *  
-#tchiyr.std:nsk.std             0.169108   0.149388   1.132  0.2576 
-# DIFFERENCES?
-# very similar to z-i nb model
+# (Intercept)                    2.40519    0.25565   9.408 <0.001 ***
+# tchiyr.std                     0.08664    0.23371   0.371  0.711    
+# stthr.trimorning               0.12696    0.33565   0.378  0.705    
+# stthr.triafternoon             0.05228    0.30508   0.171  0.864    
+# hsz.std                        0.13424    0.15072   0.891  0.373    
+# nsk.std                       -0.13719    0.11791  -1.164  0.245    
+# tchiyr.std:stthr.trimorning   -0.16565    0.31907  -0.519  0.604    
+# tchiyr.std:stthr.triafternoon  0.04031    0.27258   0.148  0.882    
+# tchiyr.std:nsk.std             0.07303    0.14829   0.492  0.622    
+# DIFFERENCES between z-i nb and logged gaussian?
+# no qualitative differences
+
 
 # test the other two-way effects of time of day
 tds.tt.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
@@ -1409,17 +1467,16 @@ tds.tt.gaus.v2 <- glmmTMB(log(tds_mph+1) ~
                        hsz.std +
                        nsk.std +
                        tchiyr.std:stthr.tri.a +
-                       tchiyr.std:hsz.std +
                        tchiyr.std:nsk.std +
                        (1|aclew_child_id),
                      data=quantity.nonrand.tt)
 #summary(tds.tt.gaus.v2)
-#stthr.tri.amidday             -0.105890   0.267468  -0.396              0.6922    
-#stthr.tri.amorning             0.274873   0.265438   1.036              0.3004    
-#tchiyr.std:stthr.tri.amidday   0.004403   0.262779   0.017              0.9866    
-#tchiyr.std:stthr.tri.amorning -0.340366   0.277150  -1.228              0.2194
-# DIFFERENCES?
-# very similar to z-i nb model
+# stthr.tri.amidday             -0.05228    0.30508  -0.171   0.864    
+# stthr.tri.amorning             0.07467    0.25899   0.288   0.773    
+# tchiyr.std:stthr.tri.amidday  -0.04031    0.27258  -0.148   0.882    
+# tchiyr.std:stthr.tri.amorning -0.20595    0.29278  -0.703   0.482    
+# DIFFERENCES between z-i nb and logged gaussian?
+# no qualitative differences
 
 # Write model results out for input to shiny
 TCDS.models <- bind_rows(
@@ -1481,7 +1538,7 @@ In contrast to findings from @shneidman2012language on Yucatec Mayan, most TCDS 
 ## ODS random sample ####
 ods.random.distribution <- ggplot(quantity.rand,
                             aes(round(ods_mph,0))) +
-  geom_histogram() +
+  geom_histogram(binwidth = 2) +
   ylab("# of clips") +
   xlab ("ODS min/hr") +
   basic.theme
@@ -1497,7 +1554,6 @@ ods.rand.zinb <- glmmTMB(round(ods_mph,0) ~
                            hsz.std +
                            nsk.std +
                            tchiyr.std:stthr.tri +
-                           tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
                            (1|aclew_child_id),
                          data=quantity.rand,
@@ -1506,24 +1562,41 @@ ods.rand.zinb <- glmmTMB(round(ods_mph,0) ~
 #ods.rand.zinb.res = simulateResiduals(ods.rand.zinb)
 #plot(ods.rand.zinb.res, rank = T) # (manually saved)
 #summary(ods.rand.zinb)
-#Conditional model:
-#                              Estimate Std. Error z value  Pr(>|z|)    
-#(Intercept)                    2.86750    0.15974  17.951  < 0.001 ***
-#tchiyr.std                    -0.12805    0.18369  -0.697  0.4857    
-#stthr.trimorning               0.36202    0.17348   2.087  0.0369 *  
-#stthr.triafternoon             0.29431    0.15573   1.890  0.0588 .  
-#hsz.std                        0.04324    0.09867   0.438  0.6612    
-#nsk.std                        0.64982    0.08871   7.325  < 0.001 ***
-#tchiyr.std:stthr.trimorning    0.09915    0.20802   0.477  0.6336    
-#tchiyr.std:stthr.triafternoon  0.37800    0.17103   2.210  0.0271 *  
-#tchiyr.std:hsz.std             0.31660    0.13159   2.406  0.0161 *  
-#tchiyr.std:nsk.std            -0.01992    0.13093  -0.152  0.8791    
-#---
-#Zero-inflation model:
-#            Estimate Std. Error z value Pr(>|z|)
-#(Intercept)   -50.25   10421.88  -0.005    0.996
-#nsk.std       -53.75   10600.83  -0.005    0.996
+# Data: quantity.rand
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    542.9    575.4   -258.4    516.9       77 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance                      Std.Dev.         
+#  aclew_child_id (Intercept) 0.000000000000000000000003448 0.000000000001857
+# Number of obs: 90, groups:  aclew_child_id, 10
+# 
+# Overdispersion parameter for nbinom1 family ():  6.5 
+# 
+# Conditional model:
+#                               Estimate Std. Error z value   Pr(>|z|)    
+# (Intercept)                    2.70946    0.16060  16.871 < 0.0001 ***
+# tchiyr.std                    -0.38657    0.15935  -2.426   0.0153 *  
+# stthr.trimorning               0.44961    0.18051   2.491   0.0127 *  
+# stthr.triafternoon             0.32721    0.16402   1.995   0.0461 *  
+# hsz.std                       -0.12098    0.07965  -1.519   0.1288    
+# nsk.std                        0.68245    0.09360   7.291   0.0001 ***
+# tchiyr.std:stthr.trimorning    0.26334    0.20038   1.314   0.1888    
+# tchiyr.std:stthr.triafternoon  0.42014    0.17366   2.419   0.0155 *  
+# tchiyr.std:nsk.std             0.14446    0.11210   1.289   0.1975    
+# -
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Zero-inflation model:
+#             Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   -51.51   13502.22  -0.004    0.997
+# nsk.std       -55.02   13734.07  -0.004    0.997
 # save for reporting
+ods.rand.zinb.COEF.age <-
+  coef(summary(ods.rand.zinb))[[1]]["tchiyr.std",] 
 ods.rand.zinb.COEF.morn <-
   coef(summary(ods.rand.zinb))[[1]]["stthr.trimorning",] 
 ods.rand.zinb.COEF.aft <-
@@ -1534,37 +1607,46 @@ ods.rand.zinb.COEF.age.morn <-
   coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:stthr.trimorning",]
 ods.rand.zinb.COEF.age.aft <-
   coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:stthr.triafternoon",]
-ods.rand.zinb.COEF.age.hsz <-
-  coef(summary(ods.rand.zinb))[[1]]["tchiyr.std:hsz.std",] 
 
 # test the other two-way effects of time of day
+# !! singular convergence !!
+# likely due to insufficient data for the afternoon vs. morning contrast
 ods.rand.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
                               tchiyr.std +
                               stthr.tri.a +
                               hsz.std +
                               nsk.std +
                               tchiyr.std:stthr.tri.a +
-                              tchiyr.std:hsz.std +
                               tchiyr.std:nsk.std +
                               (1|aclew_child_id),
                             data=quantity.rand,
                             ziformula=~nsk.std,
                             family="nbinom1")
+#ods.rand.zinb.v2.res = simulateResiduals(ods.rand.zinb.v2)
+#plot(ods.rand.zinb.v2.res, rank = T) # (manually saved)
+# residuals look okay and the other estimates look similar
+# to those from the converging model above, so I will go with these
+# results for now (hopefully more data in the future will help here)
+
 # save for reporting
 #summary(ods.rand.zinb.v2)
-#stthr.tri.amidday             -0.29431    0.15573  -1.890               0.0588 .  
-#stthr.tri.amorning             0.06770    0.14238   0.476               0.6344    
-#tchiyr.std:stthr.tri.amidday  -0.37800    0.17103  -2.210               0.0271 *  
-#tchiyr.std:stthr.tri.amorning -0.27885    0.17162  -1.625               0.1042    
+# stthr.tri.amidday             -0.32721    0.16402  -1.995               0.0461 *  
+# stthr.tri.amorning             0.12240    0.14739   0.830               0.4063    
+# tchiyr.std:stthr.tri.amidday  -0.42014    0.17366  -2.419               0.0155 *  
+# tchiyr.std:stthr.tri.amorning -0.15681    0.16012  -0.979               0.3274    
 ods.rand.zinb.v2.COEF.aft.vs.morn <-
   coef(summary(ods.rand.zinb.v2))[[1]]["stthr.tri.amorning",] 
+ods.rand.zinb.v2.COEF.aft.vs.midd <-
+  coef(summary(ods.rand.zinb.v2))[[1]]["stthr.tri.amidday",] 
 ods.rand.zinb.v2.COEF.age.aft.vs.morn <-
   coef(summary(ods.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amorning",] 
+ods.rand.zinb.v2.COEF.age.aft.vs.midd <-
+  coef(summary(ods.rand.zinb.v2))[[1]]["tchiyr.std:stthr.tri.amidday",] 
 
 ## ODS tt sample ####
 ods.tt.distribution <- ggplot(quantity.nonrand.tt,
                             aes(round(ods_mph,0))) +
-  geom_histogram() +
+  geom_histogram(binwidth = 2) +
   ylab("# of clips") +
   xlab ("ODS min/hr") +
   basic.theme
@@ -1575,13 +1657,15 @@ ggsave(paste0(shiny.input.img.path, "ODS_turntaking_distribution.png"),
 #mean(round(quantity.nonrand.tt$ods_mph,0))
 # mean is much smaller than variance
 # still zero-inflated
+# !! non-convergence w/ standard stthr.tri predictor, so
+# used the alternative stthr.tri.o to get both two-way
+# time-of-day comparisons
 ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
                          tchiyr.std +
-                         stthr.tri +
+                         stthr.tri.o +
                          hsz.std +
                          nsk.std +
-                         tchiyr.std:stthr.tri +
-                         tchiyr.std:hsz.std +
+                         tchiyr.std:stthr.tri.o +
                          tchiyr.std:nsk.std +
                          (1|aclew_child_id),
                        data=quantity.nonrand.tt,
@@ -1590,40 +1674,53 @@ ods.tt.zinb <- glmmTMB(round(ods_mph,0) ~
 #ods.tt.zinb.res = simulateResiduals(ods.tt.zinb)
 #plot(ods.tt.zinb.res, rank = T) # (manually saved)
 #summary(ods.tt.zinb)
-#Conditional model:
-#                              Estimate Std. Error z value  Pr(>|z|)    
-#(Intercept)                    2.47226    0.21894  11.292  < 0.001 ***
-#tchiyr.std                    -0.44969    0.20523  -2.191  0.02844 *  
-#stthr.trimorning               0.02291    0.25858   0.089  0.92941    
-#stthr.triafternoon            -0.69960    0.29240  -2.393  0.01673 *  
-#hsz.std                       -0.43839    0.16870  -2.599  0.00936 ** 
-#nsk.std                        0.70801    0.10686   6.626  < 0.001 ***
-#tchiyr.std:stthr.trimorning   -0.56061    0.28206  -1.988  0.04686 *  
-#tchiyr.std:stthr.triafternoon -0.14065    0.30202  -0.466  0.64142    
-#tchiyr.std:hsz.std            -0.37513    0.21525  -1.743  0.08137 .  
-#tchiyr.std:nsk.std             0.10420    0.14355   0.726  0.46792    
-#---
-#Zero-inflation model:
-#            Estimate Std. Error z value Pr(>|z|)
-#(Intercept)   -32.21   12233.79  -0.003    0.998
-#nsk.std       -31.55   12037.74  -0.003    0.998
+# Data: quantity.nonrand.tt
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    365.7    392.7   -169.8    339.7       46 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance                     Std.Dev.         
+#  aclew_child_id (Intercept) 0.00000000000000000000004144 0.000000000006437
+# Number of obs: 59, groups:  aclew_child_id, 10
+# 
+# Overdispersion parameter for nbinom1 family (): 4.22 
+# 
+# Conditional model:
+#                                  Estimate Std. Error z value   Pr(>|z|)    
+# (Intercept)                      2.642703   0.164931  16.023 < 0.000001 ***
+# tchiyr.std                      -0.803159   0.234119  -3.431   0.000602 ***
+# stthr.tri.oafternoon            -0.608341   0.251958  -2.414   0.015759 *  
+# stthr.tri.omidday               -0.002503   0.263993  -0.009   0.992434    
+# hsz.std                         -0.184692   0.087090  -2.121   0.033948 *  
+# nsk.std                          0.627375   0.097367   6.443   0.000001 ***
+# tchiyr.std:stthr.tri.oafternoon  0.475480   0.294358   1.615   0.106243    
+# tchiyr.std:stthr.tri.omidday     0.536286   0.302352   1.774   0.076111 .  
+# tchiyr.std:nsk.std              -0.012219   0.134777  -0.091   0.927763    
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Zero-inflation model:
+#             Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   -31.97   11304.01  -0.003    0.998
+# nsk.std       -31.33   11122.86  -0.003    0.998
 # save for reporting
 ods.tt.zinb.COEF.age <-
   coef(summary(ods.tt.zinb))[[1]]["tchiyr.std",] 
 ods.tt.zinb.COEF.morn <-
-  coef(summary(ods.tt.zinb))[[1]]["stthr.trimorning",] 
+  coef(summary(ods.tt.zinb))[[1]]["stthr.tri.omidday",] 
 ods.tt.zinb.COEF.aft <-
-  coef(summary(ods.tt.zinb))[[1]]["stthr.triafternoon",] 
+  coef(summary(ods.tt.zinb))[[1]]["stthr.tri.oafternoon",] 
 ods.tt.zinb.COEF.hsz <-
   coef(summary(ods.tt.zinb))[[1]]["hsz.std",] 
 ods.tt.zinb.COEF.nsk <-
   coef(summary(ods.tt.zinb))[[1]]["nsk.std",] 
 ods.tt.zinb.COEF.age.morn <-
-  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.trimorning",] 
+  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.tri.omidday",] 
 ods.tt.zinb.COEF.age.aft <-
-  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.triafternoon",] 
-ods.tt.zinb.COEF.age.hsz <-
-  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:hsz.std",] 
+  coef(summary(ods.tt.zinb))[[1]]["tchiyr.std:stthr.tri.oafternoon",] 
 
 # test the other two-way effects of time of day
 ods.tt.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
@@ -1632,18 +1729,17 @@ ods.tt.zinb.v2 <- glmmTMB(round(ods_mph,0) ~
                             hsz.std +
                             nsk.std +
                             tchiyr.std:stthr.tri.a +
-                            tchiyr.std:hsz.std +
                             tchiyr.std:nsk.std +
                             (1|aclew_child_id),
                           data=quantity.nonrand.tt,
                           ziformula=~nsk.std,
                           family="nbinom1")
-# save for reporting
 #summary(ods.tt.zinb.v2)
-#stthr.tri.amidday               0.6996     0.2924   2.393         0.01673 *  
-#stthr.tri.amorning              0.7225     0.2485   2.907         0.00364 ** 
-#tchiyr.std:stthr.tri.amidday    0.1407     0.3020   0.466         0.64142    
-#tchiyr.std:stthr.tri.amorning  -0.4200     0.2720  -1.544         0.12266   
+# save for reporting
+# stthr.tri.amidday              0.60584    0.29290   2.068   0.0386 *  
+# stthr.tri.amorning             0.60834    0.25196   2.414   0.0158 *  
+# tchiyr.std:stthr.tri.amidday   0.06081    0.31055   0.196   0.8448    
+# tchiyr.std:stthr.tri.amorning -0.47548    0.29436  -1.615   0.1062    
 ods.tt.zinb.v2.COEF.aft.vs.morn <-
   coef(summary(ods.tt.zinb.v2))[[1]]["stthr.tri.amorning",] 
 ods.tt.zinb.v2.COEF.aft.vs.midd <-
@@ -1660,28 +1756,41 @@ ods.rand.gaus <- glmmTMB(log(ods_mph+1) ~
                            hsz.std +
                            nsk.std +
                            tchiyr.std:stthr.tri +
-                           tchiyr.std:hsz.std +
                            tchiyr.std:nsk.std +
                            (1|aclew_child_id),
                          data=quantity.rand)
 #ods.rand.gaus.res = simulateResiduals(ods.rand.gaus)
 #plot(ods.rand.gaus.res, rank = T) # (manually saved)
 #summary(ods.rand.gaus)
-#Conditional model:
-#                               Estimate Std. Error z value  Pr(>|z|)    
-#(Intercept)                    2.209209   0.173268  12.750  <0.0001 ***
-#tchiyr.std                    -0.082121   0.198366  -0.414  0.6789    
-#stthr.trimorning               0.214457   0.210419   1.019  0.3081    
-#stthr.triafternoon             0.336292   0.186481   1.803  0.0713 .  
-#hsz.std                       -0.222994   0.137259  -1.625  0.1042    
-#nsk.std                        1.534691   0.094447  16.249  <0.0001 ***
-#tchiyr.std:stthr.trimorning   -0.006369   0.225841  -0.028  0.9775    
-#tchiyr.std:stthr.triafternoon  0.422003   0.201088   2.099  0.0359 *  
-#tchiyr.std:hsz.std             0.322522   0.169461   1.903  0.0570 .  
-#tchiyr.std:nsk.std             0.082755   0.122301   0.677  0.4986    
-# DIFFERENCES?
-# broadly similar to z-i nb model
-
+# Data: quantity.rand
+# 
+#      AIC      BIC   logLik deviance df.resid 
+#    220.6    248.1    -99.3    198.6       79 
+# 
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance        Std.Dev.  
+#  aclew_child_id (Intercept) 0.0000000008073 0.00002841
+#  Residual                   0.5317946982101 0.72924255
+# Number of obs: 90, groups:  aclew_child_id, 10
+# 
+# Dispersion estimate for gaussian family (sigma^2): 0.532 
+# 
+# Conditional model:
+#                               Estimate Std. Error z value   Pr(>|z|)    
+# (Intercept)                    2.04376    0.15287  13.369 < 0.000001 ***
+# tchiyr.std                    -0.26450    0.17715  -1.493   0.135415    
+# stthr.trimorning               0.23286    0.21438   1.086   0.277397    
+# stthr.triafternoon             0.35269    0.18999   1.856   0.063407 .  
+# hsz.std                       -0.37882    0.11236  -3.371   0.000748 ***
+# nsk.std                        1.55757    0.09555  16.302 < 0.000001 ***
+# tchiyr.std:stthr.trimorning    0.07095    0.22658   0.313   0.754176    
+# tchiyr.std:stthr.triafternoon  0.42755    0.20507   2.085   0.037084 *  
+# tchiyr.std:nsk.std             0.17956    0.11344   1.583   0.113435    
+# DIFFERENCES between z-i nb and logged gaussian?
+# child age and tod (midd vs. morn) sig effects in z-i nb not in gaussian
+# hsz sig effects in gaussian not in z-i nb
 
 # test the other two-way effects of time of day
 ods.rand.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
@@ -1690,18 +1799,17 @@ ods.rand.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
                               hsz.std +
                               nsk.std +
                               tchiyr.std:stthr.tri.a +
-                              tchiyr.std:hsz.std +
                               tchiyr.std:nsk.std +
                               (1|aclew_child_id),
                             data=quantity.rand)
 #summary(ods.rand.gaus.v2)
 # save for reporting
-#stthr.tri.amidday             -0.33629    0.18648  -1.803 0.0713 .  
-#stthr.tri.amorning            -0.12183    0.18372  -0.663 0.5072    
-#tchiyr.std:stthr.tri.amidday  -0.42200    0.20109  -2.099 0.0359 *  
-#tchiyr.std:stthr.tri.amorning -0.42837    0.19584  -2.187 0.0287 *
-# DIFFERENCES?
-# broadly similar to z-i nb model
+# stthr.tri.amidday             -0.35269    0.18999  -1.856   0.063407 .  
+# stthr.tri.amorning            -0.11983    0.18738  -0.640   0.522494    
+# tchiyr.std:stthr.tri.amidday  -0.42755    0.20507  -2.085   0.037084 *  
+# tchiyr.std:stthr.tri.amorning -0.35659    0.19600  -1.819   0.068861 .  
+# DIFFERENCES between z-i nb and logged gaussian?
+# no qualitative differences
 
 ## ODS tt sample ####
 ods.tt.gaus <- glmmTMB(log(ods_mph+1) ~
@@ -1710,27 +1818,35 @@ ods.tt.gaus <- glmmTMB(log(ods_mph+1) ~
                          hsz.std +
                          nsk.std +
                          tchiyr.std:stthr.tri +
-                         tchiyr.std:hsz.std +
                          tchiyr.std:nsk.std +
                          (1|aclew_child_id),
                        data=quantity.nonrand.tt)
 #ods.tt.gaus.res = simulateResiduals(ods.tt.gaus)
 #plot(ods.tt.gaus.res, rank = T) # (manually saved)
 #summary(ods.tt.gaus)
-#Conditional model:
-#                              Estimate Std. Error z value Pr(>|z|)    
-#(Intercept)                    2.24127    0.23554   9.516 < 0.0001 ***
-#tchiyr.std                    -0.25514    0.22567  -1.131 0.25822    
-#stthr.trimorning              -0.18879    0.28855  -0.654 0.51294    
-#stthr.triafternoon            -0.74887    0.25885  -2.893 0.00382 ** 
-#hsz.std                       -0.38815    0.16704  -2.324 0.02014 *  
-#nsk.std                        1.11687    0.11102  10.060 < 0.0001 ***
-#tchiyr.std:stthr.trimorning   -0.28973    0.28699  -1.010 0.31271    
-#tchiyr.std:stthr.triafternoon  0.04321    0.25431   0.170 0.86509    
-#tchiyr.std:hsz.std            -0.21240    0.21245  -1.000 0.31742    
-#tchiyr.std:nsk.std            -0.03232    0.14457  -0.224 0.82311    
-# DIFFERENCES?
-# Fairly similar, but some differences: no effect of child age or child age * morning
+# Random effects:
+# 
+# Conditional model:
+#  Groups         Name        Variance        Std.Dev.  
+#  aclew_child_id (Intercept) 0.0000000001595 0.00001263
+#  Residual                   0.4803202867131 0.69305143
+# Number of obs: 59, groups:  aclew_child_id, 10
+# 
+# Dispersion estimate for gaussian family (sigma^2): 0.48 
+# 
+# Conditional model:
+#                               Estimate Std. Error z value   Pr(>|z|)    
+# (Intercept)                    2.34259    0.21441  10.926 < 0.00001 ***
+# tchiyr.std                    -0.14993    0.20131  -0.745   0.45642    
+# stthr.trimorning              -0.24611    0.28518  -0.863   0.38813    
+# stthr.triafternoon            -0.71950    0.25935  -2.774   0.00553 ** 
+# hsz.std                       -0.26907    0.11809  -2.278   0.02270 *  
+# nsk.std                        1.09149    0.10899  10.015 < 0.00001 ***
+# tchiyr.std:stthr.trimorning   -0.24622    0.28606  -0.861   0.38940    
+# tchiyr.std:stthr.triafternoon  0.05821    0.25601   0.227   0.82013    
+# tchiyr.std:nsk.std            -0.08266    0.13667  -0.605   0.54531  
+# DIFFERENCES between z-i nb and logged gaussian?
+# child age sig effects in z-i nb not in gaussian
 
 # test the other two-way effects of time of day
 ods.tt.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
@@ -1739,18 +1855,17 @@ ods.tt.gaus.v2 <- glmmTMB(log(ods_mph+1) ~
                             hsz.std +
                             nsk.std +
                             tchiyr.std:stthr.tri.a +
-                            tchiyr.std:hsz.std +
                             tchiyr.std:nsk.std +
                             (1|aclew_child_id),
                           data=quantity.nonrand.tt)
 #summary(ods.tt.gaus.v2)
 # save for reporting
-#stthr.tri.amidday              0.74887    0.25885   2.893  0.00382 ** 
-#stthr.tri.amorning             0.56008    0.25688   2.180  0.02924 *  
-#tchiyr.std:stthr.tri.amidday  -0.04321    0.25431  -0.170  0.86509    
-#tchiyr.std:stthr.tri.amorning -0.33294    0.26822  -1.241  0.21450    
-# DIFFERENCES?
-# very similar to z-i nb model
+# stthr.tri.amidday              0.71950    0.25935   2.774              0.00553 ** 
+# stthr.tri.amorning             0.47338    0.24385   1.941              0.05222 .  
+# tchiyr.std:stthr.tri.amidday  -0.05821    0.25601  -0.227              0.82013    
+# tchiyr.std:stthr.tri.amorning -0.30443    0.26895  -1.132              0.25767    
+# DIFFERENCES between z-i nb and logged gaussian?
+# no qualitative differences
 
 # Write model results out for input to shiny
 ODS.models <- bind_rows(
@@ -1773,7 +1888,7 @@ ODS.models <- bind_rows(
 ```
 
 ## Other-directed speech (ODS)
-Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes of ODS per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, nearly six times as much speech as was directed to them, on average. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression. The count model of ODS in the randomly selected clips revealed that the presence of more speakers was strongly associated with more ODS (B = `r round(ods.rand.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.rand.zinb.COEF.nsk[[3]],2)`, p < 0.001). There were an average of `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), more than half of whom were typically adults. Older target children were also significantly less likely to hear ODS in large households, compared to younger children (B = `r round(ods.rand.zinb.COEF.age.hsz[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.hsz[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.hsz[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.hsz[[4]],3)`).
+Children heard an average of `r round(mean(quantity.rand.bychild$ods_mph),2)` minutes of ODS per hour in the random sample (median = `r round(median(quantity.rand.bychild$ods_mph),2)`; range = `r round(min(quantity.rand.bychild$ods_mph),2)`--`r round(max(quantity.rand.bychild$ods_mph),2)`): that is, nearly six times as much speech as was directed to them, on average. We modeled ODS min/hr in the random clips with a zero-inflated negative binomial regression. The count model of ODS in the randomly selected clips revealed that the presence of more speakers was strongly associated with more ODS (B = `r round(ods.rand.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.rand.zinb.COEF.nsk[[3]],2)`, p < 0.001). There were an average of `r round(mean(quantity.rand$n_spkrs_clip), 2)` speakers present other than the target child in the randomly selected clips (median = `r round(median(quantity.rand$n_spkrs_clip),2)`; range = `r round(min(quantity.rand$n_spkrs_clip),2)`--`r round(max(quantity.rand$n_spkrs_clip),2)`), more than half of whom were typically adults.
 <!--That said, these estimates may be comparable to young North American infants (6--7 months) living in nuclear family homes [@bergelson2018day], so a high incidence of ODS may be common for infants in many cultural contexts.-->
 
 Like TCDS, ODS was also strongly affected by time of day ([Figure 5](#fig5)), showing a dip around midday. Compared to midday, target children were overall significantly more likely to hear ODS in the mornings (B = `r round(ods.rand.zinb.COEF.morn[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.morn[[2]],2)`, z = `r round(ods.rand.zinb.COEF.morn[[3]],2)`, p = `r round(ods.rand.zinb.COEF.morn[[4]],2)`) and marginally more likely to hear it in the afternoons (B = `r round(ods.rand.zinb.COEF.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.aft[[4]],2)`), with no significant difference between ODS rates in the mornings and afternoons (p = `r round(ods.rand.zinb.v2.COEF.aft.vs.morn[[4]],2)`). As before, ODS rate varied across the day by target child age: older children were significantly more likely to hear ODS in the afternoon than at midday (B = `r round(ods.rand.zinb.COEF.age.aft[[1]],2)`, SD = `r round(ods.rand.zinb.COEF.age.aft[[2]],2)`, z = `r round(ods.rand.zinb.COEF.age.aft[[3]],2)`, p = `r round(ods.rand.zinb.COEF.age.aft[[4]],2)`), with no significant differences between afternoon and morning (p = `r round(ods.rand.zinb.v2.COEF.age.aft.vs.morn[[4]],2)`) or midday and morning (p = `r round(ods.rand.zinb.COEF.age.morn[[4]],2)`). There were no other significant effects on ODS rate, and no significant effects in the zero-inflation models.
@@ -1785,9 +1900,11 @@ Children heard much more TCDS in the turn-taking clips---`r round(mean(subset(qu
 
 We analyzed both TCDS and ODS rate with parallel models to those used for the random sample, though this time we did not include a zero-inflation model for TCDS given that the child was, by definition, being directly addressed in these clips (i.e., there were no cases of zero TCDS in the turn-taking sample). Overall, time-of-day effects were weaker in the turn-taking sample. TCDS rate was not significantly impacted by time-of-day at all. Meanwhile, ODS rated _did_ show a significant time-of-day effect, but the dip in ODS came later in the day than what we saw in the random sample (i.e., afternoon, not midday; afternoon-vs.-midday: B = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[1]],2)`, SD = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[2]],2)`, z = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[3]],2)`, p = `r round(ods.tt.zinb.v2.COEF.aft.vs.midd[[4]],2)`, afternoon-vs.-morning: B = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[1]],2)`, SD = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[2]],2)`, z = `r round(ods.tt.zinb.v2.COEF.aft.vs.morn[[3]],2)`, p < 0.01). Older children were also significantly more likely to hear ODS around midday compared to the morning (midday-vs.-morning: B = `r round(ods.tt.zinb.COEF.age.morn[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age.morn[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age.morn[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age.morn[[4]],2)`), but heard significantly less ODS overall than younger children (B = `r round(ods.tt.zinb.COEF.age[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.age[[2]],2)`, z = `r round(ods.tt.zinb.COEF.age[[3]],2)`, p = `r round(ods.tt.zinb.COEF.age[[4]],2)`). Finally, whereas the number of speakers present had significantly impacted both TCDS and ODS rate in the random sample, it only significantly impacted ODS rate in the turn-taking sample (random sample: B = `r round(ods.tt.zinb.COEF.nsk[[1]],2)`, SD = `r round(ods.tt.zinb.COEF.nsk[[2]],2)`, z = `r round(ods.tt.zinb.COEF.nsk[[3]],2)`, p < 0.001). This result suggests that the number of speakers is a robust predictor of ODS quantity across different contexts. Full model outputs are available in the Supplementary Materials.
 
+DERP DERP DERP while the random baseline shows that kids are most likely to hear TCDS and ODS in the mornings and afternoons, the manually selected 'top' peaks of the day suggest that ...
+
 In sum, our results provide compelling evidence in support of prior work claiming that Tseltal children hear very little directly addressed speech [@brown1998conversational; @brown2011cultural; @brown2014interactional] and that their speech input is non-uniformly distributed over the course of the day [@abney2017time; @blasiIPhuman]. Do Tseltal children then show any obvious evidence of delay in their early vocal development?
 
-``` {r all_model_tabless, message=FALSE, warning=FALSE, paged.print=FALSE}
+``` {r all_model_tables, message=FALSE, warning=FALSE, paged.print=FALSE}
 all.models <- bind_rows(TCDS.models, ODS.models)
 write_csv(all.models, paste0(shiny.input.path, "all_model_tables.csv"))
 ```
