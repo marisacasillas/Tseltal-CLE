@@ -26,6 +26,7 @@ col.sample.bu3 <- list(
   scale_color_manual(labels=samplelabels, values=viridis(3)))
 allowed.overlap <- 1000 #ms
 allowed.gap <- 2000 #ms
+text.col.figs <- "black"
 
 # Read in annotation files
 files <- list.files(path=data.path,pattern="*.txt")
@@ -161,7 +162,7 @@ used.clips$sample.type = factor(used.clips$sample.type, levels = c("Random", "Tu
 
 clip.distribution.1 <- ggplot() +
   geom_segment(data = ptcp.info,
-               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "white") +
+               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "black") +
   theme_apa() +
   scale_x_continuous(breaks = 7:21) +
   scale_y_continuous(breaks = 1:10, labels = ptcp.info$age_mo_round) +
@@ -169,17 +170,17 @@ clip.distribution.1 <- ggplot() +
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
 		legend.position = "none")
 
 clip.distribution.2 <- ggplot() +
   geom_segment(data = ptcp.info,
-               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "white") +
+               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "black") +
   geom_segment(data = subset(used.clips, sample.type == "Random"),
                aes(x = start.hr, y = order, xend = start.hr + clip.dur/60, yend = order,
                    color = sample.type), size = 10) +
@@ -187,21 +188,21 @@ clip.distribution.2 <- ggplot() +
   scale_x_continuous(breaks = 7:21) +
   scale_y_continuous(breaks = 1:10, labels = ptcp.info$age_mo_round) +
   ylab("Child age (mo)") + xlab("Time of day (hr)") + labs(color = "Sample type") +
-  scale_color_manual(values = c("white")) +
+  scale_color_manual(values = c("black")) +
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
 		legend.position = "none")
 
 clip.distribution.3 <- ggplot() +
   geom_segment(data = ptcp.info,
-               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "white") +
+               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "black") +
   geom_segment(data = subset(used.clips, sample.type != "High activity"),
                aes(x = start.hr, y = order, xend = start.hr + clip.dur/60, yend = order,
                    color = sample.type), size = 10) +
@@ -209,21 +210,21 @@ clip.distribution.3 <- ggplot() +
   scale_x_continuous(breaks = 7:21) +
   scale_y_continuous(breaks = 1:10, labels = ptcp.info$age_mo_round) +
   ylab("Child age (mo)") + xlab("Time of day (hr)") + labs(color = "Sample type") +
-  scale_color_manual(values = c("white", "red")) +
+  scale_color_manual(values = c("black", "red")) +
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
 		legend.position = "none")
 
 clip.distribution.4 <- ggplot() +
   geom_segment(data = ptcp.info,
-               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "white") +
+               aes(x = rec.start.hr, y = order, xend = rec.stop.hr, yend = order), color = "black") +
   geom_segment(data = used.clips,
                aes(x = start.hr, y = order, xend = start.hr + clip.dur/60, yend = order,
                    color = sample.type), size = 10) +
@@ -231,31 +232,31 @@ clip.distribution.4 <- ggplot() +
   scale_x_continuous(breaks = 7:21) +
   scale_y_continuous(breaks = 1:10, labels = ptcp.info$age_mo_round) +
   ylab("Child age (mo)") + xlab("Time of day (hr)") + labs(color = "Sample type") +
-  scale_color_manual(values = c("white", "red", "blue")) +
+  scale_color_manual(values = c("black", "red", "blue")) +
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
 		legend.position = "none")
 
-png(paste("diff-figs/","clip.distribution.1.png", sep=""),
+png(paste("diff_figs/","clip.distribution.1.png", sep=""),
     width=1200, height=600,units="px", bg = "transparent")
 print(clip.distribution.1)
 dev.off()
-png(paste("diff-figs/","clip.distribution.2.png", sep=""),
+png(paste("diff_figs/","clip.distribution.2.png", sep=""),
     width=1200, height=600,units="px", bg = "transparent")
 print(clip.distribution.2)
 dev.off()
-png(paste("diff-figs/","clip.distribution.3.png", sep=""),
+png(paste("diff_figs/","clip.distribution.3.png", sep=""),
     width=1200, height=600,units="px", bg = "transparent")
 print(clip.distribution.3)
 dev.off()
-png(paste("diff-figs/","clip.distribution.4.png", sep=""),
+png(paste("diff_figs/","clip.distribution.4.png", sep=""),
     width=1200, height=600,units="px", bg = "transparent")
 print(clip.distribution.4)
 dev.off()
@@ -738,10 +739,10 @@ quantity.sa.rand_and_tt <- bind_rows(quantity.nonrand.sa.tt.minimum, quantity.ra
 # ODS min/hr
 odsmph.segments.rand_and_tt.1 <- ggplot(quantity.rand,
                           aes(x = age_mo_round, y = ods_mph)) +
-  geom_boxplot(aes(group = age_mo_round), fill = "gray50", color = "white",
+  geom_boxplot(aes(group = age_mo_round), fill = "gray50", color = "black",
                outlier.shape = NA,
                lty = "solid") +
-  geom_smooth(fill = "white", color = "white", method = "lm") +
+  geom_smooth(fill = "black", color = "black", method = "lm") +
   ylab("ODS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(-10,80),
                      breaks=seq(0,80,20)) +
@@ -752,18 +753,18 @@ odsmph.segments.rand_and_tt.1 <- ggplot(quantity.rand,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
 odsmph.segments.rand_and_tt.2 <- ggplot(quantity.nonrand.tt,
                           aes(x = age_mo_round, y = ods_mph)) +
-  geom_boxplot(aes(group = age_mo_round), fill = "white", color = "red",
+  geom_boxplot(aes(group = age_mo_round), fill = "pink", color = "red",
                outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "red", color = "red", method = "lm") +
@@ -777,20 +778,20 @@ odsmph.segments.rand_and_tt.2 <- ggplot(quantity.nonrand.tt,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
-png(paste("diff-figs/","ods.1.png", sep=""),
+png(paste("diff_figs/","ods.1.png", sep=""),
     width=500, height=400,units="px", bg = "transparent")
 print(odsmph.segments.rand_and_tt.1)
 dev.off()
-png(paste("diff-figs/","ods.2.png", sep=""),
+png(paste("diff_figs/","ods.2.png", sep=""),
     width=500, height=400,units="px", bg = "transparent")
 print(odsmph.segments.rand_and_tt.2)
 dev.off()
@@ -798,10 +799,10 @@ dev.off()
 # TDS min/hr - zoomed in
 tdsmph.segments.rand_and_tt.zoomedin.1 <- ggplot(quantity.rand,
                           aes(x = age_mo_round, y = tds_mph)) +
-  geom_boxplot(aes(group = age_mo_round), fill = "gray50", color = "white",
+  geom_boxplot(aes(group = age_mo_round), fill = "gray50", color = "black",
                outlier.shape = NA,
                lty = "solid") +
-  geom_smooth(fill = "white", color = "white", method = "lm") +
+  geom_smooth(fill = "black", color = "black", method = "lm") +
   ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,40),
                      breaks=seq(0,40,10)) +
@@ -812,18 +813,18 @@ tdsmph.segments.rand_and_tt.zoomedin.1 <- ggplot(quantity.rand,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
 tdsmph.segments.rand_and_tt.zoomedin.2 <- ggplot(quantity.nonrand.tt,
                           aes(x = age_mo_round, y = tds_mph)) +
-  geom_boxplot(aes(group = age_mo_round), fill = "white", color = "red",
+  geom_boxplot(aes(group = age_mo_round), fill = "pink", color = "red",
                outlier.shape = NA,
                lty = "solid", alpha = 0.4) +
   geom_smooth(fill = "red", color = "red", method = "lm") +
@@ -837,20 +838,20 @@ tdsmph.segments.rand_and_tt.zoomedin.2 <- ggplot(quantity.nonrand.tt,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
-png(paste("diff-figs/","tcds.1.png", sep=""),
+png(paste("diff_figs/","tcds.1.png", sep=""),
     width=500, height=400,units="px", bg = "transparent")
 print(tdsmph.segments.rand_and_tt.zoomedin.1)
 dev.off()
-png(paste("diff-figs/","tcds.2.png", sep=""),
+png(paste("diff_figs/","tcds.2.png", sep=""),
     width=500, height=400,units="px", bg = "transparent")
 print(tdsmph.segments.rand_and_tt.zoomedin.2)
 dev.off()
@@ -881,10 +882,10 @@ tod.tcds <- ggplot(data = quantity.rand_and_tt.all) +
         axis.line = element_line(color="black", size = 0.4))
 
 tod.tcds.1 <- ggplot(data = quantity.rand) +
-  geom_point(data = quantity.rand, color = "white",
+  geom_point(data = quantity.rand, color = "black",
              aes(y = round(tds_mph,0), x = start.hr,
                  group = as.factor(ifelse(age_mo_round < 13, -1, 1)))) +
-  geom_smooth(data = quantity.rand, color = "white", fill = "white",
+  geom_smooth(data = quantity.rand, color = "black", fill = "black",
               aes(y = round(tds_mph,0), x = start.hr,
                   group = as.factor(ifelse(age_mo_round < 13, -1, 1))),
               method = "lm", formula = y ~ poly(x, 2)) +
@@ -899,13 +900,13 @@ tod.tcds.1 <- ggplot(data = quantity.rand) +
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
 
@@ -928,20 +929,20 @@ tod.tcds.2 <- ggplot(data = quantity.nonrand.tt) +
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
-png(paste("diff-figs/","tcds-tod.1.png", sep=""),
+png(paste("diff_figs/","tcds-tod.1.png", sep=""),
     width=1000, height=400,units="px", bg = "transparent")
 print(tod.tcds.1)
 dev.off()
-png(paste("diff-figs/","tcds-tod.2.png", sep=""),
+png(paste("diff_figs/","tcds-tod.2.png", sep=""),
     width=1000, height=400,units="px", bg = "transparent")
 print(tod.tcds.2)
 dev.off()
@@ -1441,9 +1442,9 @@ cvc.ovc.per.seg.ttnonas.bychild <- cvc.ovc.per.seg.ttnonas %>%
 # CHI-OTH transitions per minute
 chi.oth.tts.rand_and_tt.1 <- ggplot(turn.transitions.rand,
                           aes(x = age_mo_round, y = n.c_o.tpm)) +
-  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray50", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "black", fill = "gray50", outlier.shape = NA,
                lty = "solid") +
-  geom_smooth(fill = "white", color = "white", method = "lm") +
+  geom_smooth(fill = "black", color = "black", method = "lm") +
   ylab("CHI-OTH tts/min") + xlab("")	+
   scale_y_continuous(limits=c(0,30),
                      breaks=seq(0,30,5)) +
@@ -1454,18 +1455,18 @@ chi.oth.tts.rand_and_tt.1 <- ggplot(turn.transitions.rand,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
 chi.oth.tts.rand_and_tt.2 <- ggplot(turn.transitions.tt,
                           aes(x = age_mo_round, y = n.c_o.tpm)) +
-  geom_boxplot(aes(group = age_mo_round), color = "red", fill = "white", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "red", fill = "pink", outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "red", color = "red", method = "lm") +
   ylab("CHI-OTH tts/min") + xlab("")	+
@@ -1478,20 +1479,20 @@ chi.oth.tts.rand_and_tt.2 <- ggplot(turn.transitions.tt,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
-png(paste("diff-figs/","tc-o.1.png", sep=""),
+png(paste("diff_figs/","tc-o.1.png", sep=""),
     width=450, height=400,units="px", bg = "transparent")
 print(chi.oth.tts.rand_and_tt.1)
 dev.off()
-png(paste("diff-figs/","tc-o.2.png", sep=""),
+png(paste("diff_figs/","tc-o.2.png", sep=""),
     width=450, height=400,units="px", bg = "transparent")
 print(chi.oth.tts.rand_and_tt.2)
 dev.off()
@@ -1502,9 +1503,9 @@ dev.off()
 # OTH-CHI transitions per minute
 oth.chi.tts.rand_and_tt.1 <- ggplot(turn.transitions.rand,
                           aes(x = age_mo_round, y = n.o_c.tpm)) +
-  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray50", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "black", fill = "gray50", outlier.shape = NA,
                lty = "solid") +
-  geom_smooth(fill = "white", color = "white", method = "lm") +
+  geom_smooth(fill = "black", color = "black", method = "lm") +
   ylab("OTH-CHI tts/min") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,30),
                      breaks=seq(0,30,5)) +
@@ -1517,18 +1518,18 @@ oth.chi.tts.rand_and_tt.1 <- ggplot(turn.transitions.rand,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
 oth.chi.tts.rand_and_tt.2 <- ggplot(turn.transitions.tt,
                           aes(x = age_mo_round, y = n.o_c.tpm)) +
-  geom_boxplot(aes(group = age_mo_round), color = "red", fill = "white", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "red", fill = "pink", outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "red", color = "red", method = "lm") +
   ylab("OTH-CHI tts/min") + xlab("Child age (mo)")	+
@@ -1543,20 +1544,20 @@ oth.chi.tts.rand_and_tt.2 <- ggplot(turn.transitions.tt,
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
-png(paste("diff-figs/","o-tc.1.png", sep=""),
+png(paste("diff_figs/","o-tc.1.png", sep=""),
     width=450, height=400,units="px", bg = "transparent")
 print(oth.chi.tts.rand_and_tt.1)
 dev.off()
-png(paste("diff-figs/","o-tc.2.png", sep=""),
+png(paste("diff_figs/","o-tc.2.png", sep=""),
     width=450, height=400,units="px", bg = "transparent")
 print(oth.chi.tts.rand_and_tt.2)
 dev.off()
@@ -1571,9 +1572,9 @@ turn.sequences.rand_and_tt.byclip <- turn.sequences.rand_and_tt %>%
 
 seq.dur.rand_and_tt.1 <- ggplot(subset(turn.sequences.rand_and_tt.byclip, sample == "random"),
                           aes(x = age_mo_round, y = m.seqdur.sec)) +
-  geom_boxplot(aes(group = age_mo_round), color = "white", fill = "gray50", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "black", fill = "gray50", outlier.shape = NA,
                lty = "solid") +
-  geom_smooth(fill = "white", color = "white", method = "lm") +
+  geom_smooth(fill = "black", color = "black", method = "lm") +
   ylab("Seq. dur. (sec)") + xlab("")	+
   scale_y_continuous(limits=c(0,60),
                      breaks=seq(0,60,20)) +
@@ -1584,18 +1585,18 @@ seq.dur.rand_and_tt.1 <- ggplot(subset(turn.sequences.rand_and_tt.byclip, sample
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
 seq.dur.rand_and_tt.2 <- ggplot(subset(turn.sequences.rand_and_tt.byclip, sample != "random"),
                           aes(x = age_mo_round, y = m.seqdur.sec)) +
-  geom_boxplot(aes(group = age_mo_round), color = "red", fill = "white", outlier.shape = NA,
+  geom_boxplot(aes(group = age_mo_round), color = "red", fill = "pink", outlier.shape = NA,
                lty = "solid") +
   geom_smooth(fill = "red", color = "red", method = "lm") +
   ylab("Seq. dur. (sec)") + xlab("")	+
@@ -1608,20 +1609,20 @@ seq.dur.rand_and_tt.2 <- ggplot(subset(turn.sequences.rand_and_tt.byclip, sample
   basic.theme + theme(
 		panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank(),
-		axis.text.x = element_text(color="white"),
-	  axis.title.x = element_text(color="white"),
-	  axis.text.y = element_text(color="white"),
-	  axis.title.y = element_text(color="white"),
-	  strip.text = element_text(color="white"),
-		axis.ticks = element_line(color = "white"),
-		axis.line = element_line(color="white", size = 0.4),
+		axis.text.x = element_text(color="black"),
+	  axis.title.x = element_text(color="black"),
+	  axis.text.y = element_text(color="black"),
+	  axis.title.y = element_text(color="black"),
+	  strip.text = element_text(color="black"),
+		axis.ticks = element_line(color = "black"),
+		axis.line = element_line(color="black", size = 0.4),
 		legend.position = "none")
 
-png(paste("diff-figs/","seqdur.1.png", sep=""),
+png(paste("diff_figs/","seqdur.1.png", sep=""),
     width=450, height=400,units="px", bg = "transparent")
 print(seq.dur.rand_and_tt.1)
 dev.off()
-png(paste("diff-figs/","seqdur.2.png", sep=""),
+png(paste("diff_figs/","seqdur.2.png", sep=""),
     width=450, height=400,units="px", bg = "transparent")
 print(seq.dur.rand_and_tt.2)
 dev.off()
@@ -1699,13 +1700,13 @@ voc.mat.by.age.1 <- ggplot(
   basic.theme + theme(
 	panel.grid.major = element_blank(),
 	panel.grid.minor = element_blank(),
-	axis.text.x = element_text(color="white"),
-	axis.title.x = element_text(color="white"),
-	axis.text.y = element_text(color="white"),
-	axis.title.y = element_text(color="white"),
-	strip.text = element_text(color="white"),
-	axis.ticks = element_line(color = "white"),
-	axis.line = element_line(color="white", size = 0.4),
+	axis.text.x = element_text(color="black"),
+	axis.title.x = element_text(color="black"),
+	axis.text.y = element_text(color="black"),
+	axis.title.y = element_text(color="black"),
+	strip.text = element_text(color="black"),
+	axis.ticks = element_line(color = "black"),
+	axis.line = element_line(color="black", size = 0.4),
 	legend.position = "none")
 
 voc.mat.by.age.2 <- ggplot(
@@ -1723,13 +1724,13 @@ voc.mat.by.age.2 <- ggplot(
   basic.theme + theme(
 	panel.grid.major = element_blank(),
 	panel.grid.minor = element_blank(),
-	axis.text.x = element_text(color="white"),
-	axis.title.x = element_text(color="white"),
-	axis.text.y = element_text(color="white"),
-	axis.title.y = element_text(color="white"),
-	strip.text = element_text(color="white"),
-	axis.ticks = element_line(color = "white"),
-	axis.line = element_line(color="white", size = 0.4),
+	axis.text.x = element_text(color="black"),
+	axis.title.x = element_text(color="black"),
+	axis.text.y = element_text(color="black"),
+	axis.title.y = element_text(color="black"),
+	strip.text = element_text(color="black"),
+	axis.ticks = element_line(color = "black"),
+	axis.line = element_line(color="black", size = 0.4),
 	legend.position = "none")
 
 voc.mat.by.age.3 <- ggplot(
@@ -1747,13 +1748,13 @@ voc.mat.by.age.3 <- ggplot(
   basic.theme + theme(
 	panel.grid.major = element_blank(),
 	panel.grid.minor = element_blank(),
-	axis.text.x = element_text(color="white"),
-	axis.title.x = element_text(color="white"),
-	axis.text.y = element_text(color="white"),
-	axis.title.y = element_text(color="white"),
-	strip.text = element_text(color="white"),
-	axis.ticks = element_line(color = "white"),
-	axis.line = element_line(color="white", size = 0.4),
+	axis.text.x = element_text(color="black"),
+	axis.title.x = element_text(color="black"),
+	axis.text.y = element_text(color="black"),
+	axis.title.y = element_text(color="black"),
+	strip.text = element_text(color="black"),
+	axis.ticks = element_line(color = "black"),
+	axis.line = element_line(color="black", size = 0.4),
 	legend.position = "none")
 
 voc.mat.by.age.4 <- ggplot(
@@ -1771,28 +1772,28 @@ voc.mat.by.age.4 <- ggplot(
   basic.theme + theme(
 	panel.grid.major = element_blank(),
 	panel.grid.minor = element_blank(),
-	axis.text.x = element_text(color="white"),
-	axis.title.x = element_text(color="white"),
-	axis.text.y = element_text(color="white"),
-	axis.title.y = element_text(color="white"),
-	strip.text = element_text(color="white"),
-	axis.ticks = element_line(color = "white"),
-	axis.line = element_line(color="white", size = 0.4),
+	axis.text.x = element_text(color="black"),
+	axis.title.x = element_text(color="black"),
+	axis.text.y = element_text(color="black"),
+	axis.title.y = element_text(color="black"),
+	strip.text = element_text(color="black"),
+	axis.ticks = element_line(color = "black"),
+	axis.line = element_line(color="black", size = 0.4),
 	legend.position = "none")
 
-png(paste("diff-figs/","vocmat.1.png", sep=""),
+png(paste("diff_figs/","vocmat.1.png", sep=""),
     width=600, height=400,units="px", bg = "transparent")
 print(voc.mat.by.age.1)
 dev.off()
-png(paste("diff-figs/","vocmat.2.png", sep=""),
+png(paste("diff_figs/","vocmat.2.png", sep=""),
     width=600, height=400,units="px", bg = "transparent")
 print(voc.mat.by.age.2)
 dev.off()
-png(paste("diff-figs/","vocmat.3.png", sep=""),
+png(paste("diff_figs/","vocmat.3.png", sep=""),
     width=600, height=400,units="px", bg = "transparent")
 print(voc.mat.by.age.3)
 dev.off()
-png(paste("diff-figs/","vocmat.4.png", sep=""),
+png(paste("diff_figs/","vocmat.4.png", sep=""),
     width=600, height=400,units="px", bg = "transparent")
 print(voc.mat.by.age.4)
 dev.off()
