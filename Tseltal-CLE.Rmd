@@ -38,7 +38,7 @@ lineno            : yes
 mask              : no
 
 class             : "man"
-output            : papaja::apa6_word
+output            : papaja::apa6_word #apa6_pdf or apa6_word
 ---
 
 <!--
@@ -66,10 +66,10 @@ x discussion
     x be more specific when talking about 'robustness' (or don't use it); reviewer points out that it doesn't apply to volubility
   x mention that onset != usage
     x we need more detailed measures of phonological, lexical, and syntactic growth to better understand the input effect in Tseltal >> still to come
-- references
-  - make them fit in 8 pages!
+x references
+  x make them fit in 8 pages!
 - supplementary materials
-  - get rid of (now) extra analyses
+  x get rid of (now) extra analyses
   - add more context where it might be critically helpful
 - abstract + details
   - update abstract in-line with other changes
