@@ -23,10 +23,10 @@ affiliation:
 #  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
 
 abstract: |
-  Daylong at-home audio recordings from 10 Tseltal Mayan children (0;2–3;0) were analyzed for how often children engaged in verbal interaction with others and whether their speech environment changed with age, time of day, household size, and number of speakers present. Tseltal children were infrequently directly spoken to, with most directed speech coming from adults, and no increase with age. Most directed speech came in the mornings or afternoons, and interactional peaks took the form of ~1-minute bursts of turn taking. An initial analysis of children’s vocal development suggested that, despite relatively little directed speech, Tseltal children develop early language skills on a similar timescale to Western children. Multiple proposals for how Tseltal children might learn language efficiently are discussed.
+  Daylong at-home audio recordings from 10 Tseltal Mayan children (0;2–3;0) were analyzed for how often children engaged in verbal interaction with others and whether their speech environment changed with age, time of day, household size, and number of speakers present. Children were infrequently directly spoken to, with most directed speech coming from adults, and no increase with age. Most directed speech came in the mornings, and interactional peaks contained nearly four times the baseline rate of directed speech. Coarse indicators of their language development (babbling, first words, first word combinations) suggested that Tseltal children manage to extract the linguistic information they need despite minimal directed speech. Multiple proposals for how they might do so are discussed.
 
 keywords          : "Child-directed speech, linguistic input, non-WEIRD, vocal maturity, turn taking, interaction, Mayan"
-wordcount         : "10225 (8549 not including references)"
+wordcount         : "XXX (XX not including references)"
 
 bibliography      : ["Tseltal-CLE.bib"]
 
