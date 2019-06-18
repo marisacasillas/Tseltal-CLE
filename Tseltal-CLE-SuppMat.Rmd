@@ -34,7 +34,7 @@ lineno            : yes
 mask              : no
 
 class             : "man"
-output            : papaja::apa6_word #apa6_pdf or apa6_word
+output            : papaja::apa6_pdf #apa6_pdf or apa6_word
 ---
 
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
@@ -56,17 +56,20 @@ model.results <- model.results %>%
 ```
 
 # Full model outputs {#models}
-In the main text we only report _significant_ effects on two speech environment variables: TCDS min/hr and ODS min/hr. Here in the Supplementary Materials we give the full model outputs for each analysis, including re-leveled versions of each model to show all three of the two-way contrasts between the three-level time-of-day factor. We also show, for each of the measures, a figure showing how the variable is distributed across clips and a figure showing the distribution of model residuals. We also include full model output and residuals for a pair of comparably constructed gaussian mixed-effects regressions using a logged dependent measure. A gaussian model with logged measures is an alternative solution to analyzing non-normal distributions sometimes used in psycholinguistics, but is not suitable for the current data given how our speech environment measures are distributed, particularly in the randomly sampled clips (see, e.g., Figures [1](#fig1), [7](#fig7), [10](#fig10), [13](#fig13), [19](#fig19)). Overall, however, the gaussian models show a qualitatively similar pattern of results. None of the gaussian model results are presented in the main text---only here as supplementary information.
+In the main text we only report _significant_ effects on two speech environment variables: TCDS min/hr and ODS min/hr. Here in the Supplementary Materials we give the full model output tables for each analysis, including re-leveled versions of each model to show all three of the two-way contrasts between the three-level time-of-day factor (i.e., morning vs. midday, morning vs. afternoon, and midday vs. afternoon). We also include, for each of the measures, a histogram showing how each variable is distributed (i.e., usually because they are non-normal and/or zero-inflated) and a figure showing the distribution of model residuals. For every negative binomial model, we also include the full model output table and residual plots for a matching gaussian mixed-effects regressions which uses a logged dependent measure. Such gaussian models with logged measures are an alternative solution to analyzing non-normal distributions sometimes used in psycholinguistics, but are not suitable for the current data given how our speech environment measures are distributed, particularly in the randomly sampled clips (see, e.g., Figures [1](#fig1), [7](#fig7), [10](#fig10), [13](#fig13), [19](#fig19)). Overall, however, the gaussian models show a qualitatively similar pattern of results. None of the gaussian model results are presented in the main text---only here as supplementary information.
 
-In what follows, the same information is shown for both of the environment measures. All models were run with the glmm-TMB library in R [@R-glmmTMB; @brooks2017modeling]. Note that in these negative binomial regressions, the dependent variables have been rounded to the nearest integer (e.g., 3.2 minutes of TCDS per hour becomes 3 minutes per hour in the model).
+## How to interpret the model output
+All models were run with the glmm-TMB library in R [@R-glmmTMB; @brooks2017modeling]. Note that, in the negative binomial regressions, the dependent variables have been rounded to the nearest integer (e.g., 3.2 minutes of TCDS per hour becomes 3 minutes per hour in the model).
 
-The predictors in the models are abbreviated as follows: tchiyr.std = centered, standardized target child age in months; stthr.tri = the start time of the clip as either morning, midday, or afternoon; hsz.std = centered, standardized household size of the target child; nsk.std = centered, standardized number of speakers present in the clip, aclew_child_id = the unique identifier for each child. The predictors are sometimes combined in two-way interactions, as shown below with a ':' separator between predictor names (e.g., tchiyr.std:nsk.std = a two-way interaction of target child age and number of speakers present). In each model output table, the "component" shows what kind of model the estimate derives from (e.g., the zero-inflated models include both a conditional "cond" set of predictors, random effects, and zero-inflation "zi" predictors). The "term" is the estimated predictor. The "statistic" is the estimated _z_-statistic for each predictor's effect. The other labels are self-explanatory.
+The predictors in the models are abbreviated as follows: tchiyr.std = centered, standardized target child age in months; stthr.tri = the start time of the clip as either morning, midday, or afternoon; hsz.std = centered, standardized household size of the target child; nsk.std = centered, standardized number of speakers present in the clip, aclew_child_id = the unique identifier for each child. The predictors are sometimes combined in two-way interactions, as shown below with a ':' separator between predictor names (e.g., tchiyr.std:nsk.std = a two-way interaction of target child age and number of speakers present).
 
-As more data are added to this corpus, the analyses will also be updated, as will this supplementary model information, all of which will be available at: (retracted for review) <!--https://middycasillas.shinyapps.io/Tseltal_Child_Language_Environment/-->.
+In each model output table, the "component" shows what kind of model the estimate derives from (e.g., the zero-inflated models include both a conditional "cond" set of predictors, random effects, and zero-inflation "zi" predictors). The "term" is the estimated predictor. The "statistic" is the estimated _z_-statistic for each predictor's effect. The other labels are self-explanatory.
+
+As more data are added to this corpus, the analyses will also be updated, as will this supplementary model information, all of which will be available online at: (URL retracted for review)<!--https://middycasillas.shinyapps.io/Tseltal_Child_Language_Environment/-->.
 
 ## Target-child-directed speech (TCDS) {#models-tcds}
 ### Random clips {#models-tcds-random}
-TCDS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+TCDS rate in the random clips demonstrated a skewed distribution with extra cases of zero [Figure 1](#fig1). We therefore modeled it using a zero-inflated negative binomial mixed-effects regression in the main text: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 1](#tab1) and [Table 2](#tab2). The residuals for the default model ([Table 1](#tab1)) are shown in [Figure 2](#fig2).
 
 \FloatBarrier
 
@@ -92,6 +95,8 @@ apa_table(filter(model.results, model == "TCDS_random_z-inb.v2") %>% select(-mod
 knitr::include_graphics("www/TCDS_random_z-inb_res_plot.png")
 ```
 
+As an alternative analysis we generated parallel models of TCDS rate in the random clips using gaussian mixed-effects regression with logged values of TCDS: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 3](#tab3) and [Table 4](#tab4). The residuals for the default gaussian model ([Table 3](#tab3)) are shown in [Figure 3](#fig3).
+
 \FloatBarrier
 
 ```{r tab3, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -113,7 +118,8 @@ knitr::include_graphics("www/TCDS_random_log_gaus_res_plot.png")
 \FloatBarrier
 
 ### Turn-taking clips {#models-tcds-turntaking}
-TCDS rate in the turn-taking clips demonstrated a slightly skewed, but unimodal distribution. We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression. 
+TCDS rate in the turn-taking clips demonstrated a slightly skewed, but unimodal distribution [Figure 4](#fig4). We therefore modeled it using a plain (i.e., non-zero-inflated) negative binomial mixed-effects regression in the main text: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 5](#tab5) and [Table 6](#tab6). The residuals for the default model ([Table 5](#tab5)) are shown in [Figure 5](#fig5).
+
 
 \FloatBarrier
 
@@ -139,6 +145,8 @@ apa_table(filter(model.results, model == "TCDS_turntaking_nb.v2") %>% select(-mo
 knitr::include_graphics("www/TCDS_turntaking_nb_res_plot.png")
 ```
 
+As an alternative analysis we generated parallel models of TCDS rate in the turn-taking clips using gaussian mixed-effects regression with logged values of TCDS: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 7](#tab7) and [Table 8](#tab8). The residuals for the default gaussian model ([Table 7](#tab7)) are shown in [Figure 6](#fig6).
+
 \FloatBarrier
 
 ```{r tab7, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -161,7 +169,8 @@ knitr::include_graphics("www/TCDS_turntaking_log_gaus_res_plot.png")
 
 ## Other-directed speech (ODS) {#models-ods}
 ### Random clips {#models-ods-random}
-ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+ODS rate in the random clips demonstrated a skewed distribution with extra cases of zero [Figure 7](#fig7). We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.in the main text: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 9](#tab9) and [Table 10](#tab10). The residuals for the default model ([Table 9](#tab9)) are shown in [Figure 8](#fig8).
+
 
 \FloatBarrier
 
@@ -187,6 +196,8 @@ apa_table(filter(model.results, model == "ODS_random_z-inb.v2") %>% select(-mode
 knitr::include_graphics("www/ODS_random_z-inb_res_plot.png")
 ```
 
+As an alternative analysis we generated parallel models of ODS rate in the random clips using gaussian mixed-effects regression with logged values of ODS: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 11](#tab11) and [Table 12](#tab12). The residuals for the default gaussian model ([Table 11](#tab11)) are shown in [Figure 9](#fig9).
+
 \FloatBarrier
 
 ```{r tab11, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -208,7 +219,8 @@ knitr::include_graphics("www/ODS_random_log_gaus_res_plot.png")
 \FloatBarrier
 
 ### Turn-taking clips {#models-ods-turntaking}
-ODS rate in the turn-taking clips demonstrated a skewed distribution with extra cases of zero. We therefore modeled it using a zero-inflated negative binomial mixed-effects regression.
+ODS rate in the turn-taking clips demonstrated a skewed distribution with extra cases of zero [Figure 10](#fig10). We therefore modeled it using a zero-inflated negative binomial mixed-effects regression in the main text: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 13](#tab13) and [Table 14](#tab14). The residuals for the default model ([Table 13](#tab13)) are shown in [Figure 11](#fig11).
+
 
 \FloatBarrier
 
@@ -220,7 +232,7 @@ knitr::include_graphics("www/ODS_turntaking_distribution.png")
 
 ```{r tab13, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "ODS_turntaking_z-inb") %>% select(-model),
-          caption="Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with midday as the reference level for time of day.")
+          caption="Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with *morning* as the reference level for time of day (note that most default models have midday as the reference level for time of day; the default model is changed here due to convergence issues).")
 ```
 
 ```{r tab14, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
@@ -233,6 +245,8 @@ apa_table(filter(model.results, model == "ODS_turntaking_z-inb.v2") %>% select(-
 ``` {r fig11, echo=FALSE, fig.align = "center", fig.cap="The model residuals from the zero-inflated negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample.", out.width = '90%'}
 knitr::include_graphics("www/ODS_turntaking_z-inb_res_plot.png")
 ```
+
+As an alternative analysis we generated parallel models of ODS rate in the turn-taking clips using gaussian mixed-effects regression with logged values of ODS: results for the two models demonstrating all pairwise effects of time of day are shown in [Table 15](#tab15) and [Table 16](#tab16). The residuals for the default gaussian model ([Table 15](#tab15)) are shown in [Figure 12](#fig12).
 
 \FloatBarrier
 
