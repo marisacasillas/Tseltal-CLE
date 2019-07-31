@@ -1635,8 +1635,6 @@ write_csv(all.models, paste0(shiny.input.path, "all_model_tables_five_measures.c
 r_refs(file = "r-references.bib")
 ```
 
-
-
 \begingroup
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
