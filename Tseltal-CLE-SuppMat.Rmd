@@ -11,18 +11,18 @@ author:
   - name          : "Penelope Brown"
     affiliation   : "1"
   - name          : "Stephen C. Levinson"
-    affiliation   : "1,2"
+    affiliation   : "1"
 
 affiliation:
   - id            : "1"
     institution   : "Max Planck Institute for Psycholinguistics"
-  - id            : "2"
-    institution   : "Department of Biological Anthropology, Cambridge University"
 
 header-includes: #allows you to add in your own Latex packages
 - \usepackage{float} #use the 'float' package
 - \floatplacement{figure}{H} #make every figure with caption = h
 - \usepackage{placeins}
+
+csl: apa-noissue.csl
 
 bibliography      : ["Tseltal-CLE.bib"]
 
@@ -56,7 +56,7 @@ model.results <- model.results %>%
 ```
 
 # Full model outputs {#models}
-In the main text we only report _significant_ effects on two speech environment variables: TCDS min/hr and ODS min/hr. Here in the Supplementary Materials we give the full model output tables for each analysis, including re-leveled versions of each model to show all three of the two-way contrasts between the three-level time-of-day factor (i.e., morning vs. midday, morning vs. afternoon, and midday vs. afternoon). We also include, for each of the measures, a histogram showing how each variable is distributed (i.e., usually because they are non-normal and/or zero-inflated) and a figure showing the distribution of model residuals. For every negative binomial model, we also include the full model output table and residual plots for a matching gaussian mixed-effects regressions which uses a logged dependent measure. Such gaussian models with logged measures are an alternative solution to analyzing non-normal distributions sometimes used in psycholinguistics, but are not suitable for the current data given how our speech environment measures are distributed, particularly in the randomly sampled clips (see, e.g., Figures [1](#fig1), [7](#fig7), [10](#fig10), [13](#fig13), [19](#fig19)). Overall, however, the gaussian models show a qualitatively similar pattern of results. None of the gaussian model results are presented in the main text---only here as supplementary information.
+In the main text we only report _significant_ effects on two speech environment variables: TCDS min/hr and ODS min/hr. Here in the Supplementary Materials we give the full model output tables for each analysis, including re-leveled versions of each model to show all three of the two-way contrasts between the three-level time-of-day factor (i.e., morning vs. midday, morning vs. afternoon, and midday vs. afternoon). We also include, for each of the measures, a histogram showing how each variable is distributed (i.e., because they are non-normal and/or zero-inflated) and a figure showing the distribution of model residuals. For every negative binomial model, we also include the full model output table and residual plots for matching gaussian mixed-effects regressions which uses a logged dependent measure. Such gaussian models with logged measures are an alternative solution to analyzing non-normal distributions sometimes used in psycholinguistics, but are not suitable for the current data given how our speech environment measures are distributed, particularly in the randomly sampled clips (see, e.g., Figures [1](#fig1), [7](#fig7), [10](#fig10), [13](#fig13), [19](#fig19)). Overall, however, the gaussian models show a qualitatively similar pattern of results. None of the gaussian model results are presented in the main text---only here as supplementary information.
 
 ## How to interpret the model output
 All models were run with the glmm-TMB library in R [@R-glmmTMB; @brooks2017modeling]. Note that, in the negative binomial regressions, the dependent variables have been rounded to the nearest integer (e.g., 3.2 minutes of TCDS per hour becomes 3 minutes per hour in the model).
@@ -232,7 +232,7 @@ knitr::include_graphics("www/ODS_turntaking_distribution.png")
 
 ```{r tab13, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 apa_table(filter(model.results, model == "ODS_turntaking_z-inb") %>% select(-model),
-          caption="Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with *morning* as the reference level for time of day (note that most default models have midday as the reference level for time of day; the default model is changed here due to convergence issues).")
+          caption="Full output of the negative binomial mixed-effects regression of ODS min/hr for the turn-taking sample, with morning as the reference level for time of day (note that most default models have midday as the reference level for time of day; the default model is changed here due to convergence issues).")
 ```
 
 ```{r tab14, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
