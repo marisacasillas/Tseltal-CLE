@@ -229,7 +229,7 @@ all.data$sample_type[tt.samples] <- "turn-taking"
 all.data$segment_dur[tt.samples] <- 1
 
 va.samples <- which(grepl('^va', all.data$segment))
-all.data$sample_type[va.samples] <- "turn-taking"
+all.data$sample_type[va.samples] <- "high-activity"
 all.data$segment_dur[va.samples] <- 1
 
 # Add in segment start time
