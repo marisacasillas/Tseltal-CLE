@@ -1,5 +1,5 @@
-\documentclass[floatsintext,man]{apa6}
-
+\documentclass[,man,floatsintext]{apa6}
+\usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
@@ -9,126 +9,107 @@
 \else % if luatex or xelatex
   \ifxetex
     \usepackage{mathspec}
-    \usepackage{xltxtra,xunicode}
   \else
     \usepackage{fontspec}
   \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
-\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Early language experience in a Tseltal Mayan village},
+            pdfauthor={Marisa Casillas, Penelope Brown, \& Stephen C. Levinson},
+            pdfkeywords={Child-directed speech, linguistic input, non-WEIRD, vocal maturity, turn
+taking, interaction, Mayan},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
 
-% Table formatting
-\usepackage{longtable, booktabs}
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+
+  \title{Early language experience in a Tseltal Mayan village}
+    \author{Marisa Casillas\textsuperscript{1}, Penelope Brown\textsuperscript{1},
+\& Stephen C. Levinson\textsuperscript{1}}
+    \date{}
+  
+\shorttitle{Early language experience in a Tseltal Mayan village}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} Max Planck Institute for Psycholinguistics}
+\keywords{Child-directed speech, linguistic input, non-WEIRD, vocal maturity, turn taking, interaction, Mayan\newline\indent Word count: 10930 (9216 not including references)}
+\usepackage{csquotes}
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+\usepackage{longtable}
 \usepackage{lscape}
-% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
-\usepackage{multirow}		% Table styling
-\usepackage{tabularx}		% Control Column width
-\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
-\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage[flushleft]{threeparttable}
+\usepackage{threeparttablex}
 
-% Create new environments so endfloat can handle them
-% \newenvironment{ltable}
-%   {\begin{landscape}\begin{center}\begin{threeparttable}}
-%   {\end{threeparttable}\end{center}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
 
-\newenvironment{lltable}
-  {\begin{landscape}\begin{center}\begin{ThreePartTable}}
-  {\end{ThreePartTable}\end{center}\end{landscape}}
-
-
-
-
-% The following enables adjusting longtable caption width to table width
-% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
 \makeatletter
 \newcommand\LastLTentrywidth{1em}
 \newlength\longtablewidth
 \setlength{\longtablewidth}{1in}
-\newcommand\getlongtablewidth{%
- \begingroup
-  \ifcsname LT@\roman{LT@tables}\endcsname
-  \global\longtablewidth=0pt
-  \renewcommand\LT@entry[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}%
-  \@nameuse{LT@\roman{LT@tables}}%
-  \fi
-\endgroup}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
 
 
-  \usepackage{graphicx}
-  \makeatletter
-  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-  \makeatother
-  % Scale images if necessary, so that they will not overflow the page
-  % margins by default, and it is still possible to overwrite the defaults
-  % using explicit options in \includegraphics[width, height, ...]{}
-  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \usepackage[unicode=true]{hyperref}
-\fi
-\hypersetup{breaklinks=true,
-            pdfauthor={},
-            pdftitle={Early language experience in a Tseltal Mayan village},
-            colorlinks=true,
-            citecolor=blue,
-            urlcolor=blue,
-            linkcolor=black,
-            pdfborder={0 0 0}}
-\urlstyle{same}  % don't use monospace font for urls
+\usepackage{lineno}
 
-\setlength{\parindent}{0pt}
-%\setlength{\parskip}{0pt plus 0pt minus 0pt}
+\linenumbers
 
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\authornote{
 
+Correspondence concerning this article should be addressed to Marisa
+Casillas, P.O. Box 310, 6500 AH Nijmegen, The Netherlands. E-mail:
+\href{mailto:Marisa.Casillas@mpi.nl}{\nolinkurl{Marisa.Casillas@mpi.nl}}}
 
-% Manuscript styling
-\captionsetup{font=singlespacing,justification=justified}
-\usepackage{csquotes}
-\usepackage{upgreek}
-
- % Line numbering
-  \usepackage{lineno}
-  \linenumbers
-
-
-\usepackage{tikz} % Variable definition to generate author note
-
-% fix for \tightlist problem in pandoc 1.14
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-% Essential manuscript parts
-  \title{Early language experience in a Tseltal Mayan village}
-
-  \shorttitle{Early language experience in a Tseltal Mayan village}
-
-
-  \author{Marisa Casillas\textsuperscript{1}, Penelope Brown\textsuperscript{1}, \& Stephen C. Levinson\textsuperscript{1}}
-
-  % \def\affdep{{"", "", ""}}%
-  % \def\affcity{{"", "", ""}}%
-
-  \affiliation{
-    \vspace{0.5cm}
-          \textsuperscript{1} Max Planck Institute for Psycholinguistics  }
-
-  \authornote{
-    Correspondence concerning this article should be addressed to Marisa
-    Casillas, P.O. Box 310, 6500 AH Nijmegen, The Netherlands. E-mail:
-    \href{mailto:Marisa.Casillas@mpi.nl}{\nolinkurl{Marisa.Casillas@mpi.nl}}
-  }
-
-
-  \abstract{Daylong at-home audio recordings from 10 Tseltal Mayan children
+\abstract{
+Daylong at-home audio recordings from 10 Tseltal Mayan children
 (0;2--3;0; Southern Mexico) were analyzed for how often children engaged
 in verbal interaction with others and whether their speech environment
 changed with age, time of day, household size, and number of speakers
@@ -139,38 +120,13 @@ nearly four times the baseline rate of directed speech. Coarse
 indicators of children's language development (babbling, first words,
 first word combinations) suggest that Tseltal children manage to extract
 the linguistic information they need despite minimal directed speech.
-Multiple proposals for how they might do so are discussed.}
-  \keywords{Child-directed speech, linguistic input, non-WEIRD, vocal maturity, turn
-taking, interaction, Mayan \\
-
-    \indent Word count: 10930 (9216 not including references)
-  }
+Multiple proposals for how they might do so are discussed.
 
 
+}
 
-
-
-\usepackage{amsthm}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}{Lemma}[section]
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{corollary}{Corollary}[section]
-\newtheorem{proposition}{Proposition}[section]
-\theoremstyle{definition}
-\newtheorem{example}{Example}[section]
-\theoremstyle{definition}
-\newtheorem{exercise}{Exercise}[section]
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-\newtheorem*{solution}{Solution}
 \begin{document}
-
 \maketitle
-
-\setcounter{secnumdepth}{0}
-
-
 
 A great deal of work in developmental language science revolves around
 one central question: what kind of linguistic experience (and how much)
@@ -702,7 +658,7 @@ Goldin-Meadow, 2012), as illustrated in \protect\hyperlink{fig4}{Figure
 4} (see Scaff et al. (in preparation) for more detailed cross-language
 comparisons). Note that, to make this comparison, we have converted
 Shneidman's (2010) utterance/hr estimates to min/hr using the median
-Tseltal utterance duration for non-target child speakers (1029 msec),
+Tseltal utterance duration for non-target child speakers (1018 msec),
 motivated by the fact that Yucatec and Tseltal are related languages
 spoken in comparably rural indigenous communities.
 
@@ -1548,10 +1504,6 @@ Yurovsky, D. (2018). A communicative approach to early word learning.
 \emph{New Ideas in Psychology}, \emph{50}, 73--79.
 
 \endgroup
-
-
-
-
 
 
 \end{document}

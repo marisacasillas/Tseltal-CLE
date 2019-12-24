@@ -48,7 +48,7 @@ library(tidyverse)
 library(viridis)
 library(grid)
 library(gridExtra)
-library(ggpirate)
+#library(ggpirate)
 library(lme4)
 library(glmmTMB)
 library(DHARMa)
@@ -1151,7 +1151,7 @@ comparison.data$Site <- factor(comparison.data$Site,
                                levels = unique(comparison.data$Site))
 comparison.data$Site <- factor(comparison.data$Site, levels =
                                  c("US/Canada", "US", "Dutch", "MozambiqueUrb",
-                                   "MozambiqueRur", "Tsimane", "Yukatek", "Tseltal"))
+                                   "MozambiqueRur", "Tsimane", "Yucatec", "Tseltal"))
 comparison.data.shapes <- unique(comparison.data$shape)
 
 # TDS min/hr comparison
@@ -1160,7 +1160,7 @@ tdsmph.comparison <- ggplot(comparison.data,
                               color = Type, shape = Site, size = N)) +
   geom_point(fill = "gray50", alpha = 0.7) +
   scale_shape_manual(values=comparison.data.shapes) +
-  ylab("TCDS (min/hr)") + xlab("Child age (mo)")	+
+  ylab("(T)CDS (min/hr)") + xlab("Child age (mo)")	+
   scale_y_continuous(limits=c(0,20),
                      breaks=seq(0,20,5)) +
   scale_x_continuous(limits=c(0,38),
