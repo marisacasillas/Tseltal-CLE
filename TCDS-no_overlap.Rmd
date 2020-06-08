@@ -1,0 +1,628 @@
+---
+title             : "Rossel and Tseltal input rates if we assume TCDS only counts in the absence of all other speech"
+shorttitle        : "No-overlap TCDS rates in the Rossel and Tseltal data"
+
+author: 
+  - name          : "Marisa Casillas"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "P.O. Box 310, 6500 AH Nijmegen, The Netherlands"
+    email         : "Marisa.Casillas@mpi.nl"
+
+affiliation:
+  - id            : "1"
+    institution   : "Max Planck Institute for Psycholinguistics"
+
+#author_note: |
+#  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+abstract: |
+
+keywords          : 
+wordcount         : 
+
+csl: apa-noissue.csl
+
+bibliography      : ["Tseltal-CLE.bib"]
+
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+mask              : no
+
+class             : "man"
+output            : papaja::apa6_pdf #apa6_pdf or apa6_word
+---
+
+```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
+library(papaja)
+library(ggplot2)
+library(tidyverse)
+library(viridis)
+library(grid)
+library(gridExtra)
+library(lme4)
+library(glmmTMB)
+library(DHARMa)
+library(bbmle)
+library(broom.mixed)
+library(lubridate)
+library(magick)
+ssource("0-Helper.R")
+```
+
+```{r analysis-presets, include=FALSE}
+options(scipen=999)
+# set up paths
+ts.data.path <- "transcripts/anon/" # text files exported from ELAN
+ts.metadata.path <- "metadata/"
+ts.plot.path <- "plots/" # output plots
+ts.shiny.input.path <- "shiny_input/"
+ts.shiny.input.img.path <- "www/"
+ts.seg.index.file <- paste0(ts.metadata.path, "Segment-order-inventory.csv")
+ts.ptcp.info.file <- paste0(ts.metadata.path, "recording-info.csv")
+yd.data.path <- "../Yeli-CLE/transcripts/anon/" # text files exported from ELAN
+yd.metadata.path <- "../Yeli-CLE/metadata/"
+yd.plot.path <- "../Yeli-CLE/plots/" # output plots
+yd.shiny.input.path <- "../Yeli-CLE/shiny_input/"
+yd.shiny.input.img.path <- "../Yeli-CLE/www/"
+yd.seg.index.file <- paste0("../Yeli-CLE/Segment-order-inventory.csv")
+yd.ptcp.info.file <- paste0(yd.metadata.path, "recording-info.csv")
+
+# for plotting
+samplelabels <- c("High activity  ", "Random  ")
+col.sample.bu <- list(
+  scale_fill_manual(labels=samplelabels, values=viridis(2)),
+  scale_color_manual(labels=samplelabels, values=viridis(2)))
+col.sample.bu3 <- list(
+  scale_fill_manual(labels=samplelabels, values=viridis(3)),
+  scale_color_manual(labels=samplelabels, values=viridis(3)))
+
+# for calculating transitions and waking time
+allowed.overlap <- 1000 #ms
+allowed.gap <- 2000 #ms
+waking.hours <- 14
+
+# clip durations
+ts.rand.sample.dur <- 5
+yd.rand.sample.dur <- 2.5
+ext.sample.dur <- 5
+peak.sample.dur <- 1
+```
+
+
+```{r tseltal-prepare-data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Read in annotation files
+ts.files <- list.files(ts.data.path,pattern = "*.txt")
+ts.all.data <- data.frame()
+for (i in 1:length(ts.files)) {
+  newfile <- read_csv(paste0(data.path, files[i]),
+                      col_types = cols(val = col_character()))
+  newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
+  ts.all.data <- rbind(ts.all.data, newfile)
+}
+ts.all.data$row <- c(1:nrow(ts.all.data))
+
+# Read in supplementary data
+ts.ptcp.info <- read_csv(ts.ptcp.info.file, col_types = cols())
+ts.ptcp.info$aclew_child_id <- as.character(ts.ptcp.info$aclew_child_id)
+
+# Extract and convert start time of each sample
+ts.rec.time.info <- ts.ptcp.info %>%
+  select(aclew_child_id, start_of_recording, length_of_recording) %>% # diff col nms in yd
+  mutate(
+    start.hh = substr(start_of_recording, 1, 2),
+    start.mm = substr(start_of_recording, 4, 5),
+    start.ss = substr(start_of_recording, 7, 8),
+    start_of_wav.ms = period_to_seconds(hms(start_of_recording))*1000,
+    stop_of_wav.ms = start_of_wav.ms + length_of_recording*1000,
+    stop_of_wav = paste(
+      str_pad(hour(seconds_to_period(
+        stop_of_wav.ms/1000)), 2, "left", pad = "0"),
+      str_pad(minute(seconds_to_period(
+        stop_of_wav.ms/1000)), 2, "left", pad = "0"),
+      str_pad(second(seconds_to_period(
+        stop_of_wav.ms/1000)), 2, "left", pad = "0"), sep = ":"),
+    length_of_wav.ms = length_of_recording*1000) %>%
+  rename(length_of_wav.s = length_of_recording,
+    start_of_wav = start_of_recording) %>%
+  select(aclew_child_id,
+         start_of_wav, stop_of_wav, length_of_wav.s,
+         start_of_wav.ms, stop_of_wav.ms, length_of_wav.ms,
+         start.hh, start.mm, start.ss)
+
+ts.seg.info <- filter(ts.all.data, tier == "code") %>%
+  select(-tier, -speaker, -row) %>%
+  left_join(ts.rec.time.info) %>%
+  mutate(
+    start.ms = start_of_wav.ms + start,
+    start.sec = start.ms/1000,
+    start.hhmmss = paste(
+      str_pad(hour(seconds_to_period(start.sec)),
+        2, "left", pad = "0"),
+      str_pad(minute(seconds_to_period(start.sec)),
+        2, "left", pad = "0"),
+      str_pad(second(seconds_to_period(start.sec)), 2,
+        "left", pad = "0"), sep = ":"),
+    start.hr = start.ms/3600000)
+
+# Add mean and sd values for participant-level predictors to ptcp.info
+ts.ptcp.info <- ts.ptcp.info %>%
+  mutate(
+    tchiyr.m = mean(age_mo_round),
+    motyr.m = mean(mother_age), # diff col name yd
+    nsb.m = mean(number_older_sibs),
+    hsz.m = mean(household_size),
+    tchiyr.sd = sd(age_mo_round),
+    motyr.sd = sd(mother_age), # diff col name yd
+    nsb.sd = sd(number_older_sibs),
+    hsz.sd = sd(household_size)
+    )
+
+# Merge participant and segment info to the main data table
+ts.codes <- filter(ts.all.data, tier == "code")
+
+ts.all.data <- ts.all.data %>%
+  filter(speaker != "") %>%
+  left_join(ts.ptcp.info, by = "aclew_child_id") %>%
+  mutate(segment = "", sample = "",
+         sample_type = "", clip_dur = 0)
+
+for (i in 1:nrow(ts.codes)) {
+  rec <- ts.codes$aclew_child_id[i]
+  seg <- as.character(ts.codes$val[i])
+  seg.on <- ts.codes$start[i]
+  seg.off <- ts.codes$stop[i]
+  seg.idx <- which(ts.all.data$aclew_child_id == rec &
+                     ts.all.data$start < seg.off &
+                     ts.all.data$stop > seg.on)
+  ts.all.data$segment[seg.idx] <- seg
+  ts.all.data$clip_dur[seg.idx] <- ts.codes$dur[i]
+}
+
+# Remove utterances that occur outside of the annotated clips
+ts.all.data$sample[which(
+  grepl('^random', ts.all.data$segment))] <- "random"
+ts.all.data$sample[which(
+  grepl('tt', ts.all.data$segment))] <- "turn-taking"
+ts.all.data$sample[which(
+  grepl('va', ts.all.data$segment))] <- "vocal-activity"
+ts.all.data <- filter(ts.all.data, sample != "")
+# shorten utterance bouncaries that extend outside of the annotated clips
+# NOTE: because of the split extensions with the same names
+# we have to be cautious (e.g., if there are two 'ext-va-1' codes)
+# for a given recording
+ts.seg.on.off <- ts.seg.info %>%
+  select(aclew_child_id, start, stop, val) %>%
+  rename(clip_start = "start", clip_stop = "stop", segment = val) %>%
+  mutate(clip_dur = clip_stop - clip_start)
+for (i in 1:nrow(ts.seg.on.off)) {
+  over.left.edge.idx <- which(ts.all.data$aclew_child_id == ts.seg.on.off$aclew_child_id[i] &
+                          ts.all.data$start < ts.seg.on.off$clip_stop[i] &
+                          ts.all.data$stop > ts.seg.on.off$clip_start[i] &
+                          ts.all.data$start < ts.seg.on.off$clip_start[i])
+  over.right.edge.idx <- which(ts.all.data$aclew_child_id == ts.seg.on.off$aclew_child_id[i] &
+                          ts.all.data$start < ts.seg.on.off$clip_stop[i] &
+                          ts.all.data$stop > ts.seg.on.off$clip_start[i] &
+                          ts.all.data$stop > ts.seg.on.off$clip_stop[i])
+  if (length(over.left.edge.idx) > 0) {
+    ts.all.data$start[over.left.edge.idx] <- ts.seg.on.off$clip_start[i]
+  }
+  
+  if (length(over.right.edge.idx) > 0) {
+    ts.all.data$stop[over.right.edge.idx] <- ts.seg.on.off$clip_stop[i]
+  }
+}
+
+# Add basic segment info to all.data
+ts.all.data <- ts.all.data %>%
+  left_join(ts.seg.on.off) %>%
+  mutate(
+    sample_type = case_when(
+      grepl("^ran", segment) ~ "random",
+      grepl("^ext", segment) ~ "extension",
+      grepl("^tt", segment) ~ "turn-taking",
+      grepl("^va", segment) ~ "vocal-activity"
+    ),
+    segment_dur = case_when(
+      sample_type == "random" ~ ts.rand.sample.dur,
+      sample_type == "extension" ~ ext.sample.dur,
+      sample_type == "turn-taking" |
+        sample_type == "vocal-activity" ~ peak.sample.dur
+    ))
+
+
+# Add in segment start time
+ts.mini.clip.info <- select(ts.seg.info, c("aclew_child_id", "val",
+  "start.hhmmss", "start.sec", "start.hr", "start")) %>%
+  rename("segment" = "val", "clip.start.hhmmss" = "start.hhmmss",
+    "clip.start.sec" = "start.sec", "clip.start.hr" = "start.hr",
+    "clip_start" = "start")
+ts.all.data <- ts.all.data %>%
+  left_join(ts.mini.clip.info)
+
+```
+
+```{r rossel-prepare-data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Read in annotation files
+yd.files <- list.files(yd.data.path,pattern = "*.txt")
+yd.all.data <- data.frame()
+for (i in 1:length(yd.files)) {
+  newfile <- read_csv(paste0(data.path, files[i]),
+                      col_types = cols(val = col_character()))
+  newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
+  yd.all.data <- rbind(yd.all.data, newfile)
+}
+yd.all.data$row <- c(1:nrow(yd.all.data))
+
+# Read in supplementary data
+yd.ptcp.info <- read_csv(yd.ptcp.info.file, col_types = cols())
+yd.ptcp.info$aclew_child_id <- as.character(yd.ptcp.info$aclew_child_id)
+
+# Extract and convert start time of each sample
+yd.rec.time.info <- yd.ptcp.info %>%
+  select(aclew_child_id, start_of_wav, length_of_wav) %>% # diff col nms in ts
+  mutate(
+    start.hh = substr(start_of_wav, 1, 2),
+    start.mm = substr(start_of_wav, 4, 5),
+    start.ss = substr(start_of_wav, 7, 8),
+    start_of_wav.ms = period_to_seconds(hms(start_of_wav))*1000,
+    stop_of_wav.ms = start_of_wav.ms + length_of_wav*1000,
+    stop_of_wav = paste(
+      str_pad(hour(seconds_to_period(
+        stop_of_wav.ms/1000)), 2, "left", pad = "0"),
+      str_pad(minute(seconds_to_period(
+        stop_of_wav.ms/1000)), 2, "left", pad = "0"),
+      str_pad(second(seconds_to_period(
+        stop_of_wav.ms/1000)), 2, "left", pad = "0"), sep = ":"),
+    length_of_wav.ms = length_of_wav*1000) %>%
+  rename(length_of_wav.s = length_of_wav) %>%
+  select(aclew_child_id,
+         start_of_wav, stop_of_wav, length_of_wav.s,
+         start_of_wav.ms, stop_of_wav.ms, length_of_wav.ms,
+         start.hh, start.mm, start.ss)
+
+yd.seg.info <- filter(yd.all.data, tier == "code") %>%
+  select(-tier, -speaker, -row) %>%
+  left_join(yd.rec.time.info) %>%
+  mutate(
+    start.ms = start_of_wav.ms + start,
+    start.sec = start.ms/1000,
+    start.hhmmss = paste(
+      str_pad(hour(seconds_to_period(start.sec)),
+        2, "left", pad = "0"),
+      str_pad(minute(seconds_to_period(start.sec)),
+        2, "left", pad = "0"),
+      str_pad(second(seconds_to_period(start.sec)), 2,
+        "left", pad = "0"), sep = ":"),
+    start.hr = start.ms/3600000)
+
+# Add mean and sd values for participant-level predictors to ptcp.info
+yd.ptcp.info <- yd.ptcp.info %>%
+  mutate(
+    tchiyr.m = mean(age_mo_round),
+    motyr.m = mean(mat_age), # diff col name ts
+    nsb.m = mean(number_older_sibs),
+    hsz.m = mean(household_size),
+    tchiyr.sd = sd(age_mo_round),
+    motyr.sd = sd(mat_age), # diff col name ts
+    nsb.sd = sd(number_older_sibs),
+    hsz.sd = sd(household_size)
+    )
+
+# Merge participant and segment info to the main data table
+yd.codes <- filter(yd.all.data, tier == "code")
+
+yd.all.data <- yd.all.data %>%
+  filter(speaker != "") %>%
+  left_join(yd.ptcp.info, by = "aclew_child_id") %>%
+  mutate(segment = "", sample = "",
+         sample_type = "", clip_dur = 0)
+
+for (i in 1:nrow(yd.codes)) {
+  rec <- yd.codes$aclew_child_id[i]
+  seg <- as.character(yd.codes$val[i])
+  seg.on <- yd.codes$start[i]
+  seg.off <- yd.codes$stop[i]
+  seg.idx <- which(yd.all.data$aclew_child_id == rec &
+                     yd.all.data$start < seg.off &
+                     yd.all.data$stop > seg.on)
+  yd.all.data$segment[seg.idx] <- seg
+  yd.all.data$clip_dur[seg.idx] <- yd.codes$dur[i]
+}
+
+# Remove utterances that occur outside of the annotated clips
+yd.all.data$sample[which(
+  grepl('^random', yd.all.data$segment))] <- "random"
+yd.all.data$sample[which(
+  grepl('tt', yd.all.data$segment))] <- "turn-taking"
+yd.all.data$sample[which(
+  grepl('va', yd.all.data$segment))] <- "vocal-activity"
+yd.all.data <- filter(yd.all.data, sample != "")
+# shorten utterance bouncaries that extend outside of the annotated clips
+# NOTE: because of the split extensions with the same names
+# we have to be cautious (e.g., if there are two 'ext-va-1' codes)
+# for a given recording
+yd.seg.on.off <- yd.seg.info %>%
+  select(aclew_child_id, start, stop, val) %>%
+  rename(clip_start = "start", clip_stop = "stop", segment = val) %>%
+  mutate(clip_dur = clip_stop - clip_start)
+for (i in 1:nrow(yd.seg.on.off)) {
+  over.left.edge.idx <- which(yd.all.data$aclew_child_id == yd.seg.on.off$aclew_child_id[i] &
+                          yd.all.data$start < yd.seg.on.off$clip_stop[i] &
+                          yd.all.data$stop > yd.seg.on.off$clip_start[i] &
+                          yd.all.data$start < yd.seg.on.off$clip_start[i])
+  over.right.edge.idx <- which(yd.all.data$aclew_child_id == yd.seg.on.off$aclew_child_id[i] &
+                          yd.all.data$start < yd.seg.on.off$clip_stop[i] &
+                          yd.all.data$stop > yd.seg.on.off$clip_start[i] &
+                          yd.all.data$stop > yd.seg.on.off$clip_stop[i])
+  if (length(over.left.edge.idx) > 0) {
+    yd.all.data$start[over.left.edge.idx] <- yd.seg.on.off$clip_start[i]
+  }
+  
+  if (length(over.right.edge.idx) > 0) {
+    yd.all.data$stop[over.right.edge.idx] <- yd.seg.on.off$clip_stop[i]
+  }
+}
+
+# Add basic segment info to all.data
+yd.all.data <- yd.all.data %>%
+  left_join(yd.seg.on.off) %>%
+  mutate(
+    sample_type = case_when(
+      grepl("^ran", segment) ~ "random",
+      grepl("^ext", segment) ~ "extension",
+      grepl("^tt", segment) ~ "turn-taking",
+      grepl("^va", segment) ~ "vocal-activity"
+    ),
+    segment_dur = case_when(
+      sample_type == "random" ~ yd.rand.sample.dur,
+      sample_type == "extension" ~ ext.sample.dur,
+      sample_type == "turn-taking" |
+        sample_type == "vocal-activity" ~ peak.sample.dur
+    ))
+
+
+# Add in segment start time
+yd.mini.clip.info <- select(yd.seg.info, c("aclew_child_id", "val",
+  "start.hhmmss", "start.sec", "start.hr", "start")) %>%
+  rename("segment" = "val", "clip.start.hhmmss" = "start.hhmmss",
+    "clip.start.sec" = "start.sec", "clip.start.hr" = "start.hr",
+    "clip_start" = "start")
+yd.all.data <- yd.all.data %>%
+  left_join(yd.mini.clip.info)
+
+```
+
+```{r tseltal-random-quantity-prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# all non-chi vocalizations
+ts.all.nonchi.vocs <- ts.all.data %>%
+  filter(speaker != "CHI" & grepl("xds@", tier))   
+
+# RANDOM
+# Get min/hr speech measures
+ts.n.unique.rand.segs <- length(unique(
+  ts.all.data$segment[grepl("random", ts.all.data$segment)]))
+ts.n.unique.recs <- length(unique(ts.all.data$aclew_child_id))
+ts.all.rand.segments <- tibble(
+  aclew_child_id = rep(unique(ts.all.data$aclew_child_id),
+                ts.n.unique.rand.segs),
+  segment = rep(unique(ts.all.data$segment[grepl(
+    "random", ts.all.data$segment)]),
+                ts.n.unique.recs))
+
+# ALL TDS
+ts.tds.per.seg.rand <- ts.all.data %>%
+  filter(sample == "random" & speaker != "CHI" &
+           grepl("xds@", tier) & val == "T") %>%
+  group_by(aclew_child_id, segment, segment_dur) %>%
+  summarise(tds_min = round(sum(dur)/60000,3)) %>%
+  full_join(ts.all.rand.segments, by = c("aclew_child_id", "segment")) %>%
+  replace_na(list(segment_dur = ts.rand.sample.dur, tds_min = 0)) %>%
+  mutate(tds_mph = (tds_min/segment_dur)*60) %>%
+  arrange(aclew_child_id, segment)
+
+# NO-OVERLAP TDS
+# slow, but thorough:
+ts.unique.ptcp <- unique(ts.ptcp.info$aclew_child_id)
+ts.tcds.utts.no.ovlp <- tibble()
+for (ptcp in ts.unique.ptcp) {
+  tcds.utts <- ts.all.data %>%
+    filter(aclew_child_id == ptcp &
+      sample == "random" & speaker != "CHI" &
+        grepl("xds@", tier) & val == "T") %>%
+    mutate(nonovlp.dur = NA)
+  non.tcds.utts <- ts.all.data %>%
+    filter(sample == "random" &
+        (grepl("xds@", tier) | tier == "CHI") & # include child vocs and ODS
+        val != "T")
+  for (i in 1:nrow(tcds.utts)) {
+    ovlp.utts <- which(
+      non.tcds.utts$stop > tcds.utts$start[i] &
+        non.tcds.utts$start < tcds.utts$stop[i])
+    if (length(ovlp.utts) > 0) {
+      # complete overlap
+      if (length(which(
+        non.tcds.utts$start[ovlp.utts] <= tcds.utts$start[i] &
+        non.tcds.utts$stop[ovlp.utts] >= tcds.utts$stop[i]
+        )) > 0) {
+          tcds.utts$nonovlp.dur[i] <- 0
+      } else { # msec by msec check
+        msec.count <- 0
+        tcds.msecs <- tcds.utts$start[i]:tcds.utts$stop[i]
+        ovlp.msecs <- c()
+        for (j in length(ovlp.utts)) {
+          ovlp.msecs <- c(ovlp.msecs,
+            non.tcds.utts$start[ovlp.utts[j]]:non.tcds.utts$stop[ovlp.utts[j]])
+        }
+        non.ovlp.msec <- length(which(!(tcds.msecs %in% ovlp.msecs))) - 1
+        tcds.utts$nonovlp.dur[i] <- ifelse(non.ovlp.msec > 0, non.ovlp.msec, 0)
+      }
+    } else {
+      tcds.utts$nonovlp.dur[i] <- tcds.utts$dur[i]
+    }
+  }
+  ts.tcds.utts.no.ovlp <- bind_rows(ts.tcds.utts.no.ovlp, tcds.utts)
+}
+
+ts.tds.per.seg.rand.no.ovlp <- ts.tcds.utts.no.ovlp %>%
+  group_by(aclew_child_id, segment, segment_dur) %>%
+  summarise(tds.no_min = round(sum(nonovlp.dur)/60000,3)) %>%
+  full_join(ts.all.rand.segments, by = c("aclew_child_id", "segment")) %>%
+  replace_na(list(segment_dur = ts.rand.sample.dur, tds.no_min = 0)) %>%
+  mutate(tds.no_mph = (tds.no_min/segment_dur)*60) %>%
+  arrange(aclew_child_id, segment)
+
+ts.tds.per.seg.rand.all <- left_join(ts.tds.per.seg.rand,
+  ts.tds.per.seg.rand.no.ovlp) %>%
+  mutate(
+    min_diff = tds_min - tds.no_min,
+    mph_diff = tds_mph - tds.no_mph
+  )
+```
+
+
+```{r rossel-random-quantity-prep, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# all non-chi vocalizations
+yd.all.nonchi.vocs <- yd.all.data %>%
+  filter(speaker != "CHI" & grepl("xds@", tier))   
+
+# RANDOM
+# Get min/hr speech measures
+yd.n.unique.rand.segs <- length(unique(
+  yd.all.data$segment[grepl("random", yd.all.data$segment)]))
+yd.n.unique.recs <- length(unique(yd.all.data$aclew_child_id))
+yd.all.rand.segments <- tibble(
+  aclew_child_id = rep(unique(yd.all.data$aclew_child_id),
+                yd.n.unique.rand.segs),
+  segment = rep(unique(yd.all.data$segment[grepl(
+    "random", yd.all.data$segment)]),
+                yd.n.unique.recs))
+
+# ALL TDS
+yd.tds.per.seg.rand <- yd.all.data %>%
+  filter(sample == "random" & speaker != "CHI" &
+           grepl("xds@", tier) & val == "T") %>%
+  group_by(aclew_child_id, segment, segment_dur) %>%
+  summarise(tds_min = round(sum(dur)/60000,3)) %>%
+  full_join(yd.all.rand.segments, by = c("aclew_child_id", "segment")) %>%
+  replace_na(list(segment_dur = yd.rand.sample.dur, tds_min = 0)) %>%
+  mutate(tds_mph = (tds_min/segment_dur)*60) %>%
+  arrange(aclew_child_id, segment)
+
+# NO-OVERLAP TDS
+# slow, but thorough:
+yd.unique.ptcp <- unique(yd.ptcp.info$aclew_child_id)
+yd.tcds.utyd.no.ovlp <- tibble()
+for (ptcp in yd.unique.ptcp) {
+  tcds.utts <- yd.all.data %>%
+    filter(aclew_child_id == ptcp &
+      sample == "random" & speaker != "CHI" &
+        grepl("xds@", tier) & val == "T") %>%
+    mutate(nonovlp.dur = NA)
+  non.tcds.utts <- yd.all.data %>%
+    filter(sample == "random" &
+        (grepl("xds@", tier) | tier == "CHI") & # include child vocs and ODS
+        val != "T")
+  for (i in 1:nrow(tcds.utts)) {
+    ovlp.utts <- which(
+      non.tcds.utts$stop > tcds.utts$start[i] &
+        non.tcds.utts$start < tcds.utts$stop[i])
+    if (length(ovlp.utts) > 0) {
+      # complete overlap
+      if (length(which(
+        non.tcds.utts$start[ovlp.utts] <= tcds.utts$start[i] &
+        non.tcds.utts$stop[ovlp.utts] >= tcds.utts$stop[i]
+        )) > 0) {
+          tcds.utts$nonovlp.dur[i] <- 0
+      } else { # msec by msec check
+        msec.count <- 0
+        tcds.msecs <- tcds.utts$start[i]:tcds.utts$stop[i]
+        ovlp.msecs <- c()
+        for (j in length(ovlp.utts)) {
+          ovlp.msecs <- c(ovlp.msecs,
+            non.tcds.utts$start[ovlp.utts[j]]:non.tcds.utts$stop[ovlp.utts[j]])
+        }
+        non.ovlp.msec <- length(which(!(tcds.msecs %in% ovlp.msecs))) - 1
+        tcds.utts$nonovlp.dur[i] <- ifelse(non.ovlp.msec > 0, non.ovlp.msec, 0)
+      }
+    } else {
+      tcds.utts$nonovlp.dur[i] <- tcds.utts$dur[i]
+    }
+  }
+  yd.tcds.utyd.no.ovlp <- bind_rows(yd.tcds.utyd.no.ovlp, tcds.utts)
+}
+
+yd.tds.per.seg.rand.no.ovlp <- yd.tcds.utyd.no.ovlp %>%
+  group_by(aclew_child_id, segment, segment_dur) %>%
+  summarise(tds.no_min = round(sum(nonovlp.dur)/60000,3)) %>%
+  full_join(yd.all.rand.segments, by = c("aclew_child_id", "segment")) %>%
+  replace_na(list(segment_dur = yd.rand.sample.dur, tds.no_min = 0)) %>%
+  mutate(tds.no_mph = (tds.no_min/segment_dur)*60) %>%
+  arrange(aclew_child_id, segment)
+
+yd.tds.per.seg.rand.all <- left_join(yd.tds.per.seg.rand,
+  yd.tds.per.seg.rand.no.ovlp) %>%
+  mutate(
+    min_diff = tds_min - tds.no_min,
+    mph_diff = tds_mph - tds.no_mph
+  )
+```
+
+```{r combined-summary, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+both.sites.tds.per.seg.rand.all <- bind_rows(
+  mutate(ts.tds.per.seg.rand.all, sample = "Tseltal"),
+  mutate(yd.tds.per.seg.rand.all, sample = "Rossel")
+)
+
+both.sites.tds.rand.summary.byrec <- both.sites.tds.per.seg.rand.all %>%
+  group_by(sample, aclew_child_id) %>%
+  summarize(
+    tds_mph.mean = mean(tds_mph),
+    tds_mph.sd = sd(tds_mph),
+    tds_mph.median = median(tds_mph),
+    tds_mph.min = min(tds_mph),
+    tds_mph.max = max(tds_mph),
+    tds.no_mph.mean = mean(tds.no_mph),
+    tds.no_mph.sd = sd(tds.no_mph),
+    tds.no_mph.median = median(tds.no_mph),
+    tds.no_mph.min = min(tds.no_mph),
+    tds.no_mph.max = max(tds.no_mph)
+  )
+
+both.sites.tds.rand.summary.bysite <- both.sites.tds.rand.summary.byrec %>%
+  group_by(sample) %>%
+  summarize(
+    tds_mph.mean = mean(tds_mph.mean),
+    tds_mph.sd = sd(tds_mph.sd),
+    tds_mph.median = median(tds_mph.median),
+    tds_mph.min = min(tds_mph.min),
+    tds_mph.max = max(tds_mph.max),
+    tds.no_mph.mean = mean(tds.no_mph.mean),
+    tds.no_mph.sd = sd(tds.no_mph.sd),
+    tds.no_mph.median = median(tds.no_mph.median),
+    tds.no_mph.min = min(tds.no_mph.min),
+    tds.no_mph.max = max(tds.no_mph.max)
+  )
+# Bug?
+# - TDS estimates for YD look high (double-check Tseltal too)
+# - TDS no-ovlp estimates all zero for YD!
+
+```
+
+\newpage
+
+# References {#refs}
+
+```{r create_r-references}
+r_refs(file = "Tseltal-CLE.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
