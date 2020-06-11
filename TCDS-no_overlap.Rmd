@@ -98,7 +98,7 @@ peak.sample.dur <- 1
 ts.files <- list.files(ts.data.path,pattern = "*.txt")
 ts.all.data <- data.frame()
 for (i in 1:length(ts.files)) {
-  newfile <- read_csv(paste0(data.path, files[i]),
+  newfile <- read_csv(paste0(ts.data.path, files[i]),
                       col_types = cols(val = col_character()))
   newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
   ts.all.data <- rbind(ts.all.data, newfile)
@@ -250,7 +250,7 @@ ts.all.data <- ts.all.data %>%
 yd.files <- list.files(yd.data.path,pattern = "*.txt")
 yd.all.data <- data.frame()
 for (i in 1:length(yd.files)) {
-  newfile <- read_csv(paste0(data.path, files[i]),
+  newfile <- read_csv(paste0(yd.data.path, files[i]),
                       col_types = cols(val = col_character()))
   newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
   yd.all.data <- rbind(yd.all.data, newfile)
@@ -384,7 +384,6 @@ yd.all.data <- yd.all.data %>%
         sample_type == "vocal-activity" ~ peak.sample.dur
     ))
 
-
 # Add in segment start time
 yd.mini.clip.info <- select(yd.seg.info, c("aclew_child_id", "val",
   "start.hhmmss", "start.sec", "start.hr", "start")) %>%
@@ -511,6 +510,7 @@ yd.tds.per.seg.rand <- yd.all.data %>%
   replace_na(list(segment_dur = yd.rand.sample.dur, tds_min = 0)) %>%
   mutate(tds_mph = (tds_min/segment_dur)*60) %>%
   arrange(aclew_child_id, segment)
+
 
 # NO-OVERLAP TDS
 # slow, but thorough:
