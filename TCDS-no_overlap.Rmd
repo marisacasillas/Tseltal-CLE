@@ -50,7 +50,49 @@ library(bbmle)
 library(broom.mixed)
 library(lubridate)
 library(magick)
-ssource("0-Helper.R")
+source("0-Helper.R")
+
+# overlap discounter
+get.noovlp.xds <- function(ptcp, nontargetvocs,
+  addressee, cliptype) {
+  xds.utts <- nontargetvocs %>%
+    filter(aclew_child_id == ptcp &
+      sample == cliptype & speaker != "CHI" &
+        grepl("xds@", tier) & val == addressee) %>%
+    mutate(nonovlp.dur = NA)
+  non.xds.utts <- nontargetvocs %>%
+    filter(sample == cliptype &
+        (grepl("xds@", tier) | tier == "CHI") & # include child vocs and ODS
+        val != addressee)
+  for (i in 1:nrow(xds.utts)) {
+    ovlp.utts <- which(
+      non.xds.utts$stop > xds.utts$start[i] &
+        non.xds.utts$start < xds.utts$stop[i])
+    if (length(ovlp.utts) > 0) {
+      # complete overlap
+      if (length(which(
+        non.xds.utts$start[ovlp.utts] <= xds.utts$start[i] &
+        non.xds.utts$stop[ovlp.utts] >= xds.utts$stop[i]
+        )) > 0) {
+          xds.utts$nonovlp.dur[i] <- 0
+      } else { # msec by msec check
+        msec.count <- 0
+        xds.msecs <- xds.utts$start[i]:xds.utts$stop[i]
+        ovlp.msecs <- c()
+        for (j in length(ovlp.utts)) {
+          ovlp.msecs <- c(ovlp.msecs,
+            non.xds.utts$start[ovlp.utts[j]]:non.xds.utts$stop[ovlp.utts[j]])
+        }
+        non.ovlp.msec <- length(which(!(xds.msecs %in% ovlp.msecs))) - 1
+        xds.utts$nonovlp.dur[i] <- ifelse(non.ovlp.msec > 0, non.ovlp.msec, 0)
+      }
+    } else {
+      xds.utts$nonovlp.dur[i] <- xds.utts$dur[i]
+    }
+  }
+  return(xds.utts)
+}
+
 ```
 
 ```{r analysis-presets, include=FALSE}
@@ -80,11 +122,6 @@ col.sample.bu3 <- list(
   scale_fill_manual(labels=samplelabels, values=viridis(3)),
   scale_color_manual(labels=samplelabels, values=viridis(3)))
 
-# for calculating transitions and waking time
-allowed.overlap <- 1000 #ms
-allowed.gap <- 2000 #ms
-waking.hours <- 14
-
 # clip durations
 ts.rand.sample.dur <- 5
 yd.rand.sample.dur <- 2.5
@@ -98,9 +135,9 @@ peak.sample.dur <- 1
 ts.files <- list.files(ts.data.path,pattern = "*.txt")
 ts.all.data <- data.frame()
 for (i in 1:length(ts.files)) {
-  newfile <- read_csv(paste0(ts.data.path, files[i]),
+  newfile <- read_csv(paste0(ts.data.path, ts.files[i]),
                       col_types = cols(val = col_character()))
-  newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
+  newfile$aclew_child_id <- unlist(strsplit(ts.files[i], '\\.'))[1]
   ts.all.data <- rbind(ts.all.data, newfile)
 }
 ts.all.data$row <- c(1:nrow(ts.all.data))
@@ -152,14 +189,14 @@ ts.seg.info <- filter(ts.all.data, tier == "code") %>%
 ts.ptcp.info <- ts.ptcp.info %>%
   mutate(
     tchiyr.m = mean(age_mo_round),
-    motyr.m = mean(mother_age), # diff col name yd
+    motyr.m = mean(mother_age), # diff col nms in yd
     nsb.m = mean(number_older_sibs),
     hsz.m = mean(household_size),
     tchiyr.sd = sd(age_mo_round),
-    motyr.sd = sd(mother_age), # diff col name yd
+    motyr.sd = sd(mother_age), # diff col nms in yd
     nsb.sd = sd(number_older_sibs),
     hsz.sd = sd(household_size)
-    )
+  )
 
 # Merge participant and segment info to the main data table
 ts.codes <- filter(ts.all.data, tier == "code")
@@ -233,7 +270,6 @@ ts.all.data <- ts.all.data %>%
         sample_type == "vocal-activity" ~ peak.sample.dur
     ))
 
-
 # Add in segment start time
 ts.mini.clip.info <- select(ts.seg.info, c("aclew_child_id", "val",
   "start.hhmmss", "start.sec", "start.hr", "start")) %>%
@@ -250,9 +286,9 @@ ts.all.data <- ts.all.data %>%
 yd.files <- list.files(yd.data.path,pattern = "*.txt")
 yd.all.data <- data.frame()
 for (i in 1:length(yd.files)) {
-  newfile <- read_csv(paste0(yd.data.path, files[i]),
+  newfile <- read_csv(paste0(yd.data.path, yd.files[i]),
                       col_types = cols(val = col_character()))
-  newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
+  newfile$aclew_child_id <- unlist(strsplit(yd.files[i], '\\.'))[1]
   yd.all.data <- rbind(yd.all.data, newfile)
 }
 yd.all.data$row <- c(1:nrow(yd.all.data))
@@ -303,14 +339,14 @@ yd.seg.info <- filter(yd.all.data, tier == "code") %>%
 yd.ptcp.info <- yd.ptcp.info %>%
   mutate(
     tchiyr.m = mean(age_mo_round),
-    motyr.m = mean(mat_age), # diff col name ts
+    motyr.m = mean(mat_age), # diff col nms in ts
     nsb.m = mean(number_older_sibs),
     hsz.m = mean(household_size),
     tchiyr.sd = sd(age_mo_round),
-    motyr.sd = sd(mat_age), # diff col name ts
+    motyr.sd = sd(mat_age), # diff col nms in ts
     nsb.sd = sd(number_older_sibs),
     hsz.sd = sd(household_size)
-    )
+  )
 
 # Merge participant and segment info to the main data table
 yd.codes <- filter(yd.all.data, tier == "code")
@@ -424,46 +460,13 @@ ts.tds.per.seg.rand <- ts.all.data %>%
   arrange(aclew_child_id, segment)
 
 # NO-OVERLAP TDS
-# slow, but thorough:
 ts.unique.ptcp <- unique(ts.ptcp.info$aclew_child_id)
 ts.tcds.utts.no.ovlp <- tibble()
 for (ptcp in ts.unique.ptcp) {
-  tcds.utts <- ts.all.data %>%
-    filter(aclew_child_id == ptcp &
-      sample == "random" & speaker != "CHI" &
-        grepl("xds@", tier) & val == "T") %>%
-    mutate(nonovlp.dur = NA)
-  non.tcds.utts <- ts.all.data %>%
-    filter(sample == "random" &
-        (grepl("xds@", tier) | tier == "CHI") & # include child vocs and ODS
-        val != "T")
-  for (i in 1:nrow(tcds.utts)) {
-    ovlp.utts <- which(
-      non.tcds.utts$stop > tcds.utts$start[i] &
-        non.tcds.utts$start < tcds.utts$stop[i])
-    if (length(ovlp.utts) > 0) {
-      # complete overlap
-      if (length(which(
-        non.tcds.utts$start[ovlp.utts] <= tcds.utts$start[i] &
-        non.tcds.utts$stop[ovlp.utts] >= tcds.utts$stop[i]
-        )) > 0) {
-          tcds.utts$nonovlp.dur[i] <- 0
-      } else { # msec by msec check
-        msec.count <- 0
-        tcds.msecs <- tcds.utts$start[i]:tcds.utts$stop[i]
-        ovlp.msecs <- c()
-        for (j in length(ovlp.utts)) {
-          ovlp.msecs <- c(ovlp.msecs,
-            non.tcds.utts$start[ovlp.utts[j]]:non.tcds.utts$stop[ovlp.utts[j]])
-        }
-        non.ovlp.msec <- length(which(!(tcds.msecs %in% ovlp.msecs))) - 1
-        tcds.utts$nonovlp.dur[i] <- ifelse(non.ovlp.msec > 0, non.ovlp.msec, 0)
-      }
-    } else {
-      tcds.utts$nonovlp.dur[i] <- tcds.utts$dur[i]
-    }
-  }
-  ts.tcds.utts.no.ovlp <- bind_rows(ts.tcds.utts.no.ovlp, tcds.utts)
+  ts.tcds.utts.no.ovlp <- bind_rows(
+    ts.tcds.utts.no.ovlp,
+    get.noovlp.xds(ptcp, ts.all.data,
+      "T", "random"))
 }
 
 ts.tds.per.seg.rand.no.ovlp <- ts.tcds.utts.no.ovlp %>%
@@ -517,42 +520,10 @@ yd.tds.per.seg.rand <- yd.all.data %>%
 yd.unique.ptcp <- unique(yd.ptcp.info$aclew_child_id)
 yd.tcds.utyd.no.ovlp <- tibble()
 for (ptcp in yd.unique.ptcp) {
-  tcds.utts <- yd.all.data %>%
-    filter(aclew_child_id == ptcp &
-      sample == "random" & speaker != "CHI" &
-        grepl("xds@", tier) & val == "T") %>%
-    mutate(nonovlp.dur = NA)
-  non.tcds.utts <- yd.all.data %>%
-    filter(sample == "random" &
-        (grepl("xds@", tier) | tier == "CHI") & # include child vocs and ODS
-        val != "T")
-  for (i in 1:nrow(tcds.utts)) {
-    ovlp.utts <- which(
-      non.tcds.utts$stop > tcds.utts$start[i] &
-        non.tcds.utts$start < tcds.utts$stop[i])
-    if (length(ovlp.utts) > 0) {
-      # complete overlap
-      if (length(which(
-        non.tcds.utts$start[ovlp.utts] <= tcds.utts$start[i] &
-        non.tcds.utts$stop[ovlp.utts] >= tcds.utts$stop[i]
-        )) > 0) {
-          tcds.utts$nonovlp.dur[i] <- 0
-      } else { # msec by msec check
-        msec.count <- 0
-        tcds.msecs <- tcds.utts$start[i]:tcds.utts$stop[i]
-        ovlp.msecs <- c()
-        for (j in length(ovlp.utts)) {
-          ovlp.msecs <- c(ovlp.msecs,
-            non.tcds.utts$start[ovlp.utts[j]]:non.tcds.utts$stop[ovlp.utts[j]])
-        }
-        non.ovlp.msec <- length(which(!(tcds.msecs %in% ovlp.msecs))) - 1
-        tcds.utts$nonovlp.dur[i] <- ifelse(non.ovlp.msec > 0, non.ovlp.msec, 0)
-      }
-    } else {
-      tcds.utts$nonovlp.dur[i] <- tcds.utts$dur[i]
-    }
-  }
-  yd.tcds.utyd.no.ovlp <- bind_rows(yd.tcds.utyd.no.ovlp, tcds.utts)
+  yd.tcds.utyd.no.ovlp <- bind_rows(
+    yd.tcds.utyd.no.ovlp,
+    get.noovlp.xds(ptcp, yd.all.data,
+      "T", "random"))
 }
 
 yd.tds.per.seg.rand.no.ovlp <- yd.tcds.utyd.no.ovlp %>%
