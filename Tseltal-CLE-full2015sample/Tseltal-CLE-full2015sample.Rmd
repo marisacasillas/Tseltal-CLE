@@ -1,0 +1,206 @@
+---
+title             : "Título"
+shorttitle        : "Título corto"
+
+author: 
+  - name          : "Marisa Casillas"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "P.O. Box 310, 6500 AH Nijmegen, The Netherlands"
+    email         : "Marisa.Casillas@mpi.nl"
+  - name          : "Juan Méndez Girón"
+    affiliation   : "2"
+  - name          : "Penelope Brown"
+    affiliation   : "1"
+  - name          : "Gilles Polian"
+    affiliation   : "2"
+
+affiliation:
+  - id            : "1"
+    institution   : "Max Planck Institute for Psycholinguistics"
+  - id            : "2"
+    institution   : "Centro de Investigaciones y Estudios Superiores en Antropología Social"
+
+#author_note: |
+#  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+abstract: |
+  A hacer
+
+keywords          : "Desarrollo de lenguaje, habla dirigida al niño, input lingüistico, Tseltal, Maya"
+wordcount         : "XXXX (XXXX sin bibliografía)"
+
+csl: apa-noissue.csl
+
+bibliography      : ["Tseltal-CLE-full2015sample.bib"]
+
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+mask              : no
+
+class             : "man"
+output            : papaja::apa6_pdf #apa6_pdf or apa6_word
+---
+
+```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
+library(papaja)
+library(ggplot2)
+library(tidyverse)
+library(viridis)
+library(grid)
+library(gridExtra)
+library(lme4)
+library(glmmTMB)
+library(DHARMa)
+library(bbmle)
+library(broom.mixed)
+source("0-Helper.R")
+```
+
+```{r analysis_presets, include=FALSE}
+options(scipen=999)
+data.path <- "transcripts/anon/" # text files exported from ELAN
+metadata.path <- "metadata/"
+plot.path <- "plots/" # output plots
+shiny.input.path <- "../shiny_input/Tseltal-CLE-full2015sample"
+shiny.input.img.path <- "../www/Tseltal-CLE-full2015sample"
+seg.index.file <- paste0(metadata.path, "Segment-order-inventory.csv")
+ptcp.info.file <- paste0(metadata.path, "recording-info.csv")
+comparison.file <- paste0(metadata.path, "comparison_studies.csv")
+samplelabels <- c("High activity  ", "Random  ")
+col.sample.bu <- list(
+  scale_fill_manual(labels=samplelabels, values=viridis(2)),
+  scale_color_manual(labels=samplelabels, values=viridis(2)))
+col.sample.bu3 <- list(
+  scale_fill_manual(labels=samplelabels, values=viridis(3)),
+  scale_color_manual(labels=samplelabels, values=viridis(3)))
+allowed.overlap <- 1000 #ms
+allowed.gap <- 2000 #ms
+waking.hours <- 14
+```
+
+```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Read in annotation files
+files <- list.files(path = data.path,pattern="*.txt")
+all.data <- data.frame()
+for (i in 1:length(files)) {
+#  print(files[i])
+  newfile <- read_csv(paste0(data.path, files[i]),
+                      col_types = cols(val = col_character()))
+  newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
+  all.data <- rbind(all.data, newfile)
+}
+all.data$row <- c(1:nrow(all.data))
+
+# Read in supplementary data
+ptcp.info <- read_csv(ptcp.info.file, col_types = cols()) %>%
+  dplyr::select(-row)
+seg.info <- read_csv(seg.index.file)
+
+# Extract and convert start time of each sample
+seg.info$start.hhmmss <- regmatches(seg.info$Media,
+                                    regexpr("[[:digit:]]{6}", seg.info$Media))
+seg.info$start.sec <- as.numeric(substr(seg.info$start.hhmmss,1,2))*3600 +
+  as.numeric(substr(seg.info$start.hhmmss,3,4))*60 +
+  as.numeric(substr(seg.info$start.hhmmss,5,6))
+seg.info$start.hr <- round(seg.info$start.sec/3600, 3)
+
+seg.info$clipoffset.hhmmss <- regmatches(seg.info$Media,
+                                    regexpr("(?<=[[:digit:]]{6}_)[[:digit:]]{6}",
+                                            seg.info$Media, perl = TRUE))
+seg.info$clipoffset.sec <- as.numeric(substr(seg.info$clipoffset.hhmmss,1,2))*3600 +
+  as.numeric(substr(seg.info$clipoffset.hhmmss,3,4))*60 +
+  as.numeric(substr(seg.info$clipoffset.hhmmss,5,6))
+seg.info$clipoffset.hr <- round(seg.info$clipoffset.sec/3600, 3)
+
+# Add mean and sd values for participant-level predictors to ptcp.info
+ptcp.info <- ptcp.info %>%
+  mutate(
+    tchiyr.m = mean(age_mo_round),
+    motyr.m = mean(mother_age),
+    nsb.m = mean(number_older_sibs),
+    hsz.m = mean(household_size),
+    tchiyr.sd = sd(age_mo_round),
+    motyr.sd = sd(mother_age),
+    nsb.sd = sd(number_older_sibs),
+    hsz.sd = sd(household_size)
+    )
+
+# Merge in participant and segment info to the main data table
+codes <- all.data %>% filter(tier == "code")
+
+all.data <- all.data %>%
+  filter(speaker != "") %>%
+  left_join(ptcp.info, by = "aclew_child_id") %>%
+  mutate(segment = "", sample = "",
+         sample_type = "", segment_dur = 0)
+
+for (i in 1:nrow(codes)) {
+  rec <- codes$aclew_child_id[i]
+  seg <- as.character(codes$val[i])
+  seg.on <- codes$start[i]
+  seg.off <- codes$stop[i]
+  seg.idx <- which(all.data$aclew_child_id == rec &
+                     all.data$start < seg.off &
+                     all.data$stop > seg.on)
+  all.data$segment[seg.idx] <- seg
+}
+
+# Label samples
+all.data$sample[which(
+  grepl('^random', all.data$segment))] <- "random"
+all.data$sample[which(
+  grepl('tt', all.data$segment))] <- "turn-taking"
+all.data$sample[which(
+  grepl('va', all.data$segment))] <- "high-activity"
+
+# Label sample types and durations
+random.samples <- which(grepl('^random', all.data$segment))
+all.data$sample_type[random.samples] <- "random"
+all.data$segment_dur[random.samples] <- 5
+
+ext.samples <- which(grepl('^extension', all.data$segment))
+all.data$sample_type[ext.samples] <- "extension"
+all.data$segment_dur[ext.samples] <- 5
+
+tt.samples <- which(grepl('^tt', all.data$segment))
+all.data$sample_type[tt.samples] <- "turn-taking"
+all.data$segment_dur[tt.samples] <- 1
+
+va.samples <- which(grepl('^va', all.data$segment))
+all.data$sample_type[va.samples] <- "high-activity"
+all.data$segment_dur[va.samples] <- 1
+
+# Add in segment start time
+all.data <- all.data %>%
+  left_join(dplyr::select(seg.info, c("aclew_id", "CodeName", "start.hhmmss",
+                                      "start.sec", "start.hr")),
+            by = c("aclew_child_id" = "aclew_id", "segment" = "CodeName"))
+
+avg.utt.len.tseltal <- all.data %>%
+  filter(speaker != "CHI") %>%
+  dplyr::select(dur) %>%
+  summarise(mean.utt.len = mean(dur),
+            median.utt.len = median(dur))
+```
+
+# Acknowledgements {#acknowledgements}
+<!--We thank and acknowledge Rebeca Guzmán López, Humbertina Gómez Pérez, and Antun Gusman Osil, who helped make the collection and annotation of these recordings possible. We are also enormously grateful to the participating families and to the community at large for their support. This work is supported by a NWO Veni Innovational Scheme grant (275-89-033) to MC, by XXX Melanie grant, and by fieldwork and transcription funding from the Max Planck Institute for Psycholinguistics. This paper was written using the papaja library in RStudio [@R-papaja].-->
+
+\newpage
+
+# References {#refs}
+
+```{r create_r-references}
+r_refs(file = "Tseltal-CLE-full2015sample.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
