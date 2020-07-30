@@ -138,6 +138,12 @@ avg.utt.len.tseltal <- all.data %>%
             median.utt.len = median(dur))
 ```
 
+# Introducción
+
+Alrededor del mundo, los niños aprenden su lengua materna a través de las interacciones verbales que observan y en las cuales participan, en el hogar y en la escuela. Estudios anteriores han establecido que el desarrollo del lenguaje sucede más temprano y se acelera más rapido si los padres del niño hablan directa y frequentemente con él, con un estilo apropriado para su nivel de sofisticación lingüístico y cognitivo [Habla Dirigida al Niño, HDN; REFS]. En particular, los niños que oyen más habla dirigida así a ellos desarrollen más rapidamente su conocimiento lexical; producen y compreden más palabras que niños con menos HDN, y reconecen más rapidamente las palabras [REFS]. Sabemos también que el conocimiento lexical influye en la adquición y uso del conocimiento sintáctico [REFS]. En resumidas palabras, el HDN es un mecanism fundamental para aprender el lenguaje. Sin embargo, este mecanismo no permite establecer cuanto HDN es necesario para la adquisición del lenguaje. Estudios basados en interacciones cortas y modelos teóricos y computacionales, sugieren que la cantidad de evidencia lingüística requerida para el desarrollo normal del lenguaje sea inmenso. Pero evidencia sociolingüística y antropológica sugiere, lo contrario, que: hay muchas maneras de acumular evidencia lingüística del ambiente familiar, que hablar directamente a niños es muy común a través de las sociedades humánas, y que mucha HDN es una invención moderna y occidental [REFS].
+
+
+
 # Acknowledgements {#acknowledgements}
 <!--We thank and acknowledge Rebeca Guzmán López, Humbertina Gómez Pérez, and Antun Gusman Osil, who helped make the collection and annotation of these recordings possible. We are also enormously grateful to the participating families and to the community at large for their support. This work is supported by a NWO Veni Innovational Scheme grant (275-89-033) to MC, by XXX Melanie grant, and by fieldwork and transcription funding from the Max Planck Institute for Psycholinguistics. This paper was written using the papaja library in RStudio [@R-papaja].-->
 
