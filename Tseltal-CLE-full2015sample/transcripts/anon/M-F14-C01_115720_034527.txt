@@ -1,0 +1,4 @@
+tier,speaker,start,stop,dur,val
+CHI,NA,178630,181220,2590,NO-HAY-PALABRAS
+comentarios,NA,0,1210,1210,el niño está durmiendo
+comentarios,NA,178630,181220,2590,está durmiendo

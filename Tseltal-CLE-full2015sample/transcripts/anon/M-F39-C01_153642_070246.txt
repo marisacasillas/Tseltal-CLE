@@ -1,0 +1,2 @@
+tier,speaker,start,stop,dur,val
+comentarios,NA,0,1370,1370,la niña no dice nada en estes minutos

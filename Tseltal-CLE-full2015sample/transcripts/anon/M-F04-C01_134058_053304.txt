@@ -1,0 +1,6 @@
+tier,speaker,start,stop,dur,val
+CHI,NA,1800,2110,310,0.
+CHI,NA,288600,288840,240,0.
+comentarios,NA,0,1070,1070,el niño está durmiendo pero hace unos ruidos
+tlsp@CHI,NA,1800,2110,310,0.
+tlsp@CHI,NA,288600,288840,240,0.

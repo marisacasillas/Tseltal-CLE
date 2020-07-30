@@ -1,0 +1,2 @@
+tier,speaker,start,stop,dur,val
+comentarios,NA,0,1030,1030,la niña está durmiendo

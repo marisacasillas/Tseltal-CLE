@@ -1,0 +1,2 @@
+tier,speaker,start,stop,dur,val
+comentarios,NA,20,1360,1340,no dice nada!

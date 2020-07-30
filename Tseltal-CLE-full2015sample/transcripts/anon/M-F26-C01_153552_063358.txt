@@ -1,0 +1,2 @@
+tier,speaker,start,stop,dur,val
+comentarios,NA,0,1300,1300,el niño está durmiendo

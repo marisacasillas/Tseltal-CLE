@@ -1,0 +1,2 @@
+tier,speaker,start,stop,dur,val
+comentarios,NA,0,1210,1210,no habla  en este audio. creo que quizás el niño no está llevando la grabadora. puede ser que está durmiendo.
