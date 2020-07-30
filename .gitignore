@@ -2,6 +2,8 @@
 *.mp3
 *.mp4
 *.001
+*.eaf
+*.pfsx
 .DS_Store
 .DS_Store?
 ._*
@@ -9,6 +11,6 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
-*/raw/
+Tseltal-CLE-full2015sample/transcripts/raw/
 transcripts/raw/
 core_readings/
