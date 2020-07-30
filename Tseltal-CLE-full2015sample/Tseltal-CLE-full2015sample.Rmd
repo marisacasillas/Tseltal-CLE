@@ -57,7 +57,7 @@ library(glmmTMB)
 library(DHARMa)
 library(bbmle)
 library(broom.mixed)
-source("0-Helper.R")
+source("../0-Helper.R")
 ```
 
 ```{r analysis_presets, include=FALSE}
@@ -69,17 +69,13 @@ shiny.input.path <- "../shiny_input/Tseltal-CLE-full2015sample"
 shiny.input.img.path <- "../www/Tseltal-CLE-full2015sample"
 seg.index.file <- paste0(metadata.path, "Segment-order-inventory.csv")
 ptcp.info.file <- paste0(metadata.path, "recording-info.csv")
-comparison.file <- paste0(metadata.path, "comparison_studies.csv")
-samplelabels <- c("High activity  ", "Random  ")
-col.sample.bu <- list(
-  scale_fill_manual(labels=samplelabels, values=viridis(2)),
-  scale_color_manual(labels=samplelabels, values=viridis(2)))
-col.sample.bu3 <- list(
-  scale_fill_manual(labels=samplelabels, values=viridis(3)),
-  scale_color_manual(labels=samplelabels, values=viridis(3)))
-allowed.overlap <- 1000 #ms
-allowed.gap <- 2000 #ms
-waking.hours <- 14
+
+convert_hhmmss_to_dt <- function(t) {
+  dt <- lubridate::as_datetime(lubridate::hms(paste0(
+    substr(t, 1, 2), ":", substr(t, 3, 4), ":", substr(t, 5, 6))))
+  return(dt)
+}
+
 ```
 
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
@@ -90,31 +86,21 @@ for (i in 1:length(files)) {
 #  print(files[i])
   newfile <- read_csv(paste0(data.path, files[i]),
                       col_types = cols(val = col_character()))
-  newfile$aclew_child_id <- unlist(strsplit(files[i], '\\.'))[1]
+  newfile$child_id <- unlist(strsplit(files[i], '\\_'))[1]
+  newfile$seg_start_tod <- convert_hhmmss_to_dt(
+    unlist(strsplit(files[i], '\\_'))[2])
+  newfile$seg_start_rec <- convert_hhmmss_to_dt(
+    unlist(strsplit(files[i], '[\\_\\.]'))[3])
   all.data <- rbind(all.data, newfile)
 }
 all.data$row <- c(1:nrow(all.data))
 
 # Read in supplementary data
 ptcp.info <- read_csv(ptcp.info.file, col_types = cols()) %>%
-  dplyr::select(-row)
-seg.info <- read_csv(seg.index.file)
-
-# Extract and convert start time of each sample
-seg.info$start.hhmmss <- regmatches(seg.info$Media,
-                                    regexpr("[[:digit:]]{6}", seg.info$Media))
-seg.info$start.sec <- as.numeric(substr(seg.info$start.hhmmss,1,2))*3600 +
-  as.numeric(substr(seg.info$start.hhmmss,3,4))*60 +
-  as.numeric(substr(seg.info$start.hhmmss,5,6))
-seg.info$start.hr <- round(seg.info$start.sec/3600, 3)
-
-seg.info$clipoffset.hhmmss <- regmatches(seg.info$Media,
-                                    regexpr("(?<=[[:digit:]]{6}_)[[:digit:]]{6}",
-                                            seg.info$Media, perl = TRUE))
-seg.info$clipoffset.sec <- as.numeric(substr(seg.info$clipoffset.hhmmss,1,2))*3600 +
-  as.numeric(substr(seg.info$clipoffset.hhmmss,3,4))*60 +
-  as.numeric(substr(seg.info$clipoffset.hhmmss,5,6))
-seg.info$clipoffset.hr <- round(seg.info$clipoffset.sec/3600, 3)
+  dplyr::select(c(aclew_id, child_level_id, sharing_environment,
+                  lab_internal_subject_id, age_mo_round, child_sex,
+                  mat_ed, fat_ed, std_length_of_recording, start_of_recording,
+                  number_older_sibs, mother_age, father_age, household_size))
 
 # Add mean and sd values for participant-level predictors to ptcp.info
 ptcp.info <- ptcp.info %>%
@@ -129,59 +115,24 @@ ptcp.info <- ptcp.info %>%
     hsz.sd = sd(household_size)
     )
 
+# Mini summary of annotated segments per rec
+seg.info <- all.data %>%
+  select(c(child_id, seg_start_tod)) %>%
+  distinct() %>%
+  group_by(child_id) %>%
+  mutate(
+    segment_num = row_number(),
+    segment_dur_min = 5) %>%
+  ungroup()
+
 # Merge in participant and segment info to the main data table
-codes <- all.data %>% filter(tier == "code")
-
 all.data <- all.data %>%
-  filter(speaker != "") %>%
-  left_join(ptcp.info, by = "aclew_child_id") %>%
-  mutate(segment = "", sample = "",
-         sample_type = "", segment_dur = 0)
-
-for (i in 1:nrow(codes)) {
-  rec <- codes$aclew_child_id[i]
-  seg <- as.character(codes$val[i])
-  seg.on <- codes$start[i]
-  seg.off <- codes$stop[i]
-  seg.idx <- which(all.data$aclew_child_id == rec &
-                     all.data$start < seg.off &
-                     all.data$stop > seg.on)
-  all.data$segment[seg.idx] <- seg
-}
-
-# Label samples
-all.data$sample[which(
-  grepl('^random', all.data$segment))] <- "random"
-all.data$sample[which(
-  grepl('tt', all.data$segment))] <- "turn-taking"
-all.data$sample[which(
-  grepl('va', all.data$segment))] <- "high-activity"
-
-# Label sample types and durations
-random.samples <- which(grepl('^random', all.data$segment))
-all.data$sample_type[random.samples] <- "random"
-all.data$segment_dur[random.samples] <- 5
-
-ext.samples <- which(grepl('^extension', all.data$segment))
-all.data$sample_type[ext.samples] <- "extension"
-all.data$segment_dur[ext.samples] <- 5
-
-tt.samples <- which(grepl('^tt', all.data$segment))
-all.data$sample_type[tt.samples] <- "turn-taking"
-all.data$segment_dur[tt.samples] <- 1
-
-va.samples <- which(grepl('^va', all.data$segment))
-all.data$sample_type[va.samples] <- "high-activity"
-all.data$segment_dur[va.samples] <- 1
-
-# Add in segment start time
-all.data <- all.data %>%
-  left_join(dplyr::select(seg.info, c("aclew_id", "CodeName", "start.hhmmss",
-                                      "start.sec", "start.hr")),
-            by = c("aclew_child_id" = "aclew_id", "segment" = "CodeName"))
+  filter((tier == "CHI" | tier == "OTR") & !grepl("NO-HAY-PALABRAS", val)) %>%
+  left_join(ptcp.info, by = c("child_id" = "lab_internal_subject_id")) %>%
+  left_join(seg.info, by = c("child_id", "seg_start_tod"))
 
 avg.utt.len.tseltal <- all.data %>%
-  filter(speaker != "CHI") %>%
+  filter(tier == "OTR") %>%
   dplyr::select(dur) %>%
   summarise(mean.utt.len = mean(dur),
             median.utt.len = median(dur))
