@@ -162,12 +162,25 @@ Un estudio anterior ha usado grabaciones daylong con niños tseltales para estim
 
 Presentamos aquí una replicación y extensión considerable del estudio de Casillas et al. (2019): investigamos la velocidad de HDN usado por cuidadores adultos y jovenes con 56 niños tseltales entre 2 y 52 meses de edad, incluyendo los 10 niños destacados en el estudio anterior. Usando lo mismo técnico---anotar y transcribir segmentos cortos aleatoriamente del día de grabar---esperábamos que (a) in general, la velocidad de HDN no cambia significamente con la edad del niño, (b) HDN de otros niños aumenta significamente con la edad del niño y, como antes, (c) niños encuentran HDN más frecuentamente en la mañana, con niños más grande oyendo mas HDN cercal del mediodía.<!-- Especulamos también que niños que oigaron más HDN tendrían vocabularios productivos y receptivos más grandes. Testamos esta predicción indirectamente por relacionar la velocidad de HDN de niños individuales con la diversidad de vocbaulario en su habla spontanea de los segmentos transcribados.-->
 
-# Acknowledgements {#acknowledgements}
+<!--
+Censue notes
+de: http://webcache.googleusercontent.com/search?q=cache:BHXsAGj22NgJ:www.microrregiones.gob.mx/catloc/contenido.aspx?refnac%3D070930014&hl=en&gl=nl&strip=1&vwsrc=0
+
+Año	2005	2010
+Datos demográficos	Hombres	Mujeres	Total	Hombres	Mujeres	Total
+Total de población en la localidad	557	542	1,099	560	556	1,116
+Viviendas particulares habitadas	182	217
+Grado de marginación de la localidad (Ver indicadores)	Alto	Alto
+Grado de rezago social localidad (Ver indicadores)	3 medio	Medio
+Indicadores de carencia en vivienda (Ver indicadores)	
+-->
+
+# Agradecimientos {#acknowledgements}
 Agredecemos y reconocemos Rebeca Guzmán López, Humbertina Gómez Pérez, e Antun Gusman Osil, los quienes hicieron posible la colección, anotación, y transcripción de estes datos. Acknowledgements también las familias participantes y la comunidad tseltal para su apoyo. Esta investigación fue financiado por una beca NWO Veni (275-89-033) de MC, una beca XXX de MS, fundos para trabajo de campo del Max Planck Institute for Psycholinguistics, y con el apoyo del Centro de Investigaciones y Estudios Superiores en Antropología Social (CIESAS) Sureste. Este manuscrito fue escrito con el library papaja en RStudio [@R-papaja].
 
 \newpage
 
-# References {#refs}
+# Bibliografía {#refs}
 
 ```{r create_r-references}
 r_refs(file = "Tseltal-CLE-full2015sample.bib")
