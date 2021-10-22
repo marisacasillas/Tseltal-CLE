@@ -59,19 +59,19 @@ library(gridExtra)
 library(lme4)
 library(glmmTMB)
 library(DHARMa)
-library(bbmle)
+# library(bbmle)
 library(broom.mixed)
 source("../0-Helper.R")
 ```
 
 ```{r analysis_presets, include=FALSE}
-options(scipen=999)
+# options(scipen=999)
 data.path <- "transcripts/anon/" # text files exported from ELAN
 metadata.path <- "metadata/"
 plot.path <- "plots/" # output plots
-shiny.input.path <- "../shiny_input/Tseltal-CLE-full2015sample"
-shiny.input.img.path <- "../www/Tseltal-CLE-full2015sample"
-seg.index.file <- paste0(metadata.path, "Segment-order-inventory.csv")
+# shiny.input.path <- "../shiny_input/Tseltal-CLE-full2015sample"
+# shiny.input.img.path <- "../www/Tseltal-CLE-full2015sample"
+# seg.index.file <- paste0(metadata.path, "Segment-order-inventory.csv")
 ptcp.info.file <- paste0(metadata.path, "recording-info.csv")
 
 convert_hhmmss_to_dt <- function(t) {
@@ -86,8 +86,8 @@ convert_hhmmss_to_dt <- function(t) {
 # Read in annotation files
 files <- list.files(path = data.path,pattern="*.txt")
 all.data <- data.frame()
+
 for (i in 1:length(files)) {
-#  print(files[i])
   newfile <- read_csv(paste0(data.path, files[i]),
                       col_types = cols(val = col_character()))
   newfile$child_id <- unlist(strsplit(files[i], '\\_'))[1]
@@ -129,6 +129,46 @@ seg.info <- all.data %>%
     segment_dur_min = 5) %>%
   ungroup()
 
+##########
+quantity.rand <- quantity.rand %>%
+  mutate(
+    xds_mph.nz = ifelse(xds_mph > 0, 1, 0),
+    ods_mph.nz = ifelse(ods_mph > 0, 1, 0),
+    tds_mph.nz = ifelse(tds_mph > 0, 1, 0),
+    cds_mph.nz = ifelse(cds_mph > 0, 1, 0),
+    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
+    chisx.std = recode_factor(child_sex,
+                              "M" = "M", "F" = "F"),
+    mated.std = recode_factor(mat_ed,
+                              "none" = "none", "primary" = "primary",
+                              "secondary" = "secondary", "preparatory" = "preparatory"),
+    mated.bin = recode_factor(mat_ed,
+                              "none" = "0-5", "primary" = "0-5",
+                              "secondary" = "6+", "preparatory" = "6+"),
+    motyr.std = ((mother_age - motyr.m)/motyr.sd),
+    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
+    hsz.std = ((household_size - hsz.m)/hsz.sd),
+    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday")))
+quantity.rand$stthr.tri <- factor(quantity.rand$stthr.tri,
+                                  levels = c("midday", "morning", "afternoon"))
+quantity.rand$stthr.tri.a <- factor(quantity.rand$stthr.tri,
+                                  levels = c("afternoon", "midday", "morning"))
+quantity.rand$stthr.tri.o <- factor(quantity.rand$stthr.tri,
+                                  levels = c("morning", "afternoon", "midday"))
+
+
+
+
+
+
+
+
+
+##########
+
 # Merge in participant and segment info to the main data table
 all.data <- all.data %>%
   filter((tier == "CHI" | tier == "OTR") & !grepl("NO-HAY-PALABRAS", val)) %>%
@@ -140,6 +180,130 @@ avg.utt.len.tseltal <- all.data %>%
   dplyr::select(dur) %>%
   summarise(mean.utt.len = mean(dur),
             median.utt.len = median(dur))
+```
+
+```{r summarizedata}
+# Create full matrices of annotated clips
+aclew2child_id <- all.data %>%
+  select(aclew_id, child_id) %>%
+  distinct()
+
+all.clips <- expand.grid(
+  aclew_id = unique(ptcp.info$aclew_id),
+  segment_num = c(1:9),
+  tier = c("CHI", "OTR")) %>%
+  full_join(aclew2child_id, by = "aclew_id") %>%
+  filter(!is.na(child_id))
+
+# Create summaries, adding in zeroes for annotated clips with no speech
+# ... at the clip level and
+seg.lvl.summary <- all.data %>%
+  filter(tier == "OTR" | tier == "CHI") %>%
+  group_by(child_id, tier, segment_num, seg_start_tod) %>%
+  summarize(
+    tot.spch.min = sum(dur)/60000,
+    min.p.hr = tot.spch.min*12
+  ) %>%
+  full_join(all.clips, by = c("segment_num", "child_id", "tier")) %>%
+  left_join(ptcp.info, by = "aclew_id") %>%
+  left_join(seg.info, by = c("child_id", "seg_start_tod", "segment_num")) %>%
+  replace_na(list(tot.spch.min = 0, min.p.hr = 0)) %>%
+  arrange(aclew_id, tier, segment_num)
+
+# ... then with averages across clips at the recording level
+rec.lvl.summary <- seg.lvl.summary %>%
+  group_by(child_id, tier) %>%
+  summarize(
+    mean.mph = mean(min.p.hr),
+    median.mph = median(min.p.hr),
+    min.mph = min(min.p.hr),
+    max.mph = max(min.p.hr),
+    sd.mph = sd(min.p.hr)
+  ) %>%
+  left_join(ptcp.info, by = c("child_id" = "lab_internal_subject_id"))
+
+```
+
+```{r getkeydescstats}
+rec.lvl.summary.otr <- subset(rec.lvl.summary, tier == "OTR")
+mean.tph <- mean(rec.lvl.summary.otr$mean.mph)
+median.tph <- median(rec.lvl.summary.otr$median.mph)
+mean.median.tph <- mean(rec.lvl.summary.otr$median.mph)
+min.tph <- min(rec.lvl.summary.otr$mean.mph)
+max.tph <- max(rec.lvl.summary.otr$mean.mph)
+```
+
+```{r plotdata}
+ggplot(data = seg.lvl.summary,
+       aes(x = min.p.hr)) +
+  facet_grid(~ tier) +
+  geom_histogram()
+
+
+all.spch.mph.plot <- ggplot(data = seg.lvl.summary,
+       aes(x = age_mo_round, y = min.p.hr, color = aclew_id)) +
+  facet_grid(~ tier) +
+  geom_smooth(method = "lm", color = "gray") +
+  geom_boxplot(outlier.fill = NA) +
+  geom_jitter() +
+  scale_x_continuous(limits = c(0,40),
+                     breaks = seq(0,40,5)) +
+  scale_y_continuous(limits = c(0,30),
+                     breaks = seq(0,30,5)) + # cuts off a few clear outliers
+  # scale_y_continuous(limits = c(0,60),
+                     # breaks = seq(0,60,5)) +
+  coord_cartesian(xlim = c(0,40), ylim = c(0,30)) +
+  labs(x = "Age (months)", y = "min/hr") +
+  guides(color = "none") +
+  theme_apa()
+
+all.spch.mph.plot
+
+# corr btwn OTR and CHI
+  
+```
+
+```{r regression}
+## TCDS ####
+tcds.random.distribution <- ggplot(subset(seg.lvl.summary, tier == "OTR"),
+                            aes(round(min.p.hr,0))) +
+  geom_histogram(binwidth = 2) +
+  ylab("# of clips") +
+  xlab ("TCDS min/hr") +
+  basic.theme
+ggsave("TCDS_random_distribution.png",
+       plot = tcds.random.distribution,
+       width = 8, height = 6, dpi = 300)
+#sd(round(subset(seg.lvl.summary, tier == "OTR")$min.p.hr,0))^2
+#mean(round(subset(seg.lvl.summary, tier == "OTR")$min.p.hr,0))
+# mean is much smaller than variance
+tds.rand.zinb <- glmmTMB(round(min.p.hr,0) ~
+                           age_mo_round *
+                           mat_ed +
+                           (1|child_id),
+                         data=subset(seg.lvl.summary, tier == "OTR"),
+                         ziformula=~age_mo_round,
+                         family="nbinom1")
+
+
+
+tds.rand.zinb <- glmmTMB(round(min.p.hr,0) ~
+                           tchiyr.std +
+                           stthr.tri +
+                           hsz.std +
+                           nsk.std +
+                           tchiyr.std:stthr.tri +
+                           tchiyr.std:nsk.std +
+                           (1|child_id),
+                         data=subset(seg.lvl.summary, tier == "OTR"),
+                         ziformula=~nsk.std,
+                         family="nbinom1")
+
+otr.m <- lmer(min.p.hr ~
+                 age_mo_round * mat_ed + (1|child_id),
+               data = subset(seg.lvl.summary, tier == "OTR"))
+summary(otr.m)
+
 ```
 
 # Introducción
