@@ -51,13 +51,13 @@ output            : papaja::apa6_pdf #apa6_pdf or apa6_word
 
 <!--
 TO DO:
-- add in other ptcp info
 - add/check ToD
 -->
 
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
 library(papaja)
 library(ggplot2)
+library(ggpubr)
 library(tidyverse)
 library(viridis)
 library(grid)
@@ -82,7 +82,9 @@ utt.info <- read_csv("all.CHI.OTR.utterances.csv")
 clip.info <- read_csv("all.annotated.clips.csv")
 rec.info <- read_csv("metadata/rec-metadata.csv") %>%
   filter(source != "ACLEW") %>%
-  select(recording, age, sex, aclew_id)
+  select(recording, age, sex,
+         mat_ed, number_older_sibs, mother_dob,
+         household_size, aclew_id)
 
 # Create full matrix of annotated clips for CHI and OTR tiers
 all.clips.CHIOTR.tiers <- bind_rows(
@@ -94,16 +96,16 @@ all.clips.CHIOTR.tiers <- bind_rows(
 rec.info.stds <- rec.info %>%
   mutate(
     tchiyr.m = mean(age),
-    # motyr.m = mean(mother_age),
-    # nsb.m = mean(number_older_sibs),
-    # hsz.m = mean(household_size),
+    motyr.m = mean(mother_dob),
+    nsb.m = mean(number_older_sibs),
+    hsz.m = mean(household_size),
     tchiyr.sd = sd(age),
-    # motyr.sd = sd(mother_age),
-    # nsb.sd = sd(number_older_sibs),
-    # hsz.sd = sd(household_size),
+    motyr.sd = sd(mother_dob),
+    nsb.sd = sd(number_older_sibs),
+    hsz.sd = sd(household_size),
     tchiyr.std = ((age - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(sex,
-                              "M" = "M", "F" = "F"),
+    chisx.std = recode_factor(
+      sex, "M" = "M", "F" = "F"),
     )
 
 ```
@@ -115,7 +117,7 @@ clip.summary <- utt.info %>%
   group_by(recording, tier.name, clip.onset) %>%
   summarize(
     tot.spch.min = sum(dur.sec)/60,
-    min.p.hr = tot.spch.min*12
+    min.p.hr = tot.spch.min*(60/clip.dur.min)
   ) %>%
   full_join(all.clips.CHIOTR.tiers,
             by = c("recording", "tier.name", "clip.onset")) %>%
@@ -125,28 +127,29 @@ clip.summary <- utt.info %>%
   # add non-zero marker
   mutate(
     nz.spch = ifelse(min.p.hr > 0, 1, 0)
-  ) #%>%
+  ) %>%
   # add standardized/recoded predictors
-  # mutate(
-  #   mated.std = recode_factor(mat_ed,
-  #                             "none" = "none",
-  #                             "primary" = "primary",
-  #                             "secondary" = "secondary",
-  #                             "preparatory" = "preparatory"),
-  #   mated.bin = recode_factor(mat_ed,
-  #                             "none" = "0-5", "primary" = "0-5",
-  #                             "secondary" = "6+", "preparatory" = "6+"),
-  #   motyr.std = ((mother_age - motyr.m)/motyr.sd),
-  #   nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-  #   hsz.std = ((household_size - hsz.m)/hsz.sd),
+  mutate(
+    mated.std = recode_factor(mat_ed,
+                              "none" = "none",
+                              "primary" = "primary",
+                              "secondary" = "secondary",
+                              "preparatory" = "preparatory"),
+    mated.bin = recode_factor(mat_ed,
+                              "none" = "0-5", "primary" = "0-5",
+                              "secondary" = "6+", "preparatory" = "6+"),
+    motyr.std = ((mother_dob - motyr.m)/motyr.sd),
+    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
+    hsz.std = ((household_size - hsz.m)/hsz.sd)#,
   #   stthr.std = (start.hr - 12)/12,
   #   stthr.tri = ifelse(start.hr < 11, "morning",
   #                      ifelse(start.hr > 13, "afternoon", "midday"))
-  # )
+  )
     
 # ... then with averages across clips at the recording level
 rec.summary <- clip.summary %>%
-  group_by(aclew_id, tier.name) %>%
+  group_by(aclew_id, tier.name,
+           mated.std, mated.bin, motyr.std, nsb.std, hsz.std) %>%
   summarize(
     mean.mph = mean(min.p.hr),
     median.mph = median(min.p.hr),
