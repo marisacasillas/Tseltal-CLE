@@ -1,2 +1,0 @@
-tier,speaker,start,stop,dur,val
-comentarios,NA,0,1250,1250,el niño está durmiendo y no habla

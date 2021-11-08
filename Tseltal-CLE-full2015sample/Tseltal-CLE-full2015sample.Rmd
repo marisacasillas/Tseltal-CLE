@@ -49,6 +49,12 @@ class             : "man"
 output            : papaja::apa6_pdf #apa6_pdf or apa6_word
 ---
 
+<!--
+TO DO:
+- add in other ptcp info
+- add/check ToD
+-->
+
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
 library(papaja)
 library(ggplot2)
@@ -65,202 +71,191 @@ source("../0-Helper.R")
 ```
 
 ```{r analysis_presets, include=FALSE}
-# options(scipen=999)
-data.path <- "transcripts/anon/" # text files exported from ELAN
-metadata.path <- "metadata/"
-plot.path <- "plots/" # output plots
-# shiny.input.path <- "../shiny_input/Tseltal-CLE-full2015sample"
-# shiny.input.img.path <- "../www/Tseltal-CLE-full2015sample"
-# seg.index.file <- paste0(metadata.path, "Segment-order-inventory.csv")
-ptcp.info.file <- paste0(metadata.path, "recording-info.csv")
-
-convert_hhmmss_to_dt <- function(t) {
-  dt <- lubridate::as_datetime(lubridate::hms(paste0(
-    substr(t, 1, 2), ":", substr(t, 3, 4), ":", substr(t, 5, 6))))
-  return(dt)
-}
+plot.path <- "plots/"
+clip.dur.min <- 5
 
 ```
 
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-# Read in annotation files
-files <- list.files(path = data.path,pattern="*.txt")
-all.data <- data.frame()
+# Read in utterance data and metadata
+utt.info <- read_csv("all.CHI.OTR.utterances.csv")
+clip.info <- read_csv("all.annotated.clips.csv")
+rec.info <- read_csv("metadata/rec-metadata.csv") %>%
+  filter(source != "ACLEW") %>%
+  select(recording, age, sex, aclew_id)
 
-for (i in 1:length(files)) {
-  newfile <- read_csv(paste0(data.path, files[i]),
-                      col_types = cols(val = col_character()))
-  newfile$child_id <- unlist(strsplit(files[i], '\\_'))[1]
-  newfile$seg_start_tod <- convert_hhmmss_to_dt(
-    unlist(strsplit(files[i], '\\_'))[2])
-  newfile$seg_start_rec <- convert_hhmmss_to_dt(
-    unlist(strsplit(files[i], '[\\_\\.]'))[3])
-  all.data <- rbind(all.data, newfile)
-}
-all.data$row <- c(1:nrow(all.data))
+# Create full matrix of annotated clips for CHI and OTR tiers
+all.clips.CHIOTR.tiers <- bind_rows(
+  mutate(clip.info, tier.name = "CHI"),
+  mutate(clip.info, tier.name = "OTR")
+)
 
-# Read in supplementary data
-ptcp.info <- read_csv(ptcp.info.file, col_types = cols()) %>%
-  dplyr::select(c(aclew_id, child_level_id, sharing_environment,
-                  lab_internal_subject_id, age_mo_round, child_sex,
-                  mat_ed, fat_ed, std_length_of_recording, start_of_recording,
-                  number_older_sibs, mother_age, father_age, household_size))
-
-# Add mean and sd values for participant-level predictors to ptcp.info
-ptcp.info <- ptcp.info %>%
+# Compute ptcp info standards
+rec.info.stds <- rec.info %>%
   mutate(
-    tchiyr.m = mean(age_mo_round),
-    motyr.m = mean(mother_age),
-    nsb.m = mean(number_older_sibs),
-    hsz.m = mean(household_size),
-    tchiyr.sd = sd(age_mo_round),
-    motyr.sd = sd(mother_age),
-    nsb.sd = sd(number_older_sibs),
-    hsz.sd = sd(household_size)
+    tchiyr.m = mean(age),
+    # motyr.m = mean(mother_age),
+    # nsb.m = mean(number_older_sibs),
+    # hsz.m = mean(household_size),
+    tchiyr.sd = sd(age),
+    # motyr.sd = sd(mother_age),
+    # nsb.sd = sd(number_older_sibs),
+    # hsz.sd = sd(household_size),
+    tchiyr.std = ((age - tchiyr.m)/tchiyr.sd),
+    chisx.std = recode_factor(sex,
+                              "M" = "M", "F" = "F"),
     )
 
-# Mini summary of annotated segments per rec
-seg.info <- all.data %>%
-  select(c(child_id, seg_start_tod)) %>%
-  distinct() %>%
-  group_by(child_id) %>%
-  mutate(
-    segment_num = row_number(),
-    segment_dur_min = 5) %>%
-  ungroup()
-
-##########
-quantity.rand <- quantity.rand %>%
-  mutate(
-    xds_mph.nz = ifelse(xds_mph > 0, 1, 0),
-    ods_mph.nz = ifelse(ods_mph > 0, 1, 0),
-    tds_mph.nz = ifelse(tds_mph > 0, 1, 0),
-    cds_mph.nz = ifelse(cds_mph > 0, 1, 0),
-    tchiyr.std = ((age_mo_round - tchiyr.m)/tchiyr.sd),
-    chisx.std = recode_factor(child_sex,
-                              "M" = "M", "F" = "F"),
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none", "primary" = "primary",
-                              "secondary" = "secondary", "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_age - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    nsk.std = ((n_spkrs_clip - nspkrs.m)/nspkrs.sd),
-    stthr.std = (start.hr - 12)/12,
-    stthr.tri = ifelse(start.hr < 11, "morning",
-                       ifelse(start.hr > 13, "afternoon", "midday")))
-quantity.rand$stthr.tri <- factor(quantity.rand$stthr.tri,
-                                  levels = c("midday", "morning", "afternoon"))
-quantity.rand$stthr.tri.a <- factor(quantity.rand$stthr.tri,
-                                  levels = c("afternoon", "midday", "morning"))
-quantity.rand$stthr.tri.o <- factor(quantity.rand$stthr.tri,
-                                  levels = c("morning", "afternoon", "midday"))
-
-
-
-
-
-
-
-
-
-##########
-
-# Merge in participant and segment info to the main data table
-all.data <- all.data %>%
-  filter((tier == "CHI" | tier == "OTR") & !grepl("NO-HAY-PALABRAS", val)) %>%
-  left_join(ptcp.info, by = c("child_id" = "lab_internal_subject_id")) %>%
-  left_join(seg.info, by = c("child_id", "seg_start_tod"))
-
-avg.utt.len.tseltal <- all.data %>%
-  filter(tier == "OTR") %>%
-  dplyr::select(dur) %>%
-  summarise(mean.utt.len = mean(dur),
-            median.utt.len = median(dur))
 ```
 
 ```{r summarizedata}
-# Create full matrices of annotated clips
-aclew2child_id <- all.data %>%
-  select(aclew_id, child_id) %>%
-  distinct()
-
-all.clips <- expand.grid(
-  aclew_id = unique(ptcp.info$aclew_id),
-  segment_num = c(1:9),
-  tier = c("CHI", "OTR")) %>%
-  full_join(aclew2child_id, by = "aclew_id") %>%
-  filter(!is.na(child_id))
-
 # Create summaries, adding in zeroes for annotated clips with no speech
 # ... at the clip level and
-seg.lvl.summary <- all.data %>%
-  filter(tier == "OTR" | tier == "CHI") %>%
-  group_by(child_id, tier, segment_num, seg_start_tod) %>%
+clip.summary <- utt.info %>%
+  group_by(recording, tier.name, clip.onset) %>%
   summarize(
-    tot.spch.min = sum(dur)/60000,
+    tot.spch.min = sum(dur.sec)/60,
     min.p.hr = tot.spch.min*12
   ) %>%
-  full_join(all.clips, by = c("segment_num", "child_id", "tier")) %>%
-  left_join(ptcp.info, by = "aclew_id") %>%
-  left_join(seg.info, by = c("child_id", "seg_start_tod", "segment_num")) %>%
+  full_join(all.clips.CHIOTR.tiers,
+            by = c("recording", "tier.name", "clip.onset")) %>%
+  full_join(rec.info.stds, by = "recording") %>%
   replace_na(list(tot.spch.min = 0, min.p.hr = 0)) %>%
-  arrange(aclew_id, tier, segment_num)
-
+  arrange(aclew_id, tier.name, segment.num) %>%
+  # add non-zero marker
+  mutate(
+    nz.spch = ifelse(min.p.hr > 0, 1, 0)
+  ) #%>%
+  # add standardized/recoded predictors
+  # mutate(
+  #   mated.std = recode_factor(mat_ed,
+  #                             "none" = "none",
+  #                             "primary" = "primary",
+  #                             "secondary" = "secondary",
+  #                             "preparatory" = "preparatory"),
+  #   mated.bin = recode_factor(mat_ed,
+  #                             "none" = "0-5", "primary" = "0-5",
+  #                             "secondary" = "6+", "preparatory" = "6+"),
+  #   motyr.std = ((mother_age - motyr.m)/motyr.sd),
+  #   nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
+  #   hsz.std = ((household_size - hsz.m)/hsz.sd),
+  #   stthr.std = (start.hr - 12)/12,
+  #   stthr.tri = ifelse(start.hr < 11, "morning",
+  #                      ifelse(start.hr > 13, "afternoon", "midday"))
+  # )
+    
 # ... then with averages across clips at the recording level
-rec.lvl.summary <- seg.lvl.summary %>%
-  group_by(child_id, tier) %>%
+rec.summary <- clip.summary %>%
+  group_by(aclew_id, tier.name) %>%
   summarize(
     mean.mph = mean(min.p.hr),
     median.mph = median(min.p.hr),
     min.mph = min(min.p.hr),
     max.mph = max(min.p.hr),
-    sd.mph = sd(min.p.hr)
+    sd.mph = sd(min.p.hr),
+    total.clips = n()
   ) %>%
-  left_join(ptcp.info, by = c("child_id" = "lab_internal_subject_id"))
+  left_join(rec.info.stds, by = "aclew_id")
+
+# quantity.rand$stthr.tri <- factor(
+#   quantity.rand$stthr.tri,
+#   levels = c("midday", "morning", "afternoon"))
+# quantity.rand$stthr.tri.a <- factor(
+#   quantity.rand$stthr.tri,
+#   levels = c("afternoon", "midday", "morning"))
+# quantity.rand$stthr.tri.o <- factor(
+#   quantity.rand$stthr.tri,
+#   levels = c("morning", "afternoon", "midday"))
+
+# corr btwn OTR and CHI at clip and recording levels
+clip.CHI.OTR.rates <- clip.summary %>%
+  select(-tot.spch.min, -nz.spch) %>%
+  pivot_wider(names_from = "tier.name", values_from = "min.p.hr")
+    
+rec.CHI.OTR.rates <- rec.summary %>%
+  select(-median.mph, -min.mph, -max.mph, -sd.mph, -total.clips) %>%
+  pivot_wider(names_from = "tier.name", values_from = "mean.mph")
+
+OTR.mean <- mean(rec.CHI.OTR.rates$OTR)
+OTR.sd <- sd(rec.CHI.OTR.rates$OTR)
+
+rec.CHI.OTR.rates <- rec.CHI.OTR.rates %>%
+  mutate(
+    Tertile = factor(case_when(
+      OTR <= OTR.mean - OTR.sd ~ "low TCDS",
+      OTR >= OTR.mean + OTR.sd ~ "high TCDS",
+      TRUE ~ "middle TCDS"
+    ), levels = c("low TCDS", "middle TCDS", "high TCDS"))
+  ) 
 
 ```
 
 ```{r getkeydescstats}
-rec.lvl.summary.otr <- subset(rec.lvl.summary, tier == "OTR")
-mean.tph <- mean(rec.lvl.summary.otr$mean.mph)
-median.tph <- median(rec.lvl.summary.otr$median.mph)
-mean.median.tph <- mean(rec.lvl.summary.otr$median.mph)
-min.tph <- min(rec.lvl.summary.otr$mean.mph)
-max.tph <- max(rec.lvl.summary.otr$mean.mph)
+rec.summary.otr <- subset(rec.summary, tier.name == "OTR")
+mean.tph <- mean(rec.summary.otr$mean.mph)
+median.tph <- median(rec.summary.otr$median.mph)
+mean.median.tph <- mean(rec.summary.otr$median.mph)
+min.tph <- min(rec.summary.otr$mean.mph)
+max.tph <- max(rec.summary.otr$mean.mph)
 ```
 
 ```{r plotdata}
-ggplot(data = seg.lvl.summary,
+ggplot(data = clip.summary,
        aes(x = min.p.hr)) +
-  facet_grid(~ tier) +
-  geom_histogram()
+  facet_grid(~ tier.name) +
+  geom_histogram(binwidth = 1)
 
-
-all.spch.mph.plot <- ggplot(data = seg.lvl.summary,
-       aes(x = age_mo_round, y = min.p.hr, color = aclew_id)) +
-  facet_grid(~ tier) +
+all.spch.mph.plot <- ggplot(data = clip.summary,
+       aes(x = age, y = min.p.hr,
+           color = factor(aclew_id))) +
+  facet_grid(~ tier.name) +
   geom_smooth(method = "lm", color = "gray") +
   geom_boxplot(outlier.fill = NA) +
-  geom_jitter() +
-  scale_x_continuous(limits = c(0,40),
+  geom_jitter(alpha = 0.5) +
+  scale_x_continuous(limits = c(0,55),
+                     breaks = seq(0,55,5)) +
+  scale_y_continuous(limits = c(0,40),
                      breaks = seq(0,40,5)) +
-  scale_y_continuous(limits = c(0,30),
-                     breaks = seq(0,30,5)) + # cuts off a few clear outliers
-  # scale_y_continuous(limits = c(0,60),
-                     # breaks = seq(0,60,5)) +
-  coord_cartesian(xlim = c(0,40), ylim = c(0,30)) +
+  coord_cartesian(xlim = c(0,55), ylim = c(0,40)) +
   labs(x = "Age (months)", y = "min/hr") +
   guides(color = "none") +
   theme_apa()
+all.spch.mph.plot %>%
+  ggexport(filename = "plots/all.spch.mph.plot.png",
+           width = 2400, height = 1200, res = 300)
 
-all.spch.mph.plot
+clip.CHIOTR.corr.plot <- ggplot(data = clip.CHI.OTR.rates,
+                                aes(x = OTR, y = CHI)) +
+  geom_smooth(method = "lm", color = "gray") +
+  geom_jitter() +
+  labs(x = "TCDS min/hr", y = "CHI spch min/hr") +
+  theme_apa()
+clip.CHIOTR.corr.plot %>%
+  ggexport(filename = "plots/clip.CHIOTR.corr.plot.png",
+           width = 1200, height = 600, res = 300)
 
-# corr btwn OTR and CHI
-  
+rec.CHIOTR.corr.plot <- ggplot(data = rec.CHI.OTR.rates,
+                                aes(x = OTR, y = CHI)) +
+  geom_smooth(method = "lm", color = "gray") +
+  geom_jitter() +
+  labs(x = "TCDS min/hr", y = "CHI spch min/hr") +
+  theme_apa()
+rec.CHIOTR.corr.plot %>%
+  ggexport(filename = "plots/rec.CHIOTR.corr.plot.png",
+           width = 1200, height = 600, res = 300)
+
+rec.CHIage.OTRtertile.plot <- ggplot(data = rec.CHI.OTR.rates,
+                                aes(x = age, y = CHI)) +
+  facet_grid(~ Tertile) +
+  geom_smooth(method = "lm", color = "gray") +
+  geom_jitter() +
+  labs(x = "Age (mo)", y = "CHI spch min/hr") +
+  theme_apa()
+rec.CHIage.OTRtertile.plot %>%
+  ggexport(filename = "plots/rec.CHIage.OTRtertile.plot.png",
+           width = 2400, height = 800, res = 300)
+
+
 ```
 
 ```{r regression}
