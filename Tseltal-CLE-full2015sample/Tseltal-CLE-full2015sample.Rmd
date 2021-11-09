@@ -63,6 +63,18 @@ library(DHARMa)
 # library(bbmle)
 library(broom.mixed)
 source("../0-Helper.R")
+
+# load chattr stuff (this won't work on anyone else's machine--eep)
+source("../../chattr-basic/tabularize-data.R")
+source("../../chattr-basic/transition-detectors.R")
+source("../../chattr-basic/chattr-helpers.R")
+source("../../chattr-basic/tabularize-data.R")
+source("../../chattr-basic/transition-detectors.R")
+source("../../chattr-basic/continuation-detectors.R")
+source("../../chattr-basic/intseq-detectors.R")
+source("../../chattr-basic/estimate-baseline.R")
+source("../../chattr-basic/fetch-chattr-info.R")
+source("../../chattr-basic/make-summaries.R")
 ```
 
 ```{r analysis_presets, include=FALSE}
@@ -111,9 +123,56 @@ rec.info.stds <- rec.info %>%
 
 ```
 
+```{r addconvboutregions}
+convbout.summary <- tibble()
+
+for (rec in unique(utt.info$recording)) {
+  rec.utt.info <- utt.info %>%
+    filter(recording == rec)
+  if (nrow(rec.utt.info) > 0) {
+  for (clip in unique(rec.utt.info$clip.onset)) {
+    clip.utt.info <- rec.utt.info %>%
+      filter(clip.onset == clip) %>%
+      select(tier.name, time.start, time.end) %>%
+      rename(speaker = tier.name,
+             start.ms = time.start,
+             stop.ms = time.end) %>%
+      mutate(start.ms = start.ms * 1000,
+             stop.ms = stop.ms * 1000,
+             annot.clip = clip)
+    if (nrow(clip.utt.info) > 0) {
+      tt <- fetch_transitions(
+        clip.utt.info, allowed.gap = 2000, allowed.overlap = 1000,
+        min.utt.dur = 0, target.ptcp = "CHI", interactants = FALSE,
+        addressee.tags = FALSE, mode = "strict")
+      
+      spchtbl <- clip.utt.info
+      allowed.gap <- 2000
+      allowed.overlap <- 1000
+      min.utt.dur <- 0
+      target.ptcp <- "CHI"
+      interactants <- FALSE
+      addressee.tags <- FALSE
+      mode <- "strict"
+      
+      
+      if (nrow(tt) > 0) {
+        is <- fetch_intseqs(tt, allowed.gap = 2000)
+      }
+      
+    }
+    
+  }
+    
+  }
+}
+
+```
+
 ```{r summarizedata}
 # Create summaries, adding in zeroes for annotated clips with no speech
-# ... at the clip level and
+
+# ... at the clip level
 clip.summary <- utt.info %>%
   group_by(recording, tier.name, clip.onset) %>%
   summarize(
@@ -159,8 +218,8 @@ clip.summary$stthr.tri.a <- factor(
 clip.summary$stthr.tri.o <- factor(
   clip.summary$stthr.tri,
   levels = c("morning", "afternoon", "midday"))
-    
-# ... then with averages across clips at the recording level
+
+# ... and then with averages across clips at the recording level
 rec.summary <- clip.summary %>%
   group_by(aclew_id, tier.name,
            mated.std, mated.bin, motyr.std, nsb.std, hsz.std) %>%
