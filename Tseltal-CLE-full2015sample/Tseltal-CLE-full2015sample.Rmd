@@ -49,11 +49,6 @@ class             : "man"
 output            : papaja::apa6_pdf #apa6_pdf or apa6_word
 ---
 
-<!--
-TO DO:
-- add/check ToD
--->
-
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
 library(papaja)
 library(ggplot2)
@@ -72,15 +67,21 @@ source("../0-Helper.R")
 
 ```{r analysis_presets, include=FALSE}
 plot.path <- "plots/"
+metadata.path <- "metadata/"
 clip.dur.min <- 5
-
 ```
 
 ```{r prepare_data, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # Read in utterance data and metadata
 utt.info <- read_csv("all.CHI.OTR.utterances.csv")
-clip.info <- read_csv("all.annotated.clips.csv")
-rec.info <- read_csv("metadata/rec-metadata.csv") %>%
+clip.info <- read_csv(
+  paste0(metadata.path, "all.annotated.clips.csv", collapse = "")) %>%
+  mutate(clip.onset.uncorrected = str_pad(
+    as.character(clip.onset.uncorrected), width = 6, side = "left", pad = "0"),
+         clip.onset.corrected = str_pad(
+    as.character(clip.onset.corrected), width = 6, side = "left", pad = "0"))
+rec.info <- read_csv(
+  paste0(metadata.path, "rec-metadata.csv", collapse = "")) %>%
   filter(source != "ACLEW") %>%
   select(recording, age, sex,
          mat_ed, number_older_sibs, mother_dob,
@@ -120,7 +121,10 @@ clip.summary <- utt.info %>%
     min.p.hr = tot.spch.min*(60/clip.dur.min)
   ) %>%
   full_join(all.clips.CHIOTR.tiers,
-            by = c("recording", "tier.name", "clip.onset")) %>%
+            by = c("recording", "tier.name",
+                   "clip.onset" = "clip.onset.uncorrected")) %>%
+  select(-clip.onset) %>%
+  rename(clip.onset = clip.onset.corrected) %>%
   full_join(rec.info.stds, by = "recording") %>%
   replace_na(list(tot.spch.min = 0, min.p.hr = 0)) %>%
   arrange(aclew_id, tier.name, segment.num) %>%
@@ -140,11 +144,21 @@ clip.summary <- utt.info %>%
                               "secondary" = "6+", "preparatory" = "6+"),
     motyr.std = ((mother_dob - motyr.m)/motyr.sd),
     nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd)#,
-  #   stthr.std = (start.hr - 12)/12,
-  #   stthr.tri = ifelse(start.hr < 11, "morning",
-  #                      ifelse(start.hr > 13, "afternoon", "midday"))
+    hsz.std = ((household_size - hsz.m)/hsz.sd),
+    start.hr = as.numeric(substr(clip.onset, 1, 2)),
+    stthr.std = (start.hr - 12)/12,
+    stthr.tri = ifelse(start.hr < 11, "morning",
+                       ifelse(start.hr > 13, "afternoon", "midday"))
   )
+clip.summary$stthr.tri <- factor(
+  clip.summary$stthr.tri,
+  levels = c("midday", "morning", "afternoon"))
+clip.summary$stthr.tri.a <- factor(
+  clip.summary$stthr.tri,
+  levels = c("afternoon", "midday", "morning"))
+clip.summary$stthr.tri.o <- factor(
+  clip.summary$stthr.tri,
+  levels = c("morning", "afternoon", "midday"))
     
 # ... then with averages across clips at the recording level
 rec.summary <- clip.summary %>%
@@ -160,15 +174,6 @@ rec.summary <- clip.summary %>%
   ) %>%
   left_join(rec.info.stds, by = "aclew_id")
 
-# quantity.rand$stthr.tri <- factor(
-#   quantity.rand$stthr.tri,
-#   levels = c("midday", "morning", "afternoon"))
-# quantity.rand$stthr.tri.a <- factor(
-#   quantity.rand$stthr.tri,
-#   levels = c("afternoon", "midday", "morning"))
-# quantity.rand$stthr.tri.o <- factor(
-#   quantity.rand$stthr.tri,
-#   levels = c("morning", "afternoon", "midday"))
 
 # corr btwn OTR and CHI at clip and recording levels
 clip.CHI.OTR.rates <- clip.summary %>%
