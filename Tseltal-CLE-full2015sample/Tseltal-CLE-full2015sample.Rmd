@@ -64,7 +64,7 @@ library(DHARMa)
 library(broom.mixed)
 source("../0-Helper.R")
 
-# load chattr stuff (this won't work on anyone else's machine--eep)
+# load chattr stuff (this ONLY works on MC's machine--eep)
 source("../../chattr-basic/tabularize-data.R")
 source("../../chattr-basic/transition-detectors.R")
 source("../../chattr-basic/chattr-helpers.R")
@@ -145,9 +145,11 @@ utt.info <- read_csv("all.CHI.OTR.utterances.csv")
 clip.info <- read_csv(
   paste0(metadata.path, "all.annotated.clips.csv", collapse = "")) %>%
   mutate(clip.onset.uncorrected = str_pad(
-    as.character(clip.onset.uncorrected), width = 6, side = "left", pad = "0"),
+    as.character(clip.onset.uncorrected),
+    width = 6, side = "left", pad = "0"),
          clip.onset.corrected = str_pad(
-    as.character(clip.onset.corrected), width = 6, side = "left", pad = "0"))
+    as.character(clip.onset.corrected),
+    width = 6, side = "left", pad = "0"))
 
 # Create full matrix of annotated clips for CHI and OTR tiers
 all.clips.CHIOTR.tiers <- bind_rows(
@@ -173,46 +175,64 @@ rec.info.stds <- rec.info %>%
 ```
 
 ```{r add_convbout_regions, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-convbout.summary <- tibble()
+utts.within.is <- tibble()
 
 for (rec in unique(utt.info$recording)) {
+  print(rec)
   rec.utt.info <- utt.info %>%
     filter(recording == rec)
+  cds.utts.wi.is.rec <- tibble()
   if (nrow(rec.utt.info) > 0) {
-  for (clip in unique(rec.utt.info$clip.onset)) {
-    clip.utt.info <- rec.utt.info %>%
-      filter(clip.onset == clip) %>%
-      select(tier.name, time.start, time.end) %>%
-      rename(speaker = tier.name,
-             start.ms = time.start,
-             stop.ms = time.end) %>%
-      mutate(start.ms = start.ms * 1000,
-             stop.ms = stop.ms * 1000,
-             annot.clip = clip)
-    if (nrow(clip.utt.info) > 0) {
-      tt <- fetch_transitions(
-        clip.utt.info, allowed.gap = 2000, allowed.overlap = 1000,
-        min.utt.dur = 0, target.ptcp = "CHI", interactants = FALSE,
-        addressee.tags = FALSE, mode = "strict")
-      
-      spchtbl <- clip.utt.info
-      allowed.gap <- 2000
-      allowed.overlap <- 1000
-      min.utt.dur <- 0
-      target.ptcp <- "CHI"
-      interactants <- FALSE
-      addressee.tags <- FALSE
-      mode <- "strict"
-      
-      
-      if (nrow(tt) > 0) {
-        is <- fetch_intseqs(tt, allowed.gap = 2000)
+    for (clip in unique(rec.utt.info$clip.onset)) {
+      print(clip)
+      cds.utts.wi.is.clip <- tibble()
+      clip.utt.info <- rec.utt.info %>%
+        filter(clip.onset == clip) %>%
+        select(tier.name, time.start, time.end) %>%
+        rename(speaker = tier.name,
+               start.ms = time.start,
+               stop.ms = time.end) %>%
+        mutate(start.ms = start.ms * 1000,
+               stop.ms = stop.ms * 1000,
+               annot.clip = clip)
+      if (nrow(clip.utt.info) > 0 &&
+          "CHI" %in% clip.utt.info$speaker &&
+          "OTR" %in% clip.utt.info$speaker) {
+        tt <- fetch_transitions(
+          clip.utt.info, allowed.gap = 2000, allowed.overlap = 1000,
+          min.utt.dur = 0, target.ptcp = "CHI", interactants = FALSE,
+          addressee.tags = FALSE, mode = "strict")
+        if (nrow(tt) > 0 &&
+            (length(which(!is.na(tt$prompt.spkr))) > 0) ||
+            (length(which(!is.na(tt$response.spkr))) > 0)) {
+          is <- fetch_intseqs(tt, allowed.gap = 2000)
+          cds.utts.wi.is.clip <- bind_rows(cds.utts.wi.is,
+                                      filter(is, !is.na(intseq.num))) %>%
+            select(prompt.start.ms, response.start.ms) %>%
+            pivot_longer(cols = c(prompt.start.ms, response.start.ms),
+                         names_to = "tt.pos", values_to = "start.ms") %>%
+            filter(!is.na(start.ms)) %>%
+            select(start.ms) %>%
+            distinct() %>%
+            mutate(clip.onset = clip)
+        }
       }
-      
+      if (nrow(cds.utts.wi.is.clip) > 0) {
+        cds.utts.wi.is.rec <- bind_rows(cds.utts.wi.is.rec,
+                                        cds.utts.wi.is.clip)
+      }
     }
-    
+    if (nrow(cds.utts.wi.is.rec) > 0) {
+      cds.utts.wi.is.rec <- cds.utts.wi.is.rec %>%
+      mutate(time.start = start.ms/1000) %>%
+      left_join(rec.utt.info)
+    }
   }
-    
+  if (nrow(cds.utts.wi.is.rec) > 0) {
+   utts.within.is <- bind_rows(
+     utts.within.is,
+     mutate(cds.utts.wi.is.rec, recording = rec) %>%
+       select(-start.ms)) 
   }
 }
 
