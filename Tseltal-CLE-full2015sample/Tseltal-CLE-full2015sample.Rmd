@@ -431,7 +431,6 @@ OTR.sd.is <- sd(rec.CHI.OTR.rates.is$OTR)
 
 ```
 
-
 ```{r summarize_isVSnonis_OTR, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 mini.rec.summary <- rec.summary %>%
   ungroup() %>%
@@ -472,15 +471,6 @@ On average, across all `r length(unique(rec.summary$aclew_id))` recordings from 
 - does children's volubility correlate with their directed input?
     - does it change with age?
 -->
-
-```{r getkeydescstats}
-rec.summary.otr <- subset(rec.summary, tier.name == "OTR")
-mean.tph <- mean(rec.summary.otr$mean.mph)
-median.tph <- median(rec.summary.otr$median.mph)
-mean.median.tph <- mean(rec.summary.otr$median.mph)
-min.tph <- min(rec.summary.otr$mean.mph)
-max.tph <- max(rec.summary.otr$mean.mph)
-```
 
 ```{r plotdata}
 ggplot(data = clip.summary,
