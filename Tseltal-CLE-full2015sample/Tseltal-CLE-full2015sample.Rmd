@@ -174,7 +174,7 @@ rec.info.stds <- rec.info %>%
     )
 ```
 
-```{r add_convbout_regions, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+```{r add_convbout_info, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 utts.within.is <- tibble()
 
 for (rec in unique(utt.info$recording)) {
@@ -206,7 +206,7 @@ for (rec in unique(utt.info$recording)) {
             (length(which(!is.na(tt$prompt.spkr))) > 0) ||
             (length(which(!is.na(tt$response.spkr))) > 0)) {
           is <- fetch_intseqs(tt, allowed.gap = 2000)
-          cds.utts.wi.is.clip <- bind_rows(cds.utts.wi.is,
+          cds.utts.wi.is.clip <- bind_rows(cds.utts.wi.is.clip,
                                       filter(is, !is.na(intseq.num))) %>%
             select(prompt.start.ms, response.start.ms) %>%
             pivot_longer(cols = c(prompt.start.ms, response.start.ms),
@@ -225,7 +225,7 @@ for (rec in unique(utt.info$recording)) {
     if (nrow(cds.utts.wi.is.rec) > 0) {
       cds.utts.wi.is.rec <- cds.utts.wi.is.rec %>%
       mutate(time.start = start.ms/1000) %>%
-      left_join(rec.utt.info)
+      left_join(filter(rec.utt.info, tier.name == "OTR"))
     }
   }
   if (nrow(cds.utts.wi.is.rec) > 0) {
@@ -235,6 +235,22 @@ for (rec in unique(utt.info$recording)) {
        select(-start.ms)) 
   }
 }
+# take care of imperfectly matched cases (ARGH rounding issue, can't deal)
+utt.info$time.start.char <- as.character(utt.info$time.start)
+unmatched.rows <- which(is.na(utts.within.is$tier.name))
+plus.1ms <- utts.within.is %>%
+  filter(is.na(tier.name)) %>%
+  mutate(time.start = time.start + .001,
+         time.start.char = as.character(time.start)) %>%
+  select(clip.onset, time.start.char, recording) %>%
+  left_join(filter(utt.info, tier.name == "OTR")) %>%
+  select(-time.start.char)
+utts.within.is <- utts.within.is %>%
+  filter(!is.na(tier.name)) %>%
+  full_join(plus.1ms) %>%
+  mutate(within.is = TRUE)
+utt.info <- utt.info %>%
+  full_join(utts.within.is)
 
 ```
 
