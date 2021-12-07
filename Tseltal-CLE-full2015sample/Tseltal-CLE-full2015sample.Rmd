@@ -348,15 +348,14 @@ rec.CHI.OTR.rates <- rec.CHI.OTR.rates %>%
 - how much directed speech do children hear on average
     - does it change with age?
     - does it change across the day (* with age)?
-    - how bursty is it?
+    - how much of it occurs within tt/is?
 -->
-
 
 <!-- PART 2
 - how much speech do children produce?
     - does it change with age?
     - does it change across the day (* with age)?
-    - how bursty is it?
+    - how much of it occurs within tt/is?
 -->
 
 
