@@ -23,6 +23,36 @@ for (file in files) {
       rename("tier.name" = tier_name,
              "time.start" = time_start,
              "time.end" = time_end)
+    if ("OTR" %in% spch.tbl$tier.name) {
+      quien.tbl <- file.contents %>%
+        filter(tier_name %in% "quien@OTR") %>%
+        select(content, time_start, time_end) %>%
+        mutate(
+          recording = str_extract(file,
+                                  "M-F\\d{2}-C\\d{2}(-rec\\d)?"),
+          clip.onset = str_extract_all(file, "\\d{6}")[[1]][1],
+        ) %>%
+        rename("time.start" = time_start,
+               "time.end" = time_end,
+               "spkr.type" = content) %>%
+        mutate(tier.name = "OTR")
+      spch.tbl <- spch.tbl %>%
+        left_join(quien.tbl,
+                  by = c("tier.name", "time.start", "time.end",
+                         "recording", "clip.onset")) %>%
+        mutate(spkr.type = case_when(
+          !is.na(spkr.type) ~ spkr.type,
+          is.na(spkr.type) & tier.name == "OTR" ~ "missing",
+          tier.name == "CHI" ~ "CHI",
+          TRUE ~ "uh oh"
+        ))
+    } else {
+      spch.tbl <- spch.tbl %>%
+        mutate(spkr.type = case_when(
+          tier.name == "CHI" ~ "CHI",
+          TRUE ~ "uh oh"
+          ))
+    }
     all.utterances <- bind_rows(all.utterances, spch.tbl)
   }
 }
