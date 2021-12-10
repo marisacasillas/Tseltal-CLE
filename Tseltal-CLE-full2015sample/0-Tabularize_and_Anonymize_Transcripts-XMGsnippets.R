@@ -18,7 +18,11 @@ for (file in files) {
         recording = str_extract(file,
                                 "M-F\\d{2}-C\\d{2}(-rec\\d)?"),
         clip.onset = str_extract_all(file, "\\d{6}")[[1]][1],
-        tod.clip.onset = str_extract_all(file, "\\d{6}")[[1]][2]
+        tod.clip.onset = str_extract_all(file, "\\d{6}")[[1]][2],
+        tod.clip.onset = case_when(
+          is.na(tod.clip.onset) ~ "unknown",
+          TRUE ~ tod.clip.onset
+        )
       ) %>%
       rename("tier.name" = tier_name,
              "time.start" = time_start,
