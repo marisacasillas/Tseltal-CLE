@@ -51,17 +51,16 @@ output            : papaja::apa6_pdf #apa6_pdf or apa6_word
 
 ```{r load_packages, include=FALSE, echo=FALSE, warning=FALSE}
 library(papaja)
-library(ggplot2)
-library(ggpubr)
 library(tidyverse)
-library(viridis)
-library(grid)
-library(gridExtra)
-library(lme4)
-library(glmmTMB)
-library(DHARMa)
-# library(bbmle)
-library(broom.mixed)
+library(fuzzyjoin)
+library(ggpubr)
+# library(viridis)
+# library(grid)
+# library(gridExtra)
+# library(lme4)
+# library(glmmTMB)
+# library(DHARMa)
+# library(broom.mixed)
 source("../0-Helper.R")
 
 # load chattr stuff (this ONLY works on MC's machine--eep)
@@ -185,7 +184,7 @@ for (rec in unique(utt.info$recording)) {
   chi.utts.wi.is.rec <- tibble()
   if (nrow(rec.utt.info) > 0) {
     for (clip in unique(rec.utt.info$clip.onset)) {
-      print(clip)
+      # print(clip)
       cds.utts.wi.is.clip <- tibble()
       chi.utts.wi.is.clip <- tibble()
       clip.utt.info <- rec.utt.info %>%
@@ -234,13 +233,29 @@ for (rec in unique(utt.info$recording)) {
     }
     if (nrow(cds.utts.wi.is.rec) > 0) {
       cds.utts.wi.is.rec <- cds.utts.wi.is.rec %>%
-        mutate(time.start = start.ms/1000) %>%
-        left_join(filter(rec.utt.info, tier.name == "OTR"))
+        mutate(time.start = start.ms/1000,
+               clip.onset = as.numeric(clip.onset)) %>%
+        # for fun with floating point comparison (affects 1% of the data)
+        # (╯°□°）╯︵ ┻━┻
+        difference_inner_join(
+          filter(rec.utt.info, tier.name == "OTR") %>%
+            mutate(clip.onset = as.numeric(clip.onset)),
+          max_dist = 0.01,
+          distance_col = "fuzzyjoin.dist.sec",
+          by = c("clip.onset", "time.start"))
     }
     if (nrow(chi.utts.wi.is.rec) > 0) {
       chi.utts.wi.is.rec <- chi.utts.wi.is.rec %>%
-        mutate(time.start = start.ms/1000) %>%
-        left_join(filter(rec.utt.info, tier.name == "CHI"))
+        mutate(time.start = start.ms/1000,
+               clip.onset = as.numeric(clip.onset)) %>%
+        # for fun with floating point comparison (affects 1% of the data)
+        # ಥ_ಥ
+        difference_inner_join(
+          filter(rec.utt.info, tier.name == "CHI") %>%
+            mutate(clip.onset = as.numeric(clip.onset)),
+          max_dist = 0.01,
+          distance_col = "fuzzyjoin.dist.sec",
+          by = c("clip.onset", "time.start"))
     }
   }
   if (nrow(cds.utts.wi.is.rec) > 0) {
@@ -250,26 +265,32 @@ for (rec in unique(utt.info$recording)) {
        select(-start.ms)) %>%
      bind_rows(mutate(chi.utts.wi.is.rec, recording = rec) %>%
        select(-start.ms)) %>%
-     arrange(recording, clip.onset, time.start)
+     arrange(recording, clip.onset.x, time.start.x)
   }
 }
-# take care of imperfectly matched cases (ARGH rounding issue, can't deal)
-utt.info$time.start.char <- as.character(utt.info$time.start)
-unmatched.rows <- which(is.na(utts.within.is$tier.name))
-plus.1ms <- utts.within.is %>%
-  filter(is.na(tier.name)) %>%
-  mutate(time.start = time.start + .001,
-         time.start.char = as.character(time.start)) %>%
-  select(clip.onset, time.start.char, recording) %>%
-  left_join(filter(utt.info, tier.name == "OTR")) %>%
-  select(-time.start.char)
-utts.within.is <- utts.within.is %>%
-  filter(!is.na(tier.name)) %>%
-  full_join(plus.1ms) %>%
-  mutate(within.is = TRUE)
-utt.info <- utt.info %>%
-  full_join(utts.within.is)
+# check that floating point issue is dealt with properly
+# which(is.na(utts.within.is$tier.name))
+# length(which(utts.within.is$time.start.fuzzyjoin.dist.sec > 0))/nrow(utts.within.is)
 
+# Tidy the columns up
+# Again, copy with floating point comparison, this time with unique (enough)
+# utterance IDs
+utts.within.is <- utts.within.is %>%
+  select(-clip.onset.y, -time.start.y, -clip.onset.fuzzyjoin.dist.sec,
+         -time.start.fuzzyjoin.dist.sec, -fuzzyjoin.dist.sec) %>%
+  rename(clip.onset = clip.onset.x, time.start = time.start.x) %>%
+  mutate(within.is = TRUE,
+         utt.id = paste0(
+           tier.name, round(time.start,1), round(dur.sec,1),
+           recording, clip.onset)) %>%
+  select(within.is, utt.id)
+
+utt.info <- utt.info %>%
+  mutate(clip.onset = as.numeric(clip.onset),
+         utt.id = paste0(
+           tier.name, round(time.start,1), round(dur.sec,1),
+           recording, clip.onset)) %>%
+    full_join(utts.within.is, by = c("utt.id"))
 ```
 
 ```{r summarize_allCHIOTR, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
