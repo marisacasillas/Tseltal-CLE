@@ -178,13 +178,13 @@ rec.info.stds <- rec.info %>%
 utts.within.is <- tibble()
 
 for (rec in unique(utt.info$recording)) {
-  print(rec)
+  # print(rec)
   rec.utt.info <- utt.info %>%
     filter(recording == rec)
   cds.utts.wi.is.rec <- tibble()
   if (nrow(rec.utt.info) > 0) {
     for (clip in unique(rec.utt.info$clip.onset)) {
-      print(clip)
+      # print(clip)
       cds.utts.wi.is.clip <- tibble()
       clip.utt.info <- rec.utt.info %>%
         filter(clip.onset == clip) %>%

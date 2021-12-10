@@ -59,6 +59,7 @@ for (file in files) {
 
 all.utterances <- all.utterances %>%
   mutate(spkr.type.corr = case_when(
+    tier.name == "CHI" ~ "CHI",
     grepl("(hombre)|(señor)", spkr.type) ~ "hombre",
     grepl("([mM]uj+er)|(muchacha)", spkr.type) ~ "mujer",
     grepl("niña", spkr.type) ~ "niña",
