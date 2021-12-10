@@ -182,10 +182,12 @@ for (rec in unique(utt.info$recording)) {
   rec.utt.info <- utt.info %>%
     filter(recording == rec)
   cds.utts.wi.is.rec <- tibble()
+  chi.utts.wi.is.rec <- tibble()
   if (nrow(rec.utt.info) > 0) {
     for (clip in unique(rec.utt.info$clip.onset)) {
-      # print(clip)
+      print(clip)
       cds.utts.wi.is.clip <- tibble()
+      chi.utts.wi.is.clip <- tibble()
       clip.utt.info <- rec.utt.info %>%
         filter(clip.onset == clip) %>%
         select(tier.name, time.start, time.end) %>%
@@ -215,24 +217,40 @@ for (rec in unique(utt.info$recording)) {
             select(start.ms) %>%
             distinct() %>%
             mutate(clip.onset = clip)
+          chi.utts.wi.is.clip <- bind_rows(chi.utts.wi.is.clip,
+                                      filter(is, !is.na(intseq.num))) %>%
+            select(start.ms) %>%
+            mutate(clip.onset = clip)
         }
       }
       if (nrow(cds.utts.wi.is.clip) > 0) {
         cds.utts.wi.is.rec <- bind_rows(cds.utts.wi.is.rec,
                                         cds.utts.wi.is.clip)
       }
+      if (nrow(chi.utts.wi.is.clip) > 0) {
+        chi.utts.wi.is.rec <- bind_rows(chi.utts.wi.is.rec,
+                                        chi.utts.wi.is.clip)
+      }
     }
     if (nrow(cds.utts.wi.is.rec) > 0) {
       cds.utts.wi.is.rec <- cds.utts.wi.is.rec %>%
-      mutate(time.start = start.ms/1000) %>%
-      left_join(filter(rec.utt.info, tier.name == "OTR"))
+        mutate(time.start = start.ms/1000) %>%
+        left_join(filter(rec.utt.info, tier.name == "OTR"))
+    }
+    if (nrow(chi.utts.wi.is.rec) > 0) {
+      chi.utts.wi.is.rec <- chi.utts.wi.is.rec %>%
+        mutate(time.start = start.ms/1000) %>%
+        left_join(filter(rec.utt.info, tier.name == "CHI"))
     }
   }
   if (nrow(cds.utts.wi.is.rec) > 0) {
    utts.within.is <- bind_rows(
      utts.within.is,
      mutate(cds.utts.wi.is.rec, recording = rec) %>%
-       select(-start.ms)) 
+       select(-start.ms)) %>%
+     bind_rows(mutate(chi.utts.wi.is.rec, recording = rec) %>%
+       select(-start.ms)) %>%
+     arrange(recording, clip.onset, time.start)
   }
 }
 # take care of imperfectly matched cases (ARGH rounding issue, can't deal)
