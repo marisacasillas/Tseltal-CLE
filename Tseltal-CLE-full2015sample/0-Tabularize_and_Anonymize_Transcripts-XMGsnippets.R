@@ -57,6 +57,15 @@ for (file in files) {
   }
 }
 
+all.utterances <- all.utterances %>%
+  mutate(spkr.type.corr = case_when(
+    grepl("(hombre)|(señor)", spkr.type) ~ "hombre",
+    grepl("([mM]uj+er)|(muchacha)", spkr.type) ~ "mujer",
+    grepl("niña", spkr.type) ~ "niña",
+    grepl("n[iu]ño", spkr.type) ~ "niño",
+    TRUE ~ "other/unknown"
+  ))
+
 write_csv(all.utterances, "all.CHI.OTR.utterances.csv")
 
 # Write out list of total annotated clips
