@@ -468,7 +468,8 @@ tds.mdl.tbl <- broom.mixed::tidy(tds.rand.zinb)
 
 Before conducting regression analyses we observed the distribution of the data. Many clips contained zero TCDS and, among the remainder of the clips, there was a skewed, non-negative distribution (i.e., it is not possible to have less than 0 min/hr of TCDS). This pattern was expected on the basis of past work analyzing speech during randomly selected daylong clips (REFS). We handle this distribution as has been done in the past, with a zero-inflated negative-binomial mixed-effects regression. [tailor and translate description from before]. The conditional model (of non-zero integer minutes per hour of TCDS) included a random effect of recording and predictors that have previously been found to influence input rate, including: target child age (numeric; standardized), time of day (factorial; morning vs. midday/afternoon), household size (numeric; standardized), maternal education level (factorial; none vs. primary/secondary/preparatory/postsecondary), and an interaction between age and time of day. The zero-inflation component of the regression included a predictor of child age (numeric; standardized) on the prediction that younger children are overall more likely to hear zero TCDS in a given clip. The conditional regression revealed only two significant effects on TCDS rate: children hear more TCDS as they get older ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[1]],digits = 3)`), and children from larger households hear more TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "hsz.std")[1]],digits = 3)`). We did not see a significant interaction of child age and time of day, as found in past work (Casillas et al., 2020). The zero-inflation component confirmed that clips from older children are significantly less likely to contain zero TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[2]],digits = 3)`).
 
-```{r tcds_plot, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+```{r tcds_plots, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Age effect
 age.sd <- sd(rec.info$age)
 age.mean <- mean(rec.info$age)
 
@@ -495,6 +496,36 @@ tcds.plot.age <- ggplot(tcds.mdl.pred.age, aes(x = age.mo, y = predicted)) +
 ggsave("TCDS_over_age_with_estimates.png",
        plot = tcds.plot.age,
        width = 6, height = 3.5, dpi = 300)
+
+# Household effect
+hsz.sd <- sd(rec.info$household_size)
+hsz.mean <- mean(rec.info$household_size)
+
+tcds.mdl.pred.hsz <- tibble(
+  ggpredict(tds.rand.zinb, "hsz.std")) %>%
+  mutate(household_size = (x * hsz.sd) + hsz.mean)
+
+tcds.plot.hsz <- ggplot(tcds.mdl.pred.hsz, aes(x = household_size, y = predicted)) +
+  geom_ribbon(aes(ymax = conf.high, ymin = conf.low), alpha = 0.2) +
+  geom_line() +
+  labs(x = "# Personas viviendo en el hogar", y = "Valores predichos (min/hr)") +
+  geom_boxplot(data = ODS.only, aes(x = household_size, y = tot.min.p.hr,
+                   color = factor(aclew_id), fill = factor(aclew_id)),
+               outlier.fill = NA, alpha = 0.4) +
+  geom_jitter(data = ODS.only, aes(x = household_size, y = tot.min.p.hr,
+                   color = factor(aclew_id)), alpha = 0.5) +
+  scale_x_continuous(limits = c(0,14),
+                     breaks = seq(0,14,2)) +
+  scale_y_continuous(limits = c(0,20),
+                     breaks = seq(0,20,5)) +
+  coord_cartesian(xlim = c(0,15), ylim = c(0,20)) +
+  guides(color = "none", fill = "none") +
+  theme_apa()
+ggsave("TCDS_over_householdsize_with_estimates.png",
+       plot = tcds.plot.hsz,
+       width = 6, height = 3.5, dpi = 300)
+
+
 ```
 
 ## Child vocalization rate
