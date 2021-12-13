@@ -483,9 +483,10 @@ tcds.plot.age <- ggplot(tcds.mdl.pred.age, aes(x = age.mo, y = predicted)) +
   labs(x = "Edad del niño (meses)", y = "Valores predichos (min/hr)") +
   geom_boxplot(data = ODS.only, aes(x = age, y = tot.min.p.hr,
                    color = factor(aclew_id), fill = factor(aclew_id)),
-               outlier.fill = NA, alpha = 0.4) +
+               outlier.fill = NA, alpha = 0.1,
+               position = position_dodge()) +
   geom_jitter(data = ODS.only, aes(x = age, y = tot.min.p.hr,
-                   color = factor(aclew_id)), alpha = 0.5) +
+                   color = factor(aclew_id)), alpha = 0.2) +
   scale_x_continuous(limits = c(0,55),
                      breaks = seq(0,55,5)) +
   scale_y_continuous(limits = c(0,20),
@@ -511,11 +512,12 @@ tcds.plot.hsz <- ggplot(tcds.mdl.pred.hsz, aes(x = household_size, y = predicted
   labs(x = "# Personas viviendo en el hogar", y = "Valores predichos (min/hr)") +
   geom_boxplot(data = ODS.only, aes(x = household_size, y = tot.min.p.hr,
                    color = factor(aclew_id), fill = factor(aclew_id)),
-               outlier.fill = NA, alpha = 0.4) +
+               outlier.fill = NA, alpha = 0.1,
+               position = position_dodge(width = 2)) +
   geom_jitter(data = ODS.only, aes(x = household_size, y = tot.min.p.hr,
-                   color = factor(aclew_id)), alpha = 0.5) +
-  scale_x_continuous(limits = c(0,14),
-                     breaks = seq(0,14,2)) +
+                   color = factor(aclew_id)), alpha = 0.2) +
+  scale_x_continuous(limits = c(0,16),
+                     breaks = seq(0,16,2)) +
   scale_y_continuous(limits = c(0,20),
                      breaks = seq(0,20,5)) +
   coord_cartesian(xlim = c(0,15), ylim = c(0,20)) +
