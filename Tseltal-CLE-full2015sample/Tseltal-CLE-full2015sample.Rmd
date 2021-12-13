@@ -422,7 +422,7 @@ x how much directed speech do children hear on average
 
 On average, across all `r length(unique(rec.summary.all$aclew_id))` recordings from all `r length(unique(rec.summary.all$aclew_id)) - 1` children, the baseline rate of speech directly addressed to the target child (i.e., TCDS) was `r round(grand.means.OTR.all$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.OTR.all$median.tot.mph,2)`, SD = `r round(grand.means.OTR.all$sd.tot.mph,2)`, range = `r round(grand.means.OTR.all$min.tot.mph,2)`--`r round(grand.means.OTR.all$max.tot.mph,2)`). This is somewhat lower than the average of 3.6 min/hr reported in the smaller sample from this community reported in Casillas et al. (2020). If we only count TCDS that occurs within turn-taking sequences (i.e., a prompt to a child's response, a response to a child's prompt, or an utterance within part of a longer turn-taking sequence), the baseline rate is lower, at `r round(grand.means.OTR.is$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.OTR.is$median.tot.mph,2)`, SD = `r round(grand.means.OTR.is$sd.tot.mph,2)`, range = `r round(grand.means.OTR.is$min.tot.mph,2)`--`r round(grand.means.OTR.is$max.tot.mph,2)`). As is apparent, most of the TCDS comes within turn-taking sequences. Across recordings, the mean proportion of TCDS minutes that occurred within turn-taking sequences was `r round(grand.means.prop.IS.OTR$prop.is.tot.spchmin,2)`, with average proportions ranging between .70 and .90 across broad speaker type categories (female adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.fa.spchmin,2)`; male adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.ma.spchmin,2)`; female children =  `r round(grand.means.prop.IS.OTR$prop.is.tot.fc.spchmin,2)`; male children = `r round(grand.means.prop.IS.OTR$prop.is.tot.mc.spchmin,2)`; other/unknown =  `r round(grand.means.prop.IS.OTR$prop.is.tot.un.spchmin,2)`).
 
-```{r part1_regression, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+```{r tcds_regression, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 ## TCDS ####
 ODS.only <- subset(clip.summary.all, tier.name == "OTR")
 tcds.random.distribution <- ggplot(ODS.only,
@@ -464,10 +464,38 @@ tds.rand.zinb.alt <- glmmTMB(round(tot.min.p.hr, 0) ~
                          family="nbinom1")
 # summary(tds.rand.zinb.alt)
 tds.mdl.tbl <- broom.mixed::tidy(tds.rand.zinb)
-
 ```
 
 Before conducting regression analyses we observed the distribution of the data. Many clips contained zero TCDS and, among the remainder of the clips, there was a skewed, non-negative distribution (i.e., it is not possible to have less than 0 min/hr of TCDS). This pattern was expected on the basis of past work analyzing speech during randomly selected daylong clips (REFS). We handle this distribution as has been done in the past, with a zero-inflated negative-binomial mixed-effects regression. [tailor and translate description from before]. The conditional model (of non-zero integer minutes per hour of TCDS) included a random effect of recording and predictors that have previously been found to influence input rate, including: target child age (numeric; standardized), time of day (factorial; morning vs. midday/afternoon), household size (numeric; standardized), maternal education level (factorial; none vs. primary/secondary/preparatory/postsecondary), and an interaction between age and time of day. The zero-inflation component of the regression included a predictor of child age (numeric; standardized) on the prediction that younger children are overall more likely to hear zero TCDS in a given clip. The conditional regression revealed only two significant effects on TCDS rate: children hear more TCDS as they get older ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[1]],digits = 3)`), and children from larger households hear more TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "hsz.std")[1]],digits = 3)`). We did not see a significant interaction of child age and time of day, as found in past work (Casillas et al., 2020). The zero-inflation component confirmed that clips from older children are significantly less likely to contain zero TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[2]],digits = 3)`).
+
+```{r tcds_plot, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+age.sd <- sd(rec.info$age)
+age.mean <- mean(rec.info$age)
+
+tcds.mdl.pred.age <- tibble(
+  ggpredict(tds.rand.zinb, "tchiyr.std")) %>%
+  mutate(age.mo = (x * age.sd) + age.mean)
+
+tcds.plot.age <- ggplot(tcds.mdl.pred.age, aes(x = age.mo, y = predicted)) +
+  geom_ribbon(aes(ymax = conf.high, ymin = conf.low), alpha = 0.2) +
+  geom_line() +
+  labs(x = "Edad del niño (meses)", y = "Valores predichos (min/hr)") +
+  geom_boxplot(data = ODS.only, aes(x = age, y = tot.min.p.hr,
+                   color = factor(aclew_id), fill = factor(aclew_id)),
+               outlier.fill = NA, alpha = 0.4) +
+  geom_jitter(data = ODS.only, aes(x = age, y = tot.min.p.hr,
+                   color = factor(aclew_id)), alpha = 0.5) +
+  scale_x_continuous(limits = c(0,55),
+                     breaks = seq(0,55,5)) +
+  scale_y_continuous(limits = c(0,20),
+                     breaks = seq(0,20,5)) +
+  coord_cartesian(xlim = c(0,55), ylim = c(0,20)) +
+  guides(color = "none", fill = "none") +
+  theme_apa()
+ggsave("TCDS_over_age_with_estimates.png",
+       plot = tcds.plot.age,
+       width = 6, height = 3.5, dpi = 300)
+```
 
 ## Child vocalization rate
 
