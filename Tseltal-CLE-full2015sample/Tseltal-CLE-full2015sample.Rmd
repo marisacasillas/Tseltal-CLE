@@ -62,6 +62,7 @@ library(ggpubr)
 # library(DHARMa)
 # library(broom.mixed)
 source("../0-Helper.R")
+source("0-Summarize.utt.info.R")
 
 # load chattr stuff (this ONLY works on MC's machine--eep)
 source("../../chattr-basic/tabularize-data.R")
@@ -339,13 +340,21 @@ if (run.from.scratch == TRUE) {
 # Create summaries, adding in zeroes for annotated clips with no speech
 
 # ... at the clip level
-clip.summary.test <- summarize.over.clips(utt.info,
+clip.summary.all <- summarize.over.clips(utt.info,
                                  clip.dur.min, all.clips.CHIOTR.tiers,
                                  rec.info.stds)
 
 # ... and then with averages across clips at the recording level
-rec.summary.test <- summarize.over.recs(clip.summary.test, rec.info.stds)
+rec.summary.all <- summarize.over.recs(clip.summary.all, rec.info.stds)
 
+# And then repeat just for speech within interactional sequences
+# ... at the clip level
+clip.summary.is <- summarize.over.clips(filter(utt.info, within.is == TRUE),
+                                 clip.dur.min, all.clips.CHIOTR.tiers,
+                                 rec.info.stds)
+
+# ... and then with averages across clips at the recording level
+rec.summary.is <- summarize.over.recs(clip.summary.is, rec.info.stds)
 
 ```
 
