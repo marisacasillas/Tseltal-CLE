@@ -358,111 +358,55 @@ rec.summary.is <- summarize.over.recs(clip.summary.is, rec.info.stds)
 
 ```
 
-```{r summarize_isOTR, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-# Create summaries, adding in zeroes for annotated clips with no speech
-
-# ... at the clip level
-clip.summary.is <- utt.info %>%
-  filter(within.is == TRUE) %>%
-  group_by(recording, tier.name, clip.onset) %>%
-  summarize(
-    tot.spch.min = sum(dur.sec)/60,
-    min.p.hr = tot.spch.min*(60/clip.dur.min)
-  ) %>%
-  full_join(
-    filter(all.clips.CHIOTR.tiers, tier.name == "OTR"), # no filter w/ chi vocs
-            by = c("recording", "tier.name",
-                   "clip.onset" = "clip.onset.uncorrected")) %>%
-  select(-clip.onset) %>%
-  rename(clip.onset = clip.onset.corrected) %>%
-  full_join(rec.info.stds, by = "recording") %>%
-  replace_na(list(tot.spch.min = 0, min.p.hr = 0)) %>%
-  arrange(aclew_id, tier.name, segment.num) %>%
-  # add non-zero marker
-  mutate(
-    nz.spch = ifelse(min.p.hr > 0, 1, 0)
-  ) %>%
-  # add standardized/recoded predictors
-  mutate(
-    mated.std = recode_factor(mat_ed,
-                              "none" = "none",
-                              "primary" = "primary",
-                              "secondary" = "secondary",
-                              "preparatory" = "preparatory"),
-    mated.bin = recode_factor(mat_ed,
-                              "none" = "0-5", "primary" = "0-5",
-                              "secondary" = "6+", "preparatory" = "6+"),
-    motyr.std = ((mother_dob - motyr.m)/motyr.sd),
-    nsb.std = ((number_older_sibs - nsb.m)/nsb.sd),
-    hsz.std = ((household_size - hsz.m)/hsz.sd),
-    start.hr = as.numeric(substr(clip.onset, 1, 2)),
-    stthr.std = (start.hr - 12)/12,
-    stthr.tri = ifelse(start.hr < 11, "morning",
-                       ifelse(start.hr > 13, "afternoon", "midday"))
-  )
-clip.summary.is$stthr.tri <- factor(
-  clip.summary.is$stthr.tri,
-  levels = c("midday", "morning", "afternoon"))
-clip.summary.is$stthr.tri.a <- factor(
-  clip.summary.is$stthr.tri,
-  levels = c("afternoon", "midday", "morning"))
-clip.summary.is$stthr.tri.o <- factor(
-  clip.summary.is$stthr.tri,
-  levels = c("morning", "afternoon", "midday"))
-
-# ... and then with averages across clips at the recording level
-rec.summary.is <- clip.summary.is %>%
-  group_by(aclew_id, tier.name,
-           mated.std, mated.bin, motyr.std, nsb.std, hsz.std) %>%
-  summarize(
-    mean.mph = mean(min.p.hr),
-    median.mph = median(min.p.hr),
-    min.mph = min(min.p.hr),
-    max.mph = max(min.p.hr),
-    sd.mph = sd(min.p.hr),
-    total.clips = n()
-  ) %>%
-  left_join(rec.info.stds, by = "aclew_id")
-
-# corr btwn OTR and CHI at clip and recording levels
-clip.CHI.OTR.rates.is <- clip.summary.is %>%
-  select(-tot.spch.min, -nz.spch) %>%
-  pivot_wider(names_from = "tier.name", values_from = "min.p.hr")
-    
-rec.CHI.OTR.rates.is <- rec.summary.is %>%
-  select(-median.mph, -min.mph, -max.mph, -sd.mph, -total.clips) %>%
-  pivot_wider(names_from = "tier.name", values_from = "mean.mph")
-
-OTR.mean.is <- mean(rec.CHI.OTR.rates.is$OTR)
-OTR.sd.is <- sd(rec.CHI.OTR.rates.is$OTR)
-
-# rec.CHI.OTR.rates.is <- rec.CHI.OTR.rates.is %>%
-#   mutate(
-#     Tertile = factor(case_when(
-#       OTR <= OTR.mean - OTR.sd ~ "low TCDS",
-#       OTR >= OTR.mean + OTR.sd ~ "high TCDS",
-#       TRUE ~ "middle TCDS"
-#     ), levels = c("low TCDS", "middle TCDS", "high TCDS"))
-#   ) 
-
-```
-
-```{r summarize_isVSnonis_OTR, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-mini.rec.summary <- rec.summary %>%
+```{r summarize_grand_means, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# OTR summaries
+grand.means.OTR.all <- rec.summary.all %>%
   ungroup() %>%
-  select(aclew_id, tier.name, mean.mph) %>%
   filter(tier.name == "OTR") %>%
-  rename("mean.tcds.mph" = "mean.mph")
-mini.rec.summary.is <- rec.summary.is %>%
+  summarize(across(tot.spchmin:sd.un.mph, ~ mean(.x, na.rm = TRUE)))
+
+grand.means.OTR.is <- rec.summary.is %>%
   ungroup() %>%
-  select(aclew_id, tier.name, mean.mph) %>%
   filter(tier.name == "OTR") %>%
-  rename("mean.is.tcds.mph" = "mean.mph")
-# leave NAs in because prop isn't sensible for cases with zero TCDS
-mini.rec.summary.all <- mini.rec.summary %>%
-  full_join(mini.rec.summary.is) %>%
-  mutate(prop.tcds.wi.is = mean.is.tcds.mph / mean.tcds.mph) %>%
-  filter(!is.na(prop.tcds.wi.is))
+  summarize(across(tot.spchmin:sd.un.mph, ~ mean(.x, na.rm = TRUE)))
+
+# I give up on trying to do this inline with rename_all/rename_at womp womp
+OTR.is.cols <- rec.summary.is %>%
+  ungroup() %>%
+  filter(tier.name == "OTR") %>%
+  select(c(recording, contains(c(".spchmin", ".mph"))))
+colnames(OTR.is.cols) <- paste(names(OTR.is.cols), ".is", sep = "")
+
+grand.means.prop.IS.OTR <- rec.summary.all %>%
+  filter(tier.name == "OTR") %>%
+  full_join(OTR.is.cols, by = c("recording" = "recording.is")) %>%
+  ungroup() %>%
+  mutate(
+    prop.is.tot.spchmin = tot.spchmin.is/tot.spchmin,
+    prop.is.tot.fa.spchmin = tot.fa.spchmin.is/tot.fa.spchmin,
+    prop.is.tot.ma.spchmin = tot.ma.spchmin.is/tot.ma.spchmin,
+    prop.is.tot.fc.spchmin = tot.fc.spchmin.is/tot.fc.spchmin,
+    prop.is.tot.mc.spchmin = tot.mc.spchmin.is/tot.mc.spchmin,
+    prop.is.tot.oc.spchmin = tot.oc.spchmin.is/tot.oc.spchmin,
+    prop.is.tot.un.spchmin = tot.un.spchmin.is/tot.un.spchmin,
+  ) %>%
+  summarize(across(prop.is.tot.spchmin:prop.is.tot.un.spchmin,
+                   ~ mean(.x, na.rm = TRUE)))
+
+
+# CHI summaries
+grand.means.CHI.all <- rec.summary.all %>%
+  ungroup() %>%
+  select(-contains(c(".fa.", ".ma.", ".fc.", ".mc.", ".oc.", ".un."))) %>%
+  filter(tier.name == "CHI") %>%
+  summarize(across(tot.spchmin:sd.tot.mph, ~ mean(.x, na.rm = TRUE)))
+
+grand.means.CHI.is <- rec.summary.is %>%
+  ungroup() %>%
+  select(-contains(c(".fa.", ".ma.", ".fc.", ".mc.", ".oc.", ".un."))) %>%
+  filter(tier.name == "CHI") %>%
+  summarize(across(tot.spchmin:sd.tot.mph, ~ mean(.x, na.rm = TRUE)))
+
 ```
 
 # Resultados
@@ -473,7 +417,11 @@ mini.rec.summary.all <- mini.rec.summary %>%
     - how much of it occurs within tt/is?
 -->
 
-On average, across all `r length(unique(rec.summary$aclew_id))` recordings from all `length(unique(rec.summary$aclew_id)) - 1` children, the baseline rate of speech directly addressed to the target child was `round(mean(rec.CHI.OTR.rates$OTR),2)` minutes per hour (median = `round(median(rec.CHI.OTR.rates$OTR),2)`, sd = `round(sd(rec.CHI.OTR.rates$OTR),2)`, range = `round(min(rec.CHI.OTR.rates$OTR),2)`--`round(max(rec.CHI.OTR.rates$OTR),2)`). This is somewhat lower than the average of 3.6 min/hr reported in the smaller sample from this community reported in Casillas et al. (2020). If we only count TCDS that occurs within turn-taking sequences (i.e., a prompt to a child's response, a response to a child's prompt, or an utterance within part of a longer turn-taking sequence), the baseline rate is slightly lower at `round(mean(rec.CHI.OTR.rates.is$OTR),2)` minutes per hour (median = `round(median(rec.CHI.OTR.rates.is$OTR),2)`, sd = `round(sd(rec.CHI.OTR.rates.is$OTR),2)`, range = `round(min(rec.CHI.OTR.rates.is$OTR),2)`--`round(max(rec.CHI.OTR.rates.is$OTR),2)`). As is apparent, most of the TCDS comes within turn-taking sequences. Across recordings, the mean proportion of TCDS within turn-taking sequences was `r round(mean(mini.rec.summary.all$prop.tcds.wi.is),2)` (median = `r round(median(mini.rec.summary.all$prop.tcds.wi.is),2)`, sd = `r round(sd(mini.rec.summary.all$prop.tcds.wi.is),2)`, range = `r round(min(mini.rec.summary.all$prop.tcds.wi.is),2)`--`r round(max(mini.rec.summary.all$prop.tcds.wi.is),2)`).
+On average, across all `r length(unique(rec.summary.all$aclew_id))` recordings from all `length(unique(rec.summary.all$aclew_id)) - 1` children, the baseline rate of speech directly addressed to the target child (i.e., TCDS) was `round(grand.means.OTR.all$mean.tot.mph,2)` minutes per hour (median = `round(grand.means.OTR.all$median.tot.mph,2)`, sd = `round(grand.means.OTR.all$sd.tot.mph,2)`, range = `round(grand.means.OTR.all$min.tot.mph,2)`--`round(grand.means.OTR.all$max.tot.mph,2)`). This is somewhat lower than the average of 3.6 min/hr reported in the smaller sample from this community reported in Casillas et al. (2020). If we only count TCDS that occurs within turn-taking sequences (i.e., a prompt to a child's response, a response to a child's prompt, or an utterance within part of a longer turn-taking sequence), the baseline rate is lower, at `round(grand.means.OTR.is$mean.tot.mph,2)` minutes per hour (median = `round(grand.means.OTR.is$median.tot.mph,2)`, sd = `round(grand.means.OTR.is$sd.tot.mph,2)`, range = `round(grand.means.OTR.is$min.tot.mph,2)`--`round(grand.means.OTR.is$max.tot.mph,2)`).
+
+As is apparent, most of the TCDS comes within turn-taking sequences. Across recordings, the mean proportion of TCDS minutes that occurred within turn-taking sequences was `r round(grand.means.prop.IS.OTR$prop.is.tot.spchmin,2)`, with average proportions ranging between .70 and .90 across broad speaker type categories (female adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.fa.spchmin,2)`; male adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.ma.spchmin,2)`; female children =  `r round(grand.means.prop.IS.OTR$prop.is.tot.fc.spchmin,2)`; male children = `r round(grand.means.prop.IS.OTR$prop.is.tot.mc.spchmin,2)`; other/unknown =  `r round(grand.means.prop.IS.OTR$prop.is.tot.un.spchmin,2)`).
+
+
 
 <!-- PART 2
 - how much speech do children produce?
