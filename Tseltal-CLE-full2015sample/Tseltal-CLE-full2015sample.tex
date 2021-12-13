@@ -1,0 +1,321 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  english,
+  ,man,floatsintext]{apa6}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Título},
+  pdfauthor={Marisa Casillas1, Juan Méndez Girón2, Melanie Soderstrom3, Penelope Brown1, \& Gilles Polian2},
+  pdflang={en-EN},
+  pdfkeywords={Desarrollo de lenguaje, habla dirigida al niño, input lingüistico, Tseltal, Maya},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\centering\begin{threeparttable}}
+%   {\end{threeparttable}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\centering\begin{ThreePartTable}}{\end{ThreePartTable}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% \usepackage{etoolbox}
+\makeatletter
+\patchcmd{\HyOrg@maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\patchcmd{\HyOrg@maketitle}
+  {\section{\protect\normalfont{\@title}}}
+  {\section*{\protect\normalfont{\@title}}}
+  {}{\typeout{Failed to patch title.}}
+\makeatother
+\shorttitle{Título corto}
+\keywords{Desarrollo de lenguaje, habla dirigida al niño, input lingüistico, Tseltal, Maya\newline\indent Word count: XXXX (XXXX sin bibliografía)}
+\usepackage{lineno}
+
+\linenumbers
+\usepackage{csquotes}
+\ifxetex
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[]{english}
+\else
+  \usepackage[main=english]{babel}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\fi
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+  % set entry spacing
+  \ifnum #2 > 0
+  \setlength{\parskip}{#2\baselineskip}
+  \fi
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\title{Título}
+\author{Marisa Casillas\textsuperscript{1}, Juan Méndez Girón\textsuperscript{2}, Melanie Soderstrom\textsuperscript{3}, Penelope Brown\textsuperscript{1}, \& Gilles Polian\textsuperscript{2}}
+\date{}
+
+
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Max Planck Institute for Psycholinguistics\\\textsuperscript{2} Centro de Investigaciones y Estudios Superiores en Antropología Social\\\textsuperscript{3} University of Manitoba}
+
+\abstract{
+A hacer
+}
+
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{introducciuxf3n}{%
+\section{Introducción}\label{introducciuxf3n}}
+
+Alrededor del mundo, los niños aprenden su lengua materna a través de las interacciones verbales que observan y de las cuales en que participan, en el hogar y en la escuela. Estudios anteriores han establecido que el desarrollo del lenguaje sucede más temprano y se acelera más rapido si los cuidadores del niño hablan directa y frecuentemente con él, con un estilo apropriado para su nivel de sofisticación lingüístico y cognitivo {[}Habla Dirigida al Niño, HDN; REFS{]}. En particular, los niños que oyen más habla dirigida así a ellos desarrollan más rápidamente su conocimiento lexical; producen y compreden más palabras, y reconocen más rápidamente las palabras {[}REFS{]}. Sabemos también que el conocimiento lexical influye en la adquisición y uso del conocimiento sintáctico {[}REFS{]}. En resumidas palabras, el HDN es un mecanismo fundamental para aprender el lenguaje.
+
+Sin embargo, este mecanismo no permite establecer la cantidad de HDN que es necesario para la adquisición del lenguaje. Estudios basados en interacciones cortas y modelos teóricos y computacionales, sugieren que la cantidad de evidencia lingüística requerida para el desarrollo normal del lenguaje sea inmenso. Pero evidencia sociolingüística y antropológica sugiere algo contrario, que (a) hay muchas maneras de acumular evidencia lingüística del ambiente familiar, que (b) hablar directamente a niños es muy común a través de las sociedades humánas, y que (c) mucha HDN es una invención moderna y occidental {[}REFS{]}.
+
+Para echar luz sobre la cantidad de evidencia lingüística requerida para el desarrollo del lenguaje, es necesario enfocar en los patrones de habla que los niños encuentran normalmente en sus hogares---patrones de habla cotidiana, y no solo HDN. El método ideal para estudiar patrones el la habla cotidiana alrededor del niño es usar grabaciones ``daylong,'' en cual el bebé o niño lleve una camiseta o un chaleco con una grabadora adentro y sigue con un día en casa ``normal,'' resultando en una grabación que, frecuentamente dura seis horas o más {[}REFS casillas cristia{]}. Con estas grabaciones, las cual son centrado en el perspectivo del niño, es posible documentar patrones en habla a través una una multiplicidad de actividades cotidianas y parejas (e.g., la madre, la tía, un niño vecino, etc.). La colección de grabaciones daylong es sencillo, y así es posible colectar, anotar, y analyzar grabaciones en una manera casi identical entre poblaciones diversas.
+
+Estimar la variación humana en ambientes lingúísticos de niños requiere que estudiamos las experiencias de niños criados en comunidades grandes y pequeñas, urbanas y rurales, modernas y tradicionales. En cambio, la mayoria de investigaciones cuantitativas de habla ambiental del niño viene de poblaciones urbanas, occidentales, y de habla inglesa {[}REFS{]}. Por el contrario, estudios mostrando la diversidad de ambientes lingüísticos y de prácticas para la socializacíon de lengua han enfocado, en la mayor parte, en comunidades pequeñas y tradicionales, o en grupos subrepresentadas dentro de contextos urbanos o semi-urbanos mas grandes {[}REFS{]}.
+
+Investigaciones comparativas mas recientes sugieren que la cantidad de HDN en el ambiente de niños es muy poco, incluso contextos culturales en cual es típico hablar directamente a bebés sobre su foco de atención (en el estilo ``child centric''; REFS). Antes del tres años, los niños oigan menos que cinco minutos de HDN de adultos durante un día normal a casa {[}REFS bunce{]}. Diferencias en ambiente lingüístico de niños emerge en \emph{quien} habla al niño, antes bien la cantidad de HDN {[}REFS bunce{]}. Por ejemplo, Casillas et al., encontraron que la práctica de aloparenting entre familias en la Isla de Rossel (Papua Nueva Guinea) tiene un efecto en los patrones de habla oído por los niños: comparado con otras sociedades indígenas con estructuras asentamientos similares, y con poblaciones urbanas y occidentales, niños jovenes en la Isla de Rossel oigan más habla de otro niños y de hombres {[}REFS casillas 2019 ur; bunce{]}.
+
+Una tema persistente en estes esudios de habla en el ambiente natural del niño es que colectar, transcribir, y anotar grabaciones muy naturales es muy caro y cuesta mucho tiempo; por eso hay una tendencia enfocar en muestras pequeñas (típicamente N = 20 y mas pequeño, a través de 3--5 años; REFS). En el caso de una comunidad subrepresentada, sea prematuro formar conclusiones fuertes en un basis de datos así pequeño; es facil imaginar que un analisis derivando de una muestra pequeña no representa suficientamente la variación normal en la comunidad y da una impresión inexacto de las tendencias típicas en el ambiente lingüístico de niños allá.
+
+En este estudio buscamos establecer la variación típica y tendencias in general del uso de HDN en una comunidad lingüística para que sólo una muestra pequeña de datos daylong ha estado analizado: el Tseltal de Tenejapa (Maya; Chiapas, Mexico). En esta comunidad, como en otras comunidades Mayas (e.g., Tsotil, Yukateko, K'iche', Mam), niños están socializados observar las interacciones alrededor de ellos (sin esperar a estar el foco de atención social) {[}REFS de leon, rogoff, pye, y shneidman{]}. Están llevados por la más parte del primo año de vida, primariamente por la madre; y mientras cuidadores respondan muy sensiblemente cuando el bebé quiere amamantar, dormir, sentarse, o tener un cambio de pañal/pantalon, no usan HDN frecuentamente {[}REFS{]}. Este estilo de interaccion con niños ``non-child-centric'' se encuentra en muchas comunidades alrededor del mundo {[}REFS{]}. También es común que un bebé o niño joven está cuidado por un hermano mayor o otros miembros de la familia, especialmente después de que empiezan comer comida solida; Brown estima que, después de tres años, la mayor parte del HDN viene de otros niños (HDN-N), y no de adultos. En unas comunidades Yukatekas, Shneidman también encontró que la cantidad de HDN-N aumentó mucho (300\%) entre uno y tres años, y formó la mayoría del HDN de niños 2 años y más.
+
+Un estudio anterior ha usado grabaciones daylong con niños tseltales para estimar la cantidad de HDN y otra habla oíble {[}REFS{]}, confirmando que niños sur la edad de tres años les están directamente hablado infrecuentamente---3.6 minutos por hora---sin evidencia de demora en su desarrollo lingüístico. El HDN en el ambiente vino, por la mayor parte (\textasciitilde80\%) de mujeres, con un pequeño y non-significo aumentación de HDN-N asociado con edad del niño mas alta. Sin embargo, estos resultados están basados en las grabaciónes de sólo 10 niños, y sólo con niños menor que tres años; tan joven para observar el inicio de HDN-N frecuente {[}REFS{]}. La muestra pequeña puede también explicar, en parte, la discrepancia en la prevalencia de HDN-N entre eso estudio y lo de Shneidman en Goldin-Meadow (2012), en cual HDN-N fue muy frecuente después de 2 años. Sin una muestra mas integral, es dificil saber si la diferencia deriva de prácticas diferentes entre comunidades Tseltales y Yukatecos, de métodos de grabación, o algo diferente.
+
+Presentamos aquí una replicación y extensión considerable del estudio de Casillas et al.~(2019): investigamos la velocidad de HDN usado por cuidadores adultos y jovenes con 56 niños tseltales entre 2 y 52 meses de edad, incluyendo los 10 niños destacados en el estudio anterior. Usando lo mismo técnico---anotar y transcribir segmentos cortos aleatoriamente del día de grabar---esperábamos que (a) in general, la velocidad de HDN no cambia significamente con la edad del niño, (b) HDN de otros niños aumenta significamente con la edad del niño y, como antes, (c) niños encuentran HDN más frecuentamente en la mañana, con niños más grande oyendo mas HDN cercal del mediodía.
+
+\hypertarget{methods}{%
+\section{Metodología}\label{methods}}
+
+\hypertarget{methods-participants}{%
+\subsection{Participantes}\label{methods-participants}}
+
+Los niños enfocados aquí vienen de una comunidad tradicional con una agricultura de subsistencia situada en los altos de Chiapas (en el sur de México). Antes de que entran en la escuela, el desarrollo lingüístico de niños en esta comunidad es, típicamente, monolingual en el Tseltal, una idioma Maya {[}REFS{]}. Hogares son organizados en grupos patrilocales, en cuales viven miembros de la familia de varias generaciones. Durante las horas despiertas del día, infantes están llevados por un rebozo en la espalda de sus madres, mientras ella sigue con sus actividades diarias. Si la madre va a trabajar en el campo, a veces trae el bebé, y a veces deja el bebé con un otro miembro de la familia en casa (e.g., una tía o hermano mayor del niño). Todos los miembros de la familia (\textasciitilde4 años y más) contribuyen al cuidado de niños {[}REFS{]}.
+
+Décadas de investigación antropológica y lingüística ha establecido que el entorno lingüístico de niños Mayas no está centrado en el interes del niño o en los nombres de objetos; por el contrario, niños están socializados pagar atención a la interacción social entre otros, tomando parte en la interacción como participante lateral (REFS Brown, 1998, 2011, 2014). Durante la infancia, bebés reciben respuestas rápidas y efectivas cuando indican que tienen hambre, quieren dormir, y otros asuntos corporeales. Más tarde, cuando empiezan a comunicar con gestos y palabras reconocibles (\textasciitilde1;0), provocan respuestas verbales mas frecuentamente {[}REFS{]}. Intercambios interaccionales con niños son, normalmente, corto y no-verbal, y ocurren in contextos multi-participantes (Brown, 2014). La habla interactiva, por la más parte, enfoca en acciones y respuestas apropriados para el contexto social inmediato; no en palabras y sus sentidos (mira también de León, 2011; Rogoff et al., 2003). Al fin del quinto año (5;0), la mayoría de niños hablar fluentamente en tseltal y participar en trabajo de hogar (incluso el cuidado de hermanitos). El estilo tseltal de cuidar y socializar niños es semejante al estilo usado por otros cuidadores mayas através de México, Guatemala, y Belice (e.g., de León, 2011; Gaskins, 2000; Pye, 1986; Rogoff et al., 2003; Shneidman \& Goldin-Meadow, 2012).
+
+Los datos analizado aquí vienen del Casillas HomeBank Corpus (Casillas, Brown, et al., 2017), que incluye grabaciones daylong y otros datos sobre el desarrollo lingüístico de más que 100 niños, la mayoría menor de 4;0, en dos comunidades tradicionales: la de los tseltales discutida aquí, y una comunidad isleña en Papua Nueva Guinea discutido en otros artículos (Brown, 2011, 2014). Grabaciones daylong nos permiten investigar patrones lingüísticos encontrado por los niños a través de actividades y contextos interaccionales diversos durante el día (Bergelson et al., 2018; Greenwood et al., 2011; Tamis-LeMonda et al., 2018), y se puede aplicar las casi idénticamente en poblaciones diversas {[}REFS{]}.
+
+Colectamos los datos tseltales in 2015 de 55 niños de 43 madres (32.7\% promogénitos). Que sepamos, todos los niños estaban desarrollando sin trastorno lingüal, cognitivo, o motorico, y todos oigaban, veían, y crecían bien. Los padres participantes (madres: media = 26.3 años; mediana = 23; rango = 16--43, y padres: media = 30; mediana = 27; rango = 17--52) tenían 2 a 3 niños típicamente (mediana = 2; rango = 1--9), y 28\% vivían con dos niños menor que 4;0. Calculamos, basados en datos de hijos viviendos, que madres tienen \textasciitilde20 anõs cuando dan luz a su primer bebé (mediana = 19; rango = 21--27), con un interval inter-hijo de 3 años (mediana = 2.8; rango = 1--8.5). Por eso, mientras 32.7\% de los niños estudiatos. La mayoría (77\%) de madres cumplió su educación primaria o más (nivel de educación más alto: 37\% con primario; 30\% secundario; 12\% preparatorio; 2\% cursos universitarios; 23\% sin educación primaria completada). Todos los padres han completado su educación primaria, y la mayoría también cumplío la educación secundaria (44\%) o preparatoria (21\%), con dos padres cumpleando cursos universitarios (5\%).
+
+\hypertarget{methods-collection}{%
+\subsection{Recolección de datos}\label{methods-collection}}
+
+Trabajamos con un residente de la comunidad para reclutar los participantes, conducir el proceso de consentimiento informado, y colectar y anotar las grabaciones. Colectamos información demografica (e.g., sobre edad, educacíon, y fondo lingüístico de los cuidadores y hermanos del niño enfocado, etc.) y pidimos informacíon sobre la fecha de nacimiento y desarrollo del niño. La mayoría de madres también tenían una carta medical de la clínica local con la fecha de nacimiento del niño enfocado. Normalmente reciben esta carta entre dos semanas del nacimiento de un bebé durante una visita en la clínica. De vez en cuando, la carta fue pedida meses (o años) depués del nacimiento del niño o no fue pedida todavía. En estos casos, triangulamos la fecha de nacimiento con: la fecha y la edad del niño dadas por los padres, en combinación con otros fuentes de información relevantes (e.g., fecha de nacimiento de un primo nacido unas semanas/días antes or después del niño enfocado). El proceso de consentimiento informado fue conducido en dos partes: cuando arreglamos una fecha de grabación, discutimos informalmente lo que pasaría durante el día de grabar y lo que planeamos hacer con los datos depués. El día de grabar, discutimos también los derechos de los participantes y unos detalles más técnicos sobre usos futuros de los datos por otros investigadores interesados en la lengua y cultural tseltal.
+
+Hicimos grabaciones con una combinación de dos dipositivos: una grabadora pequeña y ligera (Olympus WS-832) y una cámara miniatura que toma fotos con un interval fijo (cada 30 segundos; Narrative Clip 1) aumentado con un lente fisheye minaturo (Photojojo Super Fisheye). Niños llevaron un chaleco diseñado especificamente para estas grabaciónes \protect\hyperlink{fig1}{Gráfico 1} para 9 á 11 horas en casa, típicamente entre las 8.00 y las 18.00. Niños menor que \textasciitilde8 meses llevaron un body de bebé con la grabadora mientras el cuidador corriente llevó un chaleco mas grande con la cámara. La mañana de la grabación, visitamos el niño en su casa, iniciamos la grabación, y pusimos el chaleco en el niño. En la tarde regresamos para colectar los dipositivos, verificar que los padres estuvieron contentos con su experiencia, y arreglar una cita para unos experimentos lingüísticos en los días después (no reportado aquí). El proceso de consentimiento y la realización de datos estuvieron conducido en acuerdo con las guías éticas aprovechas por el Radboud University Social Sciencies Ethics Committee.
+
+\hypertarget{methods-processing}{%
+\subsection{Selección y anotación de los datos}\label{methods-processing}}
+
+Sincronizamos el audio con las fotos para generar un archivo video (``snapshot-linked audio'') para cada grabación (se encuentra los scripts para procesar los audios y las fotos en \url{https://github.com/marisacasillas/Weave}). Aunque hay 500 horas de datos, sin transcripción, no es posible analyzar la frecuencia de HDN. La anotación y transcripción de uno minuto de audio en el estilo descrito abajo toma 30--50 minutos, y por eso trabajamos sólo en nueve segmentos cortos (5 minutos) selectados aleatoriamente\footnote{Entre el momento de salida y el momento de regreso de los investigadores.} por cada grabación. Estos 45 minutos por niño nos da una estimación de la tasa promedia de HDN total durante las horas despiertas, y nos permiten investigar como la tasa cambia como funcción de la edad del niño y hora del día. Usamos todas las grabaciones en el corpus: 56 grabaciones entre 55 niños\footnote{La primera grabación de un niño fue muy corta por un problema técnica.} entre 2 y 52 meses de edad (30 niñas y 25 niños), que resulta en 42 horas de audio para anotación.
+
+Toda la HDN se anotó por un hablante nativo del tseltal; las 10 horas de audios de Casillas et al. (\textbf{casillas2019early?}) por un miembro de la comunidad y la primera autora, y las 32 horas más por el segundo autor. Hicimos anotación en ELAN (Wittenburg et al., 2006) con el esquema de anotación ACLEW (\url{https://osf.io/b2jep/wiki/home/}, Casillas, Bunce, et al., 2017). A través de todas las 42 horas, añadimos una transcripción (en el tseltal) y una traducción aproximada (en el español) para cada enuncio dirigido al niño focalizado y marcamos el tipo de hablante que habló al niño (e.g., madre, otra mujer, hermano mayor, etc.). Usamos información contextual del audio y fotos para decidir cuando un enuncio fue, seguramente, dirigido al niño. Exportamos las transcripciónes de ELAN á un formato tab-delimited text para analisis.
+
+\hypertarget{methods-analysisinfo}{%
+\subsection{Analysis de los datos}\label{methods-analysisinfo}}
+
+Investigamos, así como Casillas et al. (\textbf{casillas2019early?}) los efectos de la edad del niño, porción del día, número de personas en el hogar, y número de personas presente durante el segmento anotado en el uso de HDN. Se condució el analisis en R (R Core Team, 2018) con generalized linear mixed-effects regresiones del paquete glmmTMB (Brooks et al., 2017) y se hició los gráficos con el paquete ggplot (Wickham, 2009). Se encuentre los datos y los scriptos para el analisis en \url{https://github.com/marisacasillas/Tseltal-CLE/Tseltal-CLE-full2015sample/}. Naturalmente, velicodad de HDN sólo puede ser metido en números positivos (0--infinidad)---por eso la distribución estatadistica natural del HDN no es normal, y tiene una cola derecha inflatada. Usamos un negative binomial linking function---que también estima un dispersion parameter---en la regresión para confrontar este problema (Brooks et al., 2017; Smithson \& Merkle, 2013). Además, en muchos segmentos audios no hay nada HDN y la distribucíon de HDN a través de segmentos, por eso, tiene dos modos: uno centrado en cero y uno centrado en la mediana de segmentos con HDN \protect\hyperlink{fig2}{Gráfico 2}. Añadimos un componente zero-inflation a la regresión para confrontar este problema. Al fin, nuestro analisis con regresión zero-inflated negative binomial mixed-effects nos da dos modelos estadisticos: una regresión binomial (logístoco) que evalua la probabilidad de un segmento sin HDN (i.e., 0 vs.~mas que 0 HDN min/hra) y una regresión linear (usando la distribución negative binomial) que evalua la velocidad de HDN en segmentos con mas que 0 HDN min/hra (e.g., `1' vs `3' minutos de HDN per hora) y da una estimación de dispersión de los datos. Se encuentre una regresión gaussian linear mixed effects (más convencional pero menor adecuado) en los Materiales Suplemental.
+
+\hypertarget{anotaciuxf3n-de-datos}{%
+\subsection{Anotación de datos}\label{anotaciuxf3n-de-datos}}
+
+\hypertarget{resultados}{%
+\section{Resultados}\label{resultados}}
+
+\hypertarget{target-child-directed-speech-rate}{%
+\subsection{Target-child directed speech rate}\label{target-child-directed-speech-rate}}
+
+On average, across all 46 recordings from all 45 children, the baseline rate of speech directly addressed to the target child (i.e., TCDS) was 2.30 minutes per hour (median = 1.64, SD = 2.23, range = 0.08--6.43). This is somewhat lower than the average of 3.6 min/hr reported in the smaller sample from this community reported in Casillas et al.~(2020). If we only count TCDS that occurs within turn-taking sequences (i.e., a prompt to a child's response, a response to a child's prompt, or an utterance within part of a longer turn-taking sequence), the baseline rate is lower, at 1.82 minutes per hour (median = 1.34, SD = 1.76, range = 0.08--5.16). As is apparent, most of the TCDS comes within turn-taking sequences. Across recordings, the mean proportion of TCDS minutes that occurred within turn-taking sequences was 0.72, with average proportions ranging between .70 and .90 across broad speaker type categories (female adults = 0.73; male adults = 0.82; female children = 0.78; male children = 0.88; other/unknown = 0.90).
+
+Before conducting regression analyses we observed the distribution of the data. Many clips contained zero TCDS and, among the remainder of the clips, there was a skewed, non-negative distribution (i.e., it is not possible to have less than 0 min/hr of TCDS). This pattern was expected on the basis of past work analyzing speech during randomly selected daylong clips (REFS). We handle this distribution as has been done in the past, with a zero-inflated negative-binomial mixed-effects regression. {[}tailor and translate description from before{]}. The conditional model (of non-zero integer minutes per hour of TCDS) included a random effect of recording and predictors that have previously been found to influence input rate, including: target child age (numeric; standardized), time of day (factorial; morning vs.~midday/afternoon), household size (numeric; standardized), maternal education level (factorial; none vs.~primary/secondary/preparatory/postsecondary), and an interaction between age and time of day. The zero-inflation component of the regression included a predictor of child age (numeric; standardized) on the prediction that younger children are overall more likely to hear zero TCDS in a given clip. The conditional regression revealed only two significant effects on TCDS rate: children hear more TCDS as they get older (\(b\) = 0.488, \(SE\) = 0.188, \(t\) = 2.597, \(p\) = 0.009), and children from larger households hear more TCDS (\(b\) = 0.139, \(SE\) = 0.060, \(t\) = 2.316, \(p\) = 0.021). We did not see a significant interaction of child age and time of day, as found in past work (Casillas et al., 2020). The zero-inflation component confirmed that clips from older children are significantly less likely to contain zero TCDS (\(b\) = -6.415, \(SE\) = 1.789, \(t\) = -3.585, \(p\) = 0.000).
+
+\hypertarget{child-vocalization-rate}{%
+\subsection{Child vocalization rate}\label{child-vocalization-rate}}
+
+\hypertarget{discusiuxf3n}{%
+\section{Discusión}\label{discusiuxf3n}}
+
+\hypertarget{acknowledgements}{%
+\section{Agradecimientos}\label{acknowledgements}}
+
+Agredecemos y reconocemos Rebeca Guzmán López, Humbertina Gómez Pérez, e Antun Gusman Osil, los quienes hicieron posible la colección, anotación, y transcripción de estes datos. Acknowledgements también las familias participantes y la comunidad tseltal para su apoyo. Esta investigación fue financiado por una beca NWO Veni (275-89-033) de MC, una beca XXX de MS, fundos para trabajo de campo del Max Planck Institute for Psycholinguistics, y con el apoyo del Centro de Investigaciones y Estudios Superiores en Antropología Social (CIESAS) Sureste. Este manuscrito fue escrito con el library papaja en RStudio (Aust \& Barth, 2018).
+
+\newpage
+
+\hypertarget{refs}{%
+\section{Bibliografía}\label{refs}}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\hypertarget{ref-R-papaja}{}%
+Aust, F., \& Barth, M. (2018). \emph{{papaja}: {Create} {APA} manuscripts with {R Markdown}}. \url{https://github.com/crsh/papaja}
+
+\leavevmode\hypertarget{ref-bergelson2018day}{}%
+Bergelson, E., Amatuni, A., Dailey, S., Koorathota, S., \& Tor, S. (2018). Day by day, hour by hour: Naturalistic language input to infants. \emph{Developmental Science}, \emph{22}, e12715. \url{https://doi.org/10.1111/desc.12715}
+
+\leavevmode\hypertarget{ref-brooks2017modeling}{}%
+Brooks, M. E., Kristensen, K., van Benthem, K. J., Magnusson, A., Berg, C. W., Nielsen, A., Skaug, H. J., Mächler, M., \& Bolker, B. M. (2017). Modeling zero-inflated count data with glmmTMB. \emph{bioRxiv}. \url{https://doi.org/10.1101/132753}
+
+\leavevmode\hypertarget{ref-brown1998conversational}{}%
+Brown, P. (1998). Conversational structure and language acquisition: The role of repetition in {T}zeltal adult and child speech. \emph{Journal of Linguistic Anthropology}, \emph{2}, 197--221. \url{https://doi.org/10.1525/jlin.1998.8.2.197}
+
+\leavevmode\hypertarget{ref-brown2011cultural}{}%
+Brown, P. (2011). The cultural organization of attention. In A. Duranti, E. Ochs, \& and B. B. Schieffelin (Eds.), \emph{Handbook of {Language Socialization}} (pp. 29--55). Malden, MA: Wiley-Blackwell.
+
+\leavevmode\hypertarget{ref-brown2014interactional}{}%
+Brown, P. (2014). The interactional context of language learning in {T}zeltal. In I. Arnon, M. Casillas, C. Kurumada, \& B. Estigarribia (Eds.), \emph{Language in interaction: Studies in honor of {Eve V. Clark}} (pp. 51-\/-82). Amsterdam, NL: John Benjamins.
+
+\leavevmode\hypertarget{ref-Casillas-HB}{}%
+Casillas, M., Brown, P., \& Levinson, S. C. (2017). \emph{Casillas {HomeBank} corpus}. \url{https://doi.org/10.21415/T51X12}
+
+\leavevmode\hypertarget{ref-casillas2017ACLEWDAS}{}%
+Casillas, M., Bunce, J., Soderstrom, M., Rosemberg, C., Migdalek, M., Alam, F., Stein, A., \& Garrison, H. (2017). \emph{Introduction: {The ACLEW DAS} template {[}training materials{]}}. \url{https://osf.io/aknjv/}
+
+\leavevmode\hypertarget{ref-deleon2011language}{}%
+de León, L. (2011). Language socialization and multiparty participation frameworks. In A. Duranti, E. Ochs, \& and B. B. Schieffelin (Eds.), \emph{Handbook of {Language Socialization}} (pp. 81--111). Malden, MA: Wiley-Blackwell. \url{https://doi.org/10.1002/9781444342901.ch4}
+
+\leavevmode\hypertarget{ref-gaskins2000childrens}{}%
+Gaskins, S. (2000). Children's daily activities in a {M}ayan village: A culturally grounded description. \emph{Cross-Cultural Research}, \emph{34}(4), 375--389. \url{https://doi.org/10.1177/106939710003400405}
+
+\leavevmode\hypertarget{ref-greenwood2011assessing}{}%
+Greenwood, C. R., Thiemann-Bourque, K., Walker, D., Buzhardt, J., \& Gilkerson, J. (2011). Assessing children's home language environments using automatic speech recognition technology. \emph{Communication Disorders Quarterly}, \emph{32}(2), 83--92. \url{https://doi.org/10.1177/1525740110367826}
+
+\leavevmode\hypertarget{ref-pye1986quiche}{}%
+Pye, C. (1986). Quich{é} {M}ayan speech to children. \emph{Journal of Child Language}, \emph{13}(1), 85--100. \url{https://doi.org/10.1017/S0305000900000313}
+
+\leavevmode\hypertarget{ref-R-base}{}%
+R Core Team. (2018). \emph{R: A language and environment for statistical computing}. R Foundation for Statistical Computing. \url{https://www.R-project.org/}
+
+\leavevmode\hypertarget{ref-rogoff2003firsthand}{}%
+Rogoff, B., Paradise, R., Arauz, R. M., Correa-Chávez, M., \& Angelillo, C. (2003). Firsthand learning through intent participation. \emph{Annual Review of Psychology}, \emph{54}(1), 175--203. \url{https://doi.org/10.1146/annurev.psych.54.101601.145118}
+
+\leavevmode\hypertarget{ref-shneidman2012language}{}%
+Shneidman, L. A., \& Goldin-Meadow, S. (2012). Language input and acquisition in a {M}ayan village: How important is directed speech? \emph{Developmental Science}, \emph{15}(5), 659--673. \url{https://doi.org/10.1111/j.1467-7687.2012.01168.x}
+
+\leavevmode\hypertarget{ref-smithson2013generalized}{}%
+Smithson, M., \& Merkle, E. C. (2013). \emph{Generalized linear models for categorical and continuous limited dependent variables}. New York: Chapman; Hall/CRC. \url{https://doi.org/10.1201/b15694}
+
+\leavevmode\hypertarget{ref-tamislemonda2018routine}{}%
+Tamis-LeMonda, C. S., Custode, S., Kuchirko, Y., Escobar, K., \& Lo, T. (2018). Routine language: Speech directed to infants during home activities. \emph{Child Development}, \emph{Early View}, 1--18.
+
+\leavevmode\hypertarget{ref-R-ggplot2}{}%
+Wickham, H. (2009). \emph{ggplot2: Elegant graphics for data analysis}. Springer-Verlag New York. \url{http://ggplot2.org}
+
+\leavevmode\hypertarget{ref-ELAN}{}%
+Wittenburg, P., Brugman, H., Russel, A., Klassmann, A., \& Sloetjes, H. (2006). {ELAN}: A professional framework for multimodality research. \emph{{Proceedings of the Fifth International Conference on Language Resources and Evaluation}}, 1556--1559.
+
+\end{CSLReferences}
+
+\endgroup
+
+
+\end{document}
