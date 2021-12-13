@@ -34,7 +34,7 @@ abstract: |
 keywords          : "Desarrollo de lenguaje, habla dirigida al niño, input lingüistico, Tseltal, Maya"
 wordcount         : "XXXX (XXXX sin bibliografía)"
 
-csl: apa-noissue.csl
+csl: apa.csl # use "et al." for second+ appearances of citations
 
 bibliography      : ["Tseltal-CLE-full2015sample.bib"]
 
@@ -54,13 +54,14 @@ library(papaja)
 library(tidyverse)
 library(fuzzyjoin)
 library(ggpubr)
+library(glmmTMB)
+library(broom.mixed)
+library(ggeffects)
 # library(viridis)
 # library(grid)
 # library(gridExtra)
 # library(lme4)
-# library(glmmTMB)
 # library(DHARMa)
-# library(broom.mixed)
 source("../0-Helper.R")
 source("0-Summarize.utt.info.R")
 
@@ -411,17 +412,64 @@ grand.means.CHI.is <- rec.summary.is %>%
 
 # Resultados
 <!-- PART 1
-- how much directed speech do children hear on average
-    - does it change with age?
-    - does it change across the day (* with age)?
-    - how much of it occurs within tt/is?
+x how much directed speech do children hear on average
+    x does it change with age?
+    x does it change across the day (* with age)?
+    x how much of it occurs within tt/is?
 -->
 
-On average, across all `r length(unique(rec.summary.all$aclew_id))` recordings from all `length(unique(rec.summary.all$aclew_id)) - 1` children, the baseline rate of speech directly addressed to the target child (i.e., TCDS) was `round(grand.means.OTR.all$mean.tot.mph,2)` minutes per hour (median = `round(grand.means.OTR.all$median.tot.mph,2)`, sd = `round(grand.means.OTR.all$sd.tot.mph,2)`, range = `round(grand.means.OTR.all$min.tot.mph,2)`--`round(grand.means.OTR.all$max.tot.mph,2)`). This is somewhat lower than the average of 3.6 min/hr reported in the smaller sample from this community reported in Casillas et al. (2020). If we only count TCDS that occurs within turn-taking sequences (i.e., a prompt to a child's response, a response to a child's prompt, or an utterance within part of a longer turn-taking sequence), the baseline rate is lower, at `round(grand.means.OTR.is$mean.tot.mph,2)` minutes per hour (median = `round(grand.means.OTR.is$median.tot.mph,2)`, sd = `round(grand.means.OTR.is$sd.tot.mph,2)`, range = `round(grand.means.OTR.is$min.tot.mph,2)`--`round(grand.means.OTR.is$max.tot.mph,2)`).
+## Target-child directed speech rate
 
-As is apparent, most of the TCDS comes within turn-taking sequences. Across recordings, the mean proportion of TCDS minutes that occurred within turn-taking sequences was `r round(grand.means.prop.IS.OTR$prop.is.tot.spchmin,2)`, with average proportions ranging between .70 and .90 across broad speaker type categories (female adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.fa.spchmin,2)`; male adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.ma.spchmin,2)`; female children =  `r round(grand.means.prop.IS.OTR$prop.is.tot.fc.spchmin,2)`; male children = `r round(grand.means.prop.IS.OTR$prop.is.tot.mc.spchmin,2)`; other/unknown =  `r round(grand.means.prop.IS.OTR$prop.is.tot.un.spchmin,2)`).
+On average, across all `r length(unique(rec.summary.all$aclew_id))` recordings from all `r `length(unique(rec.summary.all$aclew_id)) - 1` children, the baseline rate of speech directly addressed to the target child (i.e., TCDS) was `r round(grand.means.OTR.all$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.OTR.all$median.tot.mph,2)`, SD = `r round(grand.means.OTR.all$sd.tot.mph,2)`, range = `r round(grand.means.OTR.all$min.tot.mph,2)`--`r round(grand.means.OTR.all$max.tot.mph,2)`). This is somewhat lower than the average of 3.6 min/hr reported in the smaller sample from this community reported in Casillas et al. (2020). If we only count TCDS that occurs within turn-taking sequences (i.e., a prompt to a child's response, a response to a child's prompt, or an utterance within part of a longer turn-taking sequence), the baseline rate is lower, at `r round(grand.means.OTR.is$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.OTR.is$median.tot.mph,2)`, SD = `r round(grand.means.OTR.is$sd.tot.mph,2)`, range = `r round(grand.means.OTR.is$min.tot.mph,2)`--`r round(grand.means.OTR.is$max.tot.mph,2)`). As is apparent, most of the TCDS comes within turn-taking sequences. Across recordings, the mean proportion of TCDS minutes that occurred within turn-taking sequences was `r round(grand.means.prop.IS.OTR$prop.is.tot.spchmin,2)`, with average proportions ranging between .70 and .90 across broad speaker type categories (female adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.fa.spchmin,2)`; male adults = `r round(grand.means.prop.IS.OTR$prop.is.tot.ma.spchmin,2)`; female children =  `r round(grand.means.prop.IS.OTR$prop.is.tot.fc.spchmin,2)`; male children = `r round(grand.means.prop.IS.OTR$prop.is.tot.mc.spchmin,2)`; other/unknown =  `r round(grand.means.prop.IS.OTR$prop.is.tot.un.spchmin,2)`).
 
+```{r part1_regression, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+## TCDS ####
+ODS.only <- subset(clip.summary.all, tier.name == "OTR")
+tcds.random.distribution <- ggplot(ODS.only,
+                            aes(round(tot.min.p.hr, 0))) +
+  geom_histogram(binwidth = 2) +
+  ylab("# of clips") +
+  xlab ("TCDS min/hr") +
+  basic.theme
+ggsave("TCDS_random_distribution.png",
+       plot = tcds.random.distribution,
+       width = 8, height = 6, dpi = 300)
+#sd(round(subset(clip.summary.all, tier.name == "OTR")$tot.min.p.hr,0))^2
+#mean(round(subset(clip.summary.all, tier.name == "OTR")$tot.min.p.hr,0))
+# mean is much smaller than variance
 
+tds.rand.zinb <- glmmTMB(round(tot.min.p.hr, 0) ~
+                           tchiyr.std +
+                           stthr.tri.o +
+                           hsz.std +
+                           mated.std +
+                           tchiyr.std:stthr.tri.o +
+                           (1|aclew_id),
+                         data = ODS.only,
+                         ziformula = ~tchiyr.std,
+                         family="nbinom1")
+summary(tds.rand.zinb)
+
+# is household size just a proxy for # older sibs?
+# doesn't seem like it
+tds.rand.zinb.alt <- glmmTMB(round(tot.min.p.hr, 0) ~
+                           tchiyr.std +
+                           stthr.tri.o +
+                           number_older_sibs +
+                           mated.std +
+                           tchiyr.std:stthr.tri.o +
+                           (1|aclew_id),
+                         data = ODS.only,
+                         ziformula = ~tchiyr.std,
+                         family="nbinom1")
+# summary(tds.rand.zinb.alt)
+tds.mdl.tbl <- broom.mixed::tidy(tds.rand.zinb)
+
+```
+
+Before conducting regression analyses we observed the distribution of the data. Many clips contained zero TCDS and, among the remainder of the clips, there was a skewed, non-negative distribution (i.e., it is not possible to have less than 0 min/hr of TCDS). This pattern was expected on the basis of past work analyzing speech during randomly selected daylong clips (REFS). We handle this distribution as has been done in the past, with a zero-inflated negative-binomial mixed-effects regression. [tailor and translate description from before]. The conditional model (of non-zero integer minutes per hour of TCDS) included a random effect of recording and predictors that have previously been found to influence input rate, including: target child age (numeric; standardized), time of day (factorial; morning vs. midday/afternoon), household size (numeric; standardized), maternal education level (factorial; none vs. primary/secondary/preparatory/postsecondary), and an interaction between age and time of day. The zero-inflation component of the regression included a predictor of child age (numeric; standardized) on the prediction that younger children are overall more likely to hear zero TCDS in a given clip. The conditional regression revealed only two significant effects on TCDS rate: children hear more TCDS as they get older ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[1]],digits = 3)`), and children from larger households hear more TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "hsz.std")[1]],digits = 3)`). We did not see a significant interaction of child age and time of day, as found in past work (Casillas et al., 2020). The zero-inflation component confirmed that clips from older children are significantly less likely to contain zero TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[2]],digits = 3)`).
+
+## Child vocalization rate
 
 <!-- PART 2
 - how much speech do children produce?
@@ -437,103 +485,60 @@ As is apparent, most of the TCDS comes within turn-taking sequences. Across reco
 -->
 
 ```{r plotdata}
-ggplot(data = clip.summary,
-       aes(x = min.p.hr)) +
-  facet_grid(~ tier.name) +
-  geom_histogram(binwidth = 1)
-
-all.spch.mph.plot <- ggplot(data = clip.summary,
-       aes(x = age, y = min.p.hr,
-           color = factor(aclew_id))) +
-  facet_grid(~ tier.name) +
-  geom_smooth(method = "lm", color = "gray") +
-  geom_boxplot(outlier.fill = NA) +
-  geom_jitter(alpha = 0.5) +
-  scale_x_continuous(limits = c(0,55),
-                     breaks = seq(0,55,5)) +
-  scale_y_continuous(limits = c(0,40),
-                     breaks = seq(0,40,5)) +
-  coord_cartesian(xlim = c(0,55), ylim = c(0,40)) +
-  labs(x = "Age (months)", y = "min/hr") +
-  guides(color = "none") +
-  theme_apa()
-all.spch.mph.plot %>%
-  ggexport(filename = "plots/all.spch.mph.plot.png",
-           width = 2400, height = 1200, res = 300)
-
-clip.CHIOTR.corr.plot <- ggplot(data = clip.CHI.OTR.rates,
-                                aes(x = OTR, y = CHI)) +
-  geom_smooth(method = "lm", color = "gray") +
-  geom_jitter() +
-  labs(x = "TCDS min/hr", y = "CHI spch min/hr") +
-  theme_apa()
-clip.CHIOTR.corr.plot %>%
-  ggexport(filename = "plots/clip.CHIOTR.corr.plot.png",
-           width = 1200, height = 600, res = 300)
-
-rec.CHIOTR.corr.plot <- ggplot(data = rec.CHI.OTR.rates,
-                                aes(x = OTR, y = CHI)) +
-  geom_smooth(method = "lm", color = "gray") +
-  geom_jitter() +
-  labs(x = "TCDS min/hr", y = "CHI spch min/hr") +
-  theme_apa()
-rec.CHIOTR.corr.plot %>%
-  ggexport(filename = "plots/rec.CHIOTR.corr.plot.png",
-           width = 1200, height = 600, res = 300)
-
-rec.CHIage.OTRtertile.plot <- ggplot(data = rec.CHI.OTR.rates,
-                                aes(x = age, y = CHI)) +
-  facet_grid(~ Tertile) +
-  geom_smooth(method = "lm", color = "gray") +
-  geom_jitter() +
-  labs(x = "Age (mo)", y = "CHI spch min/hr") +
-  theme_apa()
-rec.CHIage.OTRtertile.plot %>%
-  ggexport(filename = "plots/rec.CHIage.OTRtertile.plot.png",
-           width = 2400, height = 800, res = 300)
-
-```
-
-```{r regression}
-## TCDS ####
-tcds.random.distribution <- ggplot(subset(seg.lvl.summary, tier == "OTR"),
-                            aes(round(min.p.hr,0))) +
-  geom_histogram(binwidth = 2) +
-  ylab("# of clips") +
-  xlab ("TCDS min/hr") +
-  basic.theme
-ggsave("TCDS_random_distribution.png",
-       plot = tcds.random.distribution,
-       width = 8, height = 6, dpi = 300)
-#sd(round(subset(seg.lvl.summary, tier == "OTR")$min.p.hr,0))^2
-#mean(round(subset(seg.lvl.summary, tier == "OTR")$min.p.hr,0))
-# mean is much smaller than variance
-tds.rand.zinb <- glmmTMB(round(min.p.hr,0) ~
-                           age_mo_round *
-                           mat_ed +
-                           (1|child_id),
-                         data=subset(seg.lvl.summary, tier == "OTR"),
-                         ziformula=~age_mo_round,
-                         family="nbinom1")
-
-
-
-tds.rand.zinb <- glmmTMB(round(min.p.hr,0) ~
-                           tchiyr.std +
-                           stthr.tri +
-                           hsz.std +
-                           nsk.std +
-                           tchiyr.std:stthr.tri +
-                           tchiyr.std:nsk.std +
-                           (1|child_id),
-                         data=subset(seg.lvl.summary, tier == "OTR"),
-                         ziformula=~nsk.std,
-                         family="nbinom1")
-
-otr.m <- lmer(min.p.hr ~
-                 age_mo_round * mat_ed + (1|child_id),
-               data = subset(seg.lvl.summary, tier == "OTR"))
-summary(otr.m)
+# ggplot(data = clip.summary,
+#        aes(x = min.p.hr)) +
+#   facet_grid(~ tier.name) +
+#   geom_histogram(binwidth = 1)
+# 
+# all.spch.mph.plot <- ggplot(data = clip.summary,
+#        aes(x = age, y = min.p.hr,
+#            color = factor(aclew_id))) +
+#   facet_grid(~ tier.name) +
+#   geom_smooth(method = "lm", color = "gray") +
+#   geom_boxplot(outlier.fill = NA) +
+#   geom_jitter(alpha = 0.5) +
+#   scale_x_continuous(limits = c(0,55),
+#                      breaks = seq(0,55,5)) +
+#   scale_y_continuous(limits = c(0,40),
+#                      breaks = seq(0,40,5)) +
+#   coord_cartesian(xlim = c(0,55), ylim = c(0,40)) +
+#   labs(x = "Age (months)", y = "min/hr") +
+#   guides(color = "none") +
+#   theme_apa()
+# all.spch.mph.plot %>%
+#   ggexport(filename = "plots/all.spch.mph.plot.png",
+#            width = 2400, height = 1200, res = 300)
+# 
+# clip.CHIOTR.corr.plot <- ggplot(data = clip.CHI.OTR.rates,
+#                                 aes(x = OTR, y = CHI)) +
+#   geom_smooth(method = "lm", color = "gray") +
+#   geom_jitter() +
+#   labs(x = "TCDS min/hr", y = "CHI spch min/hr") +
+#   theme_apa()
+# clip.CHIOTR.corr.plot %>%
+#   ggexport(filename = "plots/clip.CHIOTR.corr.plot.png",
+#            width = 1200, height = 600, res = 300)
+# 
+# rec.CHIOTR.corr.plot <- ggplot(data = rec.CHI.OTR.rates,
+#                                 aes(x = OTR, y = CHI)) +
+#   geom_smooth(method = "lm", color = "gray") +
+#   geom_jitter() +
+#   labs(x = "TCDS min/hr", y = "CHI spch min/hr") +
+#   theme_apa()
+# rec.CHIOTR.corr.plot %>%
+#   ggexport(filename = "plots/rec.CHIOTR.corr.plot.png",
+#            width = 1200, height = 600, res = 300)
+# 
+# rec.CHIage.OTRtertile.plot <- ggplot(data = rec.CHI.OTR.rates,
+#                                 aes(x = age, y = CHI)) +
+#   facet_grid(~ Tertile) +
+#   geom_smooth(method = "lm", color = "gray") +
+#   geom_jitter() +
+#   labs(x = "Age (mo)", y = "CHI spch min/hr") +
+#   theme_apa()
+# rec.CHIage.OTRtertile.plot %>%
+#   ggexport(filename = "plots/rec.CHIage.OTRtertile.plot.png",
+#            width = 2400, height = 800, res = 300)
 
 ```
 
