@@ -394,6 +394,19 @@ grand.means.prop.IS.OTR <- rec.summary.all %>%
   summarize(across(prop.is.tot.spchmin:prop.is.tot.un.spchmin,
                    ~ mean(.x, na.rm = TRUE)))
 
+# I give up on trying to do this inline with rename_all/rename_at womp womp
+CHI.is.cols <- rec.summary.is %>%
+  ungroup() %>%
+  filter(tier.name == "CHI") %>%
+  select(c(recording, tot.spchmin, mean.tot.mph))
+colnames(CHI.is.cols) <- paste(names(CHI.is.cols), ".is", sep = "")
+
+rec.means.prop.IS.CHI <- rec.summary.all %>%
+  filter(tier.name == "CHI") %>%
+  full_join(CHI.is.cols, by = c("recording" = "recording.is")) %>%
+  ungroup() %>%
+  mutate(prop.is.tot.spchmin = tot.spchmin.is/tot.spchmin) %>%
+  pull(prop.is.tot.spchmin)
 
 # CHI summaries
 grand.means.CHI.all <- rec.summary.all %>%
@@ -477,7 +490,8 @@ tcds.mdl.pred.age <- tibble(
   ggpredict(tds.rand.zinb, "tchiyr.std")) %>%
   mutate(age.mo = (x * age.sd) + age.mean)
 
-tcds.plot.age <- ggplot(tcds.mdl.pred.age, aes(x = age.mo, y = predicted)) +
+tcds.plot.age <- ggplot(
+  tcds.mdl.pred.age, aes(x = age.mo, y = predicted)) +
   geom_ribbon(aes(ymax = conf.high, ymin = conf.low), alpha = 0.2) +
   geom_line() +
   labs(x = "Edad del niño (meses)", y = "Valores predichos (min/hr)") +
@@ -509,7 +523,8 @@ tcds.mdl.pred.hsz <- tibble(
 tcds.plot.hsz <- ggplot(tcds.mdl.pred.hsz, aes(x = household_size, y = predicted)) +
   geom_ribbon(aes(ymax = conf.high, ymin = conf.low), alpha = 0.2) +
   geom_line() +
-  labs(x = "# Personas viviendo en el hogar", y = "Valores predichos (min/hr)") +
+  labs(x = "# Personas viviendo en el hogar",
+       y = "Valores predichos (min/hr)") +
   geom_boxplot(data = ODS.only, aes(x = household_size, y = tot.min.p.hr,
                    color = factor(aclew_id), fill = factor(aclew_id)),
                outlier.fill = NA, alpha = 0.1,
@@ -533,12 +548,17 @@ ggsave("TCDS_over_householdsize_with_estimates.png",
 ## Child vocalization rate
 
 <!-- PART 2
-- how much speech do children produce?
+x how much speech do children produce?
     - does it change with age?
     - does it change across the day (* with age)?
-    - how much of it occurs within tt/is?
+    x how much of it occurs within tt/is?
 -->
 
+On average, across all recordings, the baseline rate of target child vocalization was `r round(grand.means.CHI.all$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.CHI.all$median.tot.mph,2)`, SD = `r round(grand.means.CHI.all$sd.tot.mph,2)`, range = `r round(grand.means.CHI.all$min.tot.mph,2)`--`r round(grand.means.CHI.all$max.tot.mph,2)`). In other words, children vocalize much more often than they encounter directed speech. Focusing now solely on vocalizations that occur within turn-taking sequences, the baseline rate is much lower, nearly matching the rate of TCDS children hear, at `r round(grand.means.CHI.is$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.CHI.is$median.tot.mph,2)`, SD = `r round(grand.means.CHI.is$sd.tot.mph,2)`, range = `r round(grand.means.CHI.is$min.tot.mph,2)`--`r round(grand.means.CHI.is$max.tot.mph,2)`). Unlike TCDS, which primarily occurs in turn-taking sequences, child vocalizations primarily occur outside of these sequences. Across recordings, the mean proportion of child vocalization occurring within turn-taking sequences was `r round(mean(rec.means.prop.IS.CHI),2)` (median = `r round(median(rec.means.prop.IS.CHI),2)`, sd = `r round(sd(rec.means.prop.IS.CHI),2)`, range =  `r round(min(rec.means.prop.IS.CHI),2)`--`r round(max(rec.means.prop.IS.CHI),2)`).
+
+
+
+## Relating TCDS rate and child volubility
 
 <!-- PART 3
 - does children's volubility correlate with their directed input?
