@@ -447,21 +447,21 @@ tcds.random.distribution <- ggplot(OTR.only,
 ggsave("TCDS_random_distribution.png",
        plot = tcds.random.distribution,
        width = 8, height = 6, dpi = 300)
-#sd(round(subset(clip.summary.all, tier.name == "OTR")$tot.min.p.hr,0))^2
-#mean(round(subset(clip.summary.all, tier.name == "OTR")$tot.min.p.hr,0))
+#sd(round(OTR.only$tot.min.p.hr,0))^2
+#mean(round(OTR.only$tot.min.p.hr,0))
 # mean is much smaller than variance
 
 tds.rand.zinb <- glmmTMB(round(tot.min.p.hr, 0) ~
                            tchiyr.std +
                            stthr.tri.o +
                            hsz.std +
-                           mated.std +
+                           mated.bin +
                            tchiyr.std:stthr.tri.o +
                            (1|aclew_id),
                          data = OTR.only,
                          ziformula = ~tchiyr.std,
                          family="nbinom1")
-summary(tds.rand.zinb)
+# summary(tds.rand.zinb)
 
 # is household size just a proxy for # older sibs?
 # doesn't seem like it
@@ -469,7 +469,7 @@ tds.rand.zinb.alt <- glmmTMB(round(tot.min.p.hr, 0) ~
                            tchiyr.std +
                            stthr.tri.o +
                            number_older_sibs +
-                           mated.std +
+                           mated.bin +
                            tchiyr.std:stthr.tri.o +
                            (1|aclew_id),
                          data = OTR.only,
@@ -479,7 +479,7 @@ tds.rand.zinb.alt <- glmmTMB(round(tot.min.p.hr, 0) ~
 tds.mdl.tbl <- broom.mixed::tidy(tds.rand.zinb)
 ```
 
-Before conducting regression analyses we observed the distribution of the data. Many clips contained zero TCDS and, among the remainder of the clips, there was a skewed, non-negative distribution (i.e., it is not possible to have less than 0 min/hr of TCDS). This pattern was expected on the basis of past work analyzing speech during randomly selected daylong clips (REFS). We handle this distribution as has been done in the past, with a zero-inflated negative-binomial mixed-effects regression. [tailor and translate description from before]. The conditional model (of non-zero integer minutes per hour of TCDS) included a random effect of recording and predictors that have previously been found to influence input rate, including: target child age (numeric; standardized), time of day (factorial; morning vs. midday/afternoon), household size (numeric; standardized), maternal education level (factorial; none vs. primary/secondary/preparatory/postsecondary), and an interaction between age and time of day. The zero-inflation component of the regression included a predictor of child age (numeric; standardized) on the prediction that younger children are overall more likely to hear zero TCDS in a given clip. The conditional regression revealed only two significant effects on TCDS rate: children hear more TCDS as they get older ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[1]],digits = 3)`), and children from larger households hear more TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "hsz.std")[1]],digits = 3)`). We did not see a significant interaction of child age and time of day, as found in past work (Casillas et al., 2020). The zero-inflation component confirmed that clips from older children are significantly less likely to contain zero TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[2]],digits = 3)`).
+Before conducting regression analyses we observed the distribution of the data. Many clips contained zero TCDS and, among the remainder of the clips, there was a skewed, non-negative distribution (i.e., it is not possible to have less than 0 min/hr of TCDS). This pattern was expected on the basis of past work analyzing speech during randomly selected daylong clips (REFS). We handle this distribution as has been done in the past, with a zero-inflated negative-binomial mixed-effects regression. [tailor and translate description from before]. The conditional model (of non-zero integer minutes per hour of TCDS) included a random effect of recording and predictors that have previously been found to influence input rate, including: target child age (numeric; standardized), time of day (factorial; morning vs. midday/afternoon), household size (numeric; standardized), maternal education level (factorial; <6 years vs. 6+ years of schooling), and an interaction between age and time of day. The zero-inflation component of the regression included a predictor of child age (numeric; standardized) on the prediction that younger children are overall more likely to hear zero TCDS in a given clip. The conditional regression revealed only two significant effects on TCDS rate: children hear more TCDS as they get older ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[1]],digits = 3)`), and children from larger households hear more TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "hsz.std")[1]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "hsz.std")[1]],digits = 3)`). We did not see a significant interaction of child age and time of day, as found in past work (Casillas et al., 2020). The zero-inflation component confirmed that clips from older children are significantly less likely to contain zero TCDS ($b$ = `r printnum(tds.mdl.tbl$estimate[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $SE$ = `r printnum(tds.mdl.tbl$std.error[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $t$ = `r printnum(tds.mdl.tbl$statistic[which(tds.mdl.tbl$term == "tchiyr.std")[2]], digits = 3)`, $p$ = `r printnum(tds.mdl.tbl$p.value[which(tds.mdl.tbl$term == "tchiyr.std")[2]],digits = 3)`).
 
 ```{r tcds_plots, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 # Age effect
@@ -549,21 +549,105 @@ ggsave("TCDS_over_householdsize_with_estimates.png",
 
 <!-- PART 2
 x how much speech do children produce?
-    - does it change with age?
-    - does it change across the day (* with age)?
+    x does it change with age?
     x how much of it occurs within tt/is?
+    x does volubility correlate with their directed input?
+        x does it change with age?
+        x what input counts?
+
 -->
 
 On average, across all recordings, the baseline rate of target child vocalization was `r round(grand.means.CHI.all$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.CHI.all$median.tot.mph,2)`, SD = `r round(grand.means.CHI.all$sd.tot.mph,2)`, range = `r round(grand.means.CHI.all$min.tot.mph,2)`--`r round(grand.means.CHI.all$max.tot.mph,2)`). In other words, children vocalize much more often than they encounter directed speech. Focusing now solely on vocalizations that occur within turn-taking sequences, the baseline rate is much lower, nearly matching the rate of TCDS children hear, at `r round(grand.means.CHI.is$mean.tot.mph,2)` minutes per hour (median = `r round(grand.means.CHI.is$median.tot.mph,2)`, SD = `r round(grand.means.CHI.is$sd.tot.mph,2)`, range = `r round(grand.means.CHI.is$min.tot.mph,2)`--`r round(grand.means.CHI.is$max.tot.mph,2)`). Unlike TCDS, which primarily occurs in turn-taking sequences, child vocalizations primarily occur outside of these sequences. Across recordings, the mean proportion of child vocalization occurring within turn-taking sequences was `r round(mean(rec.means.prop.IS.CHI),2)` (median = `r round(median(rec.means.prop.IS.CHI),2)`, sd = `r round(sd(rec.means.prop.IS.CHI),2)`, range =  `r round(min(rec.means.prop.IS.CHI),2)`--`r round(max(rec.means.prop.IS.CHI),2)`).
 
+```{r cvoc_regression, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+## CVOC ####
+OTR.minimal <- OTR.only %>%
+  select(recording, segment.num, tot.min.p.hr,
+         min.p.hr_mujer, `min.p.hr_niños`, min.p.hr_hombre) %>%
+  rename(otr.tot.min.p.hr = tot.min.p.hr,
+         otr.min.p.hr_mujer = min.p.hr_mujer,
+         `otr.min.p.hr_niños` = `min.p.hr_niños`,
+         otr.min.p.hr_hombre = min.p.hr_hombre)
+CHI.only <- subset(clip.summary.all, tier.name == "CHI") %>%
+  full_join(OTR.minimal)
+
+cvoc.random.distribution <- ggplot(CHI.only,
+                            aes(round(tot.min.p.hr, 0))) +
+  geom_histogram(binwidth = 2) +
+  ylab("# of clips") +
+  xlab ("Child vocalization (min/hr)") +
+  basic.theme
+ggsave("CVOC_random_distribution.png",
+       plot = cvoc.random.distribution,
+       width = 8, height = 6, dpi = 300)
+#sd(round(CHI.only$tot.min.p.hr,0))^2
+#mean(round(CHI.only$tot.min.p.hr,0))
+# mean is much smaller than variance
+
+cvc.rand.zinb <- glmmTMB(round(tot.min.p.hr, 0) ~
+                           tchiyr.std +
+                           otr.tot.min.p.hr +
+                           mated.bin +
+                           tchiyr.std:otr.tot.min.p.hr +
+                           (1|aclew_id),
+                         data = CHI.only,
+                         ziformula = ~tchiyr.std,
+                         family="nbinom1")
+# summary(cvc.rand.zinb)
+  #    AIC      BIC   logLik deviance df.resid 
+  # 2291.8   2328.1  -1136.9   2273.8      405 
+
+# is TCDS rate just a proxy for TCDS from women?
+# similar effect!
+cvc.rand.zinb.alt <- glmmTMB(round(tot.min.p.hr, 0) ~
+                           tchiyr.std +
+                           otr.min.p.hr_mujer +
+                           mated.bin + # mated.std effect * none vs. postsec
+                           tchiyr.std:otr.min.p.hr_mujer +
+                           (1|aclew_id),
+                         data = CHI.only,
+                         ziformula = ~tchiyr.std,
+                         family="nbinom1")
+# summary(cvc.rand.zinb.alt)
+  #    AIC      BIC   logLik deviance df.resid 
+  # 2256.7   2292.9  -1119.4   2238.7      405
+# This is actually the better model
+# anova(cvc.rand.zinb, cvc.rand.zinb.alt)
+
+# how about for for TCDS from other children?
+# similar effect!
+cvc.rand.zinb.alt2 <- glmmTMB(round(tot.min.p.hr, 0) ~
+                           tchiyr.std +
+                           `otr.min.p.hr_niños` +
+                           mated.bin +
+                           tchiyr.std:`otr.min.p.hr_niños` +
+                           (1|aclew_id),
+                         data = CHI.only,
+                         ziformula = ~tchiyr.std,
+                         family="nbinom1")
+# summary(cvc.rand.zinb.alt2)
+  #    AIC      BIC   logLik deviance df.resid 
+  # 2329.1   2365.3  -1155.5   2311.1      405 
+
+# how about for for TCDS from men?
+# no!
+cvc.rand.zinb.alt3 <- glmmTMB(round(tot.min.p.hr, 0) ~
+                           tchiyr.std +
+                           otr.min.p.hr_hombre +
+                           mated.bin +
+                           tchiyr.std:otr.min.p.hr_hombre +
+                           (1|aclew_id),
+                         data = CHI.only,
+                         ziformula = ~tchiyr.std,
+                         family="nbinom1")
+# summary(cvc.rand.zinb.alt3)
+
+cvc.mdl.tbl <- broom.mixed::tidy(cvc.rand.zinb)
+cvc.mdl.tbl.alt <- broom.mixed::tidy(cvc.rand.zinb.alt)
+```
 
 
-## Relating TCDS rate and child volubility
 
-<!-- PART 3
-- does children's volubility correlate with their directed input?
-    - does it change with age?
--->
 
 ```{r plotdata}
 # ggplot(data = clip.summary,
